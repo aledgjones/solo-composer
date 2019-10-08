@@ -1,0 +1,26 @@
+.setup {
+  position: relative;
+  height: calc(100vh - 76px);
+}
+
+.setup__column {
+  display: flex;
+  flex-direction: column;
+}
+
+.setup__column-header, .setup__column-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  color: white;
+  padding: 0px 16px;
+  background-color: #232c32;
+  flex-shrink: 0;
+}
+
+.setup__column-content {
+  flex-grow: 1;
+  padding: 8px;
+  overflow: auto;
+}

@@ -1,0 +1,13 @@
+.instrument-item {
+  display: flex;
+  align-items:center;
+  height: 28px;
+  font-size: 12px;
+  padding: 0 4px 0 8px;
+  margin-bottom: 4px;
+  line-height: 1em;
+}
+
+.instrument-item:last-child {
+  margin-bottom: 0;
+}

@@ -1,0 +1,6 @@
+.ui-menu {
+  position: relative;
+  height: 28px;
+  background-color: white;
+  z-index:1;
+}

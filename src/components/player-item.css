@@ -1,0 +1,33 @@
+.player-item {
+  background-color: #232c32;
+  margin-bottom: 8px;
+  color: white;
+}
+
+.player-item:last-child {
+  margin-bottom: 0;
+}
+
+.player-item__header {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.player-item__list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0 16px 16px 56px;
+}
+
+.player-item__label {
+  flex-grow: 1;
+  line-height: 48px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* a cheeky offset */
+  padding-top: 2px;
+}

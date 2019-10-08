@@ -1,0 +1,32 @@
+.ui-icon {
+    position: relative;
+}
+
+.ui-icon__svg {
+    position: relative;
+    z-index: 2;
+}
+
+.ui-icon__blob {
+    position: absolute;
+    border-radius: 50%;
+    visibility: hidden;
+    z-index: 1;
+    width: calc(100% + 12px);
+    height: calc(100% + 12px);
+    top: -6px;
+    left: -6px;
+}
+
+.ui-icon--hover {
+    cursor: pointer;
+}
+
+.ui-icon--hover:hover>.ui-icon__blob {
+    visibility: visible;
+}
+
+.ui-icon--disabled {
+    opacity: .4;
+    pointer-events: none;
+}

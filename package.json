@@ -1,0 +1,49 @@
+{
+  "name": "composer",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@mdi/js": "^4.4.95",
+    "@types/big.js": "^4.0.5",
+    "@types/color": "^3.0.0",
+    "@types/jest": "24.0.18",
+    "@types/lodash": "^4.14.139",
+    "@types/node": "12.7.8",
+    "@types/react": "16.9.3",
+    "@types/react-dom": "16.9.1",
+    "@types/shortid": "0.0.29",
+    "app-reset": "^1.0.2",
+    "array-move": "^2.1.0",
+    "big.js": "^5.2.2",
+    "color": "^3.1.2",
+    "lodash": "^4.17.15",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-scripts": "3.1.2",
+    "react-sortable-hoc": "^1.10.1",
+    "shortid": "^2.2.15",
+    "sortablejs": "^1.6.1",
+    "typescript": "3.6.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
