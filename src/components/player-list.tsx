@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { SortableContainer } from 'react-sortable-hoc';
 import { mdiPlus } from '@mdi/js';
 
@@ -6,6 +6,7 @@ import { Icon } from '../ui';
 import { Player } from '../services/player';
 import { PlayerItem } from './player-item';
 import { InstrumentState, InstrumentCounts } from '../services/instrument';
+import { SelectionType, Selection } from '../states/setup';
 
 import './player-list.css';
 
@@ -13,16 +14,16 @@ interface Props {
   players: Player[];
   instruments: InstrumentState;
   counts: InstrumentCounts;
-  selectedKey: string | null;
+  selection: Selection;
 
-  onSelect: (key: string) => void;
+  onSelect: (key: string, type: SelectionType) => void;
   onAddInstrument: (key: string) => void;
   onRemovePlayer: (player: Player) => void;
   onCreatePlayer: () => void;
 }
 
 export const PlayerList = SortableContainer<Props>((props: Props) => {
-  const { players, instruments, counts, selectedKey, onSelect, onAddInstrument, onRemovePlayer, onCreatePlayer } = props;
+  const { players, instruments, counts, selection, onSelect, onAddInstrument, onRemovePlayer, onCreatePlayer } = props;
   return <div className="player-list">
     <div className="player-list__header">
       <span>Players</span>
@@ -36,7 +37,7 @@ export const PlayerList = SortableContainer<Props>((props: Props) => {
         instruments={instruments}
         counts={counts}
 
-        selected={player.key === selectedKey}
+        selected={!!(selection && player.key === selection.key)}
 
         onSelect={onSelect}
         onAddInstrument={onAddInstrument}

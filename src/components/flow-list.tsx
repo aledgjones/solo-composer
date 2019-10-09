@@ -4,21 +4,23 @@ import { mdiPlus } from '@mdi/js';
 
 import { Icon } from '../ui';
 import { Flow } from '../services/flow';
+import { FlowItem } from './flow-item';
+import { Selection, SelectionType } from '../states/setup';
 
 import './flow-list.css';
-import { FlowItem } from './flow-item';
 
 interface Props {
   flows: Flow[];
-  selectedKey: string | null;
+  selection: Selection;
 
-  onSelect: (key: string) => void;
+  onSelect: (key: string, type: SelectionType) => void;
   onRemoveFlow: (flow: Flow) => void;
   onCreateFlow: () => void;
 }
 
 export const FlowList = SortableContainer<Props>((props: Props) => {
-  const { flows, selectedKey, onSelect, onRemoveFlow, onCreateFlow } = props;
+  const { flows, selection, onSelect, onRemoveFlow, onCreateFlow } = props;
+
   return <div className="flow-list">
     <div className="flow-list__header">
       <span>Flows</span>
@@ -30,7 +32,7 @@ export const FlowList = SortableContainer<Props>((props: Props) => {
         key={flow.key}
         flow={flow}
 
-        selected={flow.key === selectedKey}
+        selection={selection}
 
         onSelect={onSelect}
         onRemoveFlow={onRemoveFlow}

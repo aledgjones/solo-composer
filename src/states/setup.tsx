@@ -12,6 +12,14 @@ import { InstrumentPicker } from '../components/instrument-picker';
 
 import './setup.css';
 
+export enum SelectionType {
+    player = 1,
+    flow,
+    layout
+}
+
+export type Selection = { key: string, type: SelectionType } | null;
+
 interface Props {
     state: State;
     actions: Actions;
@@ -19,11 +27,11 @@ interface Props {
 
 export const Setup: FC<Props> = ({ state, actions }) => {
 
-    const [selectedKey, setSelectedKey] = useState<string | null>(null);
+    const [selection, setSelection] = useState<Selection>(null);
     const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
-    const onSelect = useCallback((key: string) => {
-        setSelectedKey(key);
+    const onSelect = useCallback((key: string, type: SelectionType) => {
+        setSelection({ key, type });
     }, []);
 
     // PLAYERS
@@ -36,7 +44,7 @@ export const Setup: FC<Props> = ({ state, actions }) => {
 
     const onCreatePlayer = useCallback(() => {
         const key = actions.score.players.create(PlayerType.section);
-        setSelectedKey(key);
+        setSelection({ key, type: SelectionType.player });
         setDialogOpen(true);
     }, [actions.score.players]);
 
@@ -46,16 +54,16 @@ export const Setup: FC<Props> = ({ state, actions }) => {
 
     const onRemovePlayer = useCallback((player: Player) => {
         actions.score.players.remove(player);
-        setSelectedKey(null);
+        setSelection(null);
     }, [actions.score.players]);
 
     const onSelectInstrument = useCallback((def: InstrumentDef) => {
-        if (selectedKey) {
+        if (selection) {
             const instrumentKey = actions.score.instruments.create(def);
-            actions.score.players.assignInstrument(selectedKey, instrumentKey);
+            actions.score.players.assignInstrument(selection.key, instrumentKey);
         }
         setDialogOpen(false);
-    }, [selectedKey, actions.score.instruments, actions.score.players]);
+    }, [selection, actions.score.instruments, actions.score.players]);
 
     const onCancelInstrument = useCallback(() => {
         setDialogOpen(false);
@@ -77,12 +85,12 @@ export const Setup: FC<Props> = ({ state, actions }) => {
 
     const onCreateFlow = useCallback(() => {
         const key = actions.score.flows.create(state.score.players.order);
-        setSelectedKey(key);
+        setSelection({ key, type: SelectionType.flow });
     }, [actions.score.flows, state.score.players.order]);
 
     const onRemoveFlow = useCallback((flow: Flow) => {
         actions.score.flows.remove(flow);
-        setSelectedKey(null);
+        setSelection(null);
     }, [actions.score.flows]);
 
     const onSortFlows = useCallback((instruction) => {
@@ -95,7 +103,7 @@ export const Setup: FC<Props> = ({ state, actions }) => {
                 players={players}
                 instruments={state.score.instruments}
                 counts={counts}
-                selectedKey={selectedKey}
+                selection={selection}
 
                 distance={5}
                 lockAxis="y"
@@ -109,10 +117,10 @@ export const Setup: FC<Props> = ({ state, actions }) => {
                 onSortEnd={onSortPlayers}
             />
             <div className="setup__middle">
-                <div style={{flexGrow: 1}} />
+                <div style={{ flexGrow: 1 }} /> {/* temp for spacing - eventually this will be a score view */}
                 <FlowList
                     flows={flows}
-                    selectedKey={selectedKey}
+                    selection={selection}
 
                     distance={5}
                     lockAxis="x"

@@ -1,8 +1,6 @@
-import { useReducer, useMemo, useEffect } from "react"
+import { useReducer, useMemo } from "react"
 import { TabState, tabReducer, tabEmptyState, tabActions, TabActions } from "./tab";
 import { scoreActions, scoreReducer, scoreEmptyState, ScoreState, ScoreActions } from "./score";
-import { PlayerType } from "./player";
-import { instrumentDefs } from "./instrument-defs";
 // import { log } from "../ui/utils/log";
 
 export interface State {
@@ -35,29 +33,6 @@ export const useAppState = (): [State, Actions] => {
             score: scoreActions(dispatch)
         }
     }, [dispatch]);
-
-    useEffect(() => {
-        // setup
-        let playerKey = actions.score.players.create(PlayerType.solo);
-        let instrumentKey = actions.score.instruments.create(instrumentDefs['strings.violin']);
-        actions.score.players.assignInstrument(playerKey, instrumentKey);
-
-        playerKey = actions.score.players.create(PlayerType.section);
-        instrumentKey = actions.score.instruments.create(instrumentDefs['strings.violin']);
-        actions.score.players.assignInstrument(playerKey, instrumentKey);
-
-        playerKey = actions.score.players.create(PlayerType.section);
-        instrumentKey = actions.score.instruments.create(instrumentDefs['strings.violin']);
-        actions.score.players.assignInstrument(playerKey, instrumentKey);
-
-        playerKey = actions.score.players.create(PlayerType.section);
-        instrumentKey = actions.score.instruments.create(instrumentDefs['strings.viola']);
-        actions.score.players.assignInstrument(playerKey, instrumentKey);
-
-        playerKey = actions.score.players.create(PlayerType.section);
-        instrumentKey = actions.score.instruments.create(instrumentDefs['strings.violoncello']);
-        actions.score.players.assignInstrument(playerKey, instrumentKey);
-    }, []);
 
     // log(state, 'state');
 

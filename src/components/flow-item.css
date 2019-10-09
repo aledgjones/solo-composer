@@ -1,9 +1,8 @@
 .flow-item {
-  background-color: #232c32;
-  width: 40%;
+  flex-grow: 1;
+  min-width: 240px;
   color: white;
   height: 96px;
-  display: inline-block;
   margin-right: 8px;
 }
 

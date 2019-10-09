@@ -1,4 +1,4 @@
-import React, { useCallback, CSSProperties, FC, useMemo } from 'react';
+import React, { useCallback, CSSProperties, FC, useMemo, MouseEvent } from 'react';
 import Color from 'color';
 import { mdiCheck } from '@mdi/js';
 
@@ -22,7 +22,11 @@ interface Props {
 
 export const Checkbox: FC<Props> = ({ id, className, style, children, value, color, onChange, disabled, margin }) => {
 
-    const _onChange = useCallback(() => onChange(!value), [value, onChange]);
+    const _onChange = useCallback((e: MouseEvent<HTMLDivElement>) => {
+        e.stopPropagation();
+        onChange(!value);
+    }, [value, onChange]);
+    
     const iconColor = useMemo(() => Color(color).isDark() ? '#ffffff' : '#000000', [color]);
 
     return <div

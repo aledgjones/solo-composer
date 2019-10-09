@@ -1,36 +1,47 @@
 import React, { useCallback, useMemo } from 'react';
 import { SortableElement } from 'react-sortable-hoc';
-import { mdiDeleteOutline, mdiFileDocumentBoxOutline, mdiPencilOutline } from '@mdi/js';
+import { mdiDeleteOutline, mdiFileDocumentBoxOutline } from '@mdi/js';
 import Color from 'color';
 
-import { Icon } from '../ui';
+import { Icon, Checkbox } from '../ui';
 import { Flow } from '../services/flow';
 import { THEME } from '../const';
 import { Handle } from './handle';
+import { SelectionType, Selection } from '../states/setup';
 
 import './flow-item.css';
 
 interface Props {
     flow: Flow;
-    selected: boolean;
+    selection: Selection;
 
-    onSelect: (key: string) => void;
+    onSelect: (key: string, type: SelectionType) => void;
     onRemoveFlow: (flow: Flow) => void;
 }
 
 export const FlowItem = SortableElement<Props>((props: Props) => {
 
-    const { flow, selected, onSelect, onRemoveFlow } = props;
+    const { flow, selection, onSelect, onRemoveFlow } = props;
 
-    const _onSelect = useCallback(() => onSelect(flow.key), [flow.key, onSelect]);
+    const selected: boolean = useMemo(() => {
+        return !!selection && selection.key === flow.key;
+    }, [selection, flow.key]);
+
+    const active: boolean = useMemo(() => {
+        return !!selection && selection.type === SelectionType.player && flow.players.includes(selection.key);
+    }, [selection, flow.key, flow.players]);
+
+    const _onSelect = useCallback(() => onSelect(flow.key, SelectionType.flow), [flow.key, onSelect]);
 
     const bg = useMemo(() => {
         if (selected) {
             return THEME.PRIMARY;
+        } else if (active) {
+            return '#293237';
         } else {
-            return undefined;
+            return '#232c32';
         }
-    }, [selected]);
+    }, [selected, active]);
 
     const fg = useMemo(() => {
         return Color(bg).isDark() ? '#ffffff' : '#000000';
@@ -45,6 +56,7 @@ export const FlowItem = SortableElement<Props>((props: Props) => {
             {selected && <>
                 <Icon style={{ marginLeft: 12 }} size={24} color={fg} path={mdiDeleteOutline} onClick={() => onRemoveFlow(flow)} />
             </>}
+            {selection && selection.type !== SelectionType.flow && <Checkbox color="white" value={active} onChange={() => {}} />}
         </div>
     </div>;
 });

@@ -9,6 +9,7 @@ import { InstrumentState, InstrumentCounts } from '../services/instrument';
 import { THEME } from '../const';
 import { InstrumentItem } from './instrument-item';
 import { Handle } from './handle';
+import { SelectionType } from '../states/setup';
 
 import './player-item.css';
 
@@ -18,7 +19,7 @@ interface Props {
     counts: InstrumentCounts;
     selected: boolean;
 
-    onSelect: (key: string) => void;
+    onSelect: (key: string, type: SelectionType) => void;
     onAddInstrument: (key: string) => void;
     onRemovePlayer: (player: Player) => void;
 }
@@ -33,7 +34,7 @@ export const PlayerItem = SortableElement<Props>((props: Props) => {
         setExpanded(value => !value);
     }, []);
 
-    const _onSelect = useCallback(() => onSelect(player.key), [player.key, onSelect]);
+    const _onSelect = useCallback(() => onSelect(player.key, SelectionType.player), [player.key, onSelect]);
 
     const bg = useMemo(() => {
         if (selected) {
@@ -71,7 +72,7 @@ export const PlayerItem = SortableElement<Props>((props: Props) => {
                 }
             }, '');
         }
-    }, [player.instruments, instruments, counts]);
+    }, [player.type, player.instruments, instruments, counts]);
 
     const icon = useMemo(() => {
         switch (player.type) {
@@ -87,10 +88,12 @@ export const PlayerItem = SortableElement<Props>((props: Props) => {
             <Handle>
                 <Icon style={{ marginRight: 16 }} path={icon} size={24} color={fg} />
             </Handle>
+
             <span className="player-item__name">{name}</span>
+
             {selected && <>
                 <Icon style={{ marginLeft: 12 }} size={24} color={fg} path={mdiDeleteOutline} onClick={() => onRemovePlayer(player)} />
-                <Icon style={{ marginLeft: 12 }} path={mdiPlus} size={24} color={fg} onClick={() => onAddInstrument(player.key)} />
+                {player.type === PlayerType.solo && <Icon style={{ marginLeft: 12 }} path={mdiPlus} size={24} color={fg} onClick={() => onAddInstrument(player.key)} />}
             </>}
             <Icon style={{ marginLeft: 12 }} path={expanded ? mdiChevronUp : mdiChevronDown} size={24} color={fg} onClick={_onExpand} />
         </div>
