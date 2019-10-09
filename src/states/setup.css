@@ -1,26 +1,13 @@
 .setup {
+  display: flex;
   position: relative;
-  height: calc(100vh - 76px);
+  height: calc(100vh - 48px);
 }
 
-.setup__column {
+.setup__middle {
   display: flex;
   flex-direction: column;
-}
-
-.setup__column-header, .setup__column-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 48px;
-  color: white;
-  padding: 0px 16px;
-  background-color: #232c32;
-  flex-shrink: 0;
-}
-
-.setup__column-content {
-  flex-grow: 1;
-  padding: 8px;
-  overflow: auto;
+  width: 50%;
+  border-left: solid 4px #13191e;
+  border-right: solid 4px #13191e;
 }

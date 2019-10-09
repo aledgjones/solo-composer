@@ -13,7 +13,7 @@ export interface PlayerActions {
     create: (type: PlayerType) => string;
     reorder: (instruction: { oldIndex: number, newIndex: number }) => void;
     remove: (player: Player) => void;
-    assignInstrument: (playerKey: PlayerKey, instrument: InstrumentKey) => void;
+    assignInstrument: (playerKey: PlayerKey, instrumentKey: InstrumentKey) => void;
 }
 
 export enum PlayerType {
@@ -39,11 +39,11 @@ export const playerEmptyState = (): PlayerState => {
 export const playerReducer = (state: PlayerState, action: any) => {
     switch (action.type) {
         case PLAYER_CREATE: {
-            const playerKey: PlayerKey = action.payload.key;
+            const key: PlayerKey = action.payload.key;
             const player: Player = action.payload;
             return {
-                order: [...state.order, playerKey],
-                byKey: { ...state.byKey, [playerKey]: player }
+                order: [...state.order, key],
+                byKey: { ...state.byKey, [key]: player }
             };
         }
         case PLAYER_REORDER: {
@@ -55,10 +55,10 @@ export const playerReducer = (state: PlayerState, action: any) => {
             }
         }
         case PLAYER_REMOVE: {
-            const playerKey: PlayerKey = action.payload.key;
-            const { [playerKey]: removed, ...players } = state.byKey;
+            const key: PlayerKey = action.payload.key;
+            const { [key]: removed, ...players } = state.byKey;
             return {
-                order: state.order.filter(key => playerKey !== key),
+                order: state.order.filter(_key => _key !== key),
                 byKey: players
             }
         }

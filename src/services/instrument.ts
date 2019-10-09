@@ -57,12 +57,12 @@ export const instrumentReducer = (state: InstrumentState, action: any) => {
 
 export const instrumentActions = (dispatch: any): InstrumentActions => {
     return {
-        create: (def: InstrumentDef) => {
+        create: (def) => {
             const instrument = createInstrument(def);
             dispatch({ type: INSTRUMENT_CREATE, payload: instrument });
             return instrument.key;
         },
-        remove: (instrumentKey: InstrumentKey) => {
+        remove: (instrumentKey) => {
             dispatch({ type: INSTRUMENT_REMOVE, payload: instrumentKey });
         }
     }

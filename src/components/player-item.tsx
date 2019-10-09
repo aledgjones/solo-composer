@@ -1,4 +1,5 @@
-import React, { FC, useCallback, useState, useMemo, MouseEvent } from 'react';
+import React, { useCallback, useState, useMemo, MouseEvent } from 'react';
+import { SortableElement } from 'react-sortable-hoc';
 import { mdiChevronDown, mdiPlus, mdiDeleteOutline, mdiChevronUp, mdiAccount, mdiAccountGroup } from '@mdi/js';
 import Color from 'color';
 
@@ -7,9 +8,9 @@ import { Player, PlayerType } from '../services/player';
 import { InstrumentState, InstrumentCounts } from '../services/instrument';
 import { THEME } from '../const';
 import { InstrumentItem } from './instrument-item';
+import { Handle } from './handle';
 
 import './player-item.css';
-import { SortableElement } from 'react-sortable-hoc';
 
 interface Props {
     player: Player;
@@ -83,8 +84,10 @@ export const PlayerItem = SortableElement<Props>((props: Props) => {
 
     return <div className="player-item" style={{ backgroundColor: bg, color: fg }} onClick={_onSelect}>
         <div className="player-item__header">
-            <Icon style={{ marginRight: 16 }} path={icon} size={24} color={fg} />
-            <span className="player-item__label">{name}</span>
+            <Handle>
+                <Icon style={{ marginRight: 16 }} path={icon} size={24} color={fg} />
+            </Handle>
+            <span className="player-item__name">{name}</span>
             {selected && <>
                 <Icon style={{ marginLeft: 12 }} size={24} color={fg} path={mdiDeleteOutline} onClick={() => onRemovePlayer(player)} />
                 <Icon style={{ marginLeft: 12 }} path={mdiPlus} size={24} color={fg} onClick={() => onAddInstrument(player.key)} />

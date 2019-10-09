@@ -23,12 +23,12 @@ interface Props {
 
 export const PlayerList = SortableContainer<Props>((props: Props) => {
   const { players, instruments, counts, selectedKey, onSelect, onAddInstrument, onRemovePlayer, onCreatePlayer } = props;
-  return <div className="player-list setup__column">
-    <div className="setup__column-header">
+  return <div className="player-list">
+    <div className="player-list__header">
       <span>Players</span>
       <Icon size={24} color="#ffffff" path={mdiPlus} onClick={onCreatePlayer} />
     </div>
-    <div className="setup__column-content">
+    <div className="player-list__content">
       {players.map((player, i) => <PlayerItem
         index={i}
         key={player.key}
