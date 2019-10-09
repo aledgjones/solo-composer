@@ -2,7 +2,7 @@ import React, { FC, useState, useMemo, useCallback } from 'react';
 
 import { State, Actions } from '../services/state';
 import { PlayerType, Player } from '../services/player';
-import { Flow } from '../services/flow';
+import { Flow, FlowKey } from '../services/flow';
 import { InstrumentDef } from '../services/instrument-defs';
 import { useCounts } from '../services/instrument';
 
@@ -93,6 +93,18 @@ export const Setup: FC<Props> = ({ state, actions }) => {
         setSelection(null);
     }, [actions.score.flows]);
 
+    const onAssignPlayerToFlow = useCallback((flowKey: FlowKey) => {
+        if(selection) {
+            actions.score.flows.assignPlayer(flowKey, selection.key);
+        }
+    }, [selection, actions.score.flows]);
+
+    const onRemovePlayerFromFlow = useCallback((flowKey: FlowKey) => {
+        if(selection) {
+            actions.score.flows.removePlayer(flowKey, selection.key);
+        }
+    }, [selection, actions.score.flows]);
+
     const onSortFlows = useCallback((instruction) => {
         actions.score.flows.reorder(instruction);
     }, [actions.score.flows]);
@@ -110,7 +122,7 @@ export const Setup: FC<Props> = ({ state, actions }) => {
                 useDragHandle
                 transitionDuration={200}
 
-                onSelect={onSelect}
+                onSelectPlayer={onSelect}
                 onCreatePlayer={onCreatePlayer}
                 onAddInstrument={onAddInstrument}
                 onRemovePlayer={onRemovePlayer}
@@ -128,9 +140,11 @@ export const Setup: FC<Props> = ({ state, actions }) => {
                     useDragHandle
                     transitionDuration={200}
 
-                    onSelect={onSelect}
+                    onSelectFlow={onSelect}
                     onCreateFlow={onCreateFlow}
                     onRemoveFlow={onRemoveFlow}
+                    onAssignPlayer={onAssignPlayerToFlow}
+                    onRemovePlayer={onRemovePlayerFromFlow}
                     onSortEnd={onSortFlows}
                 />
             </div>

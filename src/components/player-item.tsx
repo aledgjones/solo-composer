@@ -19,22 +19,27 @@ interface Props {
     counts: InstrumentCounts;
     selected: boolean;
 
-    onSelect: (key: string, type: SelectionType) => void;
+    onSelectPlayer: (key: string, type: SelectionType) => void;
     onAddInstrument: (key: string) => void;
     onRemovePlayer: (player: Player) => void;
 }
 
 export const PlayerItem = SortableElement<Props>((props: Props) => {
 
-    const { player, instruments, counts, selected, onSelect, onAddInstrument, onRemovePlayer } = props;
+    const { player, instruments, counts, selected, onSelectPlayer, onAddInstrument, onRemovePlayer } = props;
 
     const [expanded, setExpanded] = useState<boolean>(false);
-    const _onExpand = useCallback((e: MouseEvent<HTMLDivElement>) => {
+    const onExpand = useCallback((e: MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
         setExpanded(value => !value);
     }, []);
 
-    const _onSelect = useCallback(() => onSelect(player.key, SelectionType.player), [player.key, onSelect]);
+    const onSelect = useCallback(() => onSelectPlayer(player.key, SelectionType.player), [player.key, onSelectPlayer]);
+
+    const onRemove = useCallback((e: MouseEvent<HTMLDivElement>) => {
+        e.stopPropagation();
+        onRemovePlayer(player);
+    }, [onRemovePlayer, player]);
 
     const bg = useMemo(() => {
         if (selected) {
@@ -83,7 +88,7 @@ export const PlayerItem = SortableElement<Props>((props: Props) => {
         }
     }, [player]);
 
-    return <div className="player-item" style={{ backgroundColor: bg, color: fg }} onClick={_onSelect}>
+    return <div className="player-item" style={{ backgroundColor: bg, color: fg }} onClick={onSelect}>
         <div className="player-item__header">
             <Handle>
                 <Icon style={{ marginRight: 16 }} path={icon} size={24} color={fg} />
@@ -92,10 +97,10 @@ export const PlayerItem = SortableElement<Props>((props: Props) => {
             <span className="player-item__name">{name}</span>
 
             {selected && <>
-                <Icon style={{ marginLeft: 12 }} size={24} color={fg} path={mdiDeleteOutline} onClick={() => onRemovePlayer(player)} />
+                <Icon style={{ marginLeft: 12 }} size={24} color={fg} path={mdiDeleteOutline} onClick={onRemove} />
                 {player.type === PlayerType.solo && <Icon style={{ marginLeft: 12 }} path={mdiPlus} size={24} color={fg} onClick={() => onAddInstrument(player.key)} />}
             </>}
-            <Icon style={{ marginLeft: 12 }} path={expanded ? mdiChevronUp : mdiChevronDown} size={24} color={fg} onClick={_onExpand} />
+            <Icon style={{ marginLeft: 12 }} path={expanded ? mdiChevronUp : mdiChevronDown} size={24} color={fg} onClick={onExpand} />
         </div>
         {expanded && <div className="player-item__list">
             {player.instruments.map(key => {

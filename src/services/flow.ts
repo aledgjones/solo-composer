@@ -66,7 +66,7 @@ export const flowReducer = (state: FlowState, action: any) => {
         }
         case FLOW_ASSIGN_PLAYER: {
             const flowKey: FlowKey = action.payload.flowKey;
-            const playerKey: FlowKey = action.payload.playerKey;
+            const playerKey: PlayerKey = action.payload.playerKey;
             const flow = state.byKey[flowKey];
             return {
                 order: state.order,
@@ -81,7 +81,7 @@ export const flowReducer = (state: FlowState, action: any) => {
         }
         case FLOW_REMOVE_PLAYER: {
             const flowKey: FlowKey = action.payload.flowKey;
-            const playerKey: FlowKey = action.payload.playerKey;
+            const playerKey: PlayerKey = action.payload.playerKey;
             const flow = state.byKey[flowKey];
             return {
                 order: state.order,
@@ -144,7 +144,7 @@ export const flowActions = (dispatch: any): FlowActions => {
             dispatch({ type: FLOW_ASSIGN_PLAYER, payload: { flowKey, playerKey } });
         },
         removePlayer: (flowKey, playerKey) => {
-            dispatch({ type: FLOW_ASSIGN_PLAYER, payload: { flowKey, playerKey } });
+            dispatch({ type: FLOW_REMOVE_PLAYER, payload: { flowKey, playerKey } });
         }
     }
 }

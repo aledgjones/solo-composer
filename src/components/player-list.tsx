@@ -16,14 +16,14 @@ interface Props {
   counts: InstrumentCounts;
   selection: Selection;
 
-  onSelect: (key: string, type: SelectionType) => void;
+  onSelectPlayer: (key: string, type: SelectionType) => void;
   onAddInstrument: (key: string) => void;
   onRemovePlayer: (player: Player) => void;
   onCreatePlayer: () => void;
 }
 
 export const PlayerList = SortableContainer<Props>((props: Props) => {
-  const { players, instruments, counts, selection, onSelect, onAddInstrument, onRemovePlayer, onCreatePlayer } = props;
+  const { players, instruments, counts, selection, onSelectPlayer, onAddInstrument, onRemovePlayer, onCreatePlayer } = props;
   return <div className="player-list">
     <div className="player-list__header">
       <span>Players</span>
@@ -39,7 +39,7 @@ export const PlayerList = SortableContainer<Props>((props: Props) => {
 
         selected={!!(selection && player.key === selection.key)}
 
-        onSelect={onSelect}
+        onSelectPlayer={onSelectPlayer}
         onAddInstrument={onAddInstrument}
         onRemovePlayer={onRemovePlayer}
       />)}
