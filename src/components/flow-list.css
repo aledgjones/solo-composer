@@ -14,10 +14,15 @@
   background-color: #13191e;
 }
 
+.flow-list__wrapper {
+  overflow: auto;
+  width: 100%;
+}
+
 .flow-list__content {
-  display: flex;
+  display: inline-flex;
+  min-width: 240px;
+  min-width: 100%;
   height: calc(100% - 48px);
   padding: 8px 0 8px 8px;
-  overflow: auto;
-  white-space: nowrap;
 }

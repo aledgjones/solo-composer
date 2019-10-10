@@ -26,7 +26,7 @@ export const PlayerList = SortableContainer<Props>((props: Props) => {
   const { players, instruments, counts, selection, onSelectPlayer, onAddInstrument, onRemovePlayer, onCreatePlayer } = props;
   return <div className="player-list">
     <div className="player-list__header">
-      <span>Players</span>
+      <span className="player-list__label">Players</span>
       <Icon size={24} color="#ffffff" path={mdiPlus} onClick={onCreatePlayer} />
     </div>
     <div className="player-list__content">

@@ -28,19 +28,21 @@ export const FlowList = SortableContainer<Props>((props: Props) => {
             <span>Flows</span>
             <Icon size={24} color="#ffffff" path={mdiPlus} onClick={onCreateFlow} />
         </div>
-        <div className="flow-list__content">
-            {flows.map((flow, i) => <FlowItem
-                index={i}
-                key={flow.key}
-                flow={flow}
+        <div className="flow-list__wrapper">
+            <div className="flow-list__content">
+                {flows.map((flow, i) => <FlowItem
+                    index={i}
+                    key={flow.key}
+                    flow={flow}
 
-                selection={selection}
+                    selection={selection}
 
-                onSelectFlow={onSelectFlow}
-                onRemoveFlow={onRemoveFlow}
-                onAssignPlayer={onAssignPlayer}
-                onRemovePlayer={onRemovePlayer}
-            />)}
+                    onSelectFlow={onSelectFlow}
+                    onRemoveFlow={onRemoveFlow}
+                    onAssignPlayer={onAssignPlayer}
+                    onRemovePlayer={onRemovePlayer}
+                />)}
+            </div>
         </div>
     </div>;
 });
