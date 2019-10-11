@@ -1,7 +1,9 @@
+import { useMemo } from 'react';
 import shortid from 'shortid';
 import { InstrumentDef } from './instrument-defs';
 import { PlayerState, PlayerKey, PLAYER_REMOVE } from './player';
-import { useMemo } from 'react';
+import { StaveKey, createStave } from './stave';
+import { removeProps } from '../ui/utils/remove-props';
 
 export const INSTRUMENT_CREATE = '@instrument/create';
 export const INSTRUMENT_REMOVE = '@instrument/remove';
@@ -9,7 +11,7 @@ export const INSTRUMENT_REMOVE = '@instrument/remove';
 export type InstrumentKey = string;
 
 export interface InstrumentActions {
-    create: (def: InstrumentDef) => InstrumentKey;
+    create: (def: InstrumentDef) => Instrument;
     remove: (instrumentKey: InstrumentKey) => void;
 }
 
@@ -18,22 +20,21 @@ export interface Instrument {
     id: string;
     longName: string;
     shortName: string;
+    staves: StaveKey[];
 }
 
-export interface InstrumentState {
-    [key: string]: Instrument;
-}
+export type Instruments = { [key: string]: Instrument; };
 
-export const instrumentEmptyState = (): InstrumentState => {
+export const instrumentEmptyState = (): Instruments => {
     return {};
 }
 
-export const instrumentReducer = (state: InstrumentState, action: any) => {
+export const instrumentReducer = (state: Instruments, action: any) => {
     switch (action.type) {
         case INSTRUMENT_CREATE: {
-            const key: InstrumentKey = action.payload.key;
-            const instrument: Instrument = action.payload;
-            return { ...state, [key]: instrument };
+            const instrumentKey: InstrumentKey = action.payload.instrument.key;
+            const instrument: Instrument = action.payload.instrument;
+            return { ...state, [instrumentKey]: instrument };
         }
         case INSTRUMENT_REMOVE: {
             const instrumentKey: InstrumentKey = action.payload;
@@ -41,14 +42,8 @@ export const instrumentReducer = (state: InstrumentState, action: any) => {
             return instruments;
         }
         case PLAYER_REMOVE: {
-            const instrumentKeys: InstrumentKey[] = action.payload.instruments;
-            const keys = Object.keys(state);
-            return keys.reduce((output: InstrumentState, key: string) => {
-                if (!instrumentKeys.includes(key)) {
-                    output[key] = state[key];
-                }
-                return output;
-            }, {});
+            const instrumentKeys: InstrumentKey[] = action.payload.player.instruments;
+            return removeProps(state, instrumentKeys);
         }
         default:
             return state;
@@ -58,9 +53,10 @@ export const instrumentReducer = (state: InstrumentState, action: any) => {
 export const instrumentActions = (dispatch: any): InstrumentActions => {
     return {
         create: (def) => {
-            const instrument = createInstrument(def);
-            dispatch({ type: INSTRUMENT_CREATE, payload: instrument });
-            return instrument.key;
+            const staves = def.staves.map(staveDef => createStave(staveDef));
+            const instrument = createInstrument(def, staves.map(stave => stave.key));
+            dispatch({ type: INSTRUMENT_CREATE, payload: { instrument, staves } });
+            return instrument;
         },
         remove: (instrumentKey) => {
             dispatch({ type: INSTRUMENT_REMOVE, payload: instrumentKey });
@@ -68,12 +64,13 @@ export const instrumentActions = (dispatch: any): InstrumentActions => {
     }
 }
 
-const createInstrument = (def: InstrumentDef): Instrument => {
+const createInstrument = (def: InstrumentDef, staves: StaveKey[]): Instrument => {
     return {
         key: shortid(),
         id: def.id,
         longName: def.longName,
-        shortName: def.shortName
+        shortName: def.shortName,
+        staves
     }
 }
 
@@ -88,7 +85,7 @@ export type InstrumentCounts = { [key: string]: number };
  * 
  * eg violin ${counts['violin'].length + 1} = Violin *1*
  */
-export function useCounts(players: PlayerState, instruments: InstrumentState): InstrumentCounts {
+export function useCounts(players: PlayerState, instruments: Instruments): InstrumentCounts {
     return useMemo(() => {
 
         const counts = players.order.reduce((output: InstrumentCountsTotals, playerKey: PlayerKey) => {

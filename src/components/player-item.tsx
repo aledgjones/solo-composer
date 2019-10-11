@@ -5,7 +5,7 @@ import Color from 'color';
 
 import { Icon } from '../ui';
 import { Player, PlayerType } from '../services/player';
-import { InstrumentState, InstrumentCounts } from '../services/instrument';
+import { Instruments, InstrumentCounts } from '../services/instrument';
 import { THEME } from '../const';
 import { InstrumentItem } from './instrument-item';
 import { Handle } from './handle';
@@ -15,7 +15,7 @@ import './player-item.css';
 
 interface Props {
     player: Player;
-    instruments: InstrumentState;
+    instruments: Instruments;
     counts: InstrumentCounts;
     selected: boolean;
 

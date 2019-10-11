@@ -1,6 +1,8 @@
 import shortid from 'shortid';
 import ArrayMove from 'array-move';
-import { InstrumentKey } from './instrument';
+import { InstrumentKey, Instrument, Instruments } from './instrument';
+import { Staves, createStave, StaveKey } from './stave';
+import { instrumentDefs } from './instrument-defs';
 
 export const PLAYER_CREATE = '@player/create';
 export const PLAYER_REMOVE = '@player/remove';
@@ -12,8 +14,8 @@ export type PlayerKey = string;
 export interface PlayerActions {
     create: (type: PlayerType) => string;
     reorder: (instruction: { oldIndex: number, newIndex: number }) => void;
-    remove: (player: Player) => void;
-    assignInstrument: (playerKey: PlayerKey, instrumentKey: InstrumentKey) => void;
+    remove: (player: Player, instruments: Instruments) => void;
+    assignInstrument: (playerKey: PlayerKey, instrument: Instrument) => void;
 }
 
 export enum PlayerType {
@@ -27,9 +29,11 @@ export interface Player {
     instruments: InstrumentKey[];
 }
 
+export type Players = { [key: string]: Player };
+
 export interface PlayerState {
     order: PlayerKey[];
-    byKey: { [key: string]: Player };
+    byKey: Players;
 }
 
 export const playerEmptyState = (): PlayerState => {
@@ -55,7 +59,7 @@ export const playerReducer = (state: PlayerState, action: any) => {
             }
         }
         case PLAYER_REMOVE: {
-            const key: PlayerKey = action.payload.key;
+            const key: PlayerKey = action.payload.player.key;
             const { [key]: removed, ...players } = state.byKey;
             return {
                 order: state.order.filter(_key => _key !== key),
@@ -92,11 +96,20 @@ export const playerActions = (dispatch: any): PlayerActions => {
         reorder: (instruction) => {
             dispatch({ type: PLAYER_REORDER, payload: instruction });
         },
-        remove: (player) => {
-            dispatch({ type: PLAYER_REMOVE, payload: player });
+        remove: (player, instruments) => {
+            const staveKeys = player.instruments.reduce((output: StaveKey[], instrumentKey) => {
+                const instrument = instruments[instrumentKey];
+                return [...output, ...instrument.staves];
+            }, []);
+            dispatch({ type: PLAYER_REMOVE, payload: { player, staveKeys } });
         },
-        assignInstrument: (playerKey, instrumentKey) => {
-            dispatch({ type: PLAYER_ASSIGN_INSTRUMENT, payload: { playerKey, instrumentKey } });
+        assignInstrument: (playerKey, instrument) => {
+            const def = instrumentDefs[instrument.id];
+            const staves = instrument.staves.reduce((output: Staves, staveKey, i) => {
+                output[staveKey] = createStave(def.staves[i], staveKey);
+                return output;
+            }, {});
+            dispatch({ type: PLAYER_ASSIGN_INSTRUMENT, payload: { playerKey, instrumentKey: instrument.key, staves } });
         }
     }
 }

@@ -1,7 +1,7 @@
 import { useReducer, useMemo } from "react"
 import { TabState, tabReducer, tabEmptyState, tabActions, TabActions } from "./tab";
 import { scoreActions, scoreReducer, scoreEmptyState, ScoreState, ScoreActions } from "./score";
-// import { log } from "../ui/utils/log";
+import { log } from "../ui/utils/log";
 
 export interface State {
     tab: TabState;
@@ -34,7 +34,7 @@ export const useAppState = (): [State, Actions] => {
         }
     }, [dispatch]);
 
-    // log(state, 'state');
+    log(state, 'state');
 
     return [state, actions];
 }

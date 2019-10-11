@@ -1,10 +1,25 @@
 import { useMemo } from "react"
 
+export enum ClefType {
+    C = 1,
+    F,
+    G
+}
+
+export interface StaveDef {
+    lines: number;
+    clef: {
+        type: ClefType,
+        offset: number; // which line the clef is centered on
+    }
+}
+
 export interface InstrumentDef {
     id: string;
     path: string[];
     longName: string;
     shortName: string;
+    staves: StaveDef[];
 }
 
 export interface InstrumentDefs {
@@ -54,88 +69,81 @@ export function getFirstInstrumentDefFromPartialPath(path: string[]): Instrument
 }
 
 export const instrumentDefs: InstrumentDefs = {
-    "brass.trumpet.b-flat": {
-        id: "brass.trumpet.b-flat",
-        path: ['Brass', 'Trumpet', 'B Flat'],
-        longName: "Trumpet",
-        shortName: "Trmp"
-    },
-    "brass.trumpet.c": {
-        id: "brass.trumpet.c",
-        path: ['Brass', 'Trumpet', 'C'],
-        longName: "Trumpet",
-        shortName: "Trmp"
-    },
     "keyboards.piano": {
         id: "keyboards.piano",
         path: ['Keyboards', 'Piano'],
         longName: "Piano",
-        shortName: "Pno"
+        shortName: "Pno",
+        staves: [{ lines: 5, clef: { type: ClefType.G, offset: 4 } }, { lines: 5, clef: { type: ClefType.F, offset: 2 } }]
     },
     "strings.violin": {
         id: "strings.violin",
         path: ['Strings', 'Violin'],
         longName: "Violin",
-        shortName: "Vln"
+        shortName: "Vln",
+        staves: [{ lines: 5, clef: { type: ClefType.G, offset: 4 } }]
     },
     "strings.viola": {
-        id: "trings.viola",
+        id: "strings.viola",
         path: ['Strings', 'Viola'],
         longName: "Viola",
-        shortName: "Vla"
+        shortName: "Vla",
+        staves: [{ lines: 5, clef: { type: ClefType.C, offset: 3 } }]
     },
     "strings.violoncello": {
         id: "strings.violoncello",
         path: ['Strings', 'Violoncello'],
         longName: "Violoncello",
-        shortName: "Vc"
+        shortName: "Vc",
+        staves: [{ lines: 5, clef: { type: ClefType.F, offset: 2 } }]
     },
     "strings.contrabass": {
         id: "strings.contrabass",
         path: ['Strings', 'Contrabass'],
         longName: "Contrabass",
-        shortName: "Cb"
+        shortName: "Cb",
+        staves: [{ lines: 5, clef: { type: ClefType.F, offset: 2 } }]
     },
     "woodwinds.piccolo": {
         id: "woodwinds.piccolo",
         path: ['Woodwinds', 'Piccolo'],
         longName: "Piccolo",
-        shortName: "Pc."
+        shortName: "Pc.",
+        staves: [{ lines: 5, clef: { type: ClefType.G, offset: 4 } }]
     },
     "woodwinds.flute": {
         id: "woodwinds.flute",
         path: ['Woodwinds', 'Flute'],
         longName: "Flute",
-        shortName: "Fl"
+        shortName: "Fl",
+        staves: [{ lines: 5, clef: { type: ClefType.G, offset: 4 } }]
     },
     "woodwinds.oboe": {
         id: "woodwinds.oboe",
         path: ['Woodwinds', 'Oboe'],
         longName: "Oboe",
-        shortName: "Ob"
+        shortName: "Ob",
+        staves: [{ lines: 5, clef: { type: ClefType.G, offset: 4 } }]
     },
     "woodwinds.clarinet.a": {
         id: "woodwinds.clarinet.a",
         path: ['Woodwinds', 'Clarinet', 'A'],
         longName: "Clarinet in A",
-        shortName: "Cl"
+        shortName: "Cl",
+        staves: [{ lines: 5, clef: { type: ClefType.G, offset: 4 } }]
     },
     "woodwinds.clarinet.b-flat": {
         id: "woodwinds.clarinet.b-flat",
         path: ['Woodwinds', 'Clarinet', 'B Flat'],
         longName: "Clarinet in B♭",
-        shortName: "Cl"
-    },
-    "woodwinds.bass-clarinet": {
-        id: "woodwinds.bass-clarinet",
-        path: ['Woodwinds', 'Bass Clarinet'],
-        longName: "Bass Clarinet in B♭",
-        shortName: "B. Cl"
+        shortName: "Cl",
+        staves: [{ lines: 5, clef: { type: ClefType.G, offset: 4 } }]
     },
     "woodwinds.bassoon": {
         id: "woodwinds.bassoon",
         path: ['Woodwinds', 'Bassoon'],
         longName: "Bassoon",
-        shortName: "Bn"
+        shortName: "Bn",
+        staves: [{ lines: 5, clef: { type: ClefType.F, offset: 2 } }]
     }
 }

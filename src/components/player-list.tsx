@@ -5,14 +5,14 @@ import { mdiPlus } from '@mdi/js';
 import { Icon } from '../ui';
 import { Player } from '../services/player';
 import { PlayerItem } from './player-item';
-import { InstrumentState, InstrumentCounts } from '../services/instrument';
+import { Instruments, InstrumentCounts } from '../services/instrument';
 import { SelectionType, Selection } from '../states/setup';
 
 import './player-list.css';
 
 interface Props {
   players: Player[];
-  instruments: InstrumentState;
+  instruments: Instruments;
   counts: InstrumentCounts;
   selection: Selection;
 

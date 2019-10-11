@@ -1,5 +1,5 @@
 import { PlayerState, playerEmptyState, playerReducer, playerActions, PlayerActions } from "./player";
-import { InstrumentActions, InstrumentState, instrumentEmptyState, instrumentReducer, instrumentActions } from "./instrument";
+import { InstrumentActions, Instruments, instrumentEmptyState, instrumentReducer, instrumentActions } from "./instrument";
 import { FlowActions, FlowState, flowEmptyState, flowReducer, flowActions } from "./flow";
 
 export interface ScoreActions {
@@ -10,7 +10,7 @@ export interface ScoreActions {
 
 export interface ScoreState {
     players: PlayerState;
-    instruments: InstrumentState;
+    instruments: Instruments;
     flows: FlowState;
 }
 

@@ -1,6 +1,10 @@
 import shortid from 'shortid';
 import ArrayMove from 'array-move';
-import { PlayerKey, PLAYER_CREATE, PLAYER_REMOVE } from './player';
+import { PlayerKey, PLAYER_CREATE, PLAYER_REMOVE, PLAYER_ASSIGN_INSTRUMENT, Players, Player } from './player';
+import { Stave, StaveKey, Staves, createStave } from './stave';
+import { removeProps } from '../ui/utils/remove-props';
+import { instrumentDefs } from './instrument-defs';
+import { Instruments, Instrument } from './instrument';
 
 export const FLOW_CREATE = '@flow/create';
 export const FLOW_REORDER = '@flow/reorder';
@@ -8,30 +12,33 @@ export const FLOW_REMOVE = '@flow/remove';
 export const FLOW_ASSIGN_PLAYER = '@flow/assign-player';
 export const FLOW_REMOVE_PLAYER = '@flow/remove-player';
 
-export type FlowKey = string;
-
 export interface FlowActions {
-    create: (players: PlayerKey[]) => FlowKey;
+    create: (playerKeys: PlayerKey[], players: Players, instruments: Instruments) => FlowKey;
     reorder: (instruction: { oldIndex: number, newIndex: number }) => void;
     remove: (flow: Flow) => void;
-    assignPlayer: (flowKey: FlowKey, playerKey: PlayerKey) => void;
-    removePlayer: (flowKey: FlowKey, playerKey: PlayerKey) => void;
+    assignPlayer: (flowKey: FlowKey, player: Player, instruments: Instruments) => void;
+    removePlayer: (flowKey: FlowKey, playerKey: PlayerKey, staveKeys: StaveKey[]) => void;
 }
+
+export type FlowKey = string;
+
+export type Flows = { [flowKey: string]: Flow };
 
 export interface Flow {
     key: FlowKey;
     title: string;
     players: PlayerKey[] // unordered, purely for inclusion lookup
+    staves: Staves;
 }
 
 export interface FlowState {
     order: FlowKey[];
-    byKey: { [key: string]: Flow };
+    byKey: Flows;
 }
 
 export const flowEmptyState = (): FlowState => {
     // score initialises with an empty flow
-    const flow = createFlow([]);
+    const flow = createFlow([], {});
     return { order: [flow.key], byKey: { [flow.key]: flow } };
 }
 
@@ -67,6 +74,7 @@ export const flowReducer = (state: FlowState, action: any) => {
         case FLOW_ASSIGN_PLAYER: {
             const flowKey: FlowKey = action.payload.flowKey;
             const playerKey: PlayerKey = action.payload.playerKey;
+            const staves: Staves = action.payload.staves;
             const flow = state.byKey[flowKey];
             return {
                 order: state.order,
@@ -74,6 +82,7 @@ export const flowReducer = (state: FlowState, action: any) => {
                     ...state.byKey,
                     [flowKey]: {
                         ...flow,
+                        staves: { ...flow.staves, ...staves },
                         players: [...flow.players, playerKey]
                     }
                 }
@@ -82,6 +91,7 @@ export const flowReducer = (state: FlowState, action: any) => {
         case FLOW_REMOVE_PLAYER: {
             const flowKey: FlowKey = action.payload.flowKey;
             const playerKey: PlayerKey = action.payload.playerKey;
+            const staveKeys: StaveKey[] = action.payload.staveKeys;
             const flow = state.byKey[flowKey];
             return {
                 order: state.order,
@@ -89,6 +99,7 @@ export const flowReducer = (state: FlowState, action: any) => {
                     ...state.byKey,
                     [flowKey]: {
                         ...flow,
+                        staves: removeProps(flow.staves, staveKeys),
                         players: flow.players.filter(key => key !== playerKey)
                     }
                 }
@@ -109,14 +120,38 @@ export const flowReducer = (state: FlowState, action: any) => {
             }
         }
         case PLAYER_REMOVE: {
-            const playerKey: PlayerKey = action.payload.key;
+            const playerKey: PlayerKey = action.payload.player.key;
+            const staveKeys: StaveKey[] = action.payload.staveKeys;
             return {
                 order: state.order,
                 byKey: state.order.reduce((output: { [key: string]: Flow }, flowKey: string) => {
                     const flow = state.byKey[flowKey];
                     output[flowKey] = {
                         ...flow,
+                        staves: removeProps(flow.staves, staveKeys),
                         players: flow.players.filter(key => key !== playerKey)
+                    }
+                    return output;
+                }, {})
+            }
+        }
+        case PLAYER_ASSIGN_INSTRUMENT: {
+            const playerKey: PlayerKey = action.payload.playerKey;
+            const staves: { [staveKey: string]: Stave } = action.payload.staves;
+            return {
+                order: state.order,
+                byKey: state.order.reduce((output: { [key: string]: Flow }, flowKey: string) => {
+                    const flow = state.byKey[flowKey];
+                    if (flow.players.includes(playerKey)) {
+                        output[flowKey] = {
+                            ...flow,
+                            staves: {
+                                ...flow.staves,
+                                ...staves
+                            }
+                        }
+                    } else {
+                        output[flowKey] = flow;
                     }
                     return output;
                 }, {})
@@ -129,8 +164,19 @@ export const flowReducer = (state: FlowState, action: any) => {
 
 export const flowActions = (dispatch: any): FlowActions => {
     return {
-        create: (players) => {
-            const flow = createFlow(players);
+        create: (playerKeys, players, instruments) => {
+            const staves = playerKeys.reduce((output: { [staveKey: string]: Stave }, playerKey) => {
+                const player = players[playerKey];
+                player.instruments.forEach(instrumentKey => {
+                    const instrument = instruments[instrumentKey];
+                    const defs = instrumentDefs[instrument.id].staves;
+                    instrument.staves.forEach((staveKey, i) => {
+                        output[staveKey] = createStave(defs[i], staveKey);
+                    });
+                });
+                return output;
+            }, {});
+            const flow = createFlow(playerKeys, staves);
             dispatch({ type: FLOW_CREATE, payload: flow });
             return flow.key;
         },
@@ -140,19 +186,28 @@ export const flowActions = (dispatch: any): FlowActions => {
         remove: (flow) => {
             dispatch({ type: FLOW_REMOVE, payload: flow });
         },
-        assignPlayer: (flowKey, playerKey) => {
-            dispatch({ type: FLOW_ASSIGN_PLAYER, payload: { flowKey, playerKey } });
+        assignPlayer: (flowKey, player, instruments) => {
+            const staves = player.instruments.reduce((output: { [staveKey: string]: Stave }, instrumentKey) => {
+                const instrument = instruments[instrumentKey];
+                const defs = instrumentDefs[instrument.id].staves;
+                instrument.staves.forEach((staveKey, i) => {
+                    output[staveKey] = createStave(defs[i], staveKey);
+                });
+                return output;
+            }, {});
+            dispatch({ type: FLOW_ASSIGN_PLAYER, payload: { flowKey, playerKey: player.key, staves } });
         },
-        removePlayer: (flowKey, playerKey) => {
-            dispatch({ type: FLOW_REMOVE_PLAYER, payload: { flowKey, playerKey } });
+        removePlayer: (flowKey, playerKey, staveKeys: StaveKey[]) => {
+            dispatch({ type: FLOW_REMOVE_PLAYER, payload: { flowKey, playerKey, staveKeys } });
         }
     }
 }
 
-const createFlow = (players: PlayerKey[]): Flow => {
+const createFlow = (players: PlayerKey[], staves: { [key: string]: Stave }): Flow => {
     return {
         key: shortid(),
         title: 'Untitled Flow',
-        players
+        players,
+        staves
     }
 }

@@ -9,6 +9,7 @@ import { useCounts } from '../services/instrument';
 import { PlayerList } from '../components/player-list';
 import { FlowList } from '../components/flow-list';
 import { InstrumentPicker } from '../components/instrument-picker';
+import { StaveKey } from '../services/stave';
 
 import './setup.css';
 
@@ -43,7 +44,7 @@ export const Setup: FC<Props> = ({ state, actions }) => {
     }, [state.score.players]);
 
     const onCreatePlayer = useCallback(() => {
-        const key = actions.score.players.create(PlayerType.section);
+        const key = actions.score.players.create(PlayerType.solo);
         setSelection({ key, type: SelectionType.player });
         setDialogOpen(true);
     }, [actions.score.players]);
@@ -53,14 +54,14 @@ export const Setup: FC<Props> = ({ state, actions }) => {
     }, []);
 
     const onRemovePlayer = useCallback((player: Player) => {
-        actions.score.players.remove(player);
+        actions.score.players.remove(player, state.score.instruments);
         setSelection(null);
     }, [actions.score.players]);
 
     const onSelectInstrument = useCallback((def: InstrumentDef) => {
         if (selection) {
-            const instrumentKey = actions.score.instruments.create(def);
-            actions.score.players.assignInstrument(selection.key, instrumentKey);
+            const instrument = actions.score.instruments.create(def);
+            actions.score.players.assignInstrument(selection.key, instrument);
         }
         setDialogOpen(false);
     }, [selection, actions.score.instruments, actions.score.players]);
@@ -84,9 +85,9 @@ export const Setup: FC<Props> = ({ state, actions }) => {
     }, [state.score.flows]);
 
     const onCreateFlow = useCallback(() => {
-        const key = actions.score.flows.create(state.score.players.order);
+        const key = actions.score.flows.create(state.score.players.order, state.score.players.byKey, state.score.instruments);
         setSelection({ key, type: SelectionType.flow });
-    }, [actions.score.flows, state.score.players.order]);
+    }, [actions.score.flows, state.score.players, state.score.instruments]);
 
     const onRemoveFlow = useCallback((flow: Flow) => {
         actions.score.flows.remove(flow);
@@ -94,16 +95,24 @@ export const Setup: FC<Props> = ({ state, actions }) => {
     }, [actions.score.flows]);
 
     const onAssignPlayerToFlow = useCallback((flowKey: FlowKey) => {
-        if(selection) {
-            actions.score.flows.assignPlayer(flowKey, selection.key);
+        if (selection) {
+            const playerKey = selection.key;
+            const player = state.score.players.byKey[playerKey];
+            actions.score.flows.assignPlayer(flowKey, player, state.score.instruments);
         }
-    }, [selection, actions.score.flows]);
+    }, [selection, actions.score.flows, state.score.instruments, state.score.players.byKey]);
 
     const onRemovePlayerFromFlow = useCallback((flowKey: FlowKey) => {
-        if(selection) {
-            actions.score.flows.removePlayer(flowKey, selection.key);
+        if (selection) {
+            const playerKey = selection.key;
+            const instruments = state.score.players.byKey[playerKey].instruments;
+            const staveKeys = instruments.reduce((output: StaveKey[], instrumentKey) => {
+                const instrument = state.score.instruments[instrumentKey];
+                return [...output, ...instrument.staves];
+            }, []);
+            actions.score.flows.removePlayer(flowKey, selection.key, staveKeys);
         }
-    }, [selection, actions.score.flows]);
+    }, [selection, actions.score.flows, state.score.instruments, state.score.players.byKey]);
 
     const onSortFlows = useCallback((instruction) => {
         actions.score.flows.reorder(instruction);
