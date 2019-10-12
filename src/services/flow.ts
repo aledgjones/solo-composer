@@ -4,7 +4,7 @@ import { PlayerKey, PLAYER_CREATE, PLAYER_REMOVE, PLAYER_ASSIGN_INSTRUMENT, Play
 import { Stave, StaveKey, Staves, createStave } from './stave';
 import { removeProps } from '../ui/utils/remove-props';
 import { instrumentDefs } from './instrument-defs';
-import { Instruments, Instrument } from './instrument';
+import { Instruments } from './instrument';
 
 export const FLOW_CREATE = '@flow/create';
 export const FLOW_REORDER = '@flow/reorder';

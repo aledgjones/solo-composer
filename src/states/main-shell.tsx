@@ -1,9 +1,12 @@
 import React, { FC } from 'react';
-import { Tabs, Tab } from '../ui';
 import { THEME } from '../const';
-import { Setup } from './setup';
+
+import { Tabs, Tab } from '../ui';
 import { useAppState } from '../services/state';
 import { TabState } from '../services/tab';
+
+import { Setup } from './setup';
+import { Write } from './write';
 
 import './main-shell.css';
 
@@ -20,5 +23,6 @@ export const MainShell: FC = () => {
       <Tab value={TabState.print}>Print</Tab>
     </Tabs>
     {state.tab === TabState.setup && <Setup state={state} actions={actions} />}
+    {state.tab === TabState.write && <Write state={state} actions={actions} />}
   </>;
 }

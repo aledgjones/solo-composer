@@ -44,8 +44,8 @@ export const Setup: FC<Props> = ({ state, actions }) => {
     }, [state.score.players]);
 
     const onCreatePlayer = useCallback(() => {
-        const key = actions.score.players.create(PlayerType.solo);
-        setSelection({ key, type: SelectionType.player });
+        const player = actions.score.players.create(PlayerType.solo);
+        setSelection({ key: player.key, type: SelectionType.player });
         setDialogOpen(true);
     }, [actions.score.players]);
 
@@ -56,7 +56,7 @@ export const Setup: FC<Props> = ({ state, actions }) => {
     const onRemovePlayer = useCallback((player: Player) => {
         actions.score.players.remove(player, state.score.instruments);
         setSelection(null);
-    }, [actions.score.players]);
+    }, [actions.score.players, state.score.instruments]);
 
     const onSelectInstrument = useCallback((def: InstrumentDef) => {
         if (selection) {

@@ -12,7 +12,7 @@ export const PLAYER_ASSIGN_INSTRUMENT = '@player/assign-instrument';
 export type PlayerKey = string;
 
 export interface PlayerActions {
-    create: (type: PlayerType) => string;
+    create: (type: PlayerType) => Player;
     reorder: (instruction: { oldIndex: number, newIndex: number }) => void;
     remove: (player: Player, instruments: Instruments) => void;
     assignInstrument: (playerKey: PlayerKey, instrument: Instrument) => void;
@@ -91,7 +91,7 @@ export const playerActions = (dispatch: any): PlayerActions => {
         create: (type) => {
             const player = createPlayer(type);
             dispatch({ type: PLAYER_CREATE, payload: player });
-            return player.key;
+            return player;
         },
         reorder: (instruction) => {
             dispatch({ type: PLAYER_REORDER, payload: instruction });

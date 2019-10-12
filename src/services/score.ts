@@ -8,13 +8,13 @@ export interface ScoreActions {
     flows: FlowActions;
 }
 
-export interface ScoreState {
+export interface Score {
     players: PlayerState;
     instruments: Instruments;
     flows: FlowState;
 }
 
-export const scoreEmptyState = (): ScoreState => {
+export const scoreEmptyState = (): Score => {
     return {
         players: playerEmptyState(),
         instruments: instrumentEmptyState(),
@@ -22,7 +22,7 @@ export const scoreEmptyState = (): ScoreState => {
     };
 }
 
-export const scoreReducer = (state: ScoreState, action: any) => {
+export const scoreReducer = (state: Score, action: any) => {
     return {
         players: playerReducer(state.players, action),
         instruments: instrumentReducer(state.instruments, action),
