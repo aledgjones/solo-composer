@@ -5,6 +5,7 @@ import { Stave, StaveKey, Staves, createStave } from './stave';
 import { removeProps } from '../ui/utils/remove-props';
 import { instrumentDefs } from './instrument-defs';
 import { Instruments } from './instrument';
+import { Track, createTrack } from './track';
 
 export const FLOW_CREATE = '@flow/create';
 export const FLOW_REORDER = '@flow/reorder';
@@ -29,6 +30,7 @@ export interface Flow {
     title: string;
     players: PlayerKey[] // unordered, purely for inclusion lookup
     staves: Staves;
+    master: Track;
 }
 
 export interface FlowState {
@@ -37,7 +39,6 @@ export interface FlowState {
 }
 
 export const flowEmptyState = (): FlowState => {
-    // score initialises with an empty flow
     const flow = createFlow([], {});
     return { order: [flow.key], byKey: { [flow.key]: flow } };
 }
@@ -208,6 +209,7 @@ const createFlow = (players: PlayerKey[], staves: { [key: string]: Stave }): Flo
         key: shortid(),
         title: 'Untitled Flow',
         players,
-        staves
+        staves,
+        master: createTrack([], {})
     }
 }

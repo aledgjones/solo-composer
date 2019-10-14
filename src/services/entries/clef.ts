@@ -1,4 +1,5 @@
-import { Entry, EntryDef, EntryKey } from ".";
+import shortid from 'shortid';
+import { Entry, EntryType } from ".";
 
 export enum ClefType {
     C = 1,
@@ -6,29 +7,22 @@ export enum ClefType {
     G
 }
 
-export interface ClefDef extends EntryDef {
+export interface ClefDef {
     type: ClefType;
-    offset: number;
+    position: number;
 }
 
-export class Clef implements Entry<ClefDef> {
+export interface Clef extends Entry, ClefDef {
 
-    public key: EntryKey;
-    
-    private type: ClefType;
-    private offset: number;
+}
 
-    constructor(def: ClefDef, key: EntryKey) {
-        this.key = key;
-        this.type = def.type;
-        this.offset = def.offset;
-    }
+export function createClef(def: ClefDef): Clef {
+    return {
+        _type: EntryType.clef,
+        _key: shortid(),
+        _box: { width: 1, height: 1 },
+        _offset: { top: 0, left: 0 },
 
-    public measure() {
-        return { width: 100 };
-    }
-
-    public def() {
-        return { _type: 'clef', type: this.type, offset: this.offset };
+        ...def
     }
 }

@@ -1,15 +1,27 @@
 export type EntryKey = string;
 
-export interface Metrics {
+export interface Box {
     width: number;
+    height: number;
 }
 
-export interface EntryDef {
-    _type: string;
+export interface Offset {
+    top: number;
+    left: number;
 }
 
-export interface Entry<T> {
-    key: EntryKey;
-    measure: () => Metrics;
-    def: () => T;
+export interface Entries {
+    [entryKey: string]: Entry;
+}
+
+export interface Entry {
+    _type: EntryType,
+    _key: EntryKey;
+    _box: Box;
+    _offset: Offset;
+}
+
+export enum EntryType {
+    clef = 1,
+    key
 }

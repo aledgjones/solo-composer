@@ -3,7 +3,7 @@ import { TabState, tabReducer, tabEmptyState, tabActions, TabActions } from "./t
 import { scoreActions, scoreReducer, scoreEmptyState, Score, ScoreActions } from "./score";
 import { PlayerType } from "./player";
 import { instrumentDefs } from "./instrument-defs";
-// import { log } from "../ui/utils/log";
+import { log } from "../ui/utils/log";
 
 export interface State {
     tab: TabState;
@@ -41,24 +41,24 @@ export const useAppState = (): [State, Actions] => {
         let player = actions.score.players.create(PlayerType.solo);
         actions.score.players.assignInstrument(player.key, instrument);
 
-        instrument = actions.score.instruments.create(instrumentDefs['strings.violin']);
-        player = actions.score.players.create(PlayerType.section);
-        actions.score.players.assignInstrument(player.key, instrument);
+        // instrument = actions.score.instruments.create(instrumentDefs['strings.violin']);
+        // player = actions.score.players.create(PlayerType.section);
+        // actions.score.players.assignInstrument(player.key, instrument);
 
-        instrument = actions.score.instruments.create(instrumentDefs['strings.violin']);
-        player = actions.score.players.create(PlayerType.section);
-        actions.score.players.assignInstrument(player.key, instrument);
+        // instrument = actions.score.instruments.create(instrumentDefs['strings.violin']);
+        // player = actions.score.players.create(PlayerType.section);
+        // actions.score.players.assignInstrument(player.key, instrument);
         
-        instrument = actions.score.instruments.create(instrumentDefs['strings.viola']);
-        player = actions.score.players.create(PlayerType.section);
-        actions.score.players.assignInstrument(player.key, instrument);
+        // instrument = actions.score.instruments.create(instrumentDefs['strings.viola']);
+        // player = actions.score.players.create(PlayerType.section);
+        // actions.score.players.assignInstrument(player.key, instrument);
 
-        instrument = actions.score.instruments.create(instrumentDefs['strings.violoncello']);
-        player = actions.score.players.create(PlayerType.section);
-        actions.score.players.assignInstrument(player.key, instrument);
+        // instrument = actions.score.instruments.create(instrumentDefs['strings.violoncello']);
+        // player = actions.score.players.create(PlayerType.section);
+        // actions.score.players.assignInstrument(player.key, instrument);
     }, [])
 
-    // log(state, 'state');
+    log(state, 'state');
 
     return [state, actions];
 }

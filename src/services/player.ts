@@ -104,12 +104,13 @@ export const playerActions = (dispatch: any): PlayerActions => {
             dispatch({ type: PLAYER_REMOVE, payload: { player, staveKeys } });
         },
         assignInstrument: (playerKey, instrument) => {
+            const instrumentKey = instrument.key;
             const def = instrumentDefs[instrument.id];
             const staves = instrument.staves.reduce((output: Staves, staveKey, i) => {
                 output[staveKey] = createStave(def.staves[i], staveKey);
                 return output;
             }, {});
-            dispatch({ type: PLAYER_ASSIGN_INSTRUMENT, payload: { playerKey, instrumentKey: instrument.key, staves } });
+            dispatch({ type: PLAYER_ASSIGN_INSTRUMENT, payload: { playerKey, instrumentKey, staves } });
         }
     }
 }

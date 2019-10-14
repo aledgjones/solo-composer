@@ -1,27 +1,26 @@
 import shortid from 'shortid';
-import { Entry } from './entries';
+import { EntryKey, Entries } from './entries';
 
 export type TrackKey = string;
 
 export interface Tracks {
-    order: TrackKey[];
-    byKey: {
-        [trackKey: string]: Track;
-    }
+    [trackKey: string]: Track;
 };
 
 export interface Track {
     key: TrackKey;
-    entriesOrder: [];
-    entriesByKey: {
-        [entryKey: string]: Entry<any>;
-    };
+    entries: {
+        order: EntryKey[];
+        byKey: Entries;
+    }
 }
 
-export function createTrack(trackKey: TrackKey = shortid()): Track {
+export function createTrack(entriesOrder: EntryKey[] = [], entriesByKey: Entries): Track {
     return {
-        key: trackKey,
-        entriesOrder: [],
-        entriesByKey: {}
+        key: shortid(),
+        entries: {
+            order: entriesOrder,
+            byKey: entriesByKey
+        }
     }
 }
