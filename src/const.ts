@@ -3,6 +3,6 @@ export const APP_VERSION = '1.0.0';
 
 export const THEME = {
     PRIMARY: "#5a4a8e",
-    // PRIMARY: '#007bff',
+    // PRIMARY: '#00afff',
     ERROR: "#ff6347"
 }

@@ -1,10 +1,5 @@
-import { useMemo } from "react"
-
-export enum ClefType {
-    C = 1,
-    F,
-    G
-}
+import { useMemo } from "react";
+import { ClefType } from "./entries/clef";
 
 export interface StaveDef {
     lines: number;

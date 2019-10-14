@@ -23,7 +23,7 @@ export const InstrumentPicker: FC<Props> = ({ onSelect, onCancel }) => {
 
   const bg = THEME.PRIMARY;
   const fg = useMemo(() => {
-    return Color(bg).isDark() ? 'rgb(255,255,255)' : 'rgb(0,0,0,)';
+    return Color(bg).isDark() ? 'rgb(255,255,255)' : 'rgb(0,0,0)';
   }, [bg]);
 
   return <Backdrop visible={true}>

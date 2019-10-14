@@ -5,11 +5,12 @@ import { PlayerType, Player } from '../services/player';
 import { Flow, FlowKey } from '../services/flow';
 import { InstrumentDef } from '../services/instrument-defs';
 import { useCounts } from '../services/instrument';
+import { StaveKey } from '../services/stave';
 
 import { PlayerList } from '../components/player-list';
 import { FlowList } from '../components/flow-list';
 import { InstrumentPicker } from '../components/instrument-picker';
-import { StaveKey } from '../services/stave';
+import { RenderRegion } from '../components/render-region';
 
 import './setup.css';
 
@@ -138,7 +139,9 @@ export const Setup: FC<Props> = ({ state, actions }) => {
                 onSortEnd={onSortPlayers}
             />
             <div className="setup__middle">
-                <div style={{ flexGrow: 1 }} /> {/* temp for spacing - eventually this will be a score view */}
+                <div style={{ flexGrow: 1 }}>
+                    <RenderRegion />
+                </div>
                 <FlowList
                     flows={flows}
                     selection={selection}
