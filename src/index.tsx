@@ -4,6 +4,7 @@ import { MainShell } from './states/main-shell';
 import * as serviceWorker from './serviceWorker';
 import 'app-reset/app-reset.css';
 import './ui/index.css';
+import './assets/fonts.css';
 
 ReactDOM.render(<MainShell />, document.getElementById('root'));
 

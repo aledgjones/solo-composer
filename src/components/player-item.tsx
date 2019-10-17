@@ -6,7 +6,7 @@ import Color from 'color';
 import { Icon } from '../ui';
 import { Player, PlayerType } from '../services/player';
 import { Instruments, InstrumentCounts } from '../services/instrument';
-import { THEME } from '../const';
+import { Theme } from '../const';
 import { InstrumentItem } from './instrument-item';
 import { Handle } from './handle';
 import { SelectionType } from '../states/setup';
@@ -43,7 +43,7 @@ export const PlayerItem = SortableElement<Props>((props: Props) => {
 
     const bg = useMemo(() => {
         if (selected) {
-            return THEME.PRIMARY;
+            return Theme.primary;
         } else {
             return undefined;
         }

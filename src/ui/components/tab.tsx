@@ -21,7 +21,6 @@ export const Tab: FC<Props> = ({ children, value, selected, background, highligh
   const text = useMemo(() => {
     if (selected) {
       return Color(highlight).isDark() ? 'rgb(255,255,255)' : 'rgb(0,0,0)';
-      // return highlight;
     } else {
       return Color(background).isDark() ? 'rgb(255,255,255)' : 'rgb(0,0,0)';
     }

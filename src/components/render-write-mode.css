@@ -1,0 +1,9 @@
+.render-write-mode__container {
+  padding: 20px;
+  display: inline-block;
+}
+
+.render-write-mode__container canvas {
+  box-shadow: 0 0 4px rgba(0, 0, 0, .1);
+  display: block;
+}

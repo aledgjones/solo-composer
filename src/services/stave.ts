@@ -1,7 +1,10 @@
 import shortid from 'shortid';
 import { StaveDef } from "./instrument-defs";
-import { Track, Tracks, TrackKey, createTrack } from './track';
-import { Clef, createClef } from './entries/clef';
+import { Track, createTrack } from './track';
+import { createClef } from './entries/clef';
+import { useMemo } from 'react';
+import { Instrument } from './instrument';
+import { Flow } from './flow';
 
 export type StaveKey = string;
 
@@ -14,7 +17,7 @@ export interface Stave {
 }
 
 export function createStave(staveDef: StaveDef, staveKey: StaveKey = shortid()): Stave {
-    const clef = createClef(staveDef.clef);
+    const clef = createClef(staveDef.clef, 0);
     const master = createTrack([clef._key], { [clef._key]: clef });
 
     return {
@@ -22,4 +25,15 @@ export function createStave(staveDef: StaveDef, staveKey: StaveKey = shortid()):
         lines: staveDef.lines,
         master
     }
+}
+
+export function useStaves(instruments: Instrument[], flow: Flow) {
+    return useMemo(() => {
+        return instruments.reduce((output: Stave[], instrument) => {
+            instrument.staves.forEach(staveKey => {
+                output.push(flow.staves[staveKey]);
+            });
+            return output;
+        }, []);
+    }, [instruments, flow.staves]);
 }

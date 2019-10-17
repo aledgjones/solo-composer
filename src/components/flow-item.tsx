@@ -5,7 +5,7 @@ import Color from 'color';
 
 import { Icon, Checkbox } from '../ui';
 import { Flow, FlowKey } from '../services/flow';
-import { THEME } from '../const';
+import { Theme } from '../const';
 import { Handle } from './handle';
 import { SelectionType, Selection } from '../states/setup';
 
@@ -49,7 +49,7 @@ export const FlowItem = SortableElement<Props>((props: Props) => {
 
     const bg = useMemo(() => {
         if (selected) {
-            return THEME.PRIMARY;
+            return Theme.primary;
         } else if (active) {
             return '#293237';
         } else {

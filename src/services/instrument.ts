@@ -1,9 +1,11 @@
 import { useMemo } from 'react';
 import shortid from 'shortid';
 import { InstrumentDef } from './instrument-defs';
-import { PlayerState, PlayerKey, PLAYER_REMOVE } from './player';
+import { PlayerKey, PLAYER_REMOVE } from './player';
 import { StaveKey, createStave } from './stave';
 import { removeProps } from '../ui/utils/remove-props';
+import { Score } from './score';
+import { Flow } from './flow';
 
 export const INSTRUMENT_CREATE = '@instrument/create';
 export const INSTRUMENT_REMOVE = '@instrument/remove';
@@ -75,7 +77,7 @@ const createInstrument = (def: InstrumentDef, staves: StaveKey[]): Instrument =>
 }
 
 type InstrumentCountsTotals = { [name: string]: InstrumentKey[] };
-export type InstrumentCounts = { [key: string]: number };
+export type InstrumentCounts = { [instrumentKey: string]: number };
 
 /**
  * Counts duplicate instrument names
@@ -85,13 +87,13 @@ export type InstrumentCounts = { [key: string]: number };
  * 
  * eg violin ${counts['violin'].length + 1} = Violin *1*
  */
-export function useCounts(players: PlayerState, instruments: Instruments): InstrumentCounts {
+export function useCounts(score: Score): InstrumentCounts {
     return useMemo(() => {
 
-        const counts = players.order.reduce((output: InstrumentCountsTotals, playerKey: PlayerKey) => {
-            const player = players.byKey[playerKey];
+        const counts = score.players.order.reduce((output: InstrumentCountsTotals, playerKey: PlayerKey) => {
+            const player = score.players.byKey[playerKey];
             player.instruments.forEach((instrumentKey: InstrumentKey) => {
-                const instrument = instruments[instrumentKey];
+                const instrument = score.instruments[instrumentKey];
                 const name = instrument.longName + ':' + player.type;
                 if (!output[name]) {
                     output[name] = [];
@@ -111,5 +113,19 @@ export function useCounts(players: PlayerState, instruments: Instruments): Instr
             return out;
         }, {});
 
-    }, [players, instruments]);
+    }, [score.players, score.instruments]);
+}
+
+export function useInstruments(score: Score, flow: Flow): Instrument[] {
+    return useMemo(() => {
+        return score.players.order.reduce((output: Instrument[], playerKey) => {
+            if (flow.players.includes(playerKey)) {
+                const player = score.players.byKey[playerKey];
+                player.instruments.forEach(instrumentKey => {
+                    output.push(score.instruments[instrumentKey]);
+                });
+            }
+            return output;
+        }, []);
+    }, [score.players, score.instruments, flow]);
 }

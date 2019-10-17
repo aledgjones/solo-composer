@@ -13,6 +13,7 @@ import { InstrumentPicker } from '../components/instrument-picker';
 import { RenderRegion } from '../components/render-region';
 
 import './setup.css';
+import { RenderWriteMode } from '../components/render-write-mode';
 
 export enum SelectionType {
     player = 1,
@@ -75,7 +76,7 @@ export const Setup: FC<Props> = ({ state, actions }) => {
         actions.score.players.reorder(instruction);
     }, [actions.score.players]);
 
-    const counts = useCounts(state.score.players, state.score.instruments);
+    const counts = useCounts(state.score);
 
     // FLOWS
 
@@ -139,9 +140,9 @@ export const Setup: FC<Props> = ({ state, actions }) => {
                 onSortEnd={onSortPlayers}
             />
             <div className="setup__middle">
-                <div style={{ flexGrow: 1 }}>
-                    <RenderRegion />
-                </div>
+                <RenderRegion className="setup__view">
+                    <RenderWriteMode score={state.score} />
+                </RenderRegion>
                 <FlowList
                     flows={flows}
                     selection={selection}

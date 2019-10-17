@@ -66,76 +66,76 @@ export const instrumentDefs: InstrumentDefs = {
         path: ['Keyboards', 'Piano'],
         longName: "Piano",
         shortName: "Pno",
-        staves: [{ lines: 5, clef: { type: ClefType.G, position: 4 } }, { lines: 5, clef: { type: ClefType.F, position: 2 } }]
+        staves: [{ lines: 5, clef: { type: ClefType.G, offset: 3 } }, { lines: 5, clef: { type: ClefType.F, offset: 1 } }]
     },
     "strings.violin": {
         id: "strings.violin",
         path: ['Strings', 'Violin'],
         longName: "Violin",
         shortName: "Vln",
-        staves: [{ lines: 5, clef: { type: ClefType.G, position: 4 } }]
+        staves: [{ lines: 5, clef: { type: ClefType.G, offset: 3 } }]
     },
     "strings.viola": {
         id: "strings.viola",
         path: ['Strings', 'Viola'],
         longName: "Viola",
         shortName: "Vla",
-        staves: [{ lines: 5, clef: { type: ClefType.C, position: 3 } }]
+        staves: [{ lines: 5, clef: { type: ClefType.C, offset: 2 } }]
     },
     "strings.violoncello": {
         id: "strings.violoncello",
         path: ['Strings', 'Violoncello'],
         longName: "Violoncello",
         shortName: "Vc",
-        staves: [{ lines: 5, clef: { type: ClefType.F, position: 2 } }]
+        staves: [{ lines: 5, clef: { type: ClefType.F, offset: 1 } }]
     },
     "strings.contrabass": {
         id: "strings.contrabass",
         path: ['Strings', 'Contrabass'],
         longName: "Contrabass",
         shortName: "Cb",
-        staves: [{ lines: 5, clef: { type: ClefType.F, position: 2 } }]
+        staves: [{ lines: 5, clef: { type: ClefType.F, offset: 1 } }]
     },
     "woodwinds.piccolo": {
         id: "woodwinds.piccolo",
         path: ['Woodwinds', 'Piccolo'],
         longName: "Piccolo",
         shortName: "Pc.",
-        staves: [{ lines: 5, clef: { type: ClefType.G, position: 4 } }]
+        staves: [{ lines: 5, clef: { type: ClefType.G, offset: 3 } }]
     },
     "woodwinds.flute": {
         id: "woodwinds.flute",
         path: ['Woodwinds', 'Flute'],
         longName: "Flute",
         shortName: "Fl",
-        staves: [{ lines: 5, clef: { type: ClefType.G, position: 4 } }]
+        staves: [{ lines: 5, clef: { type: ClefType.G, offset: 3 } }]
     },
     "woodwinds.oboe": {
         id: "woodwinds.oboe",
         path: ['Woodwinds', 'Oboe'],
         longName: "Oboe",
         shortName: "Ob",
-        staves: [{ lines: 5, clef: { type: ClefType.G, position: 4 } }]
+        staves: [{ lines: 5, clef: { type: ClefType.G, offset: 3 } }]
     },
     "woodwinds.clarinet.a": {
         id: "woodwinds.clarinet.a",
         path: ['Woodwinds', 'Clarinet', 'A'],
         longName: "Clarinet in A",
         shortName: "Cl",
-        staves: [{ lines: 5, clef: { type: ClefType.G, position: 4 } }]
+        staves: [{ lines: 5, clef: { type: ClefType.G, offset: 3 } }]
     },
     "woodwinds.clarinet.b-flat": {
         id: "woodwinds.clarinet.b-flat",
         path: ['Woodwinds', 'Clarinet', 'B Flat'],
         longName: "Clarinet in B♭",
         shortName: "Cl",
-        staves: [{ lines: 5, clef: { type: ClefType.G, position: 4 } }]
+        staves: [{ lines: 5, clef: { type: ClefType.G, offset: 3 } }]
     },
     "woodwinds.bassoon": {
         id: "woodwinds.bassoon",
         path: ['Woodwinds', 'Bassoon'],
         longName: "Bassoon",
         shortName: "Bn",
-        staves: [{ lines: 5, clef: { type: ClefType.F, position: 2 } }]
+        staves: [{ lines: 5, clef: { type: ClefType.F, offset: 1 } }]
     }
 }

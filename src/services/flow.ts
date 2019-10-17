@@ -6,6 +6,8 @@ import { removeProps } from '../ui/utils/remove-props';
 import { instrumentDefs } from './instrument-defs';
 import { Instruments } from './instrument';
 import { Track, createTrack } from './track';
+import { KeySignatureMode, createKeySignature } from './entries/key-signature';
+import { createTimeSignature } from './entries/time-signature';
 
 export const FLOW_CREATE = '@flow/create';
 export const FLOW_REORDER = '@flow/reorder';
@@ -30,6 +32,8 @@ export interface Flow {
     title: string;
     players: PlayerKey[] // unordered, purely for inclusion lookup
     staves: Staves;
+    subdivisions: number, // crotchet beat subdevision
+    length: number; // number of subdevisions in all the flow
     master: Track;
 }
 
@@ -205,11 +209,17 @@ export const flowActions = (dispatch: any): FlowActions => {
 }
 
 const createFlow = (players: PlayerKey[], staves: { [key: string]: Stave }): Flow => {
+
+    const key = createKeySignature({ mode: KeySignatureMode.major, offset: 0 }, 0);
+    const time = createTimeSignature({ count: 4, beat: 4 }, 0);
+
     return {
         key: shortid(),
         title: 'Untitled Flow',
         players,
         staves,
-        master: createTrack([], {})
+        subdivisions: 12,
+        length: 48, // 1 x 4/4 bar
+        master: createTrack([key._key, time._key], { [key._key]: key, [time._key]: time })
     }
 }

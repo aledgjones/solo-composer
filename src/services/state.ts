@@ -1,9 +1,11 @@
-import { useReducer, useMemo, useEffect } from "react"
+import { useReducer, useMemo, useEffect, useCallback } from "react"
 import { TabState, tabReducer, tabEmptyState, tabActions, TabActions } from "./tab";
 import { scoreActions, scoreReducer, scoreEmptyState, Score, ScoreActions } from "./score";
 import { PlayerType } from "./player";
 import { instrumentDefs } from "./instrument-defs";
 import { log } from "../ui/utils/log";
+
+const LOGGING = false;
 
 export interface State {
     tab: TabState;
@@ -16,11 +18,11 @@ export interface Actions {
 }
 
 export const useAppState = (): [State, Actions] => {
-    const [state, dispatch] = useReducer(
-        (state, action) => {
+    const [state, _dispatch] = useReducer(
+        (_state: State, action): State => {
             return {
-                tab: tabReducer(state.tab, action),
-                score: scoreReducer(state.score, action)
+                tab: tabReducer(_state.tab, action),
+                score: scoreReducer(_state.score, action)
             }
         },
         {
@@ -29,7 +31,15 @@ export const useAppState = (): [State, Actions] => {
         }
     );
 
-    const actions = useMemo(() => {
+    // add logging to dispatch
+    const dispatch = useCallback((action: any) => {
+        if (LOGGING) {
+            console.log(action.type, action.payload);
+        }
+        _dispatch(action);
+    }, [_dispatch]);
+
+    const actions = useMemo((): Actions => {
         return {
             tab: tabActions(dispatch),
             score: scoreActions(dispatch)
@@ -37,28 +47,28 @@ export const useAppState = (): [State, Actions] => {
     }, [dispatch]);
 
     useEffect(() => {
-        let instrument = actions.score.instruments.create(instrumentDefs['woodwinds.flute']);
+
+        let instrument = actions.score.instruments.create(instrumentDefs['strings.violin']);
         let player = actions.score.players.create(PlayerType.solo);
         actions.score.players.assignInstrument(player.key, instrument);
 
-        // instrument = actions.score.instruments.create(instrumentDefs['strings.violin']);
-        // player = actions.score.players.create(PlayerType.section);
-        // actions.score.players.assignInstrument(player.key, instrument);
+        instrument = actions.score.instruments.create(instrumentDefs['strings.violin']);
+        player = actions.score.players.create(PlayerType.solo);
+        actions.score.players.assignInstrument(player.key, instrument);
 
-        // instrument = actions.score.instruments.create(instrumentDefs['strings.violin']);
-        // player = actions.score.players.create(PlayerType.section);
-        // actions.score.players.assignInstrument(player.key, instrument);
+        instrument = actions.score.instruments.create(instrumentDefs['strings.viola']);
+        player = actions.score.players.create(PlayerType.solo);
+        actions.score.players.assignInstrument(player.key, instrument);
+
+        instrument = actions.score.instruments.create(instrumentDefs['strings.violoncello']);
+        player = actions.score.players.create(PlayerType.solo);
+        actions.score.players.assignInstrument(player.key, instrument);
         
-        // instrument = actions.score.instruments.create(instrumentDefs['strings.viola']);
-        // player = actions.score.players.create(PlayerType.section);
-        // actions.score.players.assignInstrument(player.key, instrument);
+    }, [actions.score.instruments, actions.score.players]);
 
-        // instrument = actions.score.instruments.create(instrumentDefs['strings.violoncello']);
-        // player = actions.score.players.create(PlayerType.section);
-        // actions.score.players.assignInstrument(player.key, instrument);
-    }, [])
-
-    log(state, 'state');
+    if (LOGGING) {
+        log(state, 'state');
+    }
 
     return [state, actions];
 }

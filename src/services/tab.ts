@@ -1,9 +1,7 @@
-import { Dispatch } from "react";
-
 export const TAB_SET = '@tab/set';
 
 export interface TabActions {
-    set: (tab: TabState) => Dispatch<any>;
+    set: (tab: TabState) => void;
 }
 
 export enum TabState {
@@ -15,7 +13,7 @@ export enum TabState {
 }
 
 export const tabEmptyState = (): TabState => {
-    return TabState.setup;
+    return TabState.write;
 }
 
 export const tabReducer = (state: TabState, action: any) => {
@@ -27,7 +25,7 @@ export const tabReducer = (state: TabState, action: any) => {
     }
 }
 
-export const tabActions = (dispatch: any) => {
+export const tabActions = (dispatch: any): TabActions => {
     return {
         set: (tab: TabState) => dispatch({ type: TAB_SET, payload: tab })
     }

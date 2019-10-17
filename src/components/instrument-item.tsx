@@ -2,7 +2,7 @@ import React, { FC, useMemo } from 'react';
 import { mdiChevronRight } from '@mdi/js';
 import Color from 'color';
 
-import { THEME } from '../const';
+import { Theme } from '../const';
 import { Instrument } from '../services/instrument';
 import { Icon } from '../ui';
 
@@ -18,14 +18,14 @@ export const InstrumentItem: FC<Props> = ({ selected, instrument, count }) => {
 
   const bg: string = useMemo(() => {
     if (selected) {
-      return Color(THEME.PRIMARY).lighten(.3).rgb().string();
+      return Color(Theme.primary).lighten(.3).rgb().string();
     } else {
       return 'rgb(57, 66, 71)';
     }
   }, [selected]);
 
   const fg = useMemo(() => {
-    return Color(bg).isDark() ? 'rgb(255,255,255)' : 'rgb(0,0,0)';
+    return Color(bg).isDark() ? '#ffffff' : '#000000';
   }, [bg]);
 
   const name = useMemo(() => {

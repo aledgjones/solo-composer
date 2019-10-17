@@ -1,23 +1,27 @@
 import React, { FC, useMemo } from 'react';
 import Color from 'color';
 
-import { THEME } from '../const';
+import { Theme } from '../const';
+import { merge } from '../ui/utils/merge';
 
 import './render-region.css';
 
 interface Props {
-
+  className?: string;
 }
 
-export const RenderRegion: FC<Props> = (({ }) => {
+export const RenderRegion: FC<Props> = (({ children, className }) => {
 
   const bg = useMemo(() => {
-    const start = Color(THEME.PRIMARY).lighten(.6).rgb().string();
-    const stop = Color(THEME.PRIMARY).lighten(.2).rgb().string();
+    const start = Color(Theme.primary).lighten(.6).rgb().string();
+    const stop = Color(Theme.primary).lighten(.2).rgb().string();
     return `linear-gradient(${start}, ${stop})`;
   }, []);
 
-  return <div className="render-region" style={{ backgroundImage: bg }}>
+  return <div className={merge("render-region", className)} style={{ backgroundImage: bg }}>
+    <div className="render-region__zoom-box">
+      {children}
+    </div>
   </div>;
 });
 

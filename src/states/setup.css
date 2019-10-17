@@ -11,3 +11,9 @@
   border-left: solid 4px #13191e;
   border-right: solid 4px #13191e;
 }
+
+.setup__view {
+  flex-grow: 1;
+  max-height: calc(100vh - 208px);
+  position: relative;
+}

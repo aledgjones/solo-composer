@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { THEME } from '../const';
+import { Theme } from '../const';
 
 import { Tabs, Tab } from '../ui';
 import { useAppState } from '../services/state';
@@ -15,7 +15,7 @@ export const MainShell: FC = () => {
   const [state, actions] = useAppState();
 
   return <>
-    <Tabs value={state.tab} onChange={actions.tab.set} background="#0d1216" highlight={THEME.PRIMARY}>
+    <Tabs value={state.tab} onChange={actions.tab.set} background="#0d1216" highlight={Theme.primary}>
       <Tab value={TabState.setup}>Setup</Tab>
       <Tab value={TabState.write}>Write</Tab>
       <Tab value={TabState.engrave}>Engrave</Tab>
