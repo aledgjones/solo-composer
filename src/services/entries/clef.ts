@@ -18,7 +18,7 @@ export function createClef(def: ClefDef, tick: number): Entry<Clef> {
     return {
         _type: EntryType.clef,
         _key: shortid(),
-        _box: { width: 1, height: 1 },
+        _box: { width: 7, height: 8 },
         _offset: { top: 0, left: 0 },
         _tick: tick,
 
@@ -39,11 +39,11 @@ function glyphFromType(type: ClefType) {
     }
 }
 
-export function drawClef(ctx: CanvasRenderingContext2D, x: number, y: number, height: number, type: ClefType, offset: number) {
+export function drawClef(ctx: CanvasRenderingContext2D, x: number, y: number, space: number, type: ClefType, offset: number) {
     const glyph = glyphFromType(type);
     ctx.fillStyle = 'black';
     ctx.textAlign = 'left';
-    ctx.font = `${height}px Music`;
+    ctx.font = `${space * 8}px Music`;
     ctx.textBaseline = 'middle';
-    ctx.fillText(glyph, x, y + ((height / 4) * offset));
+    ctx.fillText(glyph, x, y + (space * offset));
 }

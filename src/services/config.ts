@@ -1,30 +1,15 @@
-import { px } from "./render/units";
-import { Padding, padding } from "./render/padding";
-
 export type PartialConfig = Partial<Config>;
 
 export interface Config {
-    writePagePadding: Padding;
+    writeSpace: number;
+    writePagePadding: { top: number, right: number, bottom: number, left: number };
     writeInstrumentSpacing: number;
-    writeStaveSize: number;
     writeStaveSpacing: number;
-    writeSystemStartPadding: number
+    writeSystemStartPadding: number;
 
     writeInstrumentNameSize: number;
     writeInstrumentNameFont: string;
     writeInstrumentNameGap: number;
-}
-
-export const defaults: Config = {
-    writePagePadding: padding(25, 25, 25, 25),
-    writeInstrumentSpacing: px(16),
-    writeStaveSize: px(8),
-    writeStaveSpacing: px(12),
-    writeSystemStartPadding: px(1.5),
-
-    writeInstrumentNameSize: px(4),
-    writeInstrumentNameFont: 'Open Sans',
-    writeInstrumentNameGap: px(6)
 }
 
 export const CONFIG_SET = '@config/set';
@@ -34,7 +19,22 @@ export interface ConfigActions {
 }
 
 export const configEmptyState = (): Config => {
-    return defaults;
+    return {
+        writeSpace: 1, // 8mm staves (1 * 8)
+        writePagePadding: {
+            top: 25,
+            right: 25,
+            bottom: 25,
+            left: 25
+        },
+        writeInstrumentSpacing: 16,
+        writeStaveSpacing: 12,
+        writeSystemStartPadding: 1.5,
+
+        writeInstrumentNameSize: 4,
+        writeInstrumentNameFont: 'Open Sans',
+        writeInstrumentNameGap: 4
+    };
 }
 
 export const configReducer = (state: Config, action: any) => {

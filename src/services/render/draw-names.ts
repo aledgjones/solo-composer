@@ -1,6 +1,6 @@
 import { Config } from "../config";
 import { Instrument } from "../instrument";
-import { SystemMetrics } from "./measure-system";
+import { SystemMetrics } from "./use-measure-system";
 
 export function drawNames(ctx: CanvasRenderingContext2D, instruments: Instrument[], names: {[key: string]: string}, metrics: SystemMetrics, config: Config, nameWidth: number) {
     ctx.fillStyle = '#000000';

@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState, useCallback } from 'react';
+import React, { FC, useState } from 'react';
 import { Score } from '../services/score';
 import { InsertPoint } from '../ui/utils/insert-point';
 
@@ -12,7 +12,6 @@ interface Props {
 
 export const RenderWriteMode: FC<Props> = (({ score }) => {
 
-  const container = useRef<HTMLDivElement>(null);
   const [flowKey, setFlowKey] = useState(score.flows.order[0]);
   const canvas = useRenderWriteMode(score, flowKey);
 

@@ -26,5 +26,6 @@ export type Entry<T> = T & {
 // they will be ordered by their type number
 export enum EntryType {
     clef = 1,
-    key
+    keySignature,
+    timeSignature
 }
