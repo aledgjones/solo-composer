@@ -2,20 +2,20 @@ import { useEffect } from "react";
 
 export function useRenderLoop(render: () => void) {
     useEffect(() => {
-        // let dead = false;
+        let dead = false;
 
-        // const looper = () => {
-        //     render();
-        //     if (!dead) {
-        //         requestAnimationFrame(looper);
-        //     }
-        // }
-        // looper()
+        const looper = () => {
+            render();
+            if (!dead) {
+                requestAnimationFrame(looper);
+            }
+        }
+        looper()
 
-        render();
+        // render();
 
-        // return () => {
-        //     dead = true;
-        // }
+        return () => {
+            dead = true;
+        }
     }, [render]);
 }

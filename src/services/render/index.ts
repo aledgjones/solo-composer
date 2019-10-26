@@ -3,7 +3,7 @@ import { Score } from "../score";
 import { FlowKey } from "../flow";
 import { useCounts, useInstruments } from "../instrument";
 import { clearCanvas } from "./clear-canvas";
-import { useMeasureSystem } from "./use-measure-system";
+import { useSystemMetrics } from "./use-system-metrics";
 import { drawStaves } from "./draw-staves";
 import { useCanvas } from "./use-canvas";
 import { useStaves } from "../stave";
@@ -12,10 +12,12 @@ import { useConvertedConfig } from "./useConvertedConfig";
 import { renderStavePrologue } from "./render-stave-prologue";
 import { useNames } from "./use-name-widths";
 import { useRenderLoop } from "./use-render-loop";
+import { drawBraces } from "./draw-braces";
+import { drawBrackets } from "./draw-brackets";
+import { calcBracketAndBracesWidth } from "./calc-bracket-and-braces-width";
+import { drawSubBrackets } from "./draw-sub-brackets";
 
 export function useRenderWriteMode(score: Score, flowKey: FlowKey) {
-
-    console.time('parse');
 
     const { canvas, ctx } = useCanvas();
 
@@ -26,29 +28,32 @@ export function useRenderWriteMode(score: Score, flowKey: FlowKey) {
     const counts = useCounts(score);
     const staves = useStaves(instruments, flow);
     const { names, max: nameWidth } = useNames(instruments, counts, config, ctx);
-    const metrics = useMeasureSystem(instruments, config);
+    const metrics = useSystemMetrics(instruments, config);
 
-    console.timeEnd('parse');
+    console.log(metrics);
 
     const render = useCallback(() => {
         if (!ctx) return undefined;
 
-        console.time('render');
-
         ctx.canvas.height = config.writePagePadding.top + metrics.systemHeight + config.writePagePadding.bottom;
         clearCanvas(ctx);
 
-        drawStaves(ctx, staves, metrics, config, nameWidth);
-        drawNames(ctx, instruments, names, metrics, config, nameWidth);
+        let x = config.writePagePadding.left; 
+        drawNames(ctx, instruments, names, metrics, config, x, nameWidth);
+        x = x + nameWidth + config.writeInstrumentNameGap + calcBracketAndBracesWidth(metrics, config.writeSpace);
+
+        drawBraces(ctx, metrics, config, x);
+        drawBrackets(ctx, metrics, config, x);
+        drawSubBrackets(ctx, metrics, config, x);
+
+        drawStaves(ctx, staves, metrics, config, x);
 
         const flowEntries = flow.master.entries.order.map(flowKey => flow.master.entries.byKey[flowKey])
 
         staves.forEach(stave => {
 
             const staveEntries = stave.master.entries.order.map(staveKey => stave.master.entries.byKey[staveKey]);
-
-            let x = config.writePagePadding.left + nameWidth + config.writeInstrumentNameGap;
-            let y = config.writePagePadding.top + metrics.staveYPositions[stave.key];
+            let y = config.writePagePadding.top + metrics.staves[stave.key].y;
 
             ctx.beginPath();
             ctx.moveTo(x, config.writePagePadding.top);
@@ -57,9 +62,6 @@ export function useRenderWriteMode(score: Score, flowKey: FlowKey) {
 
             renderStavePrologue(ctx, x, y, config, flowEntries, staveEntries);
         });
-
-        console.timeEnd('render');
-        console.log(' ');
 
     }, [config, instruments, staves, metrics, names, nameWidth, ctx, flow.master.entries.order, flow.master.entries.byKey]);
 

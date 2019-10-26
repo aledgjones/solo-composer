@@ -63,6 +63,10 @@ export const useAppState = (): [State, Actions] => {
         instrument = actions.score.instruments.create(instrumentDefs['strings.violoncello']);
         player = actions.score.players.create(PlayerType.solo);
         actions.score.players.assignInstrument(player.key, instrument);
+
+        // instrument = actions.score.instruments.create(instrumentDefs['keyboards.piano']);
+        // player = actions.score.players.create(PlayerType.solo);
+        // actions.score.players.assignInstrument(player.key, instrument);
         
     }, [actions.score.instruments, actions.score.players]);
 

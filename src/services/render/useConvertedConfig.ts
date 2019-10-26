@@ -4,7 +4,7 @@ import { Converter } from "./converter";
 
 export const useConvertedConfig = (config: Config): Config => {
     return useMemo(() => {
-        const { mm, px, spaces } = Converter(config.writeSpace);
+        const { mm, spaces } = Converter(config.writeSpace);
         return {
             writeSpace: mm.toPX(config.writeSpace),
             writePagePadding: {

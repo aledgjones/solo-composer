@@ -33,7 +33,7 @@ export const configEmptyState = (): Config => {
 
         writeInstrumentNameSize: 4,
         writeInstrumentNameFont: 'Open Sans',
-        writeInstrumentNameGap: 4
+        writeInstrumentNameGap: 3
     };
 }
 
