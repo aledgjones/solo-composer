@@ -1,8 +1,9 @@
 import Big from 'big.js';
 import { Instrument, InstrumentKey } from "../instrument";
-import { Config } from "../config";
+import { Config, BracketingType } from "../config";
 import { useMemo } from 'react';
 import { StaveKey } from '../stave';
+import { isBracketed, BracketSpan } from './is-bracketed';
 
 // type YPositions = { [key: string]: number };
 // type YHeights = { [key: string]: number };
@@ -27,20 +28,6 @@ export interface SystemMetrics {
     barlines: Array<{ start: InstrumentKey, stop: InstrumentKey }>;
 }
 
-function isBracketedInstrument(instrumentType: string) {
-    switch (instrumentType) {
-        case 'strings':
-        case 'woodwinds':
-            return true;
-        default:
-            return false;
-    }
-}
-
-function instrumentFamily(instrument?: Instrument) {
-    return instrument ? instrument.id.split('.')[0] : '';
-}
-
 export function useSystemMetrics(instruments: Instrument[], config: Config): SystemMetrics {
     return useMemo(() => {
 
@@ -54,30 +41,29 @@ export function useSystemMetrics(instruments: Instrument[], config: Config): Sys
 
             const isLastInstrument = i === instrumentLen - 1;
             const instrumentTop = new Big(output.systemHeight); // this is cumulative as we loop
+            const previousInstrument = instruments[i - 1];
 
             // BRACKETS / BARLINES
 
-            const previousInstrument = instruments[i - 1];
-            const instrumentType = instrumentFamily(instrument);
-            const previousInstrumentType = instrumentFamily(previousInstrument);
+            const span = isBracketed(instrument, previousInstrument, config.writeBracketing);
 
-            if (instrumentType === previousInstrumentType) {
-                if (isBracketedInstrument(instrumentType)) {
+            switch (span) {
+                case BracketSpan.start:
+                    output.brackets.push({ start: instrument.key, stop: instrument.key });
+                    output.barlines.push({ start: instrument.key, stop: instrument.key });
+                    break;
+                case BracketSpan.continue:
                     output.brackets[output.brackets.length - 1].stop = instrument.key;
                     output.barlines[output.barlines.length - 1].stop = instrument.key;
-                } else {
+                    break;
+                default:
                     output.barlines.push({ start: instrument.key, stop: instrument.key });
-                }
-            } else {
-                if (isBracketedInstrument(instrumentType)) {
-                    output.brackets.push({ start: instrument.key, stop: instrument.key });
-                }
-                output.barlines.push({ start: instrument.key, stop: instrument.key });
+                    break;
             }
 
             // SUB BRACKETS
 
-            if (previousInstrument && isBracketedInstrument(previousInstrumentType) && instrument.id === previousInstrument.id) {
+            if (previousInstrument && (span === BracketSpan.start || span === BracketSpan.continue) && instrument.id === previousInstrument.id) {
                 const subBracketEntry = output.subBrackets[output.subBrackets.length - 1];
                 if (subBracketEntry && subBracketEntry.stop === previousInstrument.key) {
                     subBracketEntry.stop = instrument.key;

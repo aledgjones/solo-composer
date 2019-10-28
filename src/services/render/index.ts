@@ -30,8 +30,6 @@ export function useRenderWriteMode(score: Score, flowKey: FlowKey) {
     const { names, max: nameWidth } = useNames(instruments, counts, config, ctx);
     const metrics = useSystemMetrics(instruments, config);
 
-    console.log(metrics);
-
     const render = useCallback(() => {
         if (!ctx) return undefined;
 
@@ -48,17 +46,16 @@ export function useRenderWriteMode(score: Score, flowKey: FlowKey) {
 
         drawStaves(ctx, staves, metrics, config, x);
 
+        ctx.beginPath();
+        ctx.moveTo(x, config.writePagePadding.top);
+        ctx.lineTo(x, config.writePagePadding.top + metrics.systemHeight);
+        ctx.stroke();
+
         const flowEntries = flow.master.entries.order.map(flowKey => flow.master.entries.byKey[flowKey])
 
         staves.forEach(stave => {
-
             const staveEntries = stave.master.entries.order.map(staveKey => stave.master.entries.byKey[staveKey]);
             let y = config.writePagePadding.top + metrics.staves[stave.key].y;
-
-            ctx.beginPath();
-            ctx.moveTo(x, config.writePagePadding.top);
-            ctx.lineTo(x, config.writePagePadding.top + metrics.systemHeight);
-            ctx.stroke();
 
             renderStavePrologue(ctx, x, y, config, flowEntries, staveEntries);
         });

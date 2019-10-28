@@ -1,15 +1,25 @@
 export type PartialConfig = Partial<Config>;
 
-export interface Config {
-    writeSpace: number;
-    writePagePadding: { top: number, right: number, bottom: number, left: number };
-    writeInstrumentSpacing: number;
-    writeStaveSpacing: number;
-    writeSystemStartPadding: number;
+type MMs = number;
+type Spaces = number;
 
-    writeInstrumentNameSize: number;
+export enum BracketingType {
+    none,
+    orchestral,
+    smallEnsemble
+}
+
+export interface Config {
+    writeSpace: MMs; // 8mm staves (1 * 8)
+    writePagePadding: { top: MMs, right: MMs, bottom: MMs, left: MMs };
+    writeInstrumentSpacing: Spaces;
+    writeStaveSpacing: Spaces;
+    writeSystemStartPadding: Spaces;
+
+    writeInstrumentNameSize: Spaces;
     writeInstrumentNameFont: string;
-    writeInstrumentNameGap: number;
+    writeInstrumentNameGap: Spaces;
+    writeBracketing: BracketingType;
 }
 
 export const CONFIG_SET = '@config/set';
@@ -20,20 +30,17 @@ export interface ConfigActions {
 
 export const configEmptyState = (): Config => {
     return {
-        writeSpace: 1, // 8mm staves (1 * 8)
-        writePagePadding: {
-            top: 25,
-            right: 25,
-            bottom: 25,
-            left: 25
-        },
+        writeSpace: 1,
+        writePagePadding: { top: 25, right: 25, bottom: 25, left: 25 },
         writeInstrumentSpacing: 16,
         writeStaveSpacing: 12,
         writeSystemStartPadding: 1.5,
 
         writeInstrumentNameSize: 4,
         writeInstrumentNameFont: 'Open Sans',
-        writeInstrumentNameGap: 3
+        writeInstrumentNameGap: 3,
+
+        writeBracketing: BracketingType.orchestral
     };
 }
 

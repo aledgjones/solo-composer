@@ -19,7 +19,9 @@ export const useConvertedConfig = (config: Config): Config => {
 
             writeInstrumentNameSize: spaces.toPX(config.writeInstrumentNameSize),
             writeInstrumentNameFont: config.writeInstrumentNameFont,
-            writeInstrumentNameGap: spaces.toPX(config.writeInstrumentNameGap)
+            writeInstrumentNameGap: spaces.toPX(config.writeInstrumentNameGap),
+
+            writeBracketing: config.writeBracketing
         };
     }, [config]);
 }
