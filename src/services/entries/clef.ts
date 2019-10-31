@@ -1,5 +1,6 @@
 import shortid from 'shortid';
 import { Entry, EntryType } from ".";
+import { Converter } from '../render/use-converter';
 
 export enum ClefType {
     C = 1,
@@ -18,7 +19,8 @@ export function createClef(def: ClefDef, tick: number): Entry<Clef> {
     return {
         _type: EntryType.clef,
         _key: shortid(),
-        _box: { width: 3.5, height: 4 },
+        _box: { width: 2.8, height: 4 },
+        _bounds: {width: 3.8, height: 4},
         _offset: { top: 0, left: 0 },
         _tick: tick,
 
@@ -39,11 +41,16 @@ function glyphFromType(type: ClefType) {
     }
 }
 
-export function drawClef(ctx: CanvasRenderingContext2D, x: number, y: number, space: number, type: ClefType, offset: number) {
-    const glyph = glyphFromType(type);
+export function drawClef(ctx: CanvasRenderingContext2D, x: number, y: number, clef: Entry<Clef>, converter: Converter) {
+    const { spaces } = converter;
+
+    // ctx.fillStyle = 'rgba(0, 0, 255, .5)';
+    // ctx.fillRect(x, y, spaces.toPX(clef._bounds.width), spaces.toPX(clef._bounds.height));
+
+    const glyph = glyphFromType(clef.type);
     ctx.fillStyle = 'black';
     ctx.textAlign = 'left';
-    ctx.font = `${space * 4}px Music`;
+    ctx.font = `${spaces.toPX(4)}px Music`;
     ctx.textBaseline = 'middle';
-    ctx.fillText(glyph, x, y + ((space / 2) * offset));
+    ctx.fillText(glyph, x, y + spaces.toPX(.5 * clef.offset));
 }

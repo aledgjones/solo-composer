@@ -1,10 +1,10 @@
 import { useMemo } from "react";
-import { Converter } from "./converter";
 import { EngravingConfig } from "../engraving";
+import { Converter } from "./use-converter";
 
-export const useConvertedConfig = (config: EngravingConfig): EngravingConfig => {
+export const useConvertedConfig = (config: EngravingConfig, converter: Converter): EngravingConfig => {
     return useMemo(() => {
-        const { mm, spaces } = Converter(config.space);
+        const { mm, spaces } = converter;
         return {
             space: mm.toPX(config.space),
             framePadding: {
@@ -25,5 +25,5 @@ export const useConvertedConfig = (config: EngravingConfig): EngravingConfig => 
             bracketEndStyle: config.bracketEndStyle,
             bracketSingleStaves: config.bracketSingleStaves
         };
-    }, [config]);
+    }, [config, converter]);
 }

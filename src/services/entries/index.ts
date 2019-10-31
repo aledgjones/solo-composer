@@ -18,6 +18,7 @@ export type Entry<T> = T & {
     _type: EntryType,
     _key: EntryKey;
     _box: Box;
+    _bounds: Box;
     _offset: Offset;
     _tick: number
 }

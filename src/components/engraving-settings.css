@@ -28,7 +28,12 @@
     padding: 0 20px;
     height: 40px;
     background-color: rgb(235,235,235);
+    border-top: 1px solid rgb(200,200,200);
     border-bottom: 1px solid rgb(200,200,200);
+}
+
+.general-settings__header:first-of-type {
+    border-top: none;
 }
 
 .general-settings__section {

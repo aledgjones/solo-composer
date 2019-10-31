@@ -57,7 +57,7 @@ export const defaultEngravingConfig: EngravingConfig = {
 export const engravingEmptyState = (): EngravingState => {
     return {
         score: {},
-        part: { bracketing: BracketingType.none}
+        part: { bracketing: BracketingType.none }
     };
 }
 

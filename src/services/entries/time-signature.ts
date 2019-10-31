@@ -1,5 +1,6 @@
 import shortid from 'shortid';
 import { Entry, EntryType } from ".";
+import { Converter } from '../render/use-converter';
 
 export interface TimeSignatureDef {
     count: number;
@@ -15,7 +16,8 @@ export function createTimeSignature(def: TimeSignatureDef, tick: number): Entry<
     return {
         _type: EntryType.timeSignature,
         _key: shortid(),
-        _box: { width: 3, height: 4 },
+        _box: { width: 1.75, height: 4 },
+        _bounds: { width: 2.75, height: 4 },
         _offset: { top: 0, left: 0 },
         _tick: tick,
 
@@ -54,21 +56,26 @@ function glyphFromType(val: string) {
     }
 }
 
-export function drawTimeSignature(ctx: CanvasRenderingContext2D, x: number, y: number, space: number, count: number, beat: number, drawAs?: string) {
+export function drawTimeSignature(ctx: CanvasRenderingContext2D, x: number, y: number, time: Entry<TimeSignature>, converter: Converter) {
+
+    const { spaces } = converter;
+
+    // ctx.fillStyle = 'rgba(0, 255, 0, .5)';
+    // ctx.fillRect(x, y, spaces.toPX(time._bounds.width), spaces.toPX(time._bounds.height));
 
     ctx.fillStyle = 'black';
     ctx.textAlign = 'left';
-    ctx.font = `${space * 4}px Music`;
+    ctx.font = `${spaces.toPX(4)}px Music`;
     ctx.textBaseline = 'middle';
 
-    if (drawAs) {
-        const glyph = glyphFromType(drawAs);
-        ctx.fillText(glyph, x, y + (space * 2));
+    if (time.drawAs) {
+        const glyph = glyphFromType(time.drawAs);
+        ctx.fillText(glyph, x, y + spaces.toPX(2));
     } else {
-        const countGlyph = glyphFromType(count.toString());
-        const beatGlyph = glyphFromType(beat.toString());
-        ctx.fillText(countGlyph, x, y + space);
-        ctx.fillText(beatGlyph, x, y + (space * 3));
+        const countGlyph = glyphFromType(time.count.toString());
+        const beatGlyph = glyphFromType(time.beat.toString());
+        ctx.fillText(countGlyph, x, y + spaces.toPX(1));
+        ctx.fillText(beatGlyph, x, y + spaces.toPX(3));
     }
 
 }

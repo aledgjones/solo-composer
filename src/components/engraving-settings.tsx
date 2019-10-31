@@ -50,8 +50,8 @@ export const EngravingSettings: FC<Props> = ({ config, onUpdate, onClose }) => {
                         <div className="general-settings__section">
                             <Select margin required color={Theme.primary} label="Ensemble type" value={engraving.bracketing} onChange={(val: BracketingType) => onUpdate(key, { bracketing: val })}>
                                 <Option value={BracketingType.none} displayAs="None">None</Option>
-                                <Option value={BracketingType.smallEnsemble} displayAs="Small ensemble">Small ensemble</Option>
                                 <Option value={BracketingType.orchestral} displayAs="Orchestral">Orchestral</Option>
+                                <Option value={BracketingType.smallEnsemble} displayAs="Small ensemble">Small ensemble</Option>
                             </Select>
                             <Select required color={Theme.primary} label="Bracket groups with only one instrument" value={engraving.bracketSingleStaves} onChange={(val: boolean) => onUpdate(key, { bracketSingleStaves: val })}>
                                 <Option value={true} displayAs="Use bracket">Use bracket</Option>
@@ -60,7 +60,7 @@ export const EngravingSettings: FC<Props> = ({ config, onUpdate, onClose }) => {
                         </div>
                         <div className="general-settings__header">Design</div>
                         <div className="general-settings__section">
-                            <Select margin required color={Theme.primary} label="Bracet style" value={engraving.bracketEndStyle} onChange={(val: BracketEndStyle) => onUpdate(key, { bracketEndStyle: val })}>
+                            <Select margin required color={Theme.primary} label="Bracet cap style" value={engraving.bracketEndStyle} onChange={(val: BracketEndStyle) => onUpdate(key, { bracketEndStyle: val })}>
                                 <Option value={BracketEndStyle.none} displayAs="None">None</Option>
                                 <Option value={BracketEndStyle.line} displayAs="Lines">Lines</Option>
                                 <Option value={BracketEndStyle.wing} displayAs="Wings">Wings</Option>
@@ -71,7 +71,7 @@ export const EngravingSettings: FC<Props> = ({ config, onUpdate, onClose }) => {
                     {page === Page.staves && <>
                         <div className="general-settings__header">Space Size</div>
                         <div className="general-settings__section">
-                            <InputNumber label="Space size" value={engraving.space} precision={2} step={.05} units="mm" color={Theme.primary} errorColor={Theme.error} onChange={(val: number) => onUpdate(key, { space: val })} />
+                            <InputNumber label="Space size" value={engraving.space} precision={2} step={.01} units="mm" color={Theme.primary} errorColor={Theme.error} onChange={(val: number) => onUpdate(key, { space: val })} />
                         </div>
                     </>}
 

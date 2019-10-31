@@ -1,6 +1,7 @@
 import shortid from 'shortid';
 import { Entry, EntryType } from ".";
-import { ClefType } from './clef';
+import { ClefType, Clef } from './clef';
+import { Converter } from '../render/use-converter';
 
 export enum KeySignatureMode {
     major = 1,
@@ -17,11 +18,13 @@ export interface KeySignature extends KeySignatureDef {
 }
 
 export function createKeySignature(def: KeySignatureDef, tick: number): Entry<KeySignature> {
-    const width = (def.offset < 0 ? def.offset * -1 : def.offset) + (def.offset === 0 ? 0 : 1);
+    // convert to positive number
+    const width = def.offset < 0 ? def.offset * -1 : def.offset;
     return {
         _type: EntryType.keySignature,
         _key: shortid(),
-        _box: { width, height: 1 },
+        _box: { width, height: 4 },
+        _bounds: {width: width + 1, height: 4},
         _offset: { top: 0, left: 0 },
         _tick: tick,
 
@@ -91,33 +94,33 @@ function glyphFromType(type: AccidentalType) {
     }
 }
 
-export function drawKeySignature(ctx: CanvasRenderingContext2D, x: number, y: number, space: number, clefType: ClefType, clefOffset: number, keyOffset: number) {
+export function drawKeySignature(ctx: CanvasRenderingContext2D, x: number, y: number, clef: Entry<Clef>, key: Entry<KeySignature>, converter: Converter) {
+
+    const { spaces } = converter;
+
+    // ctx.fillStyle = 'rgba(255, 0, 0, .5)';
+    // ctx.fillRect(x, y, spaces.toPX(key._bounds.width), spaces.toPX(key._bounds.height));
 
     ctx.fillStyle = 'black';
     ctx.textAlign = 'left';
-    ctx.font = `${space * 4}px Music`;
+    ctx.font = `${spaces.toPX(4)}px Music`;
     ctx.textBaseline = 'middle';
-
-    let step = space / 2;
 
     // calc naturals here - find out rules for naturalising
 
-    if (keyOffset < 0) {
+    if (key.offset < 0) {
         const glyph = glyphFromType(AccidentalType.flat);
-        const pattern = patterns[clefType][clefOffset][AccidentalType.flat];
-        for (let i = 0; i > keyOffset; i--) {
-            const pointer = i * -1;
-            const left = pointer * 2;
-            ctx.fillText(glyph, x + (left * step), y + (step * pattern[pointer]));
+        const pattern = patterns[clef.type][clef.offset][AccidentalType.flat];
+        for (let i = 0; i > key.offset; i--) {
+            ctx.fillText(glyph, x + spaces.toPX(i * -1), y + spaces.toPX(.5 * pattern[i * -1]));
         }
     }
 
-    if (keyOffset > 0) {
+    if (key.offset > 0) {
         const glyph = glyphFromType(AccidentalType.sharp);
-        const pattern = patterns[clefType][clefOffset][AccidentalType.sharp];
-        for (let i = 0; i < keyOffset; i++) {
-            const left = i * 2;
-            ctx.fillText(glyph, x + (left * step), y + (step * pattern[i]));
+        const pattern = patterns[clef.type][clef.offset][AccidentalType.sharp];
+        for (let i = 0; i < key.offset; i++) {
+            ctx.fillText(glyph, x + spaces.toPX(i), y + spaces.toPX(.5 * pattern[i]));
         }
     }
 }

@@ -1,6 +1,7 @@
 import Big from 'big.js';
+import { useMemo } from 'react';
 
-export interface IConverter {
+export interface Converter {
     px: {
         toMM: (px: number) => number;
     }
@@ -12,7 +13,8 @@ export interface IConverter {
     }
 }
 
-export const Converter = (space: number): IConverter => {
+export function useConverter(space: number): Converter {
+    return useMemo(() => {
         const div = document.createElement('div');
         div.style.position = 'fixed';
         div.style.width = '1mm';
@@ -21,13 +23,14 @@ export const Converter = (space: number): IConverter => {
         document.body.removeChild(div);
         return {
             px: {
-                toMM: (px: number) => parseFloat(new Big(px).div(width).toFixed(0))
+                toMM: (px: number) => parseFloat(new Big(px).div(width).toFixed(2))
             },
             mm: {
-                toPX: (mm: number) => parseFloat(new Big(mm).times(width).toFixed(0))
+                toPX: (mm: number) => parseFloat(new Big(mm).times(width).toFixed(2))
             },
             spaces: {
-                toPX: (spaces: number) => parseFloat(new Big(spaces).times(space).times(width).toFixed(0))
+                toPX: (spaces: number) => parseFloat(new Big(spaces).times(space).times(width).toFixed(2))
             }
         };
+    }, [space]);
 };

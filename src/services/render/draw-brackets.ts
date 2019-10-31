@@ -1,5 +1,6 @@
 import { SystemMetrics } from "./use-system-metrics";
 import { EngravingConfig } from "../engraving";
+import { Converter } from "./use-converter";
 
 export enum BracketingType {
     none = 1,
@@ -13,16 +14,15 @@ export enum BracketEndStyle {
     none
 }
 
-export function drawBrackets(ctx: CanvasRenderingContext2D, metrics: SystemMetrics, config: EngravingConfig, x: number) {
+export function drawBrackets(ctx: CanvasRenderingContext2D, x: number, y: number, metrics: SystemMetrics, config: EngravingConfig, converter: Converter) {
 
     // if n > 1 neightbouring instruments in same family -- woodwind, brass, strings only!
     // subbrace if same instrument type next to each other
 
-    const lineWidth = config.space / 2;
-    const spaceWidth = config.space / 2;
+    const {spaces} = converter;
 
-    const left = x - spaceWidth - (lineWidth / 2);
-    const capLeft = x - config.space;
+    const left = x - spaces.toPX(.75);
+    const capLeft = x - spaces.toPX(1);
 
     const glyphTop = '\u{E003}';
     const glyphBottom = '\u{E004}';
@@ -31,7 +31,7 @@ export function drawBrackets(ctx: CanvasRenderingContext2D, metrics: SystemMetri
 
     ctx.fillStyle = 'black';
     ctx.textAlign = 'left';
-    ctx.font = `${config.space * 4}px Music`;
+    ctx.font = `${spaces.toPX(4)}px Music`;
     ctx.textBaseline = 'middle';
 
     metrics.brackets.forEach(bracket => {
@@ -42,25 +42,24 @@ export function drawBrackets(ctx: CanvasRenderingContext2D, metrics: SystemMetri
 
             const isWing = config.bracketEndStyle === BracketEndStyle.wing;
             const isLine = config.bracketEndStyle === BracketEndStyle.line;
-            const tweekForWing = isWing ? config.space * .25 : 0;
+            const tweekForWing = isWing ? .25 : 0;
 
-            const top = config.framePadding.top + start.y - tweekForWing;
-            const bottom = config.framePadding.top + stop.y + stop.height + tweekForWing;
+            const top = y + start.y - spaces.toPX(tweekForWing);
+            const bottom = y + stop.y + stop.height + spaces.toPX(tweekForWing);
 
-            ctx.lineWidth = lineWidth;
+            ctx.lineWidth = spaces.toPX(.5);
 
             ctx.beginPath();
             ctx.moveTo(left, top);
             ctx.lineTo(left, bottom);
             ctx.stroke();
 
-            ctx.lineWidth = 1;
-
             if (isLine) {
+                ctx.lineWidth = spaces.toPX(.125);
                 ctx.beginPath();
-                ctx.moveTo(left - (lineWidth / 2), top);
+                ctx.moveTo(left - spaces.toPX(.25), top);
                 ctx.lineTo(x, top);
-                ctx.moveTo(left - (lineWidth / 2), bottom);
+                ctx.moveTo(left - spaces.toPX(.25), bottom);
                 ctx.lineTo(x, bottom);
                 ctx.stroke();
             }

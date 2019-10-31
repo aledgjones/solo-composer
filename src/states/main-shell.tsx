@@ -15,7 +15,7 @@ import './main-shell.css';
 export const MainShell: FC = () => {
 
   const [state, actions] = useAppState();
-  const [settings, setSettings] = useState(true);
+  const [settings, setSettings] = useState(false);
 
   return <>
     <div className="main-shell__topbar">
