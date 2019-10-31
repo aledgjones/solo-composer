@@ -1,0 +1,10 @@
+.ui-input-number__controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 0 9px;
+    border-left: 1px solid rgb(175, 175, 175);
+    overflow: hidden;
+}

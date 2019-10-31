@@ -202,7 +202,7 @@ export const flowActions = (dispatch: any): FlowActions => {
             }, {});
             dispatch({ type: FLOW_ASSIGN_PLAYER, payload: { flowKey, playerKey: player.key, staves } });
         },
-        removePlayer: (flowKey, playerKey, staveKeys: StaveKey[]) => {
+        removePlayer: (flowKey, playerKey, staveKeys) => {
             dispatch({ type: FLOW_REMOVE_PLAYER, payload: { flowKey, playerKey, staveKeys } });
         }
     }

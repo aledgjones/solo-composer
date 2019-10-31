@@ -17,7 +17,7 @@ export interface KeySignature extends KeySignatureDef {
 }
 
 export function createKeySignature(def: KeySignatureDef, tick: number): Entry<KeySignature> {
-    const width = (def.offset < 0 ? def.offset * -2 : def.offset * 2) + (def.offset === 0 ? 0 : 2);
+    const width = (def.offset < 0 ? def.offset * -1 : def.offset) + (def.offset === 0 ? 0 : 1);
     return {
         _type: EntryType.keySignature,
         _key: shortid(),
@@ -95,8 +95,10 @@ export function drawKeySignature(ctx: CanvasRenderingContext2D, x: number, y: nu
 
     ctx.fillStyle = 'black';
     ctx.textAlign = 'left';
-    ctx.font = `${space * 8}px Music`;
+    ctx.font = `${space * 4}px Music`;
     ctx.textBaseline = 'middle';
+
+    let step = space / 2;
 
     // calc naturals here - find out rules for naturalising
 
@@ -106,7 +108,7 @@ export function drawKeySignature(ctx: CanvasRenderingContext2D, x: number, y: nu
         for (let i = 0; i > keyOffset; i--) {
             const pointer = i * -1;
             const left = pointer * 2;
-            ctx.fillText(glyph, x + (left * space), y + (space * pattern[pointer]));
+            ctx.fillText(glyph, x + (left * step), y + (step * pattern[pointer]));
         }
     }
 
@@ -115,7 +117,7 @@ export function drawKeySignature(ctx: CanvasRenderingContext2D, x: number, y: nu
         const pattern = patterns[clefType][clefOffset][AccidentalType.sharp];
         for (let i = 0; i < keyOffset; i++) {
             const left = i * 2;
-            ctx.fillText(glyph, x + (left * space), y + (space * pattern[i]));
+            ctx.fillText(glyph, x + (left * step), y + (step * pattern[i]));
         }
     }
 }

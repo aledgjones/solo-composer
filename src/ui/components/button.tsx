@@ -13,21 +13,34 @@ interface Props {
     color: string;
 
     compact?: boolean;
+    outline?: boolean;
     disabled?: boolean;
     working?: boolean;
 
     onClick?: (e: MouseEvent<HTMLDivElement>) => void;
 }
 
-export const Button: FC<Props> = ({ id, className, style, children, compact, color, disabled, working, onClick }) => {
+export const Button: FC<Props> = ({ id, className, style, children, compact, outline, color, disabled, working, onClick }) => {
 
     const onClickHandler = useCallback((e) => {
         onClick && onClick(e);
     }, [onClick]);
 
+    const bg = useMemo(() => {
+        if (outline) {
+            return 'rgb(255,255,255)';
+        } else {
+            return color;
+        }
+    }, [color, outline]);
+
     const fg = useMemo(() => {
-        return Color(color).isDark() ? 'rgb(255,255,255)' : 'rgb(0,0,0,)';
-    }, [color]);
+        if (outline) {
+            return color;
+        } else {
+            return Color(color).isDark() ? 'rgb(255,255,255)' : 'rgb(0,0,0)';
+        }
+    }, [color, outline]);
 
     return <button
         id={id}
@@ -41,7 +54,8 @@ export const Button: FC<Props> = ({ id, className, style, children, compact, col
         )}
         style={{
             color: fg,
-            backgroundColor: color,
+            backgroundColor: bg,
+            border: `1px solid ${outline ? fg : color}`,
             ...style
         }}
         onClick={onClickHandler}

@@ -1,8 +1,8 @@
 import React, { CSSProperties, FC, useMemo } from 'react';
 import Big from 'big.js';
+import { merge } from '../utils/merge';
 
 import './spinner.css';
-import { merge } from '../utils/merge';
 
 interface Props {
     id?: string;

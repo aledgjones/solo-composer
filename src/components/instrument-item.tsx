@@ -11,7 +11,7 @@ import './instrument-item.css';
 interface Props {
   selected: boolean;
   instrument: Instrument;
-  count?: number;
+  count?: string;
 }
 
 export const InstrumentItem: FC<Props> = ({ selected, instrument, count }) => {

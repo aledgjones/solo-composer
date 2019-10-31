@@ -10,6 +10,7 @@ import { Backdrop } from '../ui/components/backdrop';
 import { Icon, Button } from '../ui';
 
 import './instrument-picker.css';
+import { ListItem } from './list-item';
 
 interface Props {
   onSelect: (def: InstrumentDef) => void;
@@ -36,27 +37,25 @@ export const InstrumentPicker: FC<Props> = ({ onSelect, onCancel }) => {
               const selected = item === selection.path[i];
               const final = !(selected && lists[i + 1] && lists[i + 1].length > 0);
 
-              return <div
+              return <ListItem
                 key={item}
-                style={{ color: selected ? fg : undefined, backgroundColor: selected ? bg : undefined }}
-                className="instrument-picker__item"
+                selected={selected}
                 onClick={() => {
                   const path = [...selection.path.slice(0, i), item];
                   const def = getFirstInstrumentDefFromPartialPath(path);
                   setSelection(def);
-                }}
-              >
+                }}>
                 <span>{item}</span>
                 {!final && <Icon color={selected ? fg : 'black'} size={24} path={mdiChevronRight} />}
-              </div>
+              </ListItem>
             })}
           </div>
         })}
       </div>
       <div className="instrument-picker__buttons">
         <div className="instrument-picker__spacer" />
-        <Button style={{ marginRight: 4 }} color="white" onClick={() => onCancel()}>Cancel</Button>
-        <Button color={bg} onClick={() => onSelect(selection)}>Add</Button>
+        <Button compact outline style={{ marginRight: 8 }} color={bg} onClick={onCancel}>Cancel</Button>
+        <Button compact color={bg} onClick={() => onSelect(selection)}>Add</Button>
       </div>
     </Card>
   </Backdrop>;

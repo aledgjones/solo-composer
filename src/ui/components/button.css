@@ -1,7 +1,6 @@
 .ui-button {
     display: inline-block;
     transition: box-shadow .1s;
-    border-radius: 3px;
     cursor: pointer;
     min-width: 72px;
     padding: 7px 20px 8px 20px;
@@ -19,6 +18,10 @@
 
 .ui-button:active {
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+.ui-button--comapct {
+    min-width: 0;
 }
 
 .ui-button--disabled {

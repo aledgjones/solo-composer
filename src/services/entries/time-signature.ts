@@ -15,7 +15,7 @@ export function createTimeSignature(def: TimeSignatureDef, tick: number): Entry<
     return {
         _type: EntryType.timeSignature,
         _key: shortid(),
-        _box: { width: 6, height: 1 },
+        _box: { width: 3, height: 4 },
         _offset: { top: 0, left: 0 },
         _tick: tick,
 
@@ -58,17 +58,17 @@ export function drawTimeSignature(ctx: CanvasRenderingContext2D, x: number, y: n
 
     ctx.fillStyle = 'black';
     ctx.textAlign = 'left';
-    ctx.font = `${space * 8}px Music`;
+    ctx.font = `${space * 4}px Music`;
     ctx.textBaseline = 'middle';
 
     if (drawAs) {
         const glyph = glyphFromType(drawAs);
-        ctx.fillText(glyph, x, y + (space * 4));
+        ctx.fillText(glyph, x, y + (space * 2));
     } else {
         const countGlyph = glyphFromType(count.toString());
         const beatGlyph = glyphFromType(beat.toString());
-        ctx.fillText(countGlyph, x, y + (space * 2));
-        ctx.fillText(beatGlyph, x, y + (space * 6));
+        ctx.fillText(countGlyph, x, y + space);
+        ctx.fillText(beatGlyph, x, y + (space * 3));
     }
 
 }

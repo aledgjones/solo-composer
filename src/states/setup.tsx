@@ -11,9 +11,9 @@ import { PlayerList } from '../components/player-list';
 import { FlowList } from '../components/flow-list';
 import { InstrumentPicker } from '../components/instrument-picker';
 import { RenderRegion } from '../components/render-region';
+import { RenderWriteMode } from '../components/render-write-mode';
 
 import './setup.css';
-import { RenderWriteMode } from '../components/render-write-mode';
 
 export enum SelectionType {
     player = 1,

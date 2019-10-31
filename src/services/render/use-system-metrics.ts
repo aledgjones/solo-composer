@@ -1,9 +1,9 @@
 import Big from 'big.js';
 import { Instrument, InstrumentKey } from "../instrument";
-import { Config, BracketingType } from "../config";
 import { useMemo } from 'react';
 import { StaveKey } from '../stave';
 import { isBracketed, BracketSpan } from './is-bracketed';
+import { EngravingConfig } from '../engraving';
 
 // type YPositions = { [key: string]: number };
 // type YHeights = { [key: string]: number };
@@ -28,7 +28,7 @@ export interface SystemMetrics {
     barlines: Array<{ start: InstrumentKey, stop: InstrumentKey }>;
 }
 
-export function useSystemMetrics(instruments: Instrument[], config: Config): SystemMetrics {
+export function useSystemMetrics(instruments: Instrument[], config: EngravingConfig): SystemMetrics {
     return useMemo(() => {
 
         const instrumentLen = instruments.length;
@@ -45,7 +45,7 @@ export function useSystemMetrics(instruments: Instrument[], config: Config): Sys
 
             // BRACKETS / BARLINES
 
-            const span = isBracketed(instrument, previousInstrument, config.writeBracketing);
+            const span = isBracketed(instrument, previousInstrument, config.bracketing);
 
             switch (span) {
                 case BracketSpan.start:
@@ -90,10 +90,10 @@ export function useSystemMetrics(instruments: Instrument[], config: Config): Sys
                 const isLastStave = ii === staveLen - 1;
 
                 const start = new Big(output.systemHeight);
-                let height = new Big(config.writeSpace).times(8);
+                let height = new Big(config.space).times(4);
 
                 if (!isLastStave) {
-                    height = height.plus(config.writeStaveSpacing);
+                    height = height.plus(config.staveSpacing);
                 }
 
                 if (isLastStave) {
@@ -101,11 +101,11 @@ export function useSystemMetrics(instruments: Instrument[], config: Config): Sys
                 }
 
                 if (isLastStave && !isLastInstrument) {
-                    height = height.plus(config.writeInstrumentSpacing);
+                    height = height.plus(config.instrumentSpacing);
                 }
 
                 output.staves[staveKey].y = parseFloat(start.toFixed(0));
-                output.staves[staveKey].height = parseFloat(new Big(config.writeSpace).times(8).toFixed(0));
+                output.staves[staveKey].height = parseFloat(new Big(config.space).times(4).toFixed(0));
                 output.systemHeight = parseFloat(start.plus(height).toFixed(0));
 
             });

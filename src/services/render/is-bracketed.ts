@@ -1,5 +1,5 @@
 import { Instrument } from "../instrument";
-import { BracketingType } from "../config";
+import { BracketingType } from "./draw-brackets";
 
 function instrumentFamily(instrument?: Instrument) {
     return instrument ? instrument.id.split('.')[0] : '';
@@ -29,7 +29,6 @@ export function isBracketed(instrument: Instrument, previousInstrument: Instrume
             return BracketSpan.start;
         }
         return BracketSpan.continue;
-
     }
 
     if (bracketing === BracketingType.orchestral) {

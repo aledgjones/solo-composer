@@ -1,0 +1,26 @@
+.ui-input__container--margin {
+    margin-bottom: 20px;
+}
+
+.ui-input {
+    display: flex;
+    align-items: center;
+    border: 1px solid rgb(175, 175, 175);
+    height: 36px;
+    flex-grow: 1;
+}
+
+.ui-input__display {
+    flex-grow: 1;
+    padding: 0 12px;
+    height: 100%;
+}
+
+.ui-input__units {
+    padding-right: 12px;
+    color: rgb(150, 150, 150);
+}
+
+.ui-input__label {
+    margin-bottom: 8px;
+}

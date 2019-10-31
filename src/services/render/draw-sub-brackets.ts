@@ -1,12 +1,12 @@
 import { SystemMetrics } from "./use-system-metrics";
-import { Config } from "../config";
+import { EngravingConfig } from "../engraving";
 
-export function drawSubBrackets(ctx: CanvasRenderingContext2D, metrics: SystemMetrics, config: Config, x: number) {
+export function drawSubBrackets(ctx: CanvasRenderingContext2D, metrics: SystemMetrics, config: EngravingConfig, x: number) {
 
     // if n > 1 neightbouring instruments in same family -- woodwind, brass, strings only!
     // subbrace if same instrument type next to each other
 
-    const left = x - (config.writeSpace * 3);
+    const left = x - (config.space * 1.5);
 
     ctx.strokeStyle = '#000000';
 
@@ -15,8 +15,8 @@ export function drawSubBrackets(ctx: CanvasRenderingContext2D, metrics: SystemMe
         const start = metrics.instruments[bracket.start];
         const stop = metrics.instruments[bracket.stop];
 
-        const top = config.writePagePadding.top + start.y;
-        const bottom = config.writePagePadding.top + stop.y + stop.height;
+        const top = config.framePadding.top + start.y;
+        const bottom = config.framePadding.top + stop.y + stop.height;
 
         ctx.moveTo(x, top);
         ctx.lineTo(left, top);

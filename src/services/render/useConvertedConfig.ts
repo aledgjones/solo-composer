@@ -1,27 +1,29 @@
-import { Config } from "../config";
 import { useMemo } from "react";
 import { Converter } from "./converter";
+import { EngravingConfig } from "../engraving";
 
-export const useConvertedConfig = (config: Config): Config => {
+export const useConvertedConfig = (config: EngravingConfig): EngravingConfig => {
     return useMemo(() => {
-        const { mm, spaces } = Converter(config.writeSpace);
+        const { mm, spaces } = Converter(config.space);
         return {
-            writeSpace: mm.toPX(config.writeSpace),
-            writePagePadding: {
-                top: mm.toPX(config.writePagePadding.left),
-                right: mm.toPX(config.writePagePadding.right),
-                bottom: mm.toPX(config.writePagePadding.bottom),
-                left: mm.toPX(config.writePagePadding.left)
+            space: mm.toPX(config.space),
+            framePadding: {
+                top: mm.toPX(config.framePadding.left),
+                right: mm.toPX(config.framePadding.right),
+                bottom: mm.toPX(config.framePadding.bottom),
+                left: mm.toPX(config.framePadding.left)
             },
-            writeInstrumentSpacing: spaces.toPX(config.writeInstrumentSpacing),
-            writeStaveSpacing: spaces.toPX(config.writeStaveSpacing),
-            writeSystemStartPadding: spaces.toPX(config.writeSystemStartPadding),
+            instrumentSpacing: spaces.toPX(config.instrumentSpacing),
+            staveSpacing: spaces.toPX(config.staveSpacing),
+            systemStartPadding: spaces.toPX(config.systemStartPadding),
 
-            writeInstrumentNameSize: spaces.toPX(config.writeInstrumentNameSize),
-            writeInstrumentNameFont: config.writeInstrumentNameFont,
-            writeInstrumentNameGap: spaces.toPX(config.writeInstrumentNameGap),
+            staveInstrumentNameSize: spaces.toPX(config.staveInstrumentNameSize),
+            staveInstrumentNameFont: config.staveInstrumentNameFont,
+            staveInstrumentNameGap: spaces.toPX(config.staveInstrumentNameGap),
 
-            writeBracketing: config.writeBracketing
+            bracketing: config.bracketing,
+            bracketEndStyle: config.bracketEndStyle,
+            bracketSingleStaves: config.bracketSingleStaves
         };
     }, [config]);
 }

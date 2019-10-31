@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
 import shortid from 'shortid';
+import { toRoman } from 'roman-numerals';
+
 import { InstrumentDef } from './instrument-defs';
 import { PlayerKey, PLAYER_REMOVE } from './player';
 import { StaveKey, createStave } from './stave';
@@ -76,8 +78,12 @@ const createInstrument = (def: InstrumentDef, staves: StaveKey[]): Instrument =>
     }
 }
 
+export enum InstrumentAutoCountStyle {
+    arabic = 1,
+    roman
+}
 type InstrumentCountsTotals = { [name: string]: InstrumentKey[] };
-export type InstrumentCounts = { [instrumentKey: string]: number };
+export type InstrumentCounts = { [instrumentKey: string]: string };
 
 /**
  * Counts duplicate instrument names
@@ -107,13 +113,17 @@ export function useCounts(score: Score): InstrumentCounts {
         return names.reduce((out: InstrumentCounts, name: string) => {
             counts[name].forEach((instrumentKey, i, _names) => {
                 if (_names.length > 1) {
-                    out[instrumentKey] = i + 1;
+                    if (score.config.autoCountStyle === InstrumentAutoCountStyle.arabic) {
+                        out[instrumentKey] = ` ${i + 1}`;
+                    } else {
+                        out[instrumentKey] = ` ${toRoman(i + 1)}`;
+                    }
                 }
             });
             return out;
         }, {});
 
-    }, [score.players, score.instruments]);
+    }, [score.players, score.instruments, score.config.autoCountStyle]);
 }
 
 export function useInstruments(score: Score, flow: Flow): Instrument[] {

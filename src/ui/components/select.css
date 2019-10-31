@@ -1,0 +1,53 @@
+.ui-select {
+    display: block;
+    width: 100%;
+    position: relative;
+}
+
+.ui-select__display {
+    flex-grow: 1;
+    padding: 0 12px;
+}
+
+.ui-select__input {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    border: 1px solid rgb(175, 175, 175);
+    min-height: 36px;
+    padding-right: 12px;
+    cursor: pointer;
+}
+
+.ui-select__card {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    transform: translateZ(0);
+    z-index: 10;
+    max-height: 140px;
+    overflow: auto;
+    padding: 8px 0;
+    touch-action: pan-y;
+}
+
+.ui-select__card * {
+    touch-action: pan-y;
+}
+
+.ui-select__item {
+    padding: 8px 12px;
+}
+
+.ui-select__item:hover {
+    background-color: rgba(0, 0, 0, .1);
+}
+
+.ui-select--disabled .ui-select__input {
+    color: rgb(84,84,84) !important;
+    border: 1px dashed rgb(175,175,175);
+    background-color: transparent !important;
+    cursor: default;
+    pointer-events: none;
+}
