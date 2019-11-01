@@ -30,7 +30,7 @@ export function measureStavePrologue(config: EngravingConfig, flowEntries: Entry
     
 }
 
-export function renderStavePrologue(ctx: CanvasRenderingContext2D, x: number, y: number, config: EngravingConfig, flowEntries: Entry<any>[], staveEntries: Entry<any>[], converter: Converter) {
+export function drawStavePrologue(ctx: CanvasRenderingContext2D, x: number, y: number, config: EngravingConfig, flowEntries: Entry<any>[], staveEntries: Entry<any>[], converter: Converter) {
 
     const {spaces} = converter;
 

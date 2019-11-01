@@ -1,5 +1,5 @@
 import { Stave } from "../stave";
-import { SystemMetrics } from "./use-system-metrics";
+import { SystemMetrics } from "./use-measure-system";
 import { EngravingConfig } from "../engraving";
 import { Converter } from "./use-converter";
 
@@ -10,6 +10,8 @@ export function drawStaves(ctx: CanvasRenderingContext2D, x: number, y: number, 
     ctx.strokeStyle = '#000000';
     ctx.lineWidth = spaces.toPX(.125);
 
+    const tweakForStaveLineWidth = converter.spaces.toPX(.0625);
+
     ctx.beginPath();
     staves.forEach(stave => {
         for (let i = 0; i < 5; i++) {
@@ -18,6 +20,9 @@ export function drawStaves(ctx: CanvasRenderingContext2D, x: number, y: number, 
             ctx.lineTo(x + width, start);
         }
     });
+
+    ctx.moveTo(x, y - tweakForStaveLineWidth);
+    ctx.lineTo(x, y + metrics.systemHeight + tweakForStaveLineWidth);
     ctx.stroke();
 
 }

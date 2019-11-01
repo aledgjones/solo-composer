@@ -28,7 +28,7 @@ export interface SystemMetrics {
     barlines: Array<{ start: InstrumentKey, stop: InstrumentKey }>;
 }
 
-export function useSystemMetrics(instruments: Instrument[], config: EngravingConfig): SystemMetrics {
+export function useMeasureSystem(instruments: Instrument[], config: EngravingConfig): SystemMetrics {
     return useMemo(() => {
 
         const instrumentLen = instruments.length;

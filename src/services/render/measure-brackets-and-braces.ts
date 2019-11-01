@@ -1,7 +1,7 @@
-import { SystemMetrics } from "./use-system-metrics";
 import { Converter } from "./use-converter";
+import { SystemMetrics } from "./use-measure-system";
 
-export function calcBracketAndBracesWidth(metrics: SystemMetrics, converter: Converter) {
+export function measureBracketAndBraces(metrics: SystemMetrics, converter: Converter) {
 
     const {spaces} = converter;
 

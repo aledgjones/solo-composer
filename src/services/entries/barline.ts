@@ -1,6 +1,6 @@
 import shortid from 'shortid';
 import { Entry, EntryType } from ".";
-import { SystemMetrics } from '../render/use-system-metrics';
+import { SystemMetrics } from '../render/use-measure-system';
 import { Converter } from '../render/use-converter';
 
 export enum BarlineType {

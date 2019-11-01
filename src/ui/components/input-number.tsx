@@ -31,7 +31,7 @@ export const InputNumber: FC<Props> = ({ id, className, style, value, precision,
     const [display, setDisplay] = useState<string>(value.toFixed(precision));
     const [focus, setFocus] = useState<boolean>(false);
 
-    useEffect(() => setDisplay(value.toFixed(precision)), [value]);
+    useEffect(() => setDisplay(value.toFixed(precision)), [value, precision]);
 
     const _onChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setDisplay(e.target.value);
@@ -41,7 +41,7 @@ export const InputNumber: FC<Props> = ({ id, className, style, value, precision,
         } catch (e) {
             setError(true);
         }
-    }, [precision, onChange]);
+    }, [precision]);
 
     const onBlur = useCallback(() => {
 
@@ -62,7 +62,7 @@ export const InputNumber: FC<Props> = ({ id, className, style, value, precision,
         setDisplay(val);
         onChange(parsed);
 
-    }, [step, value, display, error]);
+    }, [step, value, display, error, precision, onChange]);
 
     const onDecrease = useCallback(() => {
 
@@ -71,7 +71,7 @@ export const InputNumber: FC<Props> = ({ id, className, style, value, precision,
         setDisplay(val);
         onChange(parsed);
 
-    }, [step, value, display, error]);
+    }, [step, value, display, error, precision, onChange]);
 
     const border = () => {
         if (error) {

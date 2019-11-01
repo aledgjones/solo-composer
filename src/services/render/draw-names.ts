@@ -1,5 +1,5 @@
 import { Instrument } from "../instrument";
-import { SystemMetrics } from "./use-system-metrics";
+import { SystemMetrics } from "./use-measure-system";
 import { EngravingConfig } from "../engraving";
 
 export function drawNames(ctx: CanvasRenderingContext2D, x: number, instruments: Instrument[], names: {[key: string]: string}, metrics: SystemMetrics, config: EngravingConfig) {
