@@ -7,12 +7,13 @@ export function drawSubBrackets(ctx: CanvasRenderingContext2D, x: number, y: num
     // if n > 1 neightbouring instruments in same family -- woodwind, brass, strings only!
     // subbrace if same instrument type next to each other
 
-    const {spaces} = converter;
+    const { spaces } = converter;
 
     const left = x - spaces.toPX(1.5);
 
     ctx.strokeStyle = '#000000';
     ctx.lineWidth = spaces.toPX(.125);
+    ctx.lineJoin = 'miter';
 
     ctx.beginPath();
     metrics.subBrackets.forEach(bracket => {

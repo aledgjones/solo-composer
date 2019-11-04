@@ -19,7 +19,7 @@ export function drawBrackets(ctx: CanvasRenderingContext2D, x: number, y: number
     // if n > 1 neightbouring instruments in same family -- woodwind, brass, strings only!
     // subbrace if same instrument type next to each other
 
-    const {spaces} = converter;
+    const { spaces } = converter;
 
     const left = x - spaces.toPX(.75);
     const capLeft = x - spaces.toPX(1);
@@ -42,16 +42,17 @@ export function drawBrackets(ctx: CanvasRenderingContext2D, x: number, y: number
 
             const isWing = config.bracketEndStyle === BracketEndStyle.wing;
             const isLine = config.bracketEndStyle === BracketEndStyle.line;
-            const tweekForWing = isWing ? .25 : 0;
+            const tweekForWing = isWing ? spaces.toPX(.3125) : 0; // .25 + .0625;
+            const tweekForStave = spaces.toPX(.0625);
 
-            const top = y + start.y - spaces.toPX(tweekForWing);
-            const bottom = y + stop.y + stop.height + spaces.toPX(tweekForWing);
+            const top = y + start.y - tweekForWing;
+            const bottom = y + stop.y + stop.height + tweekForWing;
 
             ctx.lineWidth = spaces.toPX(.5);
 
             ctx.beginPath();
-            ctx.moveTo(left, top);
-            ctx.lineTo(left, bottom);
+            ctx.moveTo(left, top - tweekForStave);
+            ctx.lineTo(left, bottom + tweekForStave);
             ctx.stroke();
 
             if (isLine) {

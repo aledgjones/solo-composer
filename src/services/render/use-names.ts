@@ -4,12 +4,18 @@ import { Instrument, InstrumentCounts } from "../instrument";
 import { measureText } from "./measure-text";
 import { EngravingConfig } from "../engraving";
 
-export function useNames(instruments: Instrument[], counts: InstrumentCounts, config: EngravingConfig, ctx?: CanvasRenderingContext2D) {
+export enum NameType {
+    long = 1,
+    short
+}
+
+export function useNames(instruments: Instrument[], counts: InstrumentCounts, config: EngravingConfig, type: NameType, ctx?: CanvasRenderingContext2D) {
     return useMemo(() => {
 
         const names = instruments.reduce((output: { [key: string]: string }, instrument) => {
             const count = counts[instrument.key] ? counts[instrument.key] : '';
-            output[instrument.key] = instrument.longName + count;
+            const name = type === NameType.long ? instrument.longName : instrument.shortName;
+            output[instrument.key] = name + count;
             return output;
         }, {});
 

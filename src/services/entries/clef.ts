@@ -1,6 +1,7 @@
 import shortid from 'shortid';
 import { Entry, EntryType } from ".";
 import { Converter } from '../render/use-converter';
+import { DEBUG } from '../state';
 
 export enum ClefType {
     C = 1,
@@ -20,7 +21,7 @@ export function createClef(def: ClefDef, tick: number): Entry<Clef> {
         _type: EntryType.clef,
         _key: shortid(),
         _box: { width: 2.8, height: 4 },
-        _bounds: {width: 3.8, height: 4},
+        _bounds: { width: 3.55, height: 4 },
         _offset: { top: 0, left: 0 },
         _tick: tick,
 
@@ -44,8 +45,12 @@ function glyphFromType(type: ClefType) {
 export function drawClef(ctx: CanvasRenderingContext2D, x: number, y: number, clef: Entry<Clef>, converter: Converter) {
     const { spaces } = converter;
 
-    // ctx.fillStyle = 'rgba(0, 0, 255, .5)';
-    // ctx.fillRect(x, y, spaces.toPX(clef._bounds.width), spaces.toPX(clef._bounds.height));
+    if (DEBUG) {
+        ctx.fillStyle = 'rgba(100, 0, 255, .4)';
+        ctx.fillRect(x, y, spaces.toPX(clef._box.width), spaces.toPX(clef._bounds.height));
+        ctx.fillStyle = 'rgba(100, 0, 255, .2)';
+        ctx.fillRect(x, y, spaces.toPX(clef._bounds.width), spaces.toPX(clef._bounds.height));
+    }
 
     const glyph = glyphFromType(clef.type);
     ctx.fillStyle = 'black';

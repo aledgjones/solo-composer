@@ -2,6 +2,7 @@ import shortid from 'shortid';
 import { Entry, EntryType } from ".";
 import { ClefType, Clef } from './clef';
 import { Converter } from '../render/use-converter';
+import { DEBUG } from '../state';
 
 export enum KeySignatureMode {
     major = 1,
@@ -20,11 +21,12 @@ export interface KeySignature extends KeySignatureDef {
 export function createKeySignature(def: KeySignatureDef, tick: number): Entry<KeySignature> {
     // convert to positive number
     const width = def.offset < 0 ? def.offset * -1 : def.offset;
+    const padding = width > 0 ? .75 : 0;
     return {
         _type: EntryType.keySignature,
         _key: shortid(),
         _box: { width, height: 4 },
-        _bounds: {width: width + 1, height: 4},
+        _bounds: { width: width + padding, height: 4 },
         _offset: { top: 0, left: 0 },
         _tick: tick,
 
@@ -98,8 +100,12 @@ export function drawKeySignature(ctx: CanvasRenderingContext2D, x: number, y: nu
 
     const { spaces } = converter;
 
-    // ctx.fillStyle = 'rgba(255, 0, 0, .5)';
-    // ctx.fillRect(x, y, spaces.toPX(key._bounds.width), spaces.toPX(key._bounds.height));
+    if (DEBUG) {
+        ctx.fillStyle = 'rgba(100, 0, 255, .4)';
+        ctx.fillRect(x, y, spaces.toPX(key._box.width), spaces.toPX(key._bounds.height));
+        ctx.fillStyle = 'rgba(100, 0, 255, .2)';
+        ctx.fillRect(x, y, spaces.toPX(key._bounds.width), spaces.toPX(key._bounds.height));
+    }
 
     ctx.fillStyle = 'black';
     ctx.textAlign = 'left';

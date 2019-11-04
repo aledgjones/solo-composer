@@ -11,7 +11,7 @@ import { defaultEngravingConfig } from "../engraving";
 import { useConverter } from "./use-converter";
 import { useConvertedConfig } from "./use-converted-config";
 
-import { useNames } from "./use-names";
+import { useNames, NameType } from "./use-names";
 import { useMeasureSystem } from "./use-measure-system";
 import { measureBracketAndBraces } from "./measure-brackets-and-braces";
 
@@ -31,10 +31,11 @@ export function useRenderWriteMode(score: Score, flowKey: FlowKey) {
     const config = useConvertedConfig({ ...defaultEngravingConfig, ...score.engraving.score }, converter);
 
     const flow = score.flows.byKey[flowKey];
+    const counts = useCounts(score);
     const instruments = useInstruments(score, flow);
     const staves = useStaves(instruments, flow);
-    const counts = useCounts(score);
-    const { names, max: nameWidth } = useNames(instruments, counts, config, ctx);
+    const { names, max: nameWidth } = useNames(instruments, counts, config, NameType.long, ctx );
+
     const metrics = useMeasureSystem(instruments, config);
 
     const render = useCallback(() => {
@@ -47,10 +48,11 @@ export function useRenderWriteMode(score: Score, flowKey: FlowKey) {
 
         ctx.canvas.width = x + width + config.framePadding.right;
         ctx.canvas.height = config.framePadding.top + metrics.systemHeight + config.framePadding.bottom;
+        
         clearCanvas(ctx);
 
         drawStaves(ctx, x, y, width, staves, metrics, config, converter);
-        
+
         drawNames(ctx, config.framePadding.left + nameWidth, instruments, names, metrics, config);
         drawBraces(ctx, metrics, config, x);
         drawBrackets(ctx, x, y, metrics, config, converter);
@@ -58,15 +60,17 @@ export function useRenderWriteMode(score: Score, flowKey: FlowKey) {
 
         const flowEntries = flow.master.entries.order.map(flowKey => flow.master.entries.byKey[flowKey])
 
+        let prologueWidth = 0;
         staves.forEach(stave => {
             const staveEntries = stave.master.entries.order.map(staveKey => stave.master.entries.byKey[staveKey]);
             const top = y + metrics.staves[stave.key].y;
 
-            drawStavePrologue(ctx, x, top, config, flowEntries, staveEntries, converter);
+            const width = drawStavePrologue(ctx, x, top, config, flowEntries, staveEntries, converter);
+            prologueWidth = width > prologueWidth ? width : prologueWidth;
         });
 
         const barline = createBarline({ type: BarlineType.final }, 0);
-        drawBarline(ctx, x + width - converter.spaces.toPX(.75), y, metrics, barline, converter);
+        drawBarline(ctx, x + width - converter.spaces.toPX(barline._bounds.width), y, metrics, barline, converter);
 
     }, [config, instruments, staves, metrics, names, nameWidth, ctx, flow.master.entries.order, flow.master.entries.byKey, converter]);
 

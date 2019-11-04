@@ -1,6 +1,7 @@
 import shortid from 'shortid';
 import { Entry, EntryType } from ".";
 import { Converter } from '../render/use-converter';
+import { DEBUG } from '../state';
 
 export interface TimeSignatureDef {
     count: number;
@@ -17,7 +18,7 @@ export function createTimeSignature(def: TimeSignatureDef, tick: number): Entry<
         _type: EntryType.timeSignature,
         _key: shortid(),
         _box: { width: 1.75, height: 4 },
-        _bounds: { width: 2.75, height: 4 },
+        _bounds: { width: 3, height: 4 },
         _offset: { top: 0, left: 0 },
         _tick: tick,
 
@@ -60,8 +61,12 @@ export function drawTimeSignature(ctx: CanvasRenderingContext2D, x: number, y: n
 
     const { spaces } = converter;
 
-    // ctx.fillStyle = 'rgba(0, 255, 0, .5)';
-    // ctx.fillRect(x, y, spaces.toPX(time._bounds.width), spaces.toPX(time._bounds.height));
+    if (DEBUG) {
+        ctx.fillStyle = 'rgba(100, 0, 255, .4)';
+        ctx.fillRect(x, y, spaces.toPX(time._box.width), spaces.toPX(time._bounds.height));
+        ctx.fillStyle = 'rgba(100, 0, 255, .2)';
+        ctx.fillRect(x, y, spaces.toPX(time._bounds.width), spaces.toPX(time._bounds.height));
+    }
 
     ctx.fillStyle = 'black';
     ctx.textAlign = 'left';

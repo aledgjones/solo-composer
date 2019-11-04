@@ -6,6 +6,7 @@ import { instrumentDefs } from "./instrument-defs";
 import { log } from "../ui/utils/log";
 
 const LOGGING = false;
+export const DEBUG = true;
 
 export interface State {
     tab: TabState;

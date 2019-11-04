@@ -10,7 +10,7 @@ export function drawStaves(ctx: CanvasRenderingContext2D, x: number, y: number, 
     ctx.strokeStyle = '#000000';
     ctx.lineWidth = spaces.toPX(.125);
 
-    const tweakForStaveLineWidth = converter.spaces.toPX(.0625);
+    const tweakForStaveLineWidth = spaces.toPX(.0625);
 
     ctx.beginPath();
     staves.forEach(stave => {

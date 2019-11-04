@@ -46,7 +46,7 @@ export const defaultEngravingConfig: EngravingConfig = {
     systemStartPadding: .75,
 
     staveInstrumentNameSize: 2,
-    staveInstrumentNameFont: 'Open Sans',
+    staveInstrumentNameFont: 'Libre Baskerville',
     staveInstrumentNameGap: 2,
 
     bracketing: BracketingType.orchestral,

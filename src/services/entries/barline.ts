@@ -1,7 +1,8 @@
 import shortid from 'shortid';
-import { Entry, EntryType } from ".";
+import { Entry, EntryType, Box } from ".";
 import { SystemMetrics } from '../render/use-measure-system';
 import { Converter } from '../render/use-converter';
+import { DEBUG } from '../state';
 
 export enum BarlineType {
     normal = 1,
@@ -18,12 +19,27 @@ export interface BarlineDef {
 
 export interface Barline extends BarlineDef { }
 
+function measureBarlineBox(type: BarlineType): Box {
+    switch (type) {
+        case BarlineType.double:
+            return { width: .5, height: 4 };
+        case BarlineType.final:
+            return { width: 1, height: 4 };
+        case BarlineType.start_repeat:
+        case BarlineType.end_repeat:
+            return { width: 2, height: 4 };
+        case BarlineType.normal:
+        default:
+            return { width: 0, height: 4 };
+    }
+}
+
 export function createBarline(def: BarlineDef, tick: number): Entry<Barline> {
     return {
         _type: EntryType.barline,
         _key: shortid(),
-        _box: { width: 1, height: 4 },
-        _bounds: { width: 1, height: 4 },
+        _box: measureBarlineBox(def.type),
+        _bounds: measureBarlineBox(def.type),
         _offset: { top: 0, left: 0 },
         _tick: tick,
 
@@ -35,12 +51,6 @@ export function drawBarline(ctx: CanvasRenderingContext2D, x: number, y: number,
 
     const { spaces } = converter;
 
-    const thinLineWidth = spaces.toPX(.125);
-    const thickLineWidth = spaces.toPX(.5);
-    const spaceWidth = spaces.toPX(.5);
-
-    ctx.strokeStyle = '#000000';
-
     metrics.barlines.forEach(entry => {
 
         const start = metrics.instruments[entry.start];
@@ -50,36 +60,112 @@ export function drawBarline(ctx: CanvasRenderingContext2D, x: number, y: number,
         const top = y + start.y - tweakForStaveLineWidth;
         const bottom = y + stop.y + stop.height + tweakForStaveLineWidth;
 
-        if (barline.type === BarlineType.normal) {
-            ctx.lineWidth = thinLineWidth;
-            ctx.beginPath();
-            ctx.moveTo(x, top);
-            ctx.lineTo(x, bottom);
-            ctx.stroke();
+        if (DEBUG) {
+            ctx.fillStyle = 'rgba(100, 0, 255, .4)';
+            ctx.fillRect(x, top, spaces.toPX(barline._box.width), bottom - top);
+            ctx.fillStyle = 'rgba(100, 0, 255, .2)';
+            ctx.fillRect(x, top, spaces.toPX(barline._bounds.width), bottom - top);
         }
 
-        if (barline.type === BarlineType.double) {
-            ctx.lineWidth = thinLineWidth;
-            ctx.beginPath();
-            ctx.moveTo(x, top);
-            ctx.lineTo(x, bottom);
-            ctx.moveTo(x + spaceWidth, top);
-            ctx.lineTo(x + spaceWidth, bottom);
-            ctx.stroke();
+        ctx.strokeStyle = '#000000';
+
+        switch (barline.type) {
+
+            case BarlineType.double:
+
+                ctx.lineWidth = spaces.toPX(.125);
+                ctx.beginPath();
+                ctx.moveTo(x, top);
+                ctx.lineTo(x, bottom);
+                ctx.moveTo(x + spaces.toPX(.5), top);
+                ctx.lineTo(x + spaces.toPX(.5), bottom);
+                ctx.stroke();
+                break;
+
+            case BarlineType.final:
+
+                ctx.lineWidth = spaces.toPX(.125);
+                ctx.beginPath();
+                ctx.moveTo(x, top);
+                ctx.lineTo(x, bottom);
+                ctx.stroke();
+
+                ctx.lineWidth = spaces.toPX(.5);
+                ctx.beginPath();
+                ctx.moveTo(x + spaces.toPX(.75), top);
+                ctx.lineTo(x + spaces.toPX(.75), bottom);
+                ctx.stroke();
+                break;
+
+            case BarlineType.end_repeat:
+
+                ctx.lineWidth = spaces.toPX(.125);
+                ctx.beginPath();
+                ctx.moveTo(x + spaces.toPX(1), top);
+                ctx.lineTo(x + spaces.toPX(1), bottom);
+                ctx.stroke();
+
+                ctx.lineWidth = spaces.toPX(.5);
+                ctx.beginPath();
+                ctx.moveTo(x + spaces.toPX(1.75), top);
+                ctx.lineTo(x + spaces.toPX(1.75), bottom);
+                ctx.stroke();
+                break;
+
+            case BarlineType.start_repeat:
+
+                ctx.lineWidth = spaces.toPX(.5);
+                ctx.beginPath();
+                ctx.moveTo(x + spaces.toPX(.25), top);
+                ctx.lineTo(x + spaces.toPX(.25), bottom);
+                ctx.stroke();
+
+                ctx.lineWidth = spaces.toPX(.125);
+                ctx.beginPath();
+                ctx.moveTo(x + spaces.toPX(1), top);
+                ctx.lineTo(x + spaces.toPX(1), bottom);
+                ctx.stroke();
+                break;
+
+            case BarlineType.normal:
+            default:
+
+                ctx.lineWidth = spaces.toPX(.125);
+                ctx.beginPath();
+                ctx.moveTo(x, top);
+                ctx.lineTo(x, bottom);
+                ctx.stroke();
+                break;
+
         }
 
-        if (barline.type === BarlineType.final) {
-            ctx.lineWidth = thinLineWidth;
-            ctx.beginPath();
-            ctx.moveTo(x, top);
-            ctx.lineTo(x, bottom);
-            ctx.stroke();
+        const keys = Object.keys(metrics.staves);
+        const radius = spaces.toPX(.25);
+        const startAngle = 0;
+        const endAngle = Math.PI * 2;
 
-            ctx.lineWidth = thickLineWidth;
+        ctx.fillStyle = '#000000';
+
+        if (barline.type === BarlineType.end_repeat) {
+            const left = x + spaces.toPX(.25);
             ctx.beginPath();
-            ctx.moveTo(x + spaceWidth + (thickLineWidth / 2), top);
-            ctx.lineTo(x + spaceWidth + (thickLineWidth / 2), bottom);
-            ctx.stroke();
+            keys.forEach(key => {
+                const stave = metrics.staves[key];
+                ctx.arc(left, y + stave.y + spaces.toPX(1.5), radius, startAngle, endAngle);
+                ctx.arc(left, y + stave.y + spaces.toPX(2.5), radius, startAngle, endAngle);
+            });
+            ctx.fill();
+        }
+
+        if (barline.type === BarlineType.start_repeat) {
+            const left = x + spaces.toPX(1.75);
+            ctx.beginPath();
+            keys.forEach(key => {
+                const stave = metrics.staves[key];
+                ctx.arc(left, y + stave.y + spaces.toPX(1.5), radius, startAngle, endAngle);
+                ctx.arc(left, y + stave.y + spaces.toPX(2.5), radius, startAngle, endAngle);
+            });
+            ctx.fill();
         }
 
     });

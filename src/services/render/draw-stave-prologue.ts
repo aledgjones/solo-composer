@@ -30,7 +30,7 @@ export function measureStavePrologue(config: EngravingConfig, flowEntries: Entry
     
 }
 
-export function drawStavePrologue(ctx: CanvasRenderingContext2D, x: number, y: number, config: EngravingConfig, flowEntries: Entry<any>[], staveEntries: Entry<any>[], converter: Converter) {
+export function drawStavePrologue(ctx: CanvasRenderingContext2D, x: number, y: number, config: EngravingConfig, flowEntries: Entry<any>[], staveEntries: Entry<any>[], converter: Converter): number {
 
     const {spaces} = converter;
 
@@ -54,5 +54,7 @@ export function drawStavePrologue(ctx: CanvasRenderingContext2D, x: number, y: n
         drawTimeSignature(ctx, left, y, time, converter);
         left = left + spaces.toPX(time._bounds.width);
     }
+
+    return left - x;
 
 }

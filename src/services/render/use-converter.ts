@@ -1,4 +1,4 @@
-import Big from 'big.js';
+import Big, { RoundingMode } from 'big.js';
 import { useMemo } from 'react';
 
 export interface Converter {
