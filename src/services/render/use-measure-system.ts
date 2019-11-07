@@ -63,7 +63,7 @@ export function useMeasureSystem(instruments: Instrument[], config: EngravingCon
 
             // SUB BRACKETS
 
-            if (previousInstrument && (span === BracketSpan.start || span === BracketSpan.continue) && instrument.id === previousInstrument.id) {
+            if (config.subBracket && previousInstrument && (span === BracketSpan.start || span === BracketSpan.continue) && instrument.id === previousInstrument.id) {
                 const subBracketEntry = output.subBrackets[output.subBrackets.length - 1];
                 if (subBracketEntry && subBracketEntry.stop === previousInstrument.key) {
                     subBracketEntry.stop = instrument.key;

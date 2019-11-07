@@ -1,7 +1,7 @@
-import { drawClef, Clef } from "../entries/clef";
-import { drawKeySignature, KeySignature } from "../entries/key-signature";
-import { drawTimeSignature, TimeSignature } from "../entries/time-signature";
-import { Entry, EntryType } from "../entries";
+import { drawClef, Clef } from "../../entries/clef";
+import { drawKeySignature, KeySignature } from "../../entries/key-signature";
+import { drawTimeSignature, TimeSignature } from "../../entries/time-signature";
+import { Entry, EntryType } from "../../entries";
 import { findPreviousOfType } from "./find-previous-of-type";
 import { EngravingConfig } from "../engraving";
 import { Converter } from "./use-converter";

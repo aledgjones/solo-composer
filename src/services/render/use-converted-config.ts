@@ -8,7 +8,7 @@ export const useConvertedConfig = (config: EngravingConfig, converter: Converter
         return {
             space: mm.toPX(config.space),
             framePadding: {
-                top: mm.toPX(config.framePadding.left),
+                top: mm.toPX(config.framePadding.top),
                 right: mm.toPX(config.framePadding.right),
                 bottom: mm.toPX(config.framePadding.bottom),
                 left: mm.toPX(config.framePadding.left)
@@ -23,7 +23,8 @@ export const useConvertedConfig = (config: EngravingConfig, converter: Converter
 
             bracketing: config.bracketing,
             bracketEndStyle: config.bracketEndStyle,
-            bracketSingleStaves: config.bracketSingleStaves
+            bracketSingleStaves: config.bracketSingleStaves,
+            subBracket: config.subBracket
         };
     }, [config, converter]);
 }

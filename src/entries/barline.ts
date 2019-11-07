@@ -1,8 +1,8 @@
 import shortid from 'shortid';
 import { Entry, EntryType, Box } from ".";
-import { SystemMetrics } from '../render/use-measure-system';
-import { Converter } from '../render/use-converter';
-import { DEBUG } from '../state';
+import { SystemMetrics } from '../services/render/use-measure-system';
+import { Converter } from '../services/render/use-converter';
+import { DEBUG } from '../services/state';
 
 export enum BarlineType {
     normal = 1,

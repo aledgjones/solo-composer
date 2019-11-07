@@ -53,14 +53,18 @@ export const EngravingSettings: FC<Props> = ({ config, onUpdate, onClose }) => {
                                 <Option value={BracketingType.orchestral} displayAs="Orchestral">Orchestral</Option>
                                 <Option value={BracketingType.smallEnsemble} displayAs="Small ensemble">Small ensemble</Option>
                             </Select>
-                            <Select required color={Theme.primary} label="Bracket groups with only one instrument" value={engraving.bracketSingleStaves} onChange={(val: boolean) => onUpdate(key, { bracketSingleStaves: val })}>
+                            <Select margin required color={Theme.primary} label="Bracket groups with only one instrument" value={engraving.bracketSingleStaves} onChange={(val: boolean) => onUpdate(key, { bracketSingleStaves: val })}>
                                 <Option value={true} displayAs="Use bracket">Use bracket</Option>
                                 <Option value={false} displayAs="No bracket">No bracket</Option>
+                            </Select>
+                            <Select required color={Theme.primary} label="Sub bracket instruments of the same type" value={engraving.subBracket} onChange={(val: boolean) => onUpdate(key, { subBracket: val })}>
+                                <Option value={true} displayAs="Use sub brackets">Use sub brackets</Option>
+                                <Option value={false} displayAs="No sub brackets">No sub brackets</Option>
                             </Select>
                         </div>
                         <div className="general-settings__header">Design</div>
                         <div className="general-settings__section">
-                            <Select margin required color={Theme.primary} label="Bracet cap style" value={engraving.bracketEndStyle} onChange={(val: BracketEndStyle) => onUpdate(key, { bracketEndStyle: val })}>
+                            <Select required color={Theme.primary} label="Bracet cap style" value={engraving.bracketEndStyle} onChange={(val: BracketEndStyle) => onUpdate(key, { bracketEndStyle: val })}>
                                 <Option value={BracketEndStyle.none} displayAs="None">None</Option>
                                 <Option value={BracketEndStyle.line} displayAs="Lines">Lines</Option>
                                 <Option value={BracketEndStyle.wing} displayAs="Wings">Wings</Option>

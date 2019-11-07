@@ -23,13 +23,13 @@ export function useConverter(space: number): Converter {
         document.body.removeChild(div);
         return {
             px: {
-                toMM: (px: number) => parseFloat(new Big(px).div(width).toFixed(2))
+                toMM: (px: number) => parseFloat(new Big(px).div(width).toFixed(0))
             },
             mm: {
-                toPX: (mm: number) => parseFloat(new Big(mm).times(width).toFixed(2))
+                toPX: (mm: number) => parseFloat(new Big(mm).times(width).toFixed(0))
             },
             spaces: {
-                toPX: (spaces: number) => parseFloat(new Big(spaces).times(space).times(width).toFixed(2))
+                toPX: (spaces: number) => parseFloat(new Big(spaces).times(space).times(width).toFixed(0))
             }
         };
     }, [space]);

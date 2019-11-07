@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { ClefType, ClefDef } from "./entries/clef";
+import { ClefType, ClefDef } from "../entries/clef";
 
 export interface StaveDef {
     lines: number;
@@ -94,6 +94,13 @@ export const instrumentDefs: InstrumentDefs = {
         path: ['Strings', 'Contrabass'],
         longName: "Contrabass",
         shortName: "Cb.",
+        staves: [{ lines: 5, clef: { type: ClefType.F, offset: 2 } }]
+    },
+    "brass.trombone": {
+        id: "brass.trombone",
+        path: ['Brass', 'Trombone'],
+        longName: "Trombone",
+        shortName: "Tbn.",
         staves: [{ lines: 5, clef: { type: ClefType.F, offset: 2 } }]
     },
     "woodwinds.piccolo": {

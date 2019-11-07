@@ -20,6 +20,7 @@ export interface EngravingConfig {
     bracketing: BracketingType;
     bracketEndStyle: BracketEndStyle;
     bracketSingleStaves: boolean;
+    subBracket: boolean;
 }
 
 export interface EngravingState {
@@ -40,18 +41,19 @@ export interface EngravingActions {
 
 export const defaultEngravingConfig: EngravingConfig = {
     space: 2,
-    framePadding: { top: 25, right: 25, bottom: 25, left: 25 },
+    framePadding: { top: 40, right: 25, bottom: 40, left: 25 },
     instrumentSpacing: 8,
     staveSpacing: 6,
     systemStartPadding: .75,
 
-    staveInstrumentNameSize: 2,
+    staveInstrumentNameSize: 1.75,
     staveInstrumentNameFont: 'Libre Baskerville',
     staveInstrumentNameGap: 2,
 
     bracketing: BracketingType.orchestral,
     bracketEndStyle: BracketEndStyle.wing,
-    bracketSingleStaves: false
+    bracketSingleStaves: false,
+    subBracket: true
 }
 
 export const engravingEmptyState = (): EngravingState => {

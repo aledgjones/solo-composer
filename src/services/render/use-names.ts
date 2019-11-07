@@ -1,15 +1,15 @@
 import { useMemo } from "react";
 
 import { Instrument, InstrumentCounts } from "../instrument";
-import { measureText } from "./measure-text";
 import { EngravingConfig } from "../engraving";
+import { Renderer } from "./renderer";
 
 export enum NameType {
     long = 1,
     short
 }
 
-export function useNames(instruments: Instrument[], counts: InstrumentCounts, config: EngravingConfig, type: NameType, ctx?: CanvasRenderingContext2D) {
+export function useNames(renderer: Renderer, instruments: Instrument[], counts: InstrumentCounts, config: EngravingConfig, type: NameType) {
     return useMemo(() => {
 
         const names = instruments.reduce((output: { [key: string]: string }, instrument) => {
@@ -19,12 +19,11 @@ export function useNames(instruments: Instrument[], counts: InstrumentCounts, co
             return output;
         }, {});
 
-        if (!ctx) return { names, max: 0 };
-
-        const widths = instruments.map(instrument => measureText(names[instrument.key], `${config.staveInstrumentNameSize}px ${config.staveInstrumentNameFont}`, ctx));
+        const styles = { fontFamily: config.staveInstrumentNameFont, fontSize: config.staveInstrumentNameSize };
+        const widths = instruments.map(instrument => renderer.measureText(styles, names[instrument.key]));
         const max = Math.max(...widths);
 
         return { names, max };
 
-    }, [ctx, instruments, counts, config]);
+    }, [renderer, instruments, counts, config]);
 }

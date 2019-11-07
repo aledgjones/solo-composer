@@ -1,7 +1,7 @@
 import shortid from 'shortid';
 import { Entry, EntryType } from ".";
-import { Converter } from '../render/use-converter';
-import { DEBUG } from '../state';
+import { Converter } from '../services/render/use-converter';
+import { DEBUG } from '../services/state';
 
 export enum ClefType {
     C = 1,

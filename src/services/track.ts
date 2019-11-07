@@ -1,5 +1,5 @@
 import shortid from 'shortid';
-import { EntryKey, Entries } from './entries';
+import { EntryKey, Entries } from '../entries';
 
 export type TrackKey = string;
 

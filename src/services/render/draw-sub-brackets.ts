@@ -1,8 +1,9 @@
 import { SystemMetrics } from "./use-measure-system";
 import { EngravingConfig } from "../engraving";
 import { Converter } from "./use-converter";
+import { Renderer, Path } from "./renderer";
 
-export function drawSubBrackets(ctx: CanvasRenderingContext2D, x: number, y: number, metrics: SystemMetrics, config: EngravingConfig, converter: Converter) {
+export function drawSubBrackets(renderer: Renderer, x: number, y: number, metrics: SystemMetrics, config: EngravingConfig, converter: Converter) {
 
     // if n > 1 neightbouring instruments in same family -- woodwind, brass, strings only!
     // subbrace if same instrument type next to each other
@@ -11,11 +12,7 @@ export function drawSubBrackets(ctx: CanvasRenderingContext2D, x: number, y: num
 
     const left = x - spaces.toPX(1.5);
 
-    ctx.strokeStyle = '#000000';
-    ctx.lineWidth = spaces.toPX(.125);
-    ctx.lineJoin = 'miter';
-
-    ctx.beginPath();
+    const paths: Path[] = [];
     metrics.subBrackets.forEach(bracket => {
         const start = metrics.instruments[bracket.start];
         const stop = metrics.instruments[bracket.stop];
@@ -23,11 +20,15 @@ export function drawSubBrackets(ctx: CanvasRenderingContext2D, x: number, y: num
         const top = y + start.y;
         const bottom = y + stop.y + stop.height;
 
-        ctx.moveTo(x, top);
-        ctx.lineTo(left, top);
-        ctx.lineTo(left, bottom);
-        ctx.lineTo(x, bottom);
+        paths.push([
+            [x, top],
+            [left, top],
+            [left, bottom],
+            [x, bottom]
+        ]);
     });
-    ctx.stroke();
+
+    const style = { color: '#000000', width: spaces.toPX(.125) };
+    renderer.paths(style, ...paths);
 
 }

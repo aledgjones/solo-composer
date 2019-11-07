@@ -76,7 +76,7 @@ export const Setup: FC<Props> = ({ state, actions }) => {
         actions.score.players.reorder(instruction);
     }, [actions.score.players]);
 
-    const counts = useCounts(state.score);
+    const counts = useCounts(state.score.players, state.score.instruments, state.score.config);
 
     // FLOWS
 

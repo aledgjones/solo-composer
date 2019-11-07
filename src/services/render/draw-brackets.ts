@@ -1,6 +1,7 @@
 import { SystemMetrics } from "./use-measure-system";
 import { EngravingConfig } from "../engraving";
 import { Converter } from "./use-converter";
+import { Renderer, Path, Styles } from "./renderer";
 
 export enum BracketingType {
     none = 1,
@@ -14,7 +15,7 @@ export enum BracketEndStyle {
     none
 }
 
-export function drawBrackets(ctx: CanvasRenderingContext2D, x: number, y: number, metrics: SystemMetrics, config: EngravingConfig, converter: Converter) {
+export function drawBrackets(renderer: Renderer, x: number, y: number, metrics: SystemMetrics, config: EngravingConfig, converter: Converter) {
 
     // if n > 1 neightbouring instruments in same family -- woodwind, brass, strings only!
     // subbrace if same instrument type next to each other
@@ -27,12 +28,16 @@ export function drawBrackets(ctx: CanvasRenderingContext2D, x: number, y: number
     const glyphTop = '\u{E003}';
     const glyphBottom = '\u{E004}';
 
-    ctx.strokeStyle = '#000000';
+    const styles: Styles = {
+        color: '#000000',
+        textAlign: 'left',
+        fontFamily: 'Music',
+        fontSize: spaces.toPX(4),
+        textBaseline: 'middle'
+    };
 
-    ctx.fillStyle = 'black';
-    ctx.textAlign = 'left';
-    ctx.font = `${spaces.toPX(4)}px Music`;
-    ctx.textBaseline = 'middle';
+    const thinLines: Path[] = [];
+    const thickLines: Path[] = [];
 
     metrics.brackets.forEach(bracket => {
         const start = metrics.instruments[bracket.start];
@@ -48,28 +53,33 @@ export function drawBrackets(ctx: CanvasRenderingContext2D, x: number, y: number
             const top = y + start.y - tweekForWing;
             const bottom = y + stop.y + stop.height + tweekForWing;
 
-            ctx.lineWidth = spaces.toPX(.5);
 
-            ctx.beginPath();
-            ctx.moveTo(left, top - tweekForStave);
-            ctx.lineTo(left, bottom + tweekForStave);
-            ctx.stroke();
+            thickLines.push([
+                [left, top - tweekForStave],
+                [left, bottom + tweekForStave]
+            ])
 
             if (isLine) {
-                ctx.lineWidth = spaces.toPX(.125);
-                ctx.beginPath();
-                ctx.moveTo(left - spaces.toPX(.25), top);
-                ctx.lineTo(x, top);
-                ctx.moveTo(left - spaces.toPX(.25), bottom);
-                ctx.lineTo(x, bottom);
-                ctx.stroke();
+                thinLines.push(
+                    [
+                        [left - spaces.toPX(.25), top],
+                        [x, top]
+                    ],
+                    [
+                        [left - spaces.toPX(.25), bottom],
+                        [x, bottom]
+                    ]
+                );
             }
 
             if (isWing) {
-                ctx.fillText(glyphTop, capLeft, top);
-                ctx.fillText(glyphBottom, capLeft, bottom);
+                renderer.text(styles, glyphTop, capLeft, top);
+                renderer.text(styles, glyphBottom, capLeft, bottom);
             }
         }
     });
+
+    renderer.paths({...styles,width: spaces.toPX(.5) }, ...thickLines);
+    renderer.paths({...styles,width: spaces.toPX(.125) }, ...thinLines);
 
 }

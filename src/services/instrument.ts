@@ -3,11 +3,13 @@ import shortid from 'shortid';
 import { toRoman } from 'roman-numerals';
 
 import { InstrumentDef } from './instrument-defs';
-import { PlayerKey, PLAYER_REMOVE } from './player';
+import { PlayerKey, PLAYER_REMOVE, PlayerState } from './player';
 import { StaveKey, createStave } from './stave';
 import { removeProps } from '../ui/utils/remove-props';
 import { Score } from './score';
 import { Flow } from './flow';
+import { EngravingConfig } from './engraving';
+import { ConfigState } from './config';
 
 export const INSTRUMENT_CREATE = '@instrument/create';
 export const INSTRUMENT_REMOVE = '@instrument/remove';
@@ -93,13 +95,14 @@ export type InstrumentCounts = { [instrumentKey: string]: string };
  * 
  * eg violin ${counts['violin'].length + 1} = Violin *1*
  */
-export function useCounts(score: Score): InstrumentCounts {
+export function useCounts(players: PlayerState, instruments: Instruments, config: ConfigState): InstrumentCounts {
     return useMemo(() => {
 
-        const counts = score.players.order.reduce((output: InstrumentCountsTotals, playerKey: PlayerKey) => {
-            const player = score.players.byKey[playerKey];
+        const counts = players.order.reduce((output: InstrumentCountsTotals, playerKey: PlayerKey) => {
+            const player = players.byKey[playerKey];
             player.instruments.forEach((instrumentKey: InstrumentKey) => {
-                const instrument = score.instruments[instrumentKey];
+                const instrument = instruments[instrumentKey];
+                // consider solo / ensemble players as different by appending type
                 const name = instrument.longName + ':' + player.type;
                 if (!output[name]) {
                     output[name] = [];
@@ -113,7 +116,7 @@ export function useCounts(score: Score): InstrumentCounts {
         return names.reduce((out: InstrumentCounts, name: string) => {
             counts[name].forEach((instrumentKey, i, _names) => {
                 if (_names.length > 1) {
-                    if (score.config.autoCountStyle === InstrumentAutoCountStyle.arabic) {
+                    if (config.autoCountStyle === InstrumentAutoCountStyle.arabic) {
                         out[instrumentKey] = ` ${i + 1}`;
                     } else {
                         out[instrumentKey] = ` ${toRoman(i + 1)}`;
@@ -123,7 +126,7 @@ export function useCounts(score: Score): InstrumentCounts {
             return out;
         }, {});
 
-    }, [score.players, score.instruments, score.config.autoCountStyle]);
+    }, [players, instruments, config.autoCountStyle]);
 }
 
 export function useInstruments(score: Score, flow: Flow): Instrument[] {

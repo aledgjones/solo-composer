@@ -6,8 +6,8 @@ import { removeProps } from '../ui/utils/remove-props';
 import { instrumentDefs } from './instrument-defs';
 import { Instruments } from './instrument';
 import { Track, createTrack } from './track';
-import { KeySignatureMode, createKeySignature } from './entries/key-signature';
-import { createTimeSignature } from './entries/time-signature';
+import { KeySignatureMode, createKeySignature } from '../entries/key-signature';
+import { createTimeSignature } from '../entries/time-signature';
 
 export const FLOW_CREATE = '@flow/create';
 export const FLOW_REORDER = '@flow/reorder';
@@ -210,8 +210,8 @@ export const flowActions = (dispatch: any): FlowActions => {
 
 const createFlow = (players: PlayerKey[], staves: { [key: string]: Stave }): Flow => {
 
-    const key = createKeySignature({ mode: KeySignatureMode.major, offset: -3 }, 0);
-    const time = createTimeSignature({ count: 4, beat: 4 }, 0);
+    const key = createKeySignature({ mode: KeySignatureMode.major, offset: 0 }, 0);
+    const time = createTimeSignature({ count: 4, beat: 4, drawAs: 'c' }, 0);
 
     return {
         key: shortid(),

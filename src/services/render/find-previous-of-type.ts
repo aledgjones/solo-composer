@@ -1,4 +1,4 @@
-import { EntryType, Entry } from "../entries";
+import { EntryType, Entry } from "../../entries";
 
 /**
  * Finds the first enty that prceeds the current pointer
