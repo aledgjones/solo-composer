@@ -1,7 +1,7 @@
 import shortid from 'shortid';
+import { ClefType, Clef } from './clef-defs';
 import { Entry, EntryType } from ".";
-import { ClefType, Clef } from './clef';
-import { Converter } from '../services/render/use-converter';
+import { Converter } from '../parse/converter';
 import { DEBUG } from '../services/state';
 
 export enum KeySignatureMode {

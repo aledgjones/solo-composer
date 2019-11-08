@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import { Theme } from '../const';
 
 import { EngravingState, LayoutType, PartialEngravingConfig, defaultEngravingConfig } from '../services/engraving';
-import { BracketingType, BracketEndStyle } from '../services/render/draw-brackets';
+import { BracketingType, BracketEndStyle } from '../parse/draw-brackets';
 import { ListItem } from './list-item';
 
 import { Card } from '../ui/components/card';

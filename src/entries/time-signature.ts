@@ -1,6 +1,6 @@
 import shortid from 'shortid';
 import { Entry, EntryType } from ".";
-import { Converter } from '../services/render/use-converter';
+import { Converter } from '../parse/converter';
 import { DEBUG } from '../services/state';
 
 export interface TimeSignatureDef {

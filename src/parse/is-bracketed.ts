@@ -1,4 +1,4 @@
-import { Instrument } from "../instrument";
+import { Instrument } from "../services/instrument";
 import { BracketingType } from "./draw-brackets";
 
 function instrumentFamily(instrument?: Instrument) {

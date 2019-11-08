@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { ClefType, ClefDef } from "../entries/clef";
+import { ClefType, ClefDef } from "../entries/clef-defs";
 
 export interface StaveDef {
     lines: number;

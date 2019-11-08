@@ -27,13 +27,11 @@ export function createStave(staveDef: StaveDef, staveKey: StaveKey = shortid()):
     }
 }
 
-export function useStaves(instruments: Instrument[], flow: Flow) {
-    return useMemo(() => {
-        return instruments.reduce((output: Stave[], instrument) => {
-            instrument.staves.forEach(staveKey => {
-                output.push(flow.staves[staveKey]);
-            });
-            return output;
-        }, []);
-    }, [instruments, flow.staves]);
+export function getStaves(instruments: Instrument[], flow: Flow) {
+    return instruments.reduce((output: Stave[], instrument) => {
+        instrument.staves.forEach(staveKey => {
+            output.push(flow.staves[staveKey]);
+        });
+        return output;
+    }, []);
 }

@@ -8,7 +8,6 @@ import { StaveKey, createStave } from './stave';
 import { removeProps } from '../ui/utils/remove-props';
 import { Score } from './score';
 import { Flow } from './flow';
-import { EngravingConfig } from './engraving';
 import { ConfigState } from './config';
 
 export const INSTRUMENT_CREATE = '@instrument/create';
@@ -95,50 +94,55 @@ export type InstrumentCounts = { [instrumentKey: string]: string };
  * 
  * eg violin ${counts['violin'].length + 1} = Violin *1*
  */
+export function getCounts(players: PlayerState, instruments: Instruments, config: ConfigState) {
+
+    const counts = players.order.reduce((output: InstrumentCountsTotals, playerKey: PlayerKey) => {
+        const player = players.byKey[playerKey];
+        player.instruments.forEach((instrumentKey: InstrumentKey) => {
+            const instrument = instruments[instrumentKey];
+            // consider solo / ensemble players as different by appending type
+            const name = instrument.longName + ':' + player.type;
+            if (!output[name]) {
+                output[name] = [];
+            }
+            output[name].push(instrument.key);
+        });
+        return output;
+    }, {});
+
+    const names = Object.keys(counts);
+    return names.reduce((out: InstrumentCounts, name: string) => {
+        counts[name].forEach((instrumentKey, i, _names) => {
+            if (_names.length > 1) {
+                if (config.autoCountStyle === InstrumentAutoCountStyle.arabic) {
+                    out[instrumentKey] = ` ${i + 1}`;
+                } else {
+                    out[instrumentKey] = ` ${toRoman(i + 1)}`;
+                }
+            }
+        });
+        return out;
+    }, {});
+
+}
+
 export function useCounts(players: PlayerState, instruments: Instruments, config: ConfigState): InstrumentCounts {
     return useMemo(() => {
-
-        const counts = players.order.reduce((output: InstrumentCountsTotals, playerKey: PlayerKey) => {
-            const player = players.byKey[playerKey];
-            player.instruments.forEach((instrumentKey: InstrumentKey) => {
-                const instrument = instruments[instrumentKey];
-                // consider solo / ensemble players as different by appending type
-                const name = instrument.longName + ':' + player.type;
-                if (!output[name]) {
-                    output[name] = [];
-                }
-                output[name].push(instrument.key);
-            });
-            return output;
-        }, {});
-
-        const names = Object.keys(counts);
-        return names.reduce((out: InstrumentCounts, name: string) => {
-            counts[name].forEach((instrumentKey, i, _names) => {
-                if (_names.length > 1) {
-                    if (config.autoCountStyle === InstrumentAutoCountStyle.arabic) {
-                        out[instrumentKey] = ` ${i + 1}`;
-                    } else {
-                        out[instrumentKey] = ` ${toRoman(i + 1)}`;
-                    }
-                }
-            });
-            return out;
-        }, {});
-
+        return getCounts(players, instruments, config);
     }, [players, instruments, config.autoCountStyle]);
 }
 
-export function useInstruments(score: Score, flow: Flow): Instrument[] {
-    return useMemo(() => {
-        return score.players.order.reduce((output: Instrument[], playerKey) => {
-            if (flow.players.includes(playerKey)) {
-                const player = score.players.byKey[playerKey];
-                player.instruments.forEach(instrumentKey => {
-                    output.push(score.instruments[instrumentKey]);
-                });
-            }
-            return output;
-        }, []);
-    }, [score.players, score.instruments, flow]);
+/**
+ * get an array of instruments
+ */
+export function getInstruments(players: PlayerState, instruments: Instruments, flow: Flow): Instrument[] {
+    return players.order.reduce((output: Instrument[], playerKey) => {
+        const player = players.byKey[playerKey];
+        if (flow.players.includes(player.key)) {
+            player.instruments.forEach(instrumentKey => {
+                output.push(instruments[instrumentKey]);
+            });
+        }
+        return output;
+    }, []);
 }

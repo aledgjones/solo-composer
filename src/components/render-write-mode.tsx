@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import { Score } from '../services/score';
 import { InsertPoint } from '../ui/utils/insert-point';
 
-import { useRenderWriteMode } from '../services/render';
+import { useRenderWriteMode } from '../render/use-render-write-mode';
 
 import './render-write-mode.css';
 

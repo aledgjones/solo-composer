@@ -1,20 +1,8 @@
 import shortid from 'shortid';
 import { Entry, EntryType } from ".";
-import { Converter } from '../services/render/use-converter';
+import { Converter } from '../parse/converter';
 import { DEBUG } from '../services/state';
-
-export enum ClefType {
-    C = 1,
-    F,
-    G
-}
-
-export interface ClefDef {
-    type: ClefType;
-    offset: number;
-}
-
-export interface Clef extends ClefDef { }
+import { ClefDef, Clef, ClefType } from './clef-defs';
 
 export function createClef(def: ClefDef, tick: number): Entry<Clef> {
     return {

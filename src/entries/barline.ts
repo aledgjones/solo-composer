@@ -1,7 +1,7 @@
 import shortid from 'shortid';
 import { Entry, EntryType, Box } from ".";
-import { SystemMetrics } from '../services/render/use-measure-system';
-import { Converter } from '../services/render/use-converter';
+import { VerticalMeasurements } from '../parse/measure-vertical-layout';
+import { Converter } from '../parse/converter';
 import { DEBUG } from '../services/state';
 
 export enum BarlineType {
@@ -47,7 +47,7 @@ export function createBarline(def: BarlineDef, tick: number): Entry<Barline> {
     }
 }
 
-export function drawBarline(ctx: CanvasRenderingContext2D, x: number, y: number, metrics: SystemMetrics, barline: Entry<Barline>, converter: Converter) {
+export function drawBarline(ctx: CanvasRenderingContext2D, x: number, y: number, metrics: VerticalMeasurements, barline: Entry<Barline>, converter: Converter) {
 
     const { spaces } = converter;
 

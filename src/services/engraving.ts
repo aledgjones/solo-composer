@@ -1,4 +1,4 @@
-import { BracketingType, BracketEndStyle } from "./render/draw-brackets";
+import { BracketingType, BracketEndStyle } from "../parse/draw-brackets";
 
 type MMs = number;
 type Spaces = number;

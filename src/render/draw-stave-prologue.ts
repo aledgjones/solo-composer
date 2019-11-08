@@ -1,10 +1,11 @@
-import { drawClef, Clef } from "../../entries/clef";
-import { drawKeySignature, KeySignature } from "../../entries/key-signature";
-import { drawTimeSignature, TimeSignature } from "../../entries/time-signature";
-import { Entry, EntryType } from "../../entries";
+import { drawClef } from "../entries/clef";
+import { Clef } from "../entries/clef-defs";
+import { drawKeySignature, KeySignature } from "../entries/key-signature";
+import { drawTimeSignature, TimeSignature } from "../entries/time-signature";
+import { Entry, EntryType } from "../entries";
 import { findPreviousOfType } from "./find-previous-of-type";
-import { EngravingConfig } from "../engraving";
-import { Converter } from "./use-converter";
+import { EngravingConfig } from "../services/engraving";
+import { Converter } from "../parse/converter";
 
 export function measureStavePrologue(config: EngravingConfig, flowEntries: Entry<any>[], staveEntries: Entry<any>[]) {
 
