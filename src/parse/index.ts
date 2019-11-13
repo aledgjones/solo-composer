@@ -49,12 +49,12 @@ export function parse(score: Score, flowKey: FlowKey, Converter: (space: number)
 
     //--- TEMPORARY ---//
 
-    instructions.height = config.framePadding.top + verticalMeasurements.systemHeight + config.framePadding.bottom;
-    instructions.width = x + width + config.framePadding.right;
+    // 1) convert track data into written note durations
+    // 2) create a rhythmic grid for the whole flow (ie. spacings)
+    // 3) assign widths to ticks
+    // 4) draw items at tick positions
+    // 5) add up all tick spacings to get stave width
 
-    //--- MOVE THESE ALL INTO PARSER ---//
-
-    // let prologueWidth = 0;
     // staves.forEach(stave => {
     //     const staveEntries = stave.master.entries.order.map(staveKey => stave.master.entries.byKey[staveKey]);
     //     const top = y + verticalLayout.staves[stave.key].y;
@@ -62,9 +62,6 @@ export function parse(score: Score, flowKey: FlowKey, Converter: (space: number)
     //     const width = drawStavePrologue(renderer, x, top, config, flowEntries, staveEntries, converter);
     //     prologueWidth = width > prologueWidth ? width : prologueWidth;
     // });
-
-    // const finalBarline = createBarline({ type: BarlineType.final }, 0);
-    // drawBarline(renderer, x + width - converter.spaces.toPX(finalBarline._bounds.width), config.framePadding.top, verticalLayout, finalBarline, converter);
 
     instructions.layers.score = mergeInstructions(
         ...drawNames(config.framePadding.left + namesWidth, y, instruments, names, verticalMeasurements, config),
@@ -74,6 +71,9 @@ export function parse(score: Score, flowKey: FlowKey, Converter: (space: number)
         ...drawStaves(x, y, width, staves, verticalMeasurements, converter),
         ...drawFinalBarline(x + width, y, staves, verticalMeasurements, config, converter)
     );
+
+    instructions.height = config.framePadding.top + verticalMeasurements.systemHeight + config.framePadding.bottom;
+    instructions.width = x + width + config.framePadding.right;
 
     return instructions;
 
