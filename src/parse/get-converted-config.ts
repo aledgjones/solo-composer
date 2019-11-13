@@ -22,6 +22,8 @@ export const getConvertedConfig = (config: EngravingConfig, converter: Converter
         bracketing: config.bracketing,
         bracketEndStyle: config.bracketEndStyle,
         bracketSingleStaves: config.bracketSingleStaves,
-        subBracket: config.subBracket
+        subBracket: config.subBracket,
+        
+        finalBarlineType: config.finalBarlineType
     };
 }

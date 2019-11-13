@@ -1,9 +1,8 @@
 import { VerticalMeasurements } from "./measure-vertical-layout";
-import { EngravingConfig } from "../services/engraving";
 import { Converter } from "./converter";
-import { Path, buildPath } from "../render/path";
+import { PathInstruction, buildPath } from "../render/path";
 
-export function drawSubBrackets(x: number, y: number, metrics: VerticalMeasurements, config: EngravingConfig, converter: Converter) {
+export function drawSubBrackets(x: number, y: number, metrics: VerticalMeasurements, converter: Converter) {
 
     // if n > 1 neightbouring instruments in same family -- woodwind, brass, strings only!
     // subbrace if same instrument type next to each other
@@ -11,9 +10,9 @@ export function drawSubBrackets(x: number, y: number, metrics: VerticalMeasureme
     const { spaces } = converter;
 
     const left = x - spaces.toPX(1.5);
-    const styles = { color: '#000000', width: spaces.toPX(.125) };
+    const styles = { color: '#000000', thickness: spaces.toPX(.125) };
 
-    return metrics.subBrackets.reduce((out: Path[], bracket) => {
+    return metrics.subBrackets.reduce((out: PathInstruction[], bracket) => {
         const start = metrics.instruments[bracket.start];
         const stop = metrics.instruments[bracket.stop];
 

@@ -1,4 +1,5 @@
 import { BracketingType, BracketEndStyle } from "../parse/draw-brackets";
+import { BarlineType } from "../entries/barline";
 
 type MMs = number;
 type Spaces = number;
@@ -21,6 +22,8 @@ export interface EngravingConfig {
     bracketEndStyle: BracketEndStyle;
     bracketSingleStaves: boolean;
     subBracket: boolean;
+
+    finalBarlineType: BarlineType
 }
 
 export interface EngravingState {
@@ -53,7 +56,9 @@ export const defaultEngravingConfig: EngravingConfig = {
     bracketing: BracketingType.orchestral,
     bracketEndStyle: BracketEndStyle.wing,
     bracketSingleStaves: false,
-    subBracket: true
+    subBracket: true,
+
+    finalBarlineType: BarlineType.final
 }
 
 export const engravingEmptyState = (): EngravingState => {

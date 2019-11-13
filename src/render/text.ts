@@ -1,9 +1,19 @@
-import { applyStyles, Styles } from "./apply-styles";
-import { Instruction, InstructionType } from "./instructions";
+import { applyStyles } from "./apply-styles";
+import { Instruction, InstructionType, MergedInstruction } from "../parse/instructions";
 
-export type Text = Instruction<{ value: string, x: number, y: number }>
+export interface TextStyles {
+    color: string;
+    fontFamily: string;
+    fontSize: number;
+    textAlign: CanvasTextAlign;
+    textBaseline: CanvasTextBaseline;
+};
 
-export function buildText(styles: Styles, x: number, y: number, value: string): Text {
+export type Text = { value: string, x: number, y: number };
+export type TextInstruction = Instruction<{ styles: TextStyles } & Text>;
+export type MergedTextInstruction = MergedInstruction<{ styles: TextStyles, texts: Text[] }>;
+
+export function buildText(styles: TextStyles, x: number, y: number, value: string): TextInstruction {
     return {
         type: InstructionType.text,
         styles,
@@ -13,7 +23,9 @@ export function buildText(styles: Styles, x: number, y: number, value: string): 
     }
 }
 
-export function renderText(ctx: OffscreenCanvasRenderingContext2D, text: Text) {
-    applyStyles(ctx, text.styles);
-    ctx.fillText(text.value, text.x, text.y);
+export function renderTexts(ctx: OffscreenCanvasRenderingContext2D, instruction: MergedTextInstruction) {
+    applyStyles(ctx, instruction.styles);
+    instruction.texts.forEach(text => {
+        ctx.fillText(text.value, text.x, text.y);
+    });
 }

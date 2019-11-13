@@ -1,17 +1,16 @@
 import { Stave } from "../services/stave";
 import { VerticalMeasurements } from "./measure-vertical-layout";
-import { EngravingConfig } from "../services/engraving";
 import { Converter } from "./converter";
-import { buildPath, Path } from "../render/path";
+import { buildPath, PathInstruction } from "../render/path";
 
-export function drawStaves(x: number, y: number, width: number, staves: Stave[], metrics: VerticalMeasurements, config: EngravingConfig, converter: Converter) {
+export function drawStaves(x: number, y: number, width: number, staves: Stave[], metrics: VerticalMeasurements, converter: Converter) {
 
     const { spaces } = converter;
 
     const tweakForStaveLineWidth = spaces.toPX(.0625);
-    const styles = { color: '#000000', width: spaces.toPX(.125) };
+    const styles = { color: '#000000', thickness: spaces.toPX(.125) };
 
-    const paths: Path[] = [];
+    const paths: PathInstruction[] = [];
 
     // render staves
     staves.forEach(stave => {

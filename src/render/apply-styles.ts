@@ -1,19 +1,19 @@
 export type Styles = Partial<{
     color: string;
-    width: number;
+    thickness: number;
     fontFamily: string;
     fontSize: number;
     textAlign: CanvasTextAlign;
     textBaseline: CanvasTextBaseline;
 }>
 
-export function applyStyles(ctx: OffscreenCanvasRenderingContext2D, { color, width, fontFamily, fontSize, textAlign, textBaseline }: Styles) {
+export function applyStyles(ctx: OffscreenCanvasRenderingContext2D, { color, thickness, fontFamily, fontSize, textAlign, textBaseline }: Styles) {
     if (color) {
         ctx.fillStyle = color;
         ctx.strokeStyle = color;
     }
-    if (width) {
-        ctx.lineWidth = width;
+    if (thickness) {
+        ctx.lineWidth = thickness;
     }
     if (fontFamily && fontSize) {
         ctx.font = `${fontSize}px ${fontFamily}`;

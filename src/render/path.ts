@@ -1,12 +1,14 @@
-import { applyStyles, Styles } from "./apply-styles";
-import { Instruction, InstructionType } from "./instructions";
+import { applyStyles } from "./apply-styles";
+import { Instruction, InstructionType, MergedInstruction } from "../parse/instructions";
 
-export type PointDef = [number, number];
-export type PathDef = PointDef[];
+export interface PathStyles { color: string, thickness: number };
 
-export type Path = Instruction<{ points: PointDef[] }>;
+export type Point = [number, number];
+export type Path = Point[];
+export type PathInstruction = Instruction<{ styles: PathStyles, points: Point[] }>;
+export type MergedPathInstruction = MergedInstruction<{ styles: PathStyles, paths: Path[] }>;
 
-export function buildPath(styles: Styles, ...points: PathDef): Path {
+export function buildPath(styles: PathStyles, ...points: Path): PathInstruction {
     return {
         type: InstructionType.path,
         styles,
@@ -14,16 +16,17 @@ export function buildPath(styles: Styles, ...points: PathDef): Path {
     }
 }
 
-export function renderPath(ctx: OffscreenCanvasRenderingContext2D, path: Path) {
-    applyStyles(ctx, path.styles);
+export function renderPaths(ctx: OffscreenCanvasRenderingContext2D, instruction: MergedPathInstruction) {
+    applyStyles(ctx, instruction.styles);
     ctx.beginPath();
-    path.points.forEach((point, i) => {
-        if (!ctx) return;
-        if (i === 0) {
-            ctx.moveTo(point[0], point[1]);
-        } else {
-            ctx.lineTo(point[0], point[1])
-        }
+    instruction.paths.forEach(points => {
+        points.forEach((point, i) => {
+            if (i === 0) {
+                ctx.moveTo(point[0], point[1]);
+            } else {
+                ctx.lineTo(point[0], point[1])
+            }
+        });
     });
     ctx.stroke();
 }

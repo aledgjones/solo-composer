@@ -7,19 +7,20 @@ import { getInstruments, getCounts } from "../services/instrument";
 import { getStaves } from "../services/stave";
 import { measureVerticalLayout } from "./measure-vertical-layout";
 import { getNames, getNamesWidth, NameType } from "./get-names";
-import { RenderInstructions } from "../render/instructions";
+import { RenderInstructions, mergeInstructions } from "./instructions";
 import { measureBracketAndBracesWidth } from "./measure-brackets-and-braces-width";
 import { drawNames } from "./draw-names";
 import { drawBraces } from "./draw-braces";
 import { drawBrackets } from "./draw-brackets";
 import { drawSubBrackets } from "./draw-sub-brackets";
 import { drawStaves } from "./draw-staves";
+import { drawFinalBarline } from "./draw-final-barline";
 
 export function parse(score: Score, flowKey: FlowKey, Converter: (space: number) => Converter): RenderInstructions {
 
     const instructions: RenderInstructions = {
-        height: 0,
-        width: 0,
+        height: 0.0,
+        width: 0.0,
         layers: {
             debug: [],
             score: [],
@@ -40,22 +41,16 @@ export function parse(score: Score, flowKey: FlowKey, Converter: (space: number)
     const names = getNames(instruments, counts, NameType.long);
     const namesWidth = getNamesWidth(names, config);
 
-    const verticalMeasurements = measureVerticalLayout(instruments, config);
+    const verticalMeasurements = measureVerticalLayout(instruments, config, converter);
 
     const x = config.framePadding.left + namesWidth + config.staveInstrumentNameGap + measureBracketAndBracesWidth(verticalMeasurements, converter);
     const y = config.framePadding.top;
     const width = converter.spaces.toPX(50);
 
+    //--- TEMPORARY ---//
+
     instructions.height = config.framePadding.top + verticalMeasurements.systemHeight + config.framePadding.bottom;
     instructions.width = x + width + config.framePadding.right;
-
-    instructions.layers.score.push(
-        ...drawNames(config.framePadding.left + namesWidth, y, instruments, names, verticalMeasurements, config),
-        ...drawBraces(x, y, verticalMeasurements, config, converter),
-        ...drawBrackets(x, y, verticalMeasurements, config, converter),
-        ...drawSubBrackets(x, y, verticalMeasurements, config, converter),
-        ...drawStaves(x, y, width, staves, verticalMeasurements, config, converter)
-    )
 
     //--- MOVE THESE ALL INTO PARSER ---//
 
@@ -70,6 +65,15 @@ export function parse(score: Score, flowKey: FlowKey, Converter: (space: number)
 
     // const finalBarline = createBarline({ type: BarlineType.final }, 0);
     // drawBarline(renderer, x + width - converter.spaces.toPX(finalBarline._bounds.width), config.framePadding.top, verticalLayout, finalBarline, converter);
+
+    instructions.layers.score = mergeInstructions(
+        ...drawNames(config.framePadding.left + namesWidth, y, instruments, names, verticalMeasurements, config),
+        ...drawBraces(x, y, verticalMeasurements, converter),
+        ...drawBrackets(x, y, verticalMeasurements, config, converter),
+        ...drawSubBrackets(x, y, verticalMeasurements, converter),
+        ...drawStaves(x, y, width, staves, verticalMeasurements, converter),
+        ...drawFinalBarline(x + width, y, staves, verticalMeasurements, config, converter)
+    );
 
     return instructions;
 

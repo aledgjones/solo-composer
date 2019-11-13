@@ -2,7 +2,6 @@ import shortid from 'shortid';
 import { StaveDef } from "./instrument-defs";
 import { Track, createTrack } from './track';
 import { createClef } from '../entries/clef';
-import { useMemo } from 'react';
 import { Instrument } from './instrument';
 import { Flow } from './flow';
 

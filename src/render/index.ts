@@ -1,7 +1,8 @@
-import { RenderInstructions, Instruction, InstructionType } from "./instructions";
+import { RenderInstructions, InstructionType, MergedInstruction } from "../parse/instructions";
 import { clearCanvas } from "./clear-canvas";
-import { renderPath } from "./path";
-import { renderText } from "./text";
+import { renderPaths } from "./path";
+import { renderTexts } from "./text";
+import { renderCircles } from "./circle";
 
 export function render(ctx: OffscreenCanvasRenderingContext2D, instructions: RenderInstructions) {
 
@@ -10,18 +11,20 @@ export function render(ctx: OffscreenCanvasRenderingContext2D, instructions: Ren
     ctx.canvas.width = instructions.width;
     clearCanvas(ctx);
 
-    // TODO for each layer, batch all instructions with the same type and styles
-    // minimise style allocation and stroking.
-
-    instructions.layers.score.forEach((instruction: Instruction<any>) => {
+    instructions.layers.score.forEach((instruction: MergedInstruction<any>) => {
         switch (instruction.type) {
             case InstructionType.path:
-                renderPath(ctx, instruction);
+                renderPaths(ctx, instruction);
                 break;
             case InstructionType.text:
-                renderText(ctx, instruction);
+                renderTexts(ctx, instruction);
+                break;
+            case InstructionType.circle:
+                renderCircles(ctx, instruction);
+                break;
             default:
                 break;
         }
     });
+
 }

@@ -23,10 +23,10 @@ export function getConverter(width: number) {
     return (space: number): Converter => {
         return {
             mm: {
-                toPX: (mm: number) => parseFloat(new Big(mm).times(width).toFixed(2))
+                toPX: (mm: number) => parseFloat(new Big(mm).times(width).round(2, 1).toString())
             },
             spaces: {
-                toPX: (spaces: number) => parseFloat(new Big(spaces).times(space).times(width).toFixed(2))
+                toPX: (spaces: number) => parseFloat(new Big(spaces).times(space).times(width).round(2, 1).toString())
             }
         }
     };

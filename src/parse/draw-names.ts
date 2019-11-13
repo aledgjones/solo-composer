@@ -1,12 +1,11 @@
 import { Instrument } from "../services/instrument";
 import { VerticalMeasurements } from "./measure-vertical-layout";
 import { EngravingConfig } from "../services/engraving";
-import { buildText } from "../render/text";
-import { Styles } from "../render/apply-styles";
+import { buildText, TextStyles } from "../render/text";
 
 export function drawNames(x: number, y: number, instruments: Instrument[], names: { [key: string]: string }, verticalMeasurements: VerticalMeasurements, config: EngravingConfig) {
 
-    const styles: Styles = {
+    const styles: TextStyles = {
         color: '#000000',
         textAlign: 'right',
         fontFamily: config.staveInstrumentNameFont,

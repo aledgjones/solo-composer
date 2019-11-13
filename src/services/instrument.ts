@@ -6,7 +6,6 @@ import { InstrumentDef } from './instrument-defs';
 import { PlayerKey, PLAYER_REMOVE, PlayerState } from './player';
 import { StaveKey, createStave } from './stave';
 import { removeProps } from '../ui/utils/remove-props';
-import { Score } from './score';
 import { Flow } from './flow';
 import { ConfigState } from './config';
 
@@ -69,7 +68,7 @@ export const instrumentActions = (dispatch: any): InstrumentActions => {
     }
 }
 
-const createInstrument = (def: InstrumentDef, staves: StaveKey[]): Instrument => {
+export const createInstrument = (def: InstrumentDef, staves: StaveKey[]): Instrument => {
     return {
         key: shortid(),
         id: def.id,
@@ -129,7 +128,7 @@ export function getCounts(players: PlayerState, instruments: Instruments, config
 export function useCounts(players: PlayerState, instruments: Instruments, config: ConfigState): InstrumentCounts {
     return useMemo(() => {
         return getCounts(players, instruments, config);
-    }, [players, instruments, config.autoCountStyle]);
+    }, [players, instruments, config]);
 }
 
 /**
@@ -145,4 +144,8 @@ export function getInstruments(players: PlayerState, instruments: Instruments, f
         }
         return output;
     }, []);
+}
+
+export function instrumentFamily(instrument?: Instrument) {
+    return instrument ? instrument.id.split('.')[0] : '';
 }

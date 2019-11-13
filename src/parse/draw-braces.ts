@@ -1,14 +1,13 @@
 import { VerticalMeasurements } from "./measure-vertical-layout";
-import { EngravingConfig } from "../services/engraving";
 import { Converter } from "./converter";
-import { Styles } from "../render/apply-styles";
-import { buildText } from "../render/text";
+import { buildText, TextStyles } from "../render/text";
 
-export function drawBraces(x: number, y: number, metrics: VerticalMeasurements, config: EngravingConfig, converter: Converter) {
+export function drawBraces(x: number, y: number, metrics: VerticalMeasurements, converter: Converter) {
 
-    const styles: Styles = {
+    const styles: TextStyles = {
         color: '#000000',
         fontFamily: 'Music',
+        fontSize: 0.0,
         textAlign: 'right',
         textBaseline: 'top'
     };

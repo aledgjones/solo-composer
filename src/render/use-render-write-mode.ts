@@ -20,5 +20,11 @@ export function useRenderWriteMode(score: Score, flowKey: FlowKey) {
         worker.postMessage({ type: 'UPDATE', score, flowKey }, []);
     }, [score, flowKey, offscreen, worker]);
 
+    useEffect(() => {
+        return () => {
+            worker.terminate();
+        }
+    }, [worker]);
+
     return canvas;
 }

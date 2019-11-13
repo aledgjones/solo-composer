@@ -1,9 +1,6 @@
-import { Instrument } from "../services/instrument";
+import { Instrument, instrumentFamily } from "../services/instrument";
 import { BracketingType } from "./draw-brackets";
-
-function instrumentFamily(instrument?: Instrument) {
-    return instrument ? instrument.id.split('.')[0] : '';
-}
+import { EngravingConfig } from "../services/engraving";
 
 export enum BracketSpan {
     none,
@@ -11,11 +8,11 @@ export enum BracketSpan {
     continue
 }
 
-export function isBracketed(instrument: Instrument, previousInstrument: Instrument, bracketing: BracketingType): BracketSpan {
+export function isSpan(instrument: Instrument, previousInstrument: Instrument | undefined, nextInstrument: Instrument | undefined, bracketing: BracketingType, bracketSingleStaves: boolean): BracketSpan {
 
     const instrumentType = instrumentFamily(instrument);
     const previousInstrumentType = instrumentFamily(previousInstrument);
-    const isSameType = instrumentType === previousInstrumentType;
+    const nextInstrumentType = instrumentFamily(nextInstrument);
 
     if (bracketing === BracketingType.none) {
         return BracketSpan.none;
@@ -36,9 +33,9 @@ export function isBracketed(instrument: Instrument, previousInstrument: Instrume
             case 'strings':
             case 'woodwinds':
             case 'brass':
-                if (isSameType) {
+                if (instrumentType === previousInstrumentType) {
                     return BracketSpan.continue;
-                } else {
+                } else if (nextInstrumentType === instrumentType || bracketSingleStaves) {
                     return BracketSpan.start;
                 }
             default:
