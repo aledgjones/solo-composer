@@ -55,7 +55,7 @@ export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, c
     const width = prologueWidth.reduce((a, b) => a + b, 0) + 50;
 
     instructions.layers.score = mergeInstructions(
-        ...drawNames(config.framePadding.left + namesWidth, y, instruments, names, verticalMeasurements, config),
+        ...drawNames(config.framePadding.left, y, namesWidth, instruments, names, verticalMeasurements, config),
         ...drawBraces(x, y, verticalMeasurements),
         ...drawBrackets(x, y, verticalMeasurements, config),
         ...drawSubBrackets(x, y, verticalMeasurements),

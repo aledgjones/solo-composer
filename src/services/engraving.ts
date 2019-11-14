@@ -16,6 +16,7 @@ export interface EngravingConfig {
 
     staveInstrumentNameSize: Spaces;
     staveInstrumentNameFont: string;
+    staveInstrumentNameAlign: CanvasTextAlign;
     staveInstrumentNameGap: Spaces;
 
     bracketing: BracketingType;
@@ -51,6 +52,7 @@ export const defaultEngravingConfig: EngravingConfig = {
 
     staveInstrumentNameSize: 1.75,
     staveInstrumentNameFont: 'Libre Baskerville',
+    staveInstrumentNameAlign: 'right',
     staveInstrumentNameGap: 2,
 
     bracketing: BracketingType.orchestral,

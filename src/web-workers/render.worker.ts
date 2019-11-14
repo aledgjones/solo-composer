@@ -25,7 +25,7 @@ async function route(e: any) {
             const canvas: OffscreenCanvas = e.data.canvas;
             const mm: number = e.data.mm;
 
-            context = canvas.getContext('2d', { alpha: false, desynchronized: true });
+            context = canvas.getContext('2d');
             converterGenerator = getConverter(mm);
 
             await loadFont('Music', '/bravura.woff2');

@@ -14,7 +14,7 @@ export interface ConfigActions {
 
 export const configEmptyState = (): ConfigState => {
     return {
-        autoCountStyle: InstrumentAutoCountStyle.arabic
+        autoCountStyle: InstrumentAutoCountStyle.roman
     };
 }
 

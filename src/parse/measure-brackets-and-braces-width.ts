@@ -1,4 +1,3 @@
-import { Converter } from "./converter";
 import { VerticalMeasurements } from "./measure-vertical-layout";
 
 export function measureBracketAndBracesWidth(metrics: VerticalMeasurements) {

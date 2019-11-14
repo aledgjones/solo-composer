@@ -1,7 +1,6 @@
 import { EngravingConfig } from "../services/engraving";
 import { VerticalMeasurements } from "./measure-vertical-layout";
-import { createBarline, BarlineType, drawBarline } from "../entries/barline";
-import { Converter } from "./converter";
+import { createBarline, drawBarline } from "../entries/barline";
 import { Stave } from "../services/stave";
 
 export function drawFinalBarline(x: number, y: number, staves: Stave[], metrics: VerticalMeasurements, config: EngravingConfig) {
