@@ -65,13 +65,6 @@ export function drawBarline(x: number, y: number, staves: Stave[], metrics: Vert
         const top = y + start.y - tweakForStaveLineWidth;
         const bottom = y + stop.y + stop.height + tweakForStaveLineWidth;
 
-        if (DEBUG) {
-            // ctx.fillStyle = 'rgba(100, 0, 255, .4)';
-            // ctx.fillRect(x, top, spaces.toPX(barline._box.width), bottom - top);
-            // ctx.fillStyle = 'rgba(100, 0, 255, .2)';
-            // ctx.fillRect(x, top, spaces.toPX(barline._bounds.width), bottom - top);
-        }
-
         switch (barline.type) {
 
             case BarlineType.double:

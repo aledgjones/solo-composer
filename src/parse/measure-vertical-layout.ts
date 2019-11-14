@@ -4,7 +4,6 @@ import { StaveKey } from '../services/stave';
 import { isSpan, BracketSpan } from './is-span';
 import { EngravingConfig } from '../services/engraving';
 import { Converter } from './converter';
-import { BracketingType } from './draw-brackets';
 
 // type YPositions = { [key: string]: number };
 // type YHeights = { [key: string]: number };
@@ -47,9 +46,9 @@ export function measureVerticalLayout(instruments: Instrument[], config: Engravi
 
         // BRACKETS
 
-        const bracketSpans = isSpan(instrument, previousInstrument, nextInstrument, config.bracketing, config.bracketSingleStaves);
+        const spans = isSpan(instrument, previousInstrument, nextInstrument, config.bracketing, config.bracketSingleStaves);
 
-        switch (bracketSpans) {
+        switch (spans) {
             case BracketSpan.start:
                 output.brackets.push({ start: instrument.key, stop: instrument.key });
                 break;
@@ -62,7 +61,7 @@ export function measureVerticalLayout(instruments: Instrument[], config: Engravi
 
         // SUB BRACKETS
 
-        if (config.subBracket && previousInstrument && (bracketSpans === BracketSpan.start || bracketSpans === BracketSpan.continue) && instrument.id === previousInstrument.id) {
+        if (config.subBracket && previousInstrument && (spans === BracketSpan.start || spans === BracketSpan.continue) && instrument.id === previousInstrument.id) {
             const subBracketEntry = output.subBrackets[output.subBrackets.length - 1];
             if (subBracketEntry && subBracketEntry.stop === previousInstrument.key) {
                 subBracketEntry.stop = instrument.key;
@@ -79,10 +78,7 @@ export function measureVerticalLayout(instruments: Instrument[], config: Engravi
 
         // BARLINES
 
-        const barlineSpanning = config.bracketing === BracketingType.none ? BracketingType.none : BracketingType.orchestral;
-        const barlineSpans = isSpan(instrument, previousInstrument, nextInstrument, barlineSpanning, config.bracketSingleStaves);
-
-        switch (barlineSpans) {
+        switch (spans) {
             case BracketSpan.start:
                 output.barlines.push({ start: instrument.key, stop: instrument.key });
                 break;
@@ -100,20 +96,21 @@ export function measureVerticalLayout(instruments: Instrument[], config: Engravi
         instrument.staves.forEach((staveKey, ii) => {
 
             if (!output.staves[staveKey]) {
-                output.staves[staveKey] = { y: 0, height: 0 };
+                output.staves[staveKey] = { y: 0.0, height: 0.0 };
             }
 
             const isLastStave = ii === staveLen - 1;
 
-            const start = (output.systemHeight);
+            const start = output.systemHeight;
             let height = spaces.toPX(4);
+
+            // calc the height of all the instruments staves
+            if (isLastStave) {
+                output.instruments[instrument.key].height = parseFloat(new Big(start + height - instrumentTop).round(2, 1).toFixed(2));
+            }
 
             if (!isLastStave) {
                 height = height + config.staveSpacing;
-            }
-
-            if (isLastStave) {
-                output.instruments[instrument.key].height = parseFloat(new Big(start + height - instrumentTop).round(2, 1).toFixed(2));
             }
 
             if (isLastStave && !isLastInstrument) {

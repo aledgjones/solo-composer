@@ -15,6 +15,7 @@ import { drawBrackets } from "./draw-brackets";
 import { drawSubBrackets } from "./draw-sub-brackets";
 import { drawStaves } from "./draw-staves";
 import { drawFinalBarline } from "./draw-final-barline";
+import { measureStavePrologue } from "./draw-stave-prologue";
 
 export function parse(score: Score, flowKey: FlowKey, Converter: (space: number) => Converter): RenderInstructions {
 
@@ -42,17 +43,13 @@ export function parse(score: Score, flowKey: FlowKey, Converter: (space: number)
     const namesWidth = getNamesWidth(names, config);
 
     const verticalMeasurements = measureVerticalLayout(instruments, config, converter);
+    const prologueWidth = measureStavePrologue(0, flowEntries, staves, config);
+    console.log(prologueWidth);
 
     const x = config.framePadding.left + namesWidth + config.staveInstrumentNameGap + measureBracketAndBracesWidth(verticalMeasurements, converter);
     const y = config.framePadding.top;
+
     const width = converter.spaces.toPX(50);
-
-    //--- TEMPORARY ---//
-
-    instructions.height = config.framePadding.top + verticalMeasurements.systemHeight + config.framePadding.bottom;
-    instructions.width = x + width + config.framePadding.right;
-
-    //--- MOVE THESE ALL INTO PARSER ---//
 
     // let prologueWidth = 0;
     // staves.forEach(stave => {
@@ -63,9 +60,6 @@ export function parse(score: Score, flowKey: FlowKey, Converter: (space: number)
     //     prologueWidth = width > prologueWidth ? width : prologueWidth;
     // });
 
-    // const finalBarline = createBarline({ type: BarlineType.final }, 0);
-    // drawBarline(renderer, x + width - converter.spaces.toPX(finalBarline._bounds.width), config.framePadding.top, verticalLayout, finalBarline, converter);
-
     instructions.layers.score = mergeInstructions(
         ...drawNames(config.framePadding.left + namesWidth, y, instruments, names, verticalMeasurements, config),
         ...drawBraces(x, y, verticalMeasurements, converter),
@@ -74,6 +68,9 @@ export function parse(score: Score, flowKey: FlowKey, Converter: (space: number)
         ...drawStaves(x, y, width, staves, verticalMeasurements, converter),
         ...drawFinalBarline(x + width, y, staves, verticalMeasurements, config, converter)
     );
+
+    instructions.height = config.framePadding.top + verticalMeasurements.systemHeight + config.framePadding.bottom;
+    instructions.width = x + width + config.framePadding.right;
 
     return instructions;
 
