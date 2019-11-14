@@ -16,15 +16,15 @@ export function buildPath(styles: PathStyles, ...points: Path): PathInstruction 
     }
 }
 
-export function renderPaths(ctx: OffscreenCanvasRenderingContext2D, instruction: MergedPathInstruction) {
-    applyStyles(ctx, instruction.styles);
+export function renderPaths(ctx: OffscreenCanvasRenderingContext2D, instruction: MergedPathInstruction, px: (spaces: number) => number) {
+    applyStyles(ctx, instruction.styles, px);
     ctx.beginPath();
     instruction.paths.forEach(points => {
         points.forEach((point, i) => {
             if (i === 0) {
-                ctx.moveTo(point[0], point[1]);
+                ctx.moveTo(px(point[0]), px(point[1]));
             } else {
-                ctx.lineTo(point[0], point[1])
+                ctx.lineTo(px(point[0]), px(point[1]))
             }
         });
     });

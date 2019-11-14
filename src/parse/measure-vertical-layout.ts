@@ -4,7 +4,6 @@ import { StaveKey } from '../services/stave';
 import { isSpan, BracketSpan } from './is-span';
 import { EngravingConfig } from '../services/engraving';
 import { Converter } from './converter';
-import { BracketingType } from './draw-brackets';
 
 // type YPositions = { [key: string]: number };
 // type YHeights = { [key: string]: number };
@@ -29,9 +28,8 @@ export interface VerticalMeasurements {
     barlines: Array<{ start: InstrumentKey, stop: InstrumentKey }>;
 }
 
-export function measureVerticalLayout(instruments: Instrument[], config: EngravingConfig, converter: Converter): VerticalMeasurements {
+export function measureVerticalLayout(instruments: Instrument[], config: EngravingConfig): VerticalMeasurements {
 
-    const { spaces } = converter;
     const instrumentLen = instruments.length;
 
     const metrics = instruments.reduce((output: VerticalMeasurements, instrument, i) => {
@@ -97,20 +95,21 @@ export function measureVerticalLayout(instruments: Instrument[], config: Engravi
         instrument.staves.forEach((staveKey, ii) => {
 
             if (!output.staves[staveKey]) {
-                output.staves[staveKey] = { y: 0, height: 0 };
+                output.staves[staveKey] = { y: 0.0, height: 0.0 };
             }
 
             const isLastStave = ii === staveLen - 1;
 
-            const start = (output.systemHeight);
-            let height = spaces.toPX(4);
+            const start = output.systemHeight;
+            let height = 4;
+
+            // calc the height of all the instruments staves
+            if (isLastStave) {
+                output.instruments[instrument.key].height = parseFloat(new Big(start + height - instrumentTop).round(2, 1).toFixed(2));
+            }
 
             if (!isLastStave) {
                 height = height + config.staveSpacing;
-            }
-
-            if (isLastStave) {
-                output.instruments[instrument.key].height = parseFloat(new Big(start + height - instrumentTop).round(2, 1).toFixed(2));
             }
 
             if (isLastStave && !isLastInstrument) {
@@ -118,7 +117,7 @@ export function measureVerticalLayout(instruments: Instrument[], config: Engravi
             }
 
             output.staves[staveKey].y = parseFloat(new Big(start).round(2, 1).toString());
-            output.staves[staveKey].height = spaces.toPX(4);
+            output.staves[staveKey].height = 4;
             output.systemHeight = parseFloat(new Big(start + height).round(2, 1).toString());
 
         });

@@ -2,14 +2,14 @@ import { VerticalMeasurements } from "./measure-vertical-layout";
 import { Converter } from "./converter";
 import { buildText, TextStyles } from "../render/text";
 
-export function drawBraces(x: number, y: number, metrics: VerticalMeasurements, converter: Converter) {
+export function drawBraces(x: number, y: number, metrics: VerticalMeasurements) {
 
     const styles: TextStyles = {
         color: '#000000',
-        fontFamily: 'Music',
-        fontSize: 0.0,
-        textAlign: 'right',
-        textBaseline: 'top'
+        font: 'Music',
+        size: 0.0,
+        align: 'right',
+        baseline: 'top'
     };
 
     return metrics.braces.map(brace => {
@@ -19,7 +19,7 @@ export function drawBraces(x: number, y: number, metrics: VerticalMeasurements, 
         const height = (stop.y + stop.height) - start.y;
         const top = y + start.y + (height / 2);
 
-        return buildText({...styles, fontSize: height}, x - converter.spaces.toPX(.25), top, '\u{E000}');
+        return buildText({...styles, size: height}, x - .25, top, '\u{E000}');
     });
 
 }

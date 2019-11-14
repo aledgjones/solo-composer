@@ -1,8 +1,7 @@
 import shortid from 'shortid';
 import { Entry, EntryType } from ".";
-import { Converter } from '../parse/converter';
-import { DEBUG } from '../services/state';
 import { ClefDef, Clef, ClefType } from './clef-defs';
+import { buildText, TextStyles } from '../render/text';
 
 export function createClef(def: ClefDef, tick: number): Entry<Clef> {
     return {
@@ -30,20 +29,8 @@ function glyphFromType(type: ClefType) {
     }
 }
 
-export function drawClef(ctx: CanvasRenderingContext2D, x: number, y: number, clef: Entry<Clef>, converter: Converter) {
-    const { spaces } = converter;
-
-    if (DEBUG) {
-        ctx.fillStyle = 'rgba(100, 0, 255, .4)';
-        ctx.fillRect(x, y, spaces.toPX(clef._box.width), spaces.toPX(clef._bounds.height));
-        ctx.fillStyle = 'rgba(100, 0, 255, .2)';
-        ctx.fillRect(x, y, spaces.toPX(clef._bounds.width), spaces.toPX(clef._bounds.height));
-    }
-
+export function drawClef(x: number, y: number, clef: Entry<Clef>) {
     const glyph = glyphFromType(clef.type);
-    ctx.fillStyle = 'black';
-    ctx.textAlign = 'left';
-    ctx.font = `${spaces.toPX(4)}px Music`;
-    ctx.textBaseline = 'middle';
-    ctx.fillText(glyph, x, y + spaces.toPX(.5 * clef.offset));
+    const styles: TextStyles = { color: 'black', align: 'left', size: 4, font: `Music`, baseline: 'middle' };
+    return buildText(styles, x, y + (.5 * clef.offset), glyph);
 }

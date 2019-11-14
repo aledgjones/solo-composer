@@ -3,10 +3,10 @@ import { Instruction, InstructionType, MergedInstruction } from "../parse/instru
 
 export interface TextStyles {
     color: string;
-    fontFamily: string;
-    fontSize: number;
-    textAlign: CanvasTextAlign;
-    textBaseline: CanvasTextBaseline;
+    font: string;
+    size: number;
+    align: CanvasTextAlign;
+    baseline: CanvasTextBaseline;
 };
 
 export type Text = { value: string, x: number, y: number };
@@ -23,9 +23,9 @@ export function buildText(styles: TextStyles, x: number, y: number, value: strin
     }
 }
 
-export function renderTexts(ctx: OffscreenCanvasRenderingContext2D, instruction: MergedTextInstruction) {
-    applyStyles(ctx, instruction.styles);
+export function renderTexts(ctx: OffscreenCanvasRenderingContext2D, instruction: MergedTextInstruction, px: (spaces: number) => number) {
+    applyStyles(ctx, instruction.styles, px);
     instruction.texts.forEach(text => {
-        ctx.fillText(text.value, text.x, text.y);
+        ctx.fillText(text.value, px(text.x), px(text.y));
     });
 }

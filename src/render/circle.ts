@@ -19,11 +19,11 @@ export function buildCircle(styles: CircleStyles, x: number, y: number, radius: 
     }
 }
 
-export function renderCircles(ctx: OffscreenCanvasRenderingContext2D, instruction: MergedCircleInstruction) {
-    applyStyles(ctx, instruction.styles);
+export function renderCircles(ctx: OffscreenCanvasRenderingContext2D, instruction: MergedCircleInstruction, px: (spaces: number) => number) {
+    applyStyles(ctx, instruction.styles, px);
     instruction.circles.forEach(circle => {
         ctx.beginPath();
-        ctx.arc(circle.x, circle.y, circle.radius, 0, Math.PI * 2);
+        ctx.arc(px(circle.x), px(circle.y), px(circle.radius), 0, Math.PI * 2);
         ctx.fill();
     });
 }

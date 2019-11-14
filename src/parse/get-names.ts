@@ -1,6 +1,8 @@
 import { Instrument, InstrumentCounts } from "../services/instrument";
 import { EngravingConfig } from "../services/engraving";
 import { measureText } from "./measure-text";
+import { Converter } from "./converter";
+import { TextStyles } from "../render/text";
 
 export enum NameType {
     long = 1,
@@ -20,9 +22,9 @@ export function getNames(instruments: Instrument[], counts: InstrumentCounts, ty
     }, {});
 }
 
-export function getNamesWidth(names: Names, config: EngravingConfig, ) {
-    const styles = { fontFamily: config.staveInstrumentNameFont, fontSize: config.staveInstrumentNameSize };
+export function getNamesWidth(names: Names, config: EngravingConfig, converter: Converter) {
+    const styles: TextStyles = { color: '#000000', font: config.staveInstrumentNameFont, size: config.staveInstrumentNameSize, align: 'left', baseline: 'middle' };
     const keys = Object.keys(names);
-    const boxes = keys.map(key => measureText(styles, names[key]));
+    const boxes = keys.map(key => measureText(styles, names[key], converter));
     return Math.max(...boxes);
 }

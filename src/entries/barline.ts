@@ -1,8 +1,6 @@
 import shortid from 'shortid';
 import { Entry, EntryType, Box } from ".";
 import { VerticalMeasurements } from '../parse/measure-vertical-layout';
-import { Converter } from '../parse/converter';
-import { DEBUG } from '../services/state';
 import { buildPath } from '../render/path';
 import { Stave } from '../services/stave';
 import { Instruction } from '../parse/instructions';
@@ -51,9 +49,8 @@ export function createBarline(def: BarlineDef, tick: number): Entry<Barline> {
     }
 }
 
-export function drawBarline(x: number, y: number, staves: Stave[], metrics: VerticalMeasurements, barline: Entry<Barline>, converter: Converter) {
+export function drawBarline(x: number, y: number, staves: Stave[], metrics: VerticalMeasurements, barline: Entry<Barline>) {
 
-    const { spaces } = converter;
     const instructions: Instruction<any> = [];
 
     metrics.barlines.forEach(entry => {
@@ -61,67 +58,60 @@ export function drawBarline(x: number, y: number, staves: Stave[], metrics: Vert
         const start = metrics.instruments[entry.start];
         const stop = metrics.instruments[entry.stop];
 
-        const tweakForStaveLineWidth = spaces.toPX(.0625);
+        const tweakForStaveLineWidth = .0625;
         const top = y + start.y - tweakForStaveLineWidth;
         const bottom = y + stop.y + stop.height + tweakForStaveLineWidth;
-
-        if (DEBUG) {
-            // ctx.fillStyle = 'rgba(100, 0, 255, .4)';
-            // ctx.fillRect(x, top, spaces.toPX(barline._box.width), bottom - top);
-            // ctx.fillStyle = 'rgba(100, 0, 255, .2)';
-            // ctx.fillRect(x, top, spaces.toPX(barline._bounds.width), bottom - top);
-        }
 
         switch (barline.type) {
 
             case BarlineType.double:
 
-                instructions.push(buildPath({ color: '#000000', thickness: spaces.toPX(.125) },
+                instructions.push(buildPath({ color: '#000000', thickness: .125 },
                     [x, top],
                     [x, bottom],
                 ));
-                instructions.push(buildPath({ color: '#000000', thickness: spaces.toPX(.125) },
-                    [x + spaces.toPX(.5), top],
-                    [x + spaces.toPX(.5), bottom]
+                instructions.push(buildPath({ color: '#000000', thickness: .125 },
+                    [x + .5, top],
+                    [x + .5, bottom]
                 ));
                 break;
 
             case BarlineType.final:
-                instructions.push(buildPath({ color: '#000000', thickness: spaces.toPX(.125) },
+                instructions.push(buildPath({ color: '#000000', thickness: .125 },
                     [x, top],
                     [x, bottom]
                 ));
-                instructions.push(buildPath({ color: '#000000', thickness: spaces.toPX(.5) },
-                    [x + spaces.toPX(.75), top],
-                    [x + spaces.toPX(.75), bottom]
+                instructions.push(buildPath({ color: '#000000', thickness: .5 },
+                    [x + .75, top],
+                    [x + .75, bottom]
                 ));
                 break;
 
             case BarlineType.end_repeat:
-                instructions.push(buildPath({ color: '#000000', thickness: spaces.toPX(.125) },
-                    [x + spaces.toPX(1), top],
-                    [x + spaces.toPX(1), bottom]
+                instructions.push(buildPath({ color: '#000000', thickness: .125 },
+                    [x + 1, top],
+                    [x + 1, bottom]
                 ));
-                instructions.push(buildPath({ color: '#000000', thickness: spaces.toPX(.5) },
-                    [x + spaces.toPX(1.75), top],
-                    [x + spaces.toPX(1.75), bottom]
+                instructions.push(buildPath({ color: '#000000', thickness: .5 },
+                    [x + 1.75, top],
+                    [x + 1.75, bottom]
                 ));
                 break;
 
             case BarlineType.start_repeat:
-                instructions.push(buildPath({ color: '#000000', thickness: spaces.toPX(.125) },
-                    [x + spaces.toPX(1), top],
-                    [x + spaces.toPX(1), bottom]
+                instructions.push(buildPath({ color: '#000000', thickness: .125 },
+                    [x + 1, top],
+                    [x + 1, bottom]
                 ));
-                instructions.push(buildPath({ color: '#000000', thickness: spaces.toPX(.5) },
-                    [x + spaces.toPX(.25), top],
-                    [x + spaces.toPX(.25), bottom]
+                instructions.push(buildPath({ color: '#000000', thickness: .5 },
+                    [x + .25, top],
+                    [x + .25, bottom]
                 ));
                 break;
 
             case BarlineType.normal:
             default:
-                instructions.push(buildPath({ color: '#000000', thickness: spaces.toPX(.125) },
+                instructions.push(buildPath({ color: '#000000', thickness: .125 },
                     [x, top],
                     [x, bottom]
                 ));
@@ -130,12 +120,12 @@ export function drawBarline(x: number, y: number, staves: Stave[], metrics: Vert
         }
 
         if (barline.type === BarlineType.start_repeat || barline.type === BarlineType.end_repeat) {
-            const radius = spaces.toPX(.25);
-            const left = barline.type === BarlineType.start_repeat ? x + spaces.toPX(1.75) : x + spaces.toPX(.25);
+            const radius = .25;
+            const left = barline.type === BarlineType.start_repeat ? x + 1.75 : x + .25;
             staves.forEach(stave => {
                 const top = metrics.staves[stave.key].y;
-                instructions.push(buildCircle({ color: '#000000' }, left, y + top + spaces.toPX(1.5), radius));
-                instructions.push(buildCircle({ color: '#000000' }, left, y + top + spaces.toPX(2.5), radius));
+                instructions.push(buildCircle({ color: '#000000' }, left, y + top + 1.5, radius));
+                instructions.push(buildCircle({ color: '#000000' }, left, y + top + 2.5, radius));
             });
         }
 
