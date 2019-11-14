@@ -1,7 +1,5 @@
 import shortid from 'shortid';
 import { Entry, EntryType } from ".";
-import { Converter } from '../parse/converter';
-import { DEBUG } from '../services/state';
 import { ClefDef, Clef, ClefType } from './clef-defs';
 import { buildText, TextStyles } from '../render/text';
 
@@ -31,9 +29,8 @@ function glyphFromType(type: ClefType) {
     }
 }
 
-export function drawClef(x: number, y: number, clef: Entry<Clef>, converter: Converter) {
-    const { spaces } = converter;
+export function drawClef(x: number, y: number, clef: Entry<Clef>) {
     const glyph = glyphFromType(clef.type);
-    const styles: TextStyles = { color: 'black', textAlign: 'left', fontSize: spaces.toPX(4), fontFamily: `Music`, textBaseline: 'middle' };
-    return buildText(styles, x, y + spaces.toPX(.5 * clef.offset), glyph);
+    const styles: TextStyles = { color: 'black', align: 'left', size: 4, font: `Music`, baseline: 'middle' };
+    return buildText(styles, x, y + (.5 * clef.offset), glyph);
 }

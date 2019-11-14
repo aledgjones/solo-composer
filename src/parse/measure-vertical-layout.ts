@@ -28,9 +28,8 @@ export interface VerticalMeasurements {
     barlines: Array<{ start: InstrumentKey, stop: InstrumentKey }>;
 }
 
-export function measureVerticalLayout(instruments: Instrument[], config: EngravingConfig, converter: Converter): VerticalMeasurements {
+export function measureVerticalLayout(instruments: Instrument[], config: EngravingConfig): VerticalMeasurements {
 
-    const { spaces } = converter;
     const instrumentLen = instruments.length;
 
     const metrics = instruments.reduce((output: VerticalMeasurements, instrument, i) => {
@@ -102,7 +101,7 @@ export function measureVerticalLayout(instruments: Instrument[], config: Engravi
             const isLastStave = ii === staveLen - 1;
 
             const start = output.systemHeight;
-            let height = spaces.toPX(4);
+            let height = 4;
 
             // calc the height of all the instruments staves
             if (isLastStave) {
@@ -118,7 +117,7 @@ export function measureVerticalLayout(instruments: Instrument[], config: Engravi
             }
 
             output.staves[staveKey].y = parseFloat(new Big(start).round(2, 1).toString());
-            output.staves[staveKey].height = spaces.toPX(4);
+            output.staves[staveKey].height = 4;
             output.systemHeight = parseFloat(new Big(start + height).round(2, 1).toString());
 
         });

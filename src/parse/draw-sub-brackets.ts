@@ -2,15 +2,13 @@ import { VerticalMeasurements } from "./measure-vertical-layout";
 import { Converter } from "./converter";
 import { PathInstruction, buildPath } from "../render/path";
 
-export function drawSubBrackets(x: number, y: number, metrics: VerticalMeasurements, converter: Converter) {
+export function drawSubBrackets(x: number, y: number, metrics: VerticalMeasurements) {
 
     // if n > 1 neightbouring instruments in same family -- woodwind, brass, strings only!
     // subbrace if same instrument type next to each other
 
-    const { spaces } = converter;
-
-    const left = x - spaces.toPX(1.5);
-    const styles = { color: '#000000', thickness: spaces.toPX(.125) };
+    const left = x - 1.5;
+    const styles = { color: '#000000', thickness: .125 };
 
     return metrics.subBrackets.reduce((out: PathInstruction[], bracket) => {
         const start = metrics.instruments[bracket.start];

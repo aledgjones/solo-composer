@@ -1,8 +1,6 @@
 import { FlowKey } from "../services/flow";
 import { Score } from "../services/score";
-import { Converter } from "./converter";
-import { defaultEngravingConfig } from "../services/engraving";
-import { getConvertedConfig } from "./get-converted-config";
+import { EngravingConfig, defaultEngravingConfig } from "../services/engraving";
 import { getInstruments, getCounts } from "../services/instrument";
 import { getStaves } from "../services/stave";
 import { measureVerticalLayout } from "./measure-vertical-layout";
@@ -15,9 +13,10 @@ import { drawBrackets } from "./draw-brackets";
 import { drawSubBrackets } from "./draw-sub-brackets";
 import { drawStaves } from "./draw-staves";
 import { drawFinalBarline } from "./draw-final-barline";
-import { measureStavePrologue } from "./draw-stave-prologue";
+import { measureStavePrologue, drawStavePrologue } from "./draw-stave-prologue";
+import { Converter } from "./converter";
 
-export function parse(score: Score, flowKey: FlowKey, Converter: (space: number) => Converter): RenderInstructions {
+export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, converter: Converter): RenderInstructions {
 
     const instructions: RenderInstructions = {
         height: 0.0,
@@ -29,9 +28,6 @@ export function parse(score: Score, flowKey: FlowKey, Converter: (space: number)
         }
     };
 
-    const converter = Converter(score.engraving.score.space || defaultEngravingConfig.space);
-    const config = getConvertedConfig({ ...defaultEngravingConfig, ...score.engraving.score }, converter);
-
     const flow = score.flows.byKey[flowKey];
 
     const instruments = getInstruments(score.players, score.instruments, flow);
@@ -40,33 +36,25 @@ export function parse(score: Score, flowKey: FlowKey, Converter: (space: number)
 
     const counts = getCounts(score.players, score.instruments, score.config);
     const names = getNames(instruments, counts, NameType.long);
-    const namesWidth = getNamesWidth(names, config);
+    const namesWidth = getNamesWidth(names, config, converter);
 
-    const verticalMeasurements = measureVerticalLayout(instruments, config, converter);
+    const verticalMeasurements = measureVerticalLayout(instruments, config);
     const prologueWidth = measureStavePrologue(0, flowEntries, staves, config);
-    console.log(prologueWidth);
 
-    const x = config.framePadding.left + namesWidth + config.staveInstrumentNameGap + measureBracketAndBracesWidth(verticalMeasurements, converter);
+    const x = config.framePadding.left + namesWidth + config.staveInstrumentNameGap + measureBracketAndBracesWidth(verticalMeasurements);
     const y = config.framePadding.top;
 
-    const width = converter.spaces.toPX(50);
-
-    // let prologueWidth = 0;
-    // staves.forEach(stave => {
-    //     const staveEntries = stave.master.entries.order.map(staveKey => stave.master.entries.byKey[staveKey]);
-    //     const top = y + verticalLayout.staves[stave.key].y;
-
-    //     const width = drawStavePrologue(renderer, x, top, config, flowEntries, staveEntries, converter);
-    //     prologueWidth = width > prologueWidth ? width : prologueWidth;
-    // });
+    const width = prologueWidth.reduce((a, b) => a + b, 0) + 50;
 
     instructions.layers.score = mergeInstructions(
         ...drawNames(config.framePadding.left + namesWidth, y, instruments, names, verticalMeasurements, config),
-        ...drawBraces(x, y, verticalMeasurements, converter),
-        ...drawBrackets(x, y, verticalMeasurements, config, converter),
-        ...drawSubBrackets(x, y, verticalMeasurements, converter),
-        ...drawStaves(x, y, width, staves, verticalMeasurements, converter),
-        ...drawFinalBarline(x + width, y, staves, verticalMeasurements, config, converter)
+        ...drawBraces(x, y, verticalMeasurements),
+        ...drawBrackets(x, y, verticalMeasurements, config),
+        ...drawSubBrackets(x, y, verticalMeasurements),
+        ...drawStaves(x, y, width, staves, verticalMeasurements),
+        ...drawStavePrologue(x, y, prologueWidth, verticalMeasurements, flowEntries, staves, 0),
+
+        ...drawFinalBarline(x + width, y, staves, verticalMeasurements, config)
     );
 
     instructions.height = config.framePadding.top + verticalMeasurements.systemHeight + config.framePadding.bottom;

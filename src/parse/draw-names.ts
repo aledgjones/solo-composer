@@ -7,10 +7,10 @@ export function drawNames(x: number, y: number, instruments: Instrument[], names
 
     const styles: TextStyles = {
         color: '#000000',
-        textAlign: 'right',
-        fontFamily: config.staveInstrumentNameFont,
-        fontSize: config.staveInstrumentNameSize,
-        textBaseline: 'middle'
+        align: 'right',
+        font: config.staveInstrumentNameFont,
+        size: config.staveInstrumentNameSize,
+        baseline: 'middle'
     };
 
     return instruments.map(instrument => {

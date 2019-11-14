@@ -1,8 +1,7 @@
 import shortid from 'shortid';
 import { ClefType, Clef } from './clef-defs';
 import { Entry, EntryType } from ".";
-import { Converter } from '../parse/converter';
-import { DEBUG } from '../services/state';
+import { TextStyles, buildText } from '../render/text';
 
 export enum KeySignatureMode {
     major = 1,
@@ -96,21 +95,17 @@ function glyphFromType(type: AccidentalType) {
     }
 }
 
-export function drawKeySignature(ctx: CanvasRenderingContext2D, x: number, y: number, clef: Entry<Clef>, key: Entry<KeySignature>, converter: Converter) {
+export function drawKeySignature(x: number, y: number, clef: Entry<Clef>, key: Entry<KeySignature>) {
 
-    const { spaces } = converter;
+    const instructions = [];
 
-    if (DEBUG) {
-        ctx.fillStyle = 'rgba(100, 0, 255, .4)';
-        ctx.fillRect(x, y, spaces.toPX(key._box.width), spaces.toPX(key._bounds.height));
-        ctx.fillStyle = 'rgba(100, 0, 255, .2)';
-        ctx.fillRect(x, y, spaces.toPX(key._bounds.width), spaces.toPX(key._bounds.height));
+    const styles: TextStyles = {
+        color: '#000000',
+        font: 'Music',
+        size: 4,
+        align: 'left',
+        baseline: 'middle'
     }
-
-    ctx.fillStyle = 'black';
-    ctx.textAlign = 'left';
-    ctx.font = `${spaces.toPX(4)}px Music`;
-    ctx.textBaseline = 'middle';
 
     // calc naturals here - find out rules for naturalising
 
@@ -118,7 +113,7 @@ export function drawKeySignature(ctx: CanvasRenderingContext2D, x: number, y: nu
         const glyph = glyphFromType(AccidentalType.flat);
         const pattern = patterns[clef.type][clef.offset][AccidentalType.flat];
         for (let i = 0; i > key.offset; i--) {
-            ctx.fillText(glyph, x + spaces.toPX(i * -1), y + spaces.toPX(.5 * pattern[i * -1]));
+            instructions.push(buildText(styles, x + (i * -1), y + (.5 * pattern[i * -1]), glyph));
         }
     }
 
@@ -126,7 +121,9 @@ export function drawKeySignature(ctx: CanvasRenderingContext2D, x: number, y: nu
         const glyph = glyphFromType(AccidentalType.sharp);
         const pattern = patterns[clef.type][clef.offset][AccidentalType.sharp];
         for (let i = 0; i < key.offset; i++) {
-            ctx.fillText(glyph, x + spaces.toPX(i), y + spaces.toPX(.5 * pattern[i]));
+            instructions.push(buildText(styles, x + i, y + (.5 * pattern[i]), glyph));
         }
     }
+
+    return instructions;
 }

@@ -6,6 +6,8 @@ import { Entry, EntryType } from "../entries";
 import { findPreviousOfType } from "../render/find-previous-of-type";
 import { EngravingConfig } from "../services/engraving";
 import { Stave } from "../services/stave";
+import { Instruction } from "./instructions";
+import { VerticalMeasurements } from "./measure-vertical-layout";
 
 export function measureStavePrologue(tick: number, flowEntries: Entry<any>[], staves: Stave[], config: EngravingConfig): [number, number, number, number] {
 
@@ -41,31 +43,37 @@ export function measureStavePrologue(tick: number, flowEntries: Entry<any>[], st
 
 }
 
-// export function drawStavePrologue(ctx: CanvasRenderingContext2D, x: number, y: number, config: EngravingConfig, flowEntries: Entry<any>[], staveEntries: Entry<any>[], converter: Converter): number {
+export function drawStavePrologue(x: number, y: number, prologueWidths: [number, number, number, number], verticalMeasurements: VerticalMeasurements, flowEntries: Entry<any>, staves: Stave[], tick: number) {
 
-//     const { spaces } = converter;
+    const [spacerWidth, clefWidth, keyWidth] = prologueWidths;
 
-//     let left = x + config.systemStartPadding;
+    const key = findPreviousOfType<KeySignature>(EntryType.keySignature, tick, flowEntries);
+    const time = findPreviousOfType<TimeSignature>(EntryType.timeSignature, tick, flowEntries);
 
-//     const clef = findPreviousOfType<Clef>(EntryType.clef, 0, staveEntries);
-//     const key = findPreviousOfType<KeySignature>(EntryType.keySignature, 0, flowEntries);
-//     const time = findPreviousOfType<TimeSignature>(EntryType.timeSignature, 0, flowEntries);
+    return staves.reduce((out: Instruction<any>[], stave) => {
+        const staveEntries = stave.master.entries.order.map(staveKey => stave.master.entries.byKey[staveKey]);
+        const clef = findPreviousOfType<Clef>(EntryType.clef, tick, staveEntries);
 
-//     if (clef) {
-//         drawClef(ctx, left, y, clef, converter);
-//         left = left + spaces.toPX(clef._bounds.width);
-//     }
+        const top = y + verticalMeasurements.staves[stave.key].y;
+        let left = x + spacerWidth;
 
-//     if (clef && key) {
-//         drawKeySignature(ctx, left, y, clef, key, converter);
-//         left = left + spaces.toPX(key._bounds.width);
-//     }
+        if (clef) {
+            out.push(drawClef(left, top, clef));
+        }
 
-//     if (time) {
-//         drawTimeSignature(ctx, left, y, time, converter);
-//         left = left + spaces.toPX(time._bounds.width);
-//     }
+        left += clefWidth;
 
-//     return left - x;
+        if (clef && key) {
+            out.push(...drawKeySignature(left, top, clef, key));
+        }
 
-// }
+        left += keyWidth;
+
+        if (time) {
+            out.push(...drawTimeSignature(left, top, time));
+        }
+
+        return out;
+
+    }, []);
+}

@@ -1,9 +1,6 @@
 export function Timer(label: string) {
-    let start = 0.0;
+    let start = performance.now();
     return {
-        start: () => {
-            start = performance.now();
-        },
         stop: () => {
             const now = performance.now();
             const time = now - start;
