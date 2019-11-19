@@ -29,5 +29,6 @@ export enum EntryType {
     barline = 1,
     clef,
     keySignature,
-    timeSignature
+    timeSignature,
+    tone
 }

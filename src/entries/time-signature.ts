@@ -3,8 +3,8 @@ import { Entry, EntryType } from ".";
 import { TextStyles, buildText } from '../render/text';
 
 export interface TimeSignatureDef {
-    count: number;
-    beat: number;
+    beats: number;
+    beatType: number;
     drawAs?: 'c' | 'splitc';
 }
 
@@ -71,8 +71,8 @@ export function drawTimeSignature(x: number, y: number, time: Entry<TimeSignatur
         const glyph = glyphFromType(time.drawAs);
         instructions.push(buildText(styles, x, y + 2, glyph));
     } else {
-        const countGlyph = glyphFromType(time.count.toString());
-        const beatGlyph = glyphFromType(time.beat.toString());
+        const countGlyph = glyphFromType(time.beats.toString());
+        const beatGlyph = glyphFromType(time.beatType.toString());
         instructions.push(buildText(styles, x, y + 1, countGlyph));
         instructions.push(buildText(styles, x, y + 3, beatGlyph));
     }

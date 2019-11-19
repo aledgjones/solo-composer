@@ -1,20 +1,27 @@
 import { FlowKey } from "../services/flow";
 import { Score } from "../services/score";
-import { EngravingConfig, defaultEngravingConfig } from "../services/engraving";
+import { EngravingConfig } from "../services/engraving";
+
 import { getInstruments, getCounts } from "../services/instrument";
+import { getNames, NameType } from "./get-names";
 import { getStaves } from "../services/stave";
+
 import { measureVerticalLayout } from "./measure-vertical-layout";
-import { getNames, getNamesWidth, NameType } from "./get-names";
+import { measureNames } from "./measure-names";
 import { RenderInstructions, mergeInstructions } from "./instructions";
-import { measureBracketAndBracesWidth } from "./measure-brackets-and-braces-width";
+import { measureBracketAndBraces } from "./measure-brackets-and-braces";
+import { measureStavePrologue, drawStavePrologue } from "./draw-stave-prologue";
+
 import { drawNames } from "./draw-names";
 import { drawBraces } from "./draw-braces";
 import { drawBrackets } from "./draw-brackets";
 import { drawSubBrackets } from "./draw-sub-brackets";
 import { drawStaves } from "./draw-staves";
 import { drawFinalBarline } from "./draw-final-barline";
-import { measureStavePrologue, drawStavePrologue } from "./draw-stave-prologue";
+
 import { Converter } from "./converter";
+import { writtenDurationsFromTrack } from "./track-to-written";
+import { debugTicks } from "../debug/debug-ticks";
 
 export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, converter: Converter): RenderInstructions {
 
@@ -36,17 +43,28 @@ export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, c
 
     const counts = getCounts(score.players, score.instruments, score.config);
     const names = getNames(instruments, counts, NameType.long);
-    const namesWidth = getNamesWidth(names, config, converter);
+    const namesWidth = measureNames(names, config, converter);
 
     const verticalMeasurements = measureVerticalLayout(instruments, config);
     const prologueWidth = measureStavePrologue(0, flowEntries, staves, config);
 
-    const x = config.framePadding.left + namesWidth + config.staveInstrumentNameGap + measureBracketAndBracesWidth(verticalMeasurements);
+    const x = config.framePadding.left + namesWidth + config.staveInstrumentNameGap + measureBracketAndBraces(verticalMeasurements);
     const y = config.framePadding.top;
 
     //--- TEMPORARY ---//
 
     // 1) convert track data into written note durations
+
+    debugTicks(flow);
+
+    staves.forEach(stave => {
+        stave.tracks.order.forEach(trackKey => {
+            const track = stave.tracks.byKey[trackKey];
+            const written = writtenDurationsFromTrack(flow, track);
+            debugTrack(written)
+        });
+    });
+
     // 2) create a rhythmic grid for the whole flow (ie. spacings)
     // 3) assign widths to ticks
     // 4) draw items at tick positions

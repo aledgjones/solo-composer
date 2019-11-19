@@ -6,7 +6,6 @@ import { instrumentDefs } from "./instrument-defs";
 import { log } from "../ui/utils/log";
 
 const LOGGING = false;
-export const DEBUG = false;
 
 export interface State {
     tab: TabState;
@@ -53,17 +52,17 @@ export const useAppState = (): [State, Actions] => {
         let player = actions.score.players.create(PlayerType.solo);
         actions.score.players.assignInstrument(player.key, instrument);
 
-        instrument = actions.score.instruments.create(instrumentDefs['strings.violin']);
-        player = actions.score.players.create(PlayerType.solo);
-        actions.score.players.assignInstrument(player.key, instrument);
+        // instrument = actions.score.instruments.create(instrumentDefs['strings.violin']);
+        // player = actions.score.players.create(PlayerType.solo);
+        // actions.score.players.assignInstrument(player.key, instrument);
 
-        instrument = actions.score.instruments.create(instrumentDefs['strings.viola']);
-        player = actions.score.players.create(PlayerType.solo);
-        actions.score.players.assignInstrument(player.key, instrument);
+        // instrument = actions.score.instruments.create(instrumentDefs['strings.viola']);
+        // player = actions.score.players.create(PlayerType.solo);
+        // actions.score.players.assignInstrument(player.key, instrument);
 
-        instrument = actions.score.instruments.create(instrumentDefs['strings.violoncello']);
-        player = actions.score.players.create(PlayerType.solo);
-        actions.score.players.assignInstrument(player.key, instrument);
+        // instrument = actions.score.instruments.create(instrumentDefs['strings.violoncello']);
+        // player = actions.score.players.create(PlayerType.solo);
+        // actions.score.players.assignInstrument(player.key, instrument);
 
         // instrument = actions.score.instruments.create(instrumentDefs['keyboards.piano']);
         // player = actions.score.players.create(PlayerType.solo);

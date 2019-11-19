@@ -211,7 +211,7 @@ export const flowActions = (dispatch: any): FlowActions => {
 const createFlow = (players: PlayerKey[], staves: { [key: string]: Stave }): Flow => {
 
     const key = createKeySignature({ mode: KeySignatureMode.major, offset: -2 }, 0);
-    const time = createTimeSignature({ count: 2, beat: 2, drawAs: 'splitc' }, 0);
+    const time = createTimeSignature({ beats: 4, beatType: 4, drawAs: 'c' }, 0);
 
     return {
         key: shortid(),

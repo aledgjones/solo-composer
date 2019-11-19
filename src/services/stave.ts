@@ -1,9 +1,10 @@
 import shortid from 'shortid';
 import { StaveDef } from "./instrument-defs";
-import { Track, createTrack } from './track';
+import { Track, createTrack, TrackKey, Tracks } from './track';
 import { createClef } from '../entries/clef';
 import { Instrument } from './instrument';
 import { Flow } from './flow';
+import { createTone } from '../entries/tone';
 
 export type StaveKey = string;
 
@@ -13,16 +14,28 @@ export interface Stave {
     key: StaveKey;
     lines: number;
     master: Track;
+    tracks: Tracks;
 }
 
 export function createStave(staveDef: StaveDef, staveKey: StaveKey = shortid()): Stave {
     const clef = createClef(staveDef.clef, 0);
     const master = createTrack([clef._key], { [clef._key]: clef });
 
+    // remove next after debug
+    const tone1 = createTone({duration: 24}, 0);
+    const tone2 = createTone({duration: 6}, 12);
+    const track = createTrack([tone1._key, tone2._key], {[tone1._key]: tone1, [tone2._key]: tone2});
+
     return {
         key: staveKey,
         lines: staveDef.lines,
-        master
+        master,
+        tracks: {
+            order: [track.key],
+            byKey: {
+                [track.key]: track
+            }
+        }
     }
 }
 

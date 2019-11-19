@@ -1,6 +1,6 @@
 import { VerticalMeasurements } from "./measure-vertical-layout";
 
-export function measureBracketAndBracesWidth(metrics: VerticalMeasurements) {
+export function measureBracketAndBraces(metrics: VerticalMeasurements) {
     let max = metrics.brackets.length > 0 ? 1 : 0;
     max = max + (metrics.subBrackets.length > 0 ? .5 : 0);
 
