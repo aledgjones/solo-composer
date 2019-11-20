@@ -5,12 +5,14 @@ import { EngravingConfig } from "../services/engraving";
 import { getInstruments, getCounts } from "../services/instrument";
 import { getNames, NameType } from "./get-names";
 import { getStaves } from "../services/stave";
+import { entriesByTick } from "../services/track";
 
 import { measureVerticalLayout } from "./measure-vertical-layout";
 import { measureNames } from "./measure-names";
 import { RenderInstructions, mergeInstructions } from "./instructions";
 import { measureBracketAndBraces } from "./measure-brackets-and-braces";
 import { measureStavePrologue, drawStavePrologue } from "./draw-stave-prologue";
+import { notateTones } from "./notate-tones";
 
 import { drawNames } from "./draw-names";
 import { drawBraces } from "./draw-braces";
@@ -20,8 +22,9 @@ import { drawStaves } from "./draw-staves";
 import { drawFinalBarline } from "./draw-final-barline";
 
 import { Converter } from "./converter";
-import { writtenDurationsFromTrack } from "./track-to-written";
+
 import { debugTicks } from "../debug/debug-ticks";
+import { debugTrack } from "../debug/debug-track";
 
 export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, converter: Converter): RenderInstructions {
 
@@ -57,11 +60,14 @@ export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, c
 
     debugTicks(flow);
 
+    // const flowEntriesByTick = entriesByTick(flow.master.entries.order, flow.master.entries.byKey);
+
     staves.forEach(stave => {
         stave.tracks.order.forEach(trackKey => {
             const track = stave.tracks.byKey[trackKey];
-            const written = writtenDurationsFromTrack(flow, track);
-            debugTrack(written)
+            const trackEventsByTick = entriesByTick(track.entries.order, track.entries.byKey);
+            const rhythmTrack = notateTones(flow.length, trackEventsByTick);
+            debugTrack(flow, rhythmTrack);
         });
     });
 

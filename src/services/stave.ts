@@ -22,9 +22,19 @@ export function createStave(staveDef: StaveDef, staveKey: StaveKey = shortid()):
     const master = createTrack([clef._key], { [clef._key]: clef });
 
     // remove next after debug
-    const tone1 = createTone({duration: 24}, 0);
-    const tone2 = createTone({duration: 6}, 12);
-    const track = createTrack([tone1._key, tone2._key], {[tone1._key]: tone1, [tone2._key]: tone2});
+    const tones = [
+        // createTone({ duration: 24 }, 0),
+        createTone({ duration: 12 }, 0),
+        createTone({ duration: 24 }, 36),
+        createTone({ duration: 12 }, 42)
+    ];
+    const track = createTrack(
+        tones.map(tone => tone._key),
+        tones.reduce((out: any, tone) => {
+            out[tone._key] = tone;
+            return out;
+        }, {})
+    );
 
     return {
         key: staveKey,

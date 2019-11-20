@@ -38,9 +38,9 @@ export function debugTicks(flow: Flow) {
         const isFirstBeat = ((i - lastTimeSignatureChange) / ticksPerBeat) % beats === 0;
 
         if (isFirstBeat) {
-            debug += "|";
+            debug += '|';
         } else if (isBeat) {
-            debug += "|";
+            debug += '|';
         } else {
             debug += "'";
         }

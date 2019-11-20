@@ -219,7 +219,7 @@ const createFlow = (players: PlayerKey[], staves: { [key: string]: Stave }): Flo
         players,
         staves,
         subdivisions: 12,
-        length: 48, // 1 x 4/4 bar
+        length: 96, // 1 x 4/4 bar
         master: createTrack([key._key, time._key], { [key._key]: key, [time._key]: time })
     }
 }

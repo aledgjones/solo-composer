@@ -24,6 +24,8 @@ export interface EngravingConfig {
     bracketSingleStaves: boolean;
     subBracket: boolean;
 
+    minNoteSpacing: Spaces;
+
     finalBarlineType: BarlineType
 }
 
@@ -59,6 +61,8 @@ export const defaultEngravingConfig: EngravingConfig = {
     bracketEndStyle: BracketEndStyle.wing,
     bracketSingleStaves: false,
     subBracket: true,
+
+    minNoteSpacing: 1.6,
 
     finalBarlineType: BarlineType.final
 }
