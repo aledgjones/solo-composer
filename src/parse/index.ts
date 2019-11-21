@@ -25,8 +25,12 @@ import { Converter } from "./converter";
 
 import { debugTicks } from "../debug/debug-ticks";
 import { debugTrack } from "../debug/debug-track";
+import { splitAsPerMeter } from "./split-as-per-meter";
+import { Timer } from "../debug/timer";
 
 export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, converter: Converter): RenderInstructions {
+
+    const timer = Timer('parse');
 
     const instructions: RenderInstructions = {
         height: 0.0,
@@ -60,16 +64,20 @@ export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, c
 
     debugTicks(flow);
 
-    // const flowEntriesByTick = entriesByTick(flow.master.entries.order, flow.master.entries.byKey);
+    const flowEntriesByTick = entriesByTick(flow.master.entries.order, flow.master.entries.byKey);
 
     staves.forEach(stave => {
         stave.tracks.order.forEach(trackKey => {
             const track = stave.tracks.byKey[trackKey];
             const trackEventsByTick = entriesByTick(track.entries.order, track.entries.byKey);
-            const rhythmTrack = notateTones(flow.length, trackEventsByTick);
+            let rhythmTrack = {};
+            rhythmTrack = notateTones(flow.length, flow.subdivisions, trackEventsByTick, flowEntriesByTick, rhythmTrack);
+            // rhythmTrack = splitAsPerMeter(flow.subdivisions, flowEntriesByTick, rhythmTrack);
             debugTrack(flow, rhythmTrack);
         });
     });
+
+    timer.stop();
 
     // 2) create a rhythmic grid for the whole flow (ie. spacings)
     // 3) assign widths to ticks

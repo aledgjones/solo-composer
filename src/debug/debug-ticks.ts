@@ -3,6 +3,7 @@ import { TimeSignature } from "../entries/time-signature";
 import { EntryKey, Entry, EntryType } from "../entries";
 import { getTicksPerBeat } from "../parse/get-ticks-per-beat";
 import { Flow } from "../services/flow";
+import { getNearestEntryToTick } from "../parse/get-time-signature-at-tick";
 
 export interface WrittenTrack {
     _key: EntryKey;
@@ -15,32 +16,19 @@ export function debugTicks(flow: Flow) {
 
     const flowTrack = entriesByTick(flow.master.entries.order, flow.master.entries.byKey);
 
-    let lastTimeSignatureChange = 0;
-    let beats = 4;
-    let ticksPerBeat = 12;
-
     // walk through each tick - by definition something could happen on any tick
-    for (let i = 0; i < flow.length; i++) {
+    for (let tick = 0; tick < flow.length; tick++) {
 
-        // get the current timesignature
-        if (flowTrack[i]) {
-            flowTrack[i].forEach((entry: Entry<any>) => {
-                if (entry._type === EntryType.timeSignature) {
-                    const sig = entry as Entry<TimeSignature>;
-                    lastTimeSignatureChange = i;
-                    beats = sig.beats;
-                    ticksPerBeat = getTicksPerBeat(flow.subdivisions, sig.beatType);
-                }
-            });
-        }
+        const foundSig = getNearestEntryToTick<TimeSignature>(tick, flowTrack, EntryType.timeSignature);
+        const ticksPerBeat = foundSig ? getTicksPerBeat(flow.subdivisions, foundSig.entry.beatType) : 12;
 
-        const isBeat = (i - lastTimeSignatureChange) % ticksPerBeat === 0;
-        const isFirstBeat = ((i - lastTimeSignatureChange) / ticksPerBeat) % beats === 0;
+        const isBeat = (tick - (foundSig ? foundSig.at : 0)) % ticksPerBeat === 0;
+        const isFirstBeat = ((tick - (foundSig ? foundSig.at : 0)) / ticksPerBeat) % (foundSig ? foundSig.entry.beats : 4) === 0;
 
         if (isFirstBeat) {
             debug += '|';
         } else if (isBeat) {
-            debug += '|';
+            debug += '↓';
         } else {
             debug += "'";
         }

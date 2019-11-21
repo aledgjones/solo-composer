@@ -23,10 +23,9 @@ export function createStave(staveDef: StaveDef, staveKey: StaveKey = shortid()):
 
     // remove next after debug
     const tones = [
-        // createTone({ duration: 24 }, 0),
-        createTone({ duration: 12 }, 0),
-        createTone({ duration: 24 }, 36),
-        createTone({ duration: 12 }, 42)
+        createTone({ duration: 48 }, 12),
+        // createTone({ duration: 24 }, 36),
+        // createTone({ duration: 12 }, 42)
     ];
     const track = createTrack(
         tones.map(tone => tone._key),
