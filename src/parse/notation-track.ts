@@ -1,18 +1,18 @@
 import { EntryKey } from "../entries";
 
-export enum DurationType {
+export enum NotationType {
     rest,
     note,
     barline
 }
 
-export interface Rhythm {
+export interface Notation {
     keys: EntryKey[] // these may be repeated if a tone is split up into ties notes
     duration: number;
-    type: DurationType;
+    type: NotationType;
     ties: EntryKey[];
 }
 
-export interface RhythmTrack {
-    [tick: number]: Rhythm;
+export interface NotationTrack {
+    [tick: number]: Notation;
 }

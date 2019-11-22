@@ -36,13 +36,13 @@ async function route(e: any) {
         }
         case 'UPDATE':
         default:
-            // const timer = Timer('parse');
+            const timer = Timer('parse');
             score = e.data.score;
             flowKey = e.data.flowKey;
             converter = converterGenerator(score.engraving.score.space || defaultEngravingConfig.space);
             config = getConvertedConfig({ ...defaultEngravingConfig, ...score.engraving.score }, converter);
             instructions = parse(score, flowKey, config, converter);
-            // timer.stop();
+            timer.stop();
             break;
     }
 }

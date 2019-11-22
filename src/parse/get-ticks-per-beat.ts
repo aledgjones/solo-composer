@@ -1,3 +1,3 @@
-export function getTicksPerBeat(subdivisions: number, beat: number) {
-    return subdivisions / (beat / 4);
+export function getTicksPerBeat(subdivisions: number, beatType: number) {
+    return subdivisions / (beatType / 4);
 }

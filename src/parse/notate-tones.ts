@@ -3,7 +3,7 @@ import shortid from "shortid";
 import { EntriesByTick } from "../services/track";
 import { EntryKey, Entry, EntryType } from "../entries";
 import { Tone } from "../entries/tone";
-import { RhythmTrack, Rhythm, DurationType } from "./rhythm-track";
+import { NotationTrack, Notation, NotationType } from "./notation-track";
 import { getNearestEntryToTick } from "./get-time-signature-at-tick";
 import { TimeSignature } from "../entries/time-signature";
 
@@ -12,9 +12,9 @@ import { TimeSignature } from "../entries/time-signature";
  * 
  *  we split notation on the on / off of new notes while other, longer notes are playing
  */
-export function notateTones(length: number, subdivisions: number, track: EntriesByTick, flow: EntriesByTick, rhythmTrack: RhythmTrack) {
+export function notateTones(length: number, subdivisions: number, track: EntriesByTick, flow: EntriesByTick, rhythmTrack: NotationTrack) {
 
-    let previousEvent: Rhythm | null = null;
+    let previousEvent: Notation | null = null;
     const offsByTick: { [tick: number]: EntryKey[] } = {};
 
     // walk through each tick - by definition something could happen on any tick
@@ -23,16 +23,13 @@ export function notateTones(length: number, subdivisions: number, track: Entries
         const trackEntries = track[tick] || [];
         const offEntries = offsByTick[tick] || [];
 
-        const currentEvent: Rhythm = { keys: [], duration: 0, type: DurationType.note, ties: [] };
-
-        const foundSig = getNearestEntryToTick<TimeSignature>(tick, flow, EntryType.timeSignature);
-        const isFirstBeat = foundSig ? (tick - foundSig.at) % (subdivisions * foundSig.entry.beats) === 0 : false;
+        const currentEvent: Notation = { keys: [], duration: 0, type: NotationType.note, ties: [] };
 
         // we spilt the ongoing notes at: note off, new note or firstbeat; 
-        if (previousEvent && (offEntries.length > 0 || trackEntries.length > 0 || isFirstBeat)) {
+        if (previousEvent && (offEntries.length > 0 || trackEntries.length > 0)) {
             // we dont hold rests or tones that are 'off on this tick
             const holds = previousEvent.keys.filter(key => {
-                return (previousEvent && previousEvent.type !== DurationType.rest) && !offEntries.includes(key)
+                return (previousEvent && previousEvent.type !== NotationType.rest) && !offEntries.includes(key)
             });
             currentEvent.keys = [...holds];
             previousEvent.ties.push(...holds);
@@ -56,9 +53,9 @@ export function notateTones(length: number, subdivisions: number, track: Entries
 
         const isRest = Object.keys(offsByTick).length === 0;
         if (isRest) {
-            if (!previousEvent || previousEvent.type !== DurationType.rest || isFirstBeat) {
+            if (!previousEvent || previousEvent.type !== NotationType.rest) {
                 currentEvent.keys.push(shortid());
-                currentEvent.type = DurationType.rest;;
+                currentEvent.type = NotationType.rest;;
             }
         }
 
