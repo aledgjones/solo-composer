@@ -4,6 +4,8 @@ import { EntryKey, Entry, EntryType } from "../entries";
 import { getTicksPerBeat } from "../parse/get-ticks-per-beat";
 import { Flow } from "../services/flow";
 import { getNearestEntryToTick } from "../parse/get-time-signature-at-tick";
+import { getIsBeat } from "../parse/get-is-beat";
+import { getDistanceFromBarline } from "../parse/get-distance-from-barline";
 
 export interface WrittenTrack {
     _key: EntryKey;
@@ -19,15 +21,19 @@ export function debugTicks(flow: Flow) {
     // walk through each tick - by definition something could happen on any tick
     for (let tick = 0; tick < flow.length; tick++) {
 
-        const foundSig = getNearestEntryToTick<TimeSignature>(tick, flowTrack, EntryType.timeSignature);
-        const ticksPerBeat = foundSig ? getTicksPerBeat(flow.subdivisions, foundSig.entry.beatType) : 12;
+        const foundTimeSig = getNearestEntryToTick<TimeSignature>(tick, flowTrack, EntryType.timeSignature);
+        const timeSig = foundTimeSig && foundTimeSig.entry;
+        const timeSigAt = foundTimeSig ? foundTimeSig.at : 0;
 
-        const isBeat = (tick - (foundSig ? foundSig.at : 0)) % ticksPerBeat === 0;
-        const isFirstBeat = ((tick - (foundSig ? foundSig.at : 0)) / ticksPerBeat) % (foundSig ? foundSig.entry.beats : 4) === 0;
+        const ticksPerBeat = getTicksPerBeat(flow.subdivisions, timeSig);
+        const distanceFromBarline = getDistanceFromBarline(tick, ticksPerBeat, timeSigAt, timeSig);
+
+        const isFirstBeat = distanceFromBarline === 0;
+        const isBeat = getIsBeat(tick, ticksPerBeat, timeSigAt);
 
         if (isFirstBeat) {
             debug += '|';
-        } else if (isBeat) {
+        } else if (timeSig && timeSig.beats !== 0 && isBeat) {
             debug += '↓';
         } else {
             debug += "'";

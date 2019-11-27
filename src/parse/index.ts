@@ -26,6 +26,7 @@ import { Converter } from "./converter";
 import { debugTicks } from "../debug/debug-ticks";
 import { debugTrack } from "../debug/debug-track";
 import { splitAsPerMeter } from "./split-as-per-meter";
+import { drawRest } from "../entries/rest";
 
 export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, converter: Converter): RenderInstructions {
 
@@ -50,27 +51,30 @@ export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, c
     const namesWidth = measureNames(names, config, converter);
 
     const verticalMeasurements = measureVerticalLayout(instruments, config);
-    const prologueWidth = measureStavePrologue(0, flowEntries, staves, config);
+    const prologueWidths = measureStavePrologue(0, flowEntries, staves, config);
+    const prologueWidth = prologueWidths.reduce((a, b) => a + b, 0);
 
     const x = config.framePadding.left + namesWidth + config.staveInstrumentNameGap + measureBracketAndBraces(verticalMeasurements);
     const y = config.framePadding.top;
 
-    //--- TEMPORARY ---//
-
     // 1) convert track data into written note durations
 
-    debugTicks(flow);
+    // debugTicks(flow);
 
     const flowEntriesByTick = entriesByTick(flow.master.entries.order, flow.master.entries.byKey);
+    const notes: any[] = [];
 
     staves.forEach(stave => {
+
+        notes.push(...drawRest(x + prologueWidth, y + verticalMeasurements.staves[stave.key].y, 12, 12));
+
         stave.tracks.order.forEach(trackKey => {
             const track = stave.tracks.byKey[trackKey];
             const trackEventsByTick = entriesByTick(track.entries.order, track.entries.byKey);
             let rhythmTrack = {};
             rhythmTrack = notateTones(flow.length, flow.subdivisions, trackEventsByTick, flowEntriesByTick, rhythmTrack);
             rhythmTrack = splitAsPerMeter(flow.subdivisions, flowEntriesByTick, rhythmTrack);
-            debugTrack(flow, rhythmTrack);
+            // debugTrack(flow.length, rhythmTrack);
         });
     });
 
@@ -79,7 +83,7 @@ export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, c
     // 4) draw items at tick positions
     // 5) add up all tick spacings to get stave width
 
-    const width = prologueWidth.reduce((a, b) => a + b, 0) + 50;
+    const width = prologueWidth + 4.5;
 
     instructions.layers.score = mergeInstructions(
         ...drawNames(config.framePadding.left, y, namesWidth, instruments, names, verticalMeasurements, config),
@@ -87,7 +91,8 @@ export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, c
         ...drawBrackets(x, y, verticalMeasurements, config),
         ...drawSubBrackets(x, y, verticalMeasurements),
         ...drawStaves(x, y, width, staves, verticalMeasurements),
-        ...drawStavePrologue(x, y, prologueWidth, verticalMeasurements, flowEntries, staves, 0),
+        ...drawStavePrologue(x, y, prologueWidths, verticalMeasurements, flowEntries, staves, 0),
+        ...notes,
 
         ...drawFinalBarline(x + width, y, staves, verticalMeasurements, config)
     );

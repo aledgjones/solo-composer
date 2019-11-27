@@ -1,76 +1,66 @@
-import { createTimeSignature } from "../entries/time-signature";
 import { getTimeSignatureType, TimeSignatureType } from "./get-time-signature-type";
 
-// x/4
+it('is the right type (0)', () => {
+    const type = getTimeSignatureType(0);
+    expect(type).toEqual(TimeSignatureType.open);
+});
 
-it('Is the right type', () => {
-    const sig = createTimeSignature({ beats: 1, beatType: 4 }, 0);
-    const type = getTimeSignatureType(sig);
+it('is the right type (1)', () => {
+    const type = getTimeSignatureType(1);
     expect(type).toEqual(TimeSignatureType.simple);
 });
 
-it('Is the right type', () => {
-    const sig = createTimeSignature({ beats: 2, beatType: 4 }, 0);
-    const type = getTimeSignatureType(sig);
+it('is the right type (2)', () => {
+    const type = getTimeSignatureType(2);
     expect(type).toEqual(TimeSignatureType.simple);
 });
 
-it('Is the right type', () => {
-    const sig = createTimeSignature({ beats: 3, beatType: 4 }, 0);
-    const type = getTimeSignatureType(sig);
+it('is the right type (3)', () => {
+    const type = getTimeSignatureType(3);
     expect(type).toEqual(TimeSignatureType.simple);
 });
 
-it('Is the right type', () => {
-    const sig = createTimeSignature({ beats: 4, beatType: 4 }, 0);
-    const type = getTimeSignatureType(sig);
+it('is the right type (4)', () => {
+    const type = getTimeSignatureType(4);
     expect(type).toEqual(TimeSignatureType.simple);
 });
 
-it('Is the right type', () => {
-    const sig = createTimeSignature({ beats: 5, beatType: 4 }, 0);
-    const type = getTimeSignatureType(sig);
+it('is the right type (5)', () => {
+    const type = getTimeSignatureType(5);
     expect(type).toEqual(TimeSignatureType.complex);
 });
 
-it('Is the right type', () => {
-    const sig = createTimeSignature({ beats: 6, beatType: 4 }, 0);
-    const type = getTimeSignatureType(sig);
+it('is the right type (6)', () => {
+    const type = getTimeSignatureType(6);
     expect(type).toEqual(TimeSignatureType.compound);
 });
 
-it('Is the right type', () => {
-    const sig = createTimeSignature({ beats: 7, beatType: 4 }, 0);
-    const type = getTimeSignatureType(sig);
+it('is the right type (7)', () => {
+    const type = getTimeSignatureType(7);
     expect(type).toEqual(TimeSignatureType.complex);
 });
 
-it('Is the right type', () => {
-    const sig = createTimeSignature({ beats: 8, beatType: 4 }, 0);
-    const type = getTimeSignatureType(sig);
-    expect(type).toEqual(TimeSignatureType.simple);
+it('is the right type (8)', () => {
+    const type = getTimeSignatureType(8);
+    expect(type).toEqual(TimeSignatureType.complex);
 });
 
-it('Is the right type', () => {
-    const sig = createTimeSignature({ beats: 9, beatType: 4 }, 0);
-    const type = getTimeSignatureType(sig);
+it('is the right type (9)', () => {
+    const type = getTimeSignatureType(9);
     expect(type).toEqual(TimeSignatureType.compound);
 });
 
-it('Is the right type', () => {
-    const sig = createTimeSignature({ beats: 10, beatType: 4 }, 0);
-    const type = getTimeSignatureType(sig);
-    expect(type).toEqual(TimeSignatureType.simple);
-});
-
-it('Is the right type', () => {
-    const sig = createTimeSignature({ beats: 11, beatType: 4 }, 0);
-    const type = getTimeSignatureType(sig);
+it('is the right type (10)', () => {
+    const type = getTimeSignatureType(10);
     expect(type).toEqual(TimeSignatureType.complex);
 });
 
-it('Is the right type', () => {
-    const sig = createTimeSignature({ beats: 12, beatType: 4 }, 0);
-    const type = getTimeSignatureType(sig);
+it('is the right type (11)', () => {
+    const type = getTimeSignatureType(11);
+    expect(type).toEqual(TimeSignatureType.complex);
+});
+
+it('is the right type (12)', () => {
+    const type = getTimeSignatureType(12);
     expect(type).toEqual(TimeSignatureType.compound);
 });

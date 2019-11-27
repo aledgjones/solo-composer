@@ -9,5 +9,5 @@ export function measureNames(names: Names, config: EngravingConfig, converter: C
     const styles: TextStyles = { color: '#000000', font: config.staveInstrumentNameFont, size: config.staveInstrumentNameSize, align: 'left', baseline: 'middle' };
     const keys = Object.keys(names);
     const boxes = keys.map(key => measureText(styles, names[key], converter));
-    return Math.max(...boxes);
+    return Math.max(...boxes, 0); // add a zero incase we dont actually have any widthds
 }

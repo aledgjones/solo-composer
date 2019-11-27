@@ -9,7 +9,7 @@ import { Stave } from "../services/stave";
 import { Instruction } from "./instructions";
 import { VerticalMeasurements } from "./measure-vertical-layout";
 
-export function measureStavePrologue(tick: number, flowEntries: Entry<any>[], staves: Stave[], config: EngravingConfig): [number, number, number, number] {
+export function measureStavePrologue(tick: number, flowEntries: Entry<any>[], staves: Stave[], config: EngravingConfig): [number, number, number, number, number] {
 
     const key = findPreviousOfType<KeySignature>(EntryType.keySignature, tick, flowEntries);
     const time = findPreviousOfType<TimeSignature>(EntryType.timeSignature, tick, flowEntries);
@@ -39,11 +39,11 @@ export function measureStavePrologue(tick: number, flowEntries: Entry<any>[], st
 
         return measurements;
 
-    }, [config.systemStartPadding, 0.0, 0.0, 0.0]);
+    }, [config.systemStartPadding, 0.0, 0.0, 0.0, 1]);
 
 }
 
-export function drawStavePrologue(x: number, y: number, prologueWidths: [number, number, number, number], verticalMeasurements: VerticalMeasurements, flowEntries: Entry<any>, staves: Stave[], tick: number) {
+export function drawStavePrologue(x: number, y: number, prologueWidths: [number, number, number, number, number], verticalMeasurements: VerticalMeasurements, flowEntries: Entry<any>, staves: Stave[], tick: number) {
 
     const [spacerWidth, clefWidth, keyWidth] = prologueWidths;
 

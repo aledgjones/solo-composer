@@ -1,48 +1,109 @@
 import { EntriesByTick } from "../services/track";
-import { NotationTrack, Notation } from "./notation-track";
+import { NotationTrack, Notation, NotationType } from "./notation-track";
 import { getNearestEntryToTick } from "./get-time-signature-at-tick";
 import { TimeSignature } from "../entries/time-signature";
 import { EntryType } from "../entries";
 import { getTicksPerBeat } from "./get-ticks-per-beat";
+import { getBeatGroupingBoundries } from "./get-beat-group-boundries";
+import { getDistanceFromBarline } from "./get-distance-from-barline";
+import { getIsBeatGroupingEmpty } from "./get-is-beat-grouping-empty";
+import { getIsBeat } from "./get-is-beat";
+import { getMiddleOfBar } from "./get-is-middle-of-bar";
+import { getIsHalfBarEmpty } from "./get-is-half-bar-empty";
+import { getIsWholeBarEmpty } from "./get-is-whole-bar-empty";
 
-function seperateAtSplit(event: Notation, start: number, split: number, flow: EntriesByTick, subdivisions: number) {
-    const out: NotationTrack = {
-        [start]: {
+function seperateAtSplits(event: Notation, start: number, splits: number[]) {
+
+    let out: NotationTrack = {};
+    let remainingDuration = event.duration;
+    for (let i = splits.length - 1; i >= 0; i--) {
+        const split = splits[i];
+        const duration = start + remainingDuration - split;
+
+        out[split] = {
             ...event,
-            ties: event.keys,
-            duration: split - start
-        },
-        [split]: {
-            ...event,
-            duration: start + event.duration - split
+            ties: i < splits.length - 1 ? event.keys : [],
+            duration
         }
-    };
 
-    return splitAsPerMeter(subdivisions, flow, out);
+        remainingDuration -= duration;
+    }
+    return out;
 }
 
 function splitEventPerMeter(start: number, event: Notation, flow: EntriesByTick, subdivisions: number): NotationTrack {
 
     const stop = start + event.duration;
+    const splits = [start];
+
+
 
     // split in preparation for conversion to note values
     // we never need to do anything on the first tick so add one to the start tick of the loop
     for (let tick = start + 1; tick < stop; tick++) {
 
-        const foundSig = getNearestEntryToTick<TimeSignature>(start, flow, EntryType.timeSignature);
-        const { at: timeAt, entry: time } = foundSig ? foundSig : { at: 0, entry: { beats: 4, beatType: 4 } };
+        const foundTimeSig = getNearestEntryToTick<TimeSignature>(start, flow, EntryType.timeSignature);
+        const timeSigAt = foundTimeSig ? foundTimeSig.at : 0;
+        const timeSig = foundTimeSig && foundTimeSig.entry;
+        const ticksPerBeat = getTicksPerBeat(subdivisions, timeSig);
 
-        const ticksPerBeat = getTicksPerBeat(subdivisions, time.beatType);
-        const isFirstBeat = (tick - timeAt) % (ticksPerBeat * time.beats) === 0;
+        const distanceFromBarline = getDistanceFromBarline(tick, ticksPerBeat, timeSigAt, timeSig);
+        const beatGroupingBoundries = getBeatGroupingBoundries(tick, ticksPerBeat, timeSigAt, timeSig);
+        const middleOfBar = getMiddleOfBar(beatGroupingBoundries);
 
-        if (isFirstBeat) {
-            return seperateAtSplit(event, start, tick, flow, subdivisions);
+        const isBeat = getIsBeat(tick, ticksPerBeat, timeSigAt);
+        const isFirstBeat = distanceFromBarline === 0;
+        const isMiddleOfBar = tick === middleOfBar;
+        const isBeatGroupingBoundry = beatGroupingBoundries.includes(tick);
+
+        const isWholeBarEmpty = getIsWholeBarEmpty(start, stop, beatGroupingBoundries);
+        const isbeatGroupingEmpty = getIsBeatGroupingEmpty(start, stop, tick, beatGroupingBoundries);
+        const isHalfBarEmpty = getIsHalfBarEmpty(start, stop, tick, beatGroupingBoundries);
+
+        if (!timeSig || timeSig.beats === 0) {
+            // I haven't done this yet
+        } else {
+
+            // REST + NOTE SPLIT RULES
+
+            if (event.type === NotationType.rest) {
+                // REST SPLIT RULES
+
+                if (isFirstBeat) {
+                    splits.push(tick);
+                }
+
+                if (!isWholeBarEmpty) {
+
+                    if (timeSig.groupings.length === 3) {
+                        if (isBeatGroupingBoundry) {
+                            splits.push(tick);
+                        }
+                    } else {
+                        if (isMiddleOfBar) {
+                            splits.push(tick);
+                        } else if (!isHalfBarEmpty && isBeatGroupingBoundry) {
+                            splits.push(tick);
+                        } else if (!isbeatGroupingEmpty && isBeat) {
+                            splits.push(tick);
+                        }
+                    }
+
+                }
+
+            } else {
+
+                // NOTE SPLIT RULES
+                if (isFirstBeat) {
+                    splits.push(tick);
+                }
+
+            }
         }
 
     }
 
-    // if we don't find a split point we return as is
-    return { [start]: event };
+    return seperateAtSplits(event, start, splits);
 
 }
 

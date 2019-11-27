@@ -1,32 +1,33 @@
-import { Flow } from "../services/flow";
 import { NotationType, NotationTrack } from "../parse/notation-track";
 
-export function debugTrack(flow: Flow, track: NotationTrack) {
-    let rests = '';
-    const output: { [key: string]: string } = {};
-    for (let tick = 0; tick < flow.length; tick++) {
+export function debugTrack(length: number, track: NotationTrack) {
+
+    const output: { rests: string[], [key: string]: string[] } = { rests: [] };
+    for (let tick = 0; tick < length; tick++) {
         const entry = track[tick];
         if (entry) {
             switch (entry.type) {
                 case NotationType.note: {
                     entry.keys.forEach((key) => {
                         if (!output[key]) {
-                            output[key] = '';
+                            output[key] = [];
                         }
-                        const fill = Array(tick - output[key].length).fill(' ').join('');
-                        output[key] += fill + 'o';
+                        output[key].push(...Array(tick - output[key].length).fill(' '));
+                        output[key].push('o');
                         if (entry.ties.includes(key)) {
-                            output[key] += Array(entry.duration - 1).fill('_').join('');
+                            output[key].push(...Array(entry.duration - 1).fill('_'));
                         } else {
-                            output[key] += Array(entry.duration - 2).fill('-').join('') + '¬';
+                            output[key].push(...Array(entry.duration - 2).fill('-'))
+                            output[key].push('¬');
                         }
                     });
                     break;
                 }
                 case NotationType.rest: {
-                    const fill = Array(tick - rests.length).fill(' ').join('');
-                    rests += fill + 'r';
-                    rests += Array(entry.duration - 2).fill('-').join('') + '¬';
+                    output['rests'].push(...Array(tick - output['rests'].length).fill(' '));
+                    output['rests'].push('r');
+                    output['rests'].push(...Array(entry.duration - 2).fill('-'))
+                    output['rests'].push('¬');
                     break;
                 }
                 default:
@@ -36,9 +37,26 @@ export function debugTrack(flow: Flow, track: NotationTrack) {
 
     }
 
-    console.log(rests);
-    const keys = Object.keys(output);
-    keys.forEach(key => {
-        console.log(output[key]);
-    });
+    // if (merged) {
+
+        const log: string[] = [];
+        const keys = Object.keys(output);
+        for (let tick = 0; tick < length; tick++) {
+            keys.forEach(key => {
+                const char = output[key][tick];
+                if (!log[tick] || log[tick] === ' ' || char === 'r' || char === 'o') {
+                    log[tick] = char;
+                }
+            });
+        }
+        return log.join('');
+
+    // } else {
+
+    //     const keys = Object.keys(output);
+    //     keys.forEach(key => {
+    //         console.log(output[key].join(''));
+    //     });
+
+    // }
 }

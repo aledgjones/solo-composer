@@ -46,11 +46,11 @@ export const useAppState = (): [State, Actions] => {
         }
     }, [dispatch]);
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        let instrument = actions.score.instruments.create(instrumentDefs['strings.violin']);
-        let player = actions.score.players.create(PlayerType.solo);
-        actions.score.players.assignInstrument(player.key, instrument);
+    //     let instrument = actions.score.instruments.create(instrumentDefs['strings.violin']);
+    //     let player = actions.score.players.create(PlayerType.solo);
+    //     actions.score.players.assignInstrument(player.key, instrument);
 
         // instrument = actions.score.instruments.create(instrumentDefs['strings.violin']);
         // player = actions.score.players.create(PlayerType.solo);
@@ -68,7 +68,7 @@ export const useAppState = (): [State, Actions] => {
         // player = actions.score.players.create(PlayerType.solo);
         // actions.score.players.assignInstrument(player.key, instrument);
         
-    }, [actions.score.instruments, actions.score.players]);
+    // }, [actions.score.instruments, actions.score.players]);
 
     if (LOGGING) {
         log(state, 'state');

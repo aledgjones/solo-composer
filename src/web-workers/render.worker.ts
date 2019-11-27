@@ -25,13 +25,13 @@ async function route(e: any) {
             const canvas: OffscreenCanvas = e.data.canvas;
             const mm: number = e.data.mm;
 
-            context = canvas.getContext('2d');
+            context = canvas.getContext('2d', { alpha: false, desynchronized: true });
             converterGenerator = getConverter(mm);
 
             await loadFont('Music', '/bravura.woff2');
             await loadFont('Libre Baskerville', '/libre-baskerville.woff2');
 
-            renderLoop();
+            go();
             break;
         }
         case 'UPDATE':
@@ -39,19 +39,19 @@ async function route(e: any) {
             const timer = Timer('parse');
             score = e.data.score;
             flowKey = e.data.flowKey;
-            converter = converterGenerator(score.engraving.score.space || defaultEngravingConfig.space);
-            config = getConvertedConfig({ ...defaultEngravingConfig, ...score.engraving.score }, converter);
-            instructions = parse(score, flowKey, config, converter);
+            go();
             timer.stop();
             break;
     }
 }
 
-function renderLoop() {
+function go() {
     if (context) {
+        converter = converterGenerator(score.engraving.score.space || defaultEngravingConfig.space);
+        config = getConvertedConfig({ ...defaultEngravingConfig, ...score.engraving.score }, converter);
+        instructions = parse(score, flowKey, config, converter);
         render(context, instructions, converter);
     }
-    requestAnimationFrame(renderLoop);
 }
 
 ctx.addEventListener("message", route);

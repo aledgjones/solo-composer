@@ -8,6 +8,7 @@ import { Instruments } from './instrument';
 import { Track, createTrack } from './track';
 import { KeySignatureMode, createKeySignature } from '../entries/key-signature';
 import { createTimeSignature } from '../entries/time-signature';
+import { getDefaultGroupings } from '../parse/get-default-groupings';
 
 export const FLOW_CREATE = '@flow/create';
 export const FLOW_REORDER = '@flow/reorder';
@@ -209,17 +210,13 @@ export const flowActions = (dispatch: any): FlowActions => {
 }
 
 const createFlow = (players: PlayerKey[], staves: { [key: string]: Stave }): Flow => {
-
-    const key = createKeySignature({ mode: KeySignatureMode.major, offset: -2 }, 0);
-    const time = createTimeSignature({ beats: 3, beatType: 4 }, 0);
-
     return {
         key: shortid(),
         title: 'Untitled Flow',
         players,
         staves,
         subdivisions: 12,
-        length: 108, // 1 x 4/4 bar
-        master: createTrack([key._key, time._key], { [key._key]: key, [time._key]: time })
+        length: 12,
+        master: createTrack([],{})
     }
 }

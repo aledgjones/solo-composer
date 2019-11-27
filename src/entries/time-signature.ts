@@ -3,9 +3,10 @@ import { Entry, EntryType } from ".";
 import { TextStyles, buildText } from '../render/text';
 
 export interface TimeSignatureDef {
-    beats: number;
-    beatType: number;
-    drawAs?: 'c' | 'splitc';
+    beats: number; // 0 = free
+    beatType: number; // if free this helps the splitting rules
+    groupings: number[];
+    drawAs?: 'c' | 'splitc' | 'X'; // free will not be drawn unless X is stated
 }
 
 export interface TimeSignature extends TimeSignatureDef {
@@ -13,11 +14,13 @@ export interface TimeSignature extends TimeSignatureDef {
 }
 
 export function createTimeSignature(def: TimeSignatureDef, tick: number): Entry<TimeSignature> {
+    // we hide if we have a free time sig and we dont write it as X
+    const isHidden = def.beats === 0 && !def.drawAs;
     return {
         _type: EntryType.timeSignature,
         _key: shortid(),
-        _box: { width: 1.75, height: 4 },
-        _bounds: { width: 3, height: 4 },
+        _box: { width: isHidden ? 0 : 1.75, height: 4 },
+        _bounds: { width: isHidden ? 0 : 3, height: 4 },
         _offset: { top: 0, left: 0 },
         _tick: tick,
 
@@ -51,6 +54,8 @@ function glyphFromType(val: string) {
             return '\u{E08A}'
         case 'splitc':
             return '\u{E08B}'
+        case 'X':
+            return '\u{E09C}'
         default:
             return '\u{E08A}';
     }

@@ -1,76 +1,67 @@
-import { createTimeSignature } from "../entries/time-signature";
-import { getGroupings } from "./get-groupings";
+import { getDefaultGroupings } from "./get-default-groupings";
 
-// x/4
 
-it('Is the grouping (1)', () => {
-    const sig = createTimeSignature({ beats: 1, beatType: 4 }, 0);
-    const groups = getGroupings(sig);
+it('is grouped correctly (0)', () => {
+    const groups = getDefaultGroupings(0);
+    expect(groups).toEqual([]);
+});
+
+it('is grouped correctly (1)', () => {
+    const groups = getDefaultGroupings(1);
     expect(groups).toEqual([1]);
 });
 
-it('Is the grouping (2)', () => {
-    const sig = createTimeSignature({ beats: 2, beatType: 4 }, 0);
-    const groups = getGroupings(sig);
+it('is grouped correctly (2)', () => {
+    const groups = getDefaultGroupings(2);
     expect(groups).toEqual([1, 1]);
 });
 
-it('Is the grouping (3)', () => {
-    const sig = createTimeSignature({ beats: 3, beatType: 4 }, 0);
-    const groups = getGroupings(sig);
+it('is grouped correctly (3)', () => {
+    const groups = getDefaultGroupings(3);
     expect(groups).toEqual([1, 1, 1]);
 });
 
-it('Is the grouping (4)', () => {
-    const sig = createTimeSignature({ beats: 4, beatType: 4 }, 0);
-    const groups = getGroupings(sig);
+it('is grouped correctly (4)', () => {
+    const groups = getDefaultGroupings(4);
     expect(groups).toEqual([2, 2]);
 });
 
-it('Is the grouping (5)', () => {
-    const sig = createTimeSignature({ beats: 5, beatType: 4 }, 0);
-    const groups = getGroupings(sig);
+it('is grouped correctly (5)', () => {
+    const groups = getDefaultGroupings(5);
     expect(groups).toEqual([3, 2]);
 });
 
-it('Is the grouping (6)', () => {
-    const sig = createTimeSignature({ beats: 6, beatType: 4 }, 0);
-    const groups = getGroupings(sig);
+it('is grouped correctly (6)', () => {
+    const groups = getDefaultGroupings(6);
     expect(groups).toEqual([3, 3]);
 });
 
-it('Is the grouping (7)', () => {
-    const sig = createTimeSignature({ beats: 7, beatType: 4 }, 0);
-    const groups = getGroupings(sig);
-    expect(groups).toEqual([3, 2, 2]);
+it('is grouped correctly (7)', () => {
+    const groups = getDefaultGroupings(7);
+    expect(groups).toEqual([3, 4]);
 });
 
-it('Is the grouping (8)', () => {
-    const sig = createTimeSignature({ beats: 8, beatType: 4 }, 0);
-    const groups = getGroupings(sig);
-    expect(groups).toEqual([2, 2, 2, 2]);
+it('is grouped correctly (8)', () => {
+    const groups = getDefaultGroupings(8);
+    expect(groups).toEqual([3,3,2]);
 });
 
-it('Is the grouping', () => {
-    const sig = createTimeSignature({ beats: 9, beatType: 4 }, 0);
-    const groups = getGroupings(sig);
+it('is grouped correctly (9)', () => {
+    const groups = getDefaultGroupings(9);
     expect(groups).toEqual([3, 3, 3]);
 });
 
-it('Is the grouping', () => {
-    const sig = createTimeSignature({ beats: 10, beatType: 4 }, 0);
-    const groups = getGroupings(sig);
-    expect(groups).toEqual([2, 2, 2, 2, 2]);
+it('is grouped correctly (10)', () => {
+    const groups = getDefaultGroupings(10);
+    expect(groups).toEqual([3, 3, 4]);
 });
 
-it('Is the grouping', () => {
-    const sig = createTimeSignature({ beats: 11, beatType: 4 }, 0);
-    const groups = getGroupings(sig);
+it('is grouped correctly (11)', () => {
+    const groups = getDefaultGroupings(11);
     expect(groups).toEqual([3, 3, 3, 2]);
 });
 
-it('Is the grouping', () => {
-    const sig = createTimeSignature({ beats: 12, beatType: 4 }, 0);
-    const groups = getGroupings(sig);
+it('is grouped correctly (12)', () => {
+    const groups = getDefaultGroupings(12);
     expect(groups).toEqual([3, 3, 3, 3]);
 });

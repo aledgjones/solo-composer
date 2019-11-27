@@ -4,8 +4,6 @@ import { EntriesByTick } from "../services/track";
 import { EntryKey, Entry, EntryType } from "../entries";
 import { Tone } from "../entries/tone";
 import { NotationTrack, Notation, NotationType } from "./notation-track";
-import { getNearestEntryToTick } from "./get-time-signature-at-tick";
-import { TimeSignature } from "../entries/time-signature";
 
 /**
  *  split tones into notated rhythms (none timesignature based)
