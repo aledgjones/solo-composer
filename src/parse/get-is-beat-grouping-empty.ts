@@ -1,12 +1,8 @@
-export function getIsBeatGroupingEmpty(start: number, stop: number, tick: number, beatGroupingBoundries: number[]) {
-    for (let i = 0; i < beatGroupingBoundries.length; i++) {
-        const begining = beatGroupingBoundries[i];
-        const end = beatGroupingBoundries[i + 1];
-        if (tick >= begining && tick < end) {
-            // we are in the right grouping;
-            return start <= begining && stop >= end;
-        }
-    }
+export function getIsBeatGroupingEmpty(start: number, stop: number, i: number, beatGroupingBoundries: number[]) {
+    const begining = beatGroupingBoundries[i];
+    const end = beatGroupingBoundries[i + 1];
 
-    return true;
+    console.log(start, stop, i);
+
+    return start <= begining && stop >= end;
 }

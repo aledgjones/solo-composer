@@ -1,6 +1,5 @@
 import { Stave } from "../services/stave";
 import { VerticalMeasurements } from "./measure-vertical-layout";
-import { Converter } from "./converter";
 import { buildPath, PathInstruction } from "../render/path";
 
 export function drawStaves(x: number, y: number, width: number, staves: Stave[], metrics: VerticalMeasurements) {
@@ -19,7 +18,9 @@ export function drawStaves(x: number, y: number, width: number, staves: Stave[],
     });
 
     // render starting barline
-    paths.push(buildPath(styles, [x, y - tweakForStaveLineWidth], [x, y + metrics.systemHeight + tweakForStaveLineWidth]));
+    if (staves.length > 0) {
+        paths.push(buildPath(styles, [x, y - tweakForStaveLineWidth], [x, y + metrics.systemHeight + tweakForStaveLineWidth]));
+    }
 
     return paths;
 

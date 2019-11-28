@@ -11,6 +11,7 @@ import { getIsBeat } from "./get-is-beat";
 import { getMiddleOfBar } from "./get-is-middle-of-bar";
 import { getIsHalfBarEmpty } from "./get-is-half-bar-empty";
 import { getIsWholeBarEmpty } from "./get-is-whole-bar-empty";
+import { getCurrentBeatGroupingIndex } from "./get-current-beat-grouping-index";
 
 function seperateAtSplits(event: Notation, start: number, splits: number[]) {
 
@@ -31,12 +32,10 @@ function seperateAtSplits(event: Notation, start: number, splits: number[]) {
     return out;
 }
 
-function splitEventPerMeter(start: number, event: Notation, flow: EntriesByTick, subdivisions: number): NotationTrack {
+function splitEventPerMeter(start: number, event: Notation, flow: EntriesByTick): NotationTrack {
 
     const stop = start + event.duration;
     const splits = [start];
-
-
 
     // split in preparation for conversion to note values
     // we never need to do anything on the first tick so add one to the start tick of the loop
@@ -45,10 +44,11 @@ function splitEventPerMeter(start: number, event: Notation, flow: EntriesByTick,
         const foundTimeSig = getNearestEntryToTick<TimeSignature>(start, flow, EntryType.timeSignature);
         const timeSigAt = foundTimeSig ? foundTimeSig.at : 0;
         const timeSig = foundTimeSig && foundTimeSig.entry;
-        const ticksPerBeat = getTicksPerBeat(subdivisions, timeSig);
+        const ticksPerBeat = getTicksPerBeat(timeSig);
 
         const distanceFromBarline = getDistanceFromBarline(tick, ticksPerBeat, timeSigAt, timeSig);
         const beatGroupingBoundries = getBeatGroupingBoundries(tick, ticksPerBeat, timeSigAt, timeSig);
+        const currentBeatGroupingIndex = getCurrentBeatGroupingIndex(tick, beatGroupingBoundries);
         const middleOfBar = getMiddleOfBar(beatGroupingBoundries);
 
         const isBeat = getIsBeat(tick, ticksPerBeat, timeSigAt);
@@ -57,7 +57,7 @@ function splitEventPerMeter(start: number, event: Notation, flow: EntriesByTick,
         const isBeatGroupingBoundry = beatGroupingBoundries.includes(tick);
 
         const isWholeBarEmpty = getIsWholeBarEmpty(start, stop, beatGroupingBoundries);
-        const isbeatGroupingEmpty = getIsBeatGroupingEmpty(start, stop, tick, beatGroupingBoundries);
+        const isbeatGroupingEmpty = getIsBeatGroupingEmpty(start, stop, currentBeatGroupingIndex, beatGroupingBoundries);
         const isHalfBarEmpty = getIsHalfBarEmpty(start, stop, tick, beatGroupingBoundries);
 
         if (!timeSig || timeSig.beats === 0) {
@@ -66,12 +66,12 @@ function splitEventPerMeter(start: number, event: Notation, flow: EntriesByTick,
 
             // REST + NOTE SPLIT RULES
 
+            if (isFirstBeat) {
+                splits.push(tick);
+            }
+
             if (event.type === NotationType.rest) {
                 // REST SPLIT RULES
-
-                if (isFirstBeat) {
-                    splits.push(tick);
-                }
 
                 if (!isWholeBarEmpty) {
 
@@ -94,8 +94,23 @@ function splitEventPerMeter(start: number, event: Notation, flow: EntriesByTick,
             } else {
 
                 // NOTE SPLIT RULES
-                if (isFirstBeat) {
-                    splits.push(tick);
+
+                if (!isWholeBarEmpty) {
+
+                    if (timeSig.groupings.length === 3) {
+                        if (isMiddleOfBar && splits.length < 2) {
+                            splits.push(tick);
+                        } else if (isBeatGroupingBoundry) {
+                            splits.push(tick);
+                        }
+                        // if(!isbeatGroupingEmpty && isBeatGroupingBoundry) {
+                        //     splits.push(tick);
+                        // } else 
+                    } else {
+                        if (isMiddleOfBar) {
+                            splits.push(tick);
+                        }
+                    }
                 }
 
             }
@@ -107,7 +122,7 @@ function splitEventPerMeter(start: number, event: Notation, flow: EntriesByTick,
 
 }
 
-export function splitAsPerMeter(subdivisions: number, flow: EntriesByTick, rhythmTrack: NotationTrack) {
+export function splitAsPerMeter(flow: EntriesByTick, rhythmTrack: NotationTrack) {
 
     const events = Object.keys(rhythmTrack);
     const output = events.reduce((track: NotationTrack, startTickStr: string) => {
@@ -117,7 +132,7 @@ export function splitAsPerMeter(subdivisions: number, flow: EntriesByTick, rhyth
 
         const out = {
             ...track,
-            ...splitEventPerMeter(startTick, event, flow, subdivisions)
+            ...splitEventPerMeter(startTick, event, flow)
         }
 
         return out;

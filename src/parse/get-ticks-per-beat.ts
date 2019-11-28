@@ -1,10 +1,10 @@
 import { Entry } from "../entries";
 import { TimeSignature } from "../entries/time-signature";
 
-export function getTicksPerBeat(subdivisions: number, sig?: Entry<TimeSignature>) {
+export function getTicksPerBeat(sig?: Entry<TimeSignature>) {
     if (!sig) {
-        return subdivisions;
+        return 12;
     } else {
-        return subdivisions / (sig.beatType / 4);
+        return sig.subdivisions / (sig.beatType / 4);
     }
 }

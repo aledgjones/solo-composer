@@ -1,6 +1,6 @@
-import { Track, entriesByTick } from "../services/track";
+import { entriesByTick } from "../services/track";
 import { TimeSignature } from "../entries/time-signature";
-import { EntryKey, Entry, EntryType } from "../entries";
+import { EntryKey, EntryType } from "../entries";
 import { getTicksPerBeat } from "../parse/get-ticks-per-beat";
 import { Flow } from "../services/flow";
 import { getNearestEntryToTick } from "../parse/get-time-signature-at-tick";
@@ -25,7 +25,7 @@ export function debugTicks(flow: Flow) {
         const timeSig = foundTimeSig && foundTimeSig.entry;
         const timeSigAt = foundTimeSig ? foundTimeSig.at : 0;
 
-        const ticksPerBeat = getTicksPerBeat(flow.subdivisions, timeSig);
+        const ticksPerBeat = getTicksPerBeat(timeSig);
         const distanceFromBarline = getDistanceFromBarline(tick, ticksPerBeat, timeSigAt, timeSig);
 
         const isFirstBeat = distanceFromBarline === 0;

@@ -37,26 +37,17 @@ export function debugTrack(length: number, track: NotationTrack) {
 
     }
 
-    // if (merged) {
 
-        const log: string[] = [];
-        const keys = Object.keys(output);
-        for (let tick = 0; tick < length; tick++) {
-            keys.forEach(key => {
-                const char = output[key][tick];
-                if (!log[tick] || log[tick] === ' ' || char === 'r' || char === 'o') {
-                    log[tick] = char;
-                }
-            });
-        }
-        return log.join('');
+    const log: string[] = [];
+    const keys = Object.keys(output);
+    for (let tick = 0; tick < length; tick++) {
+        keys.forEach(key => {
+            const char = output[key][tick];
+            if (!log[tick] || log[tick] === ' ' || char === 'r' || char === 'o') {
+                log[tick] = char;
+            }
+        });
+    }
+    return log.join('');
 
-    // } else {
-
-    //     const keys = Object.keys(output);
-    //     keys.forEach(key => {
-    //         console.log(output[key].join(''));
-    //     });
-
-    // }
 }

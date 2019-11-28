@@ -10,7 +10,7 @@ import { NotationTrack, Notation, NotationType } from "./notation-track";
  * 
  *  we split notation on the on / off of new notes while other, longer notes are playing
  */
-export function notateTones(length: number, subdivisions: number, track: EntriesByTick, flow: EntriesByTick, rhythmTrack: NotationTrack) {
+export function notateTones(length: number, track: EntriesByTick, rhythmTrack: NotationTrack) {
 
     let previousEvent: Notation | null = null;
     const offsByTick: { [tick: number]: EntryKey[] } = {};

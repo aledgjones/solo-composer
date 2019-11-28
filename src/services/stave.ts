@@ -20,14 +20,17 @@ export interface Stave {
 export function createStave(staveDef: StaveDef, staveKey: StaveKey = shortid()): Stave {
     const clef = createClef(staveDef.clef, 0);
     const master = createTrack([clef._key], { [clef._key]: clef });
+    const primary = createTrack([], {});
 
     return {
         key: staveKey,
         lines: staveDef.lines,
         master,
         tracks: {
-            order: [],
-            byKey: {}
+            order: [primary.key],
+            byKey: {
+                [primary.key]: primary
+            }
         }
     }
 }

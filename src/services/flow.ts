@@ -6,9 +6,10 @@ import { removeProps } from '../ui/utils/remove-props';
 import { instrumentDefs } from './instrument-defs';
 import { Instruments } from './instrument';
 import { Track, createTrack } from './track';
-import { KeySignatureMode, createKeySignature } from '../entries/key-signature';
 import { createTimeSignature } from '../entries/time-signature';
 import { getDefaultGroupings } from '../parse/get-default-groupings';
+import { createKeySignature, KeySignatureMode } from '../entries/key-signature';
+import { Entry } from '../entries';
 
 export const FLOW_CREATE = '@flow/create';
 export const FLOW_REORDER = '@flow/reorder';
@@ -33,7 +34,6 @@ export interface Flow {
     title: string;
     players: PlayerKey[] // unordered, purely for inclusion lookup
     staves: Staves;
-    subdivisions: number, // crotchet beat subdevision
     length: number; // number of subdevisions in all the flow
     master: Track;
 }
@@ -210,13 +210,24 @@ export const flowActions = (dispatch: any): FlowActions => {
 }
 
 const createFlow = (players: PlayerKey[], staves: { [key: string]: Stave }): Flow => {
+
+    const events = [
+        createTimeSignature({ beats: 0, beatType: 4, groupings: getDefaultGroupings(4), subdivisions: 12 }, 0),
+        createKeySignature({ offset: 0, mode: KeySignatureMode.major }, 0)
+    ];
+
     return {
         key: shortid(),
         title: 'Untitled Flow',
         players,
         staves,
-        subdivisions: 12,
         length: 12,
-        master: createTrack([],{})
+        master: createTrack(
+            events.map(e => e._key),
+            events.reduce((out: { [key: string]: Entry<any> }, e) => {
+                out[e._key] = e;
+                return out;
+            }, {})
+        )
     }
 }

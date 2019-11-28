@@ -13,6 +13,7 @@ import { RenderInstructions, mergeInstructions } from "./instructions";
 import { measureBracketAndBraces } from "./measure-brackets-and-braces";
 import { measureStavePrologue, drawStavePrologue } from "./draw-stave-prologue";
 import { notateTones } from "./notate-tones";
+import { splitAsPerMeter } from "./split-as-per-meter";
 
 import { drawNames } from "./draw-names";
 import { drawBraces } from "./draw-braces";
@@ -23,10 +24,10 @@ import { drawFinalBarline } from "./draw-final-barline";
 
 import { Converter } from "./converter";
 
+import { drawRest } from "../entries/rest";
 import { debugTicks } from "../debug/debug-ticks";
 import { debugTrack } from "../debug/debug-track";
-import { splitAsPerMeter } from "./split-as-per-meter";
-import { drawRest } from "../entries/rest";
+import { NotationTrack } from "./notation-track";
 
 export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, converter: Converter): RenderInstructions {
 
@@ -59,24 +60,26 @@ export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, c
 
     // 1) convert track data into written note durations
 
-    // debugTicks(flow);
-
     const flowEntriesByTick = entriesByTick(flow.master.entries.order, flow.master.entries.byKey);
-    const notes: any[] = [];
 
-    staves.forEach(stave => {
-
-        notes.push(...drawRest(x + prologueWidth, y + verticalMeasurements.staves[stave.key].y, 12, 12));
-
+    const tracks = staves.reduce((output: { [key: string]: NotationTrack }, stave) => {
         stave.tracks.order.forEach(trackKey => {
+
             const track = stave.tracks.byKey[trackKey];
             const trackEventsByTick = entriesByTick(track.entries.order, track.entries.byKey);
-            let rhythmTrack = {};
-            rhythmTrack = notateTones(flow.length, flow.subdivisions, trackEventsByTick, flowEntriesByTick, rhythmTrack);
-            rhythmTrack = splitAsPerMeter(flow.subdivisions, flowEntriesByTick, rhythmTrack);
-            // debugTrack(flow.length, rhythmTrack);
+
+            let notationTrack = {};
+            notationTrack = notateTones(flow.length, trackEventsByTick, notationTrack);
+            notationTrack = splitAsPerMeter(flowEntriesByTick, notationTrack);
+
+            output[trackKey] = notationTrack;
+
         });
-    });
+
+        return output;
+    }, {});
+
+    console.log(tracks);
 
     // 2) create a rhythmic grid for the whole flow (ie. spacings)
     // 3) assign widths to ticks
@@ -92,7 +95,6 @@ export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, c
         ...drawSubBrackets(x, y, verticalMeasurements),
         ...drawStaves(x, y, width, staves, verticalMeasurements),
         ...drawStavePrologue(x, y, prologueWidths, verticalMeasurements, flowEntries, staves, 0),
-        ...notes,
 
         ...drawFinalBarline(x + width, y, staves, verticalMeasurements, config)
     );
