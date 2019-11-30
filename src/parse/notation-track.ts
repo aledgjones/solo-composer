@@ -7,6 +7,7 @@ export enum NotationType {
 }
 
 export interface Notation {
+    tick: number;
     keys: EntryKey[] // these may be repeated if a tone is split up into ties notes
     duration: number;
     type: NotationType;

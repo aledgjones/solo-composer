@@ -13,7 +13,6 @@ import { RenderInstructions, mergeInstructions } from "./instructions";
 import { measureBracketAndBraces } from "./measure-brackets-and-braces";
 import { measureStavePrologue, drawStavePrologue } from "./draw-stave-prologue";
 import { notateTones } from "./notate-tones";
-import { splitAsPerMeter } from "./split-as-per-meter";
 
 import { drawNames } from "./draw-names";
 import { drawBraces } from "./draw-braces";
@@ -28,6 +27,9 @@ import { drawRest } from "../entries/rest";
 import { debugTicks } from "../debug/debug-ticks";
 import { debugTrack } from "../debug/debug-track";
 import { NotationTrack } from "./notation-track";
+import { splitAsPerMeter } from "./split-as-per-meter";
+import { getFirstBeats } from "./get-first-beats";
+import { spltNotationTrack } from "./split-notation-track";
 
 export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, converter: Converter): RenderInstructions {
 
@@ -61,6 +63,7 @@ export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, c
     // 1) convert track data into written note durations
 
     const flowEntriesByTick = entriesByTick(flow.master.entries.order, flow.master.entries.byKey);
+    const barlines = getFirstBeats(flow.length, flowEntriesByTick);
 
     const tracks = staves.reduce((output: { [key: string]: NotationTrack }, stave) => {
         stave.tracks.order.forEach(trackKey => {
@@ -70,7 +73,7 @@ export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, c
 
             let notationTrack = {};
             notationTrack = notateTones(flow.length, trackEventsByTick, notationTrack);
-            notationTrack = splitAsPerMeter(flowEntriesByTick, notationTrack);
+            notationTrack = splitAsPerMeter(flow.length, flowEntriesByTick, notationTrack, barlines);
 
             output[trackKey] = notationTrack;
 
@@ -78,8 +81,6 @@ export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, c
 
         return output;
     }, {});
-
-    console.log(tracks);
 
     // 2) create a rhythmic grid for the whole flow (ie. spacings)
     // 3) assign widths to ticks

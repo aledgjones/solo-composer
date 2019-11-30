@@ -4,7 +4,7 @@ export function getDefaultGroupings(beats: number) {
     const type = getTimeSignatureType(beats);
 
     if (beats === 0) {
-        return [];
+        return [2];
     }
 
     if (beats <= 3) {
