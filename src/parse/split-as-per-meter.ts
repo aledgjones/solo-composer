@@ -99,7 +99,7 @@ export function splitUnit(start: number, stop: number, subdivisions: number, ori
 
             if (found) {
                 if (found.entry.type === NotationType.rest) {
-                    const durationRemaining = found.entry.duration - (groupingBoundries[0] - found.at);
+                    const durationRemaining = found.entry.duration - (found.at < groupingBoundries[0] ? groupingBoundries[0] - found.at: 0) - (found.at > groupingBoundries[5] ? (found.at + found.entry.duration) - groupingBoundries[5] : 0);
                     if (durationRemaining !== longestDottedRest && found.at !== middle) {
                         splits[middle] = true;
                     }

@@ -699,6 +699,76 @@ it(i + '. ' + 'renders correctly - 2/4 [----s]', () => {
 
 i++;
 
+it(i + '. ' + 'renders correctly - 6/8 [c_ss---]', () => {
+    const q = 6;
+    const sq = 3;
+    const len = q * 6;
+
+    const flow: EntriesByTick = {
+        [0]: [createTimeSignature({ beats: 6, beatType: 8, groupings: getDefaultGroupings(6), subdivisions: 12 }, 0)]
+    }
+
+    const track: NotationTrack = {
+        [0]: { tick: 0, keys: ['a'], duration: sq * 5, type: NotationType.note, ties: [] },
+        [sq * 5]: { tick: sq * 4, keys: ['b'], duration: sq, type: NotationType.note, ties: [] },
+        [sq * 6]: { tick: sq * 5, keys: ['c'], duration: q * 3, type: NotationType.rest, ties: [] }
+    }
+
+    const barlines = getFirstBeats(len, flow);
+    const output = splitAsPerMeter(len, flow, track, barlines);
+    const log = debugTrack(len, output);
+
+    expect(log).toBe('o___________o-¬o-¬r----------------¬');
+});
+
+i++;
+
+it(i + '. ' + 'renders correctly - 2/4 [qcq]', () => {
+    const q = 6;
+    const len = q * 4;
+
+    const flow: EntriesByTick = {
+        [0]: [createTimeSignature({ beats: 2, beatType: 4, groupings: getDefaultGroupings(2), subdivisions: 12 }, 0)]
+    }
+
+    const track: NotationTrack = {
+        [0]: { tick: 0, keys: ['a'], duration: q, type: NotationType.note, ties: [] },
+        [q]: { tick: q, keys: ['b'], duration: q * 2, type: NotationType.note, ties: [] },
+        [q * 3]: { tick: q * 3, keys: ['b'], duration: q, type: NotationType.note, ties: [] }
+    }
+
+    const barlines = getFirstBeats(len, flow);
+    const output = splitAsPerMeter(len, flow, track, barlines);
+    const log = debugTrack(len, output);
+
+    expect(log).toBe('o----¬o----------¬o----¬');
+});
+
+i++;
+
+it(i + '. ' + 'renders correctly - 2/4 [sq._c]', () => {
+    const q = 6;
+    const sq = 3;
+    const len = q * 4;
+
+    const flow: EntriesByTick = {
+        [0]: [createTimeSignature({ beats: 2, beatType: 4, groupings: getDefaultGroupings(2), subdivisions: 12 }, 0)]
+    }
+
+    const track: NotationTrack = {
+        [0]: { tick: 0, keys: ['a'], duration: sq, type: NotationType.note, ties: [] },
+        [sq]: { tick: sq, keys: ['b'], duration: sq * 7, type: NotationType.note, ties: [] }
+    }
+
+    const barlines = getFirstBeats(len, flow);
+    const output = splitAsPerMeter(len, flow, track, barlines);
+    const log = debugTrack(len, output);
+
+    expect(log).toBe('o-¬o________o----------¬');
+});
+
+i++;
+
 it(i + '. ' + 'renders correctly - 3/4 [m_qq]', () => {
     const q = 6;
     const len = q * 6;
@@ -788,6 +858,28 @@ it(i + '. ' + 'renders correctly - 3/4 [qq_m]', () => {
 
 i++
 
+it(i + '. ' + 'renders correctly - 6/8 [qq_m]', () => {
+    const q = 6;
+    const len = q * 6;
+
+    const flow: EntriesByTick = {
+        [0]: [createTimeSignature({ beats: 6, beatType: 8, groupings: getDefaultGroupings(6), subdivisions: 12 }, 0)]
+    }
+
+    const track: NotationTrack = {
+        [0]: { tick: 0, keys: ['a'], duration: q * 1, type: NotationType.note, ties: [] },
+        [q * 1]: { tick: q * 1, keys: ['b'], duration: q * 5, type: NotationType.note, ties: [] }
+    }
+
+    const barlines = getFirstBeats(len, flow);
+    const output = splitAsPerMeter(len, flow, track, barlines);
+    const log = debugTrack(len, output);
+
+    expect(log).toBe('o----¬o___________o----------------¬');
+});
+
+i++
+
 it(i + '. ' + 'renders correctly - 9/8 [m._cq]', () => {
     const q = 6;
     const len = q * 9;
@@ -809,6 +901,51 @@ it(i + '. ' + 'renders correctly - 9/8 [m._cq]', () => {
 });
 
 i++
+
+it(i + '. ' + 'renders correctly - 4/4 [cm.]', () => {
+    const c = 12;
+    const len = c * 4;
+
+    const flow: EntriesByTick = {
+        [0]: [createTimeSignature({ beats: 4, beatType: 4, groupings: getDefaultGroupings(4), subdivisions: 12 }, 0)]
+    }
+
+    const track: NotationTrack = {
+        [0]: { tick: 0, keys: ['a'], duration: c, type: NotationType.note, ties: [] },
+        [c]: { tick: c, keys: ['b'], duration: c * 3, type: NotationType.note, ties: [] }
+    }
+
+    const barlines = getFirstBeats(len, flow);
+    const output = splitAsPerMeter(len, flow, track, barlines);
+    const log = debugTrack(len, output);
+
+    expect(log).toBe('o----------¬o----------------------------------¬');
+});
+
+i++;
+
+it(i + '. ' + 'renders correctly - 4/4 [sq._c_m]', () => {
+    const q = 6;
+    const sq = 3;
+    const len = q * 8;
+
+    const flow: EntriesByTick = {
+        [0]: [createTimeSignature({ beats: 4, beatType: 4, groupings: getDefaultGroupings(4), subdivisions: 12 }, 0)]
+    }
+
+    const track: NotationTrack = {
+        [0]: { tick: 0, keys: ['a'], duration: sq, type: NotationType.note, ties: [] },
+        [sq]: { tick: sq, keys: ['b'], duration: sq * 15, type: NotationType.note, ties: [] }
+    }
+
+    const barlines = getFirstBeats(len, flow);
+    const output = splitAsPerMeter(len, flow, track, barlines);
+    const log = debugTrack(len, output);
+
+    expect(log).toBe('o-¬o________o___________o----------------------¬');
+});
+
+i++;
 
 it(i + '. ' + 'renders correctly - 4/4 [qc._qcq]', () => {
     const q = 6;
