@@ -21,7 +21,7 @@ export function notateTones(length: number, track: EntriesByTick, rhythmTrack: N
         const trackEntries = track[tick] || [];
         const offEntries = offsByTick[tick] || [];
 
-        const currentEvent: Notation = { tick, keys: [], duration: 0, type: NotationType.note, ties: [] };
+        const currentEvent: Notation = { keys: [], duration: 0, type: NotationType.note, ties: [] };
 
         // we spilt the ongoing notes at: note off, new note or firstbeat; 
         if (previousEvent && (offEntries.length > 0 || trackEntries.length > 0)) {

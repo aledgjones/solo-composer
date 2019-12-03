@@ -25,7 +25,7 @@ export function debugTicks(flow: Flow) {
         const timeSig = foundTimeSig && foundTimeSig.entry;
         const timeSigAt = foundTimeSig ? foundTimeSig.at : 0;
 
-        const ticksPerBeat = getTicksPerBeat(timeSig);
+        const ticksPerBeat = getTicksPerBeat(timeSig ? timeSig.subdivisions : 12, timeSig ? timeSig.beatType : 4);
         const distanceFromBarline = getDistanceFromBarline(tick, ticksPerBeat, timeSigAt, timeSig);
 
         const isFirstBeat = distanceFromBarline === 0;

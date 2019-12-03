@@ -1,8 +1,6 @@
-import { useReducer, useMemo, useEffect, useCallback } from "react"
+import { useReducer, useMemo, useCallback } from "react"
 import { TabState, tabReducer, tabEmptyState, tabActions, TabActions } from "./tab";
 import { scoreActions, scoreReducer, scoreEmptyState, Score, ScoreActions } from "./score";
-import { PlayerType } from "./player";
-import { instrumentDefs } from "./instrument-defs";
 import { log } from "../ui/utils/log";
 
 const LOGGING = false;
@@ -45,30 +43,6 @@ export const useAppState = (): [State, Actions] => {
             score: scoreActions(dispatch)
         }
     }, [dispatch]);
-
-    // useEffect(() => {
-
-    // let instrument = actions.score.instruments.create(instrumentDefs['strings.violin']);
-    // let player = actions.score.players.create(PlayerType.solo);
-    // actions.score.players.assignInstrument(player.key, instrument);
-
-    // instrument = actions.score.instruments.create(instrumentDefs['strings.violin']);
-    // player = actions.score.players.create(PlayerType.solo);
-    // actions.score.players.assignInstrument(player.key, instrument);
-
-    // instrument = actions.score.instruments.create(instrumentDefs['strings.viola']);
-    // player = actions.score.players.create(PlayerType.solo);
-    // actions.score.players.assignInstrument(player.key, instrument);
-
-    // instrument = actions.score.instruments.create(instrumentDefs['strings.violoncello']);
-    // player = actions.score.players.create(PlayerType.solo);
-    // actions.score.players.assignInstrument(player.key, instrument);
-
-    // instrument = actions.score.instruments.create(instrumentDefs['keyboards.piano']);
-    // player = actions.score.players.create(PlayerType.solo);
-    // actions.score.players.assignInstrument(player.key, instrument);
-
-    // }, [actions.score.instruments, actions.score.players]);
 
     if (LOGGING) {
         log(state, 'state');

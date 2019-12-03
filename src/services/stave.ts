@@ -1,10 +1,9 @@
 import shortid from 'shortid';
 import { StaveDef } from "./instrument-defs";
-import { Track, createTrack, TrackKey, Tracks } from './track';
+import { Track, createTrack, Tracks } from './track';
 import { createClef } from '../entries/clef';
 import { Instrument } from './instrument';
 import { Flow } from './flow';
-import { createTone } from '../entries/tone';
 
 export type StaveKey = string;
 
