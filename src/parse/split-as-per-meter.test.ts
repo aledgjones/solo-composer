@@ -17,7 +17,7 @@ it(i + '. ' + 'splits notes at barlines only - 2/4', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: len, type: NotationType.note, ties: [] }
+        [0]: { keys: ['a'], duration: len, type: NotationType.note, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -38,7 +38,7 @@ it(i + '. ' + 'splits rests at barlines only - 2/4', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: len, type: NotationType.rest, ties: [] }
+        [0]: { keys: ['a'], duration: len, type: NotationType.rest, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -59,7 +59,7 @@ it(i + '. ' + 'renders a full bar rest as such - 2/4', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: len, type: NotationType.rest, ties: [] }
+        [0]: { keys: ['a'], duration: len, type: NotationType.rest, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -80,7 +80,7 @@ it(i + '. ' + 'renders a full bar rest as such - 6/8', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: len, type: NotationType.rest, ties: [] }
+        [0]: { keys: ['a'], duration: len, type: NotationType.rest, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -101,7 +101,7 @@ it(i + '. ' + 'renders a full bar rest as such - 3/4', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: len, type: NotationType.rest, ties: [] }
+        [0]: { keys: ['a'], duration: len, type: NotationType.rest, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -122,7 +122,7 @@ it(i + '. ' + 'renders a full bar rest as such - 9/8', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: len, type: NotationType.rest, ties: [] }
+        [0]: { keys: ['a'], duration: len, type: NotationType.rest, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -143,7 +143,7 @@ it(i + '. ' + 'renders a full bar rest as such - 4/4', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: len, type: NotationType.rest, ties: [] }
+        [0]: { keys: ['a'], duration: len, type: NotationType.rest, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -164,7 +164,7 @@ it(i + '. ' + 'renders a full bar rest as such - 12/8', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: len, type: NotationType.rest, ties: [] }
+        [0]: { keys: ['a'], duration: len, type: NotationType.rest, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -185,7 +185,7 @@ it(i + '. ' + 'renders a full bar rest as such - 5/8', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: len, type: NotationType.rest, ties: [] }
+        [0]: { keys: ['a'], duration: len, type: NotationType.rest, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -206,7 +206,7 @@ it(i + '. ' + 'renders a full bar rest as such - 7/8', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: len, type: NotationType.rest, ties: [] }
+        [0]: { keys: ['a'], duration: len, type: NotationType.rest, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -227,7 +227,7 @@ it(i + '. ' + 'renders a full bar note as such - 2/4', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: len, type: NotationType.note, ties: [] }
+        [0]: { keys: ['a'], duration: len, type: NotationType.note, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -248,7 +248,7 @@ it(i + '. ' + 'renders a full bar note as such - 6/8', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: len, type: NotationType.note, ties: [] }
+        [0]: { keys: ['a'], duration: len, type: NotationType.note, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -269,7 +269,7 @@ it(i + '. ' + 'renders a full bar note as such - 3/4', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: len, type: NotationType.note, ties: [] }
+        [0]: { keys: ['a'], duration: len, type: NotationType.note, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -290,7 +290,7 @@ it(i + '. ' + 'renders a full bar note as such - 9/8', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: len, type: NotationType.note, ties: [] }
+        [0]: { keys: ['a'], duration: len, type: NotationType.note, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -311,7 +311,7 @@ it(i + '. ' + 'renders a full bar note as such - 4/4', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: len, type: NotationType.note, ties: [] }
+        [0]: { keys: ['a'], duration: len, type: NotationType.note, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -332,7 +332,7 @@ it(i + '. ' + 'renders a full bar note as such - 12/8', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: len, type: NotationType.note, ties: [] }
+        [0]: { keys: ['a'], duration: len, type: NotationType.note, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -353,7 +353,7 @@ it(i + '. ' + 'renders a full bar note as such - 5/8', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: len, type: NotationType.note, ties: [] }
+        [0]: { keys: ['a'], duration: len, type: NotationType.note, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -374,7 +374,7 @@ it(i + '. ' + 'renders a full bar note as such - 7/8', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: len, type: NotationType.note, ties: [] }
+        [0]: { keys: ['a'], duration: len, type: NotationType.note, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -395,8 +395,8 @@ it(i + '. ' + 'renders correctly - 4/4 [c---]', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: c * 1, type: NotationType.note, ties: [] },
-        [c * 1]: { tick: c * 1, keys: ['b'], duration: c * 3, type: NotationType.rest, ties: [] }
+        [0]: { keys: ['a'], duration: c * 1, type: NotationType.note, ties: [] },
+        [c * 1]: { keys: ['b'], duration: c * 3, type: NotationType.rest, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -417,9 +417,9 @@ it(i + '. ' + 'renders correctly - 4/4 [c--c]', () => {
     }
 
     const track: NotationTrack = {
-        [c * 0]: { tick: 0, keys: ['a'], duration: c * 1, type: NotationType.note, ties: [] },
-        [c * 1]: { tick: c * 1, keys: ['b'], duration: c * 2, type: NotationType.rest, ties: [] },
-        [c * 3]: { tick: c * 3, keys: ['c'], duration: c * 1, type: NotationType.note, ties: [] }
+        [c * 0]: { keys: ['a'], duration: c * 1, type: NotationType.note, ties: [] },
+        [c * 1]: { keys: ['b'], duration: c * 2, type: NotationType.rest, ties: [] },
+        [c * 3]: { keys: ['c'], duration: c * 1, type: NotationType.note, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -440,8 +440,8 @@ it(i + '. ' + 'renders correctly - 4/4 [---c]', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: c * 3, type: NotationType.rest, ties: [] },
-        [c * 3]: { tick: c * 3, keys: ['b'], duration: c * 1, type: NotationType.note, ties: [] }
+        [0]: { keys: ['a'], duration: c * 3, type: NotationType.rest, ties: [] },
+        [c * 3]: { keys: ['b'], duration: c * 1, type: NotationType.note, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -463,8 +463,8 @@ it(i + '. ' + 'renders correctly - 6/8 [q-----]', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: q, type: NotationType.note, ties: [] },
-        [q]: { tick: q, keys: ['b'], duration: q * 5, type: NotationType.rest, ties: [] }
+        [0]: { keys: ['a'], duration: q, type: NotationType.note, ties: [] },
+        [q]: { keys: ['b'], duration: q * 5, type: NotationType.rest, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -485,9 +485,9 @@ it(i + '. ' + 'renders correctly - 6/8 [c--c]', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: q * 2, type: NotationType.note, ties: [] },
-        [q * 2]: { tick: q * 2, keys: ['b'], duration: q * 2, type: NotationType.rest, ties: [] },
-        [q * 4]: { tick: q * 4, keys: ['c'], duration: q * 2, type: NotationType.note, ties: [] }
+        [0]: { keys: ['a'], duration: q * 2, type: NotationType.note, ties: [] },
+        [q * 2]: { keys: ['b'], duration: q * 2, type: NotationType.rest, ties: [] },
+        [q * 4]: { keys: ['c'], duration: q * 2, type: NotationType.note, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -508,8 +508,8 @@ it(i + '. ' + 'renders correctly - 6/8 [-----q]', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: q * 5, type: NotationType.rest, ties: [] },
-        [q * 5]: { tick: q * 5, keys: ['b'], duration: q * 1, type: NotationType.note, ties: [] }
+        [0]: { keys: ['a'], duration: q * 5, type: NotationType.rest, ties: [] },
+        [q * 5]: { keys: ['b'], duration: q * 1, type: NotationType.note, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -530,8 +530,8 @@ it(i + '. ' + 'renders correctly - 12/8 [q-----------]', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: q * 1, type: NotationType.note, ties: [] },
-        [q * 1]: { tick: q * 1, keys: ['b'], duration: q * 11, type: NotationType.rest, ties: [] }
+        [0]: { keys: ['a'], duration: q * 1, type: NotationType.note, ties: [] },
+        [q * 1]: { keys: ['b'], duration: q * 11, type: NotationType.rest, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -552,9 +552,9 @@ it(i + '. ' + 'renders correctly - 12/8 [q----------q]', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: q * 1, type: NotationType.note, ties: [] },
-        [q * 1]: { tick: q * 1, keys: ['b'], duration: q * 10, type: NotationType.rest, ties: [] },
-        [q * 11]: { tick: q * 11, keys: ['c'], duration: q * 1, type: NotationType.note, ties: [] }
+        [0]: { keys: ['a'], duration: q * 1, type: NotationType.note, ties: [] },
+        [q * 1]: { keys: ['b'], duration: q * 10, type: NotationType.rest, ties: [] },
+        [q * 11]: { keys: ['c'], duration: q * 1, type: NotationType.note, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -575,8 +575,8 @@ it(i + '. ' + 'renders correctly - 12/8 [-----------q]', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: q * 11, type: NotationType.rest, ties: [] },
-        [q * 11]: { tick: q * 11, keys: ['b'], duration: q * 1, type: NotationType.note, ties: [] }
+        [0]: { keys: ['a'], duration: q * 11, type: NotationType.rest, ties: [] },
+        [q * 11]: { keys: ['b'], duration: q * 1, type: NotationType.note, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -597,8 +597,8 @@ it(i + '. ' + 'renders correctly - 3/4 [c--]', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: c * 1, type: NotationType.note, ties: [] },
-        [c * 1]: { tick: c * 1, keys: ['b'], duration: c * 2, type: NotationType.rest, ties: [] }
+        [0]: { keys: ['a'], duration: c * 1, type: NotationType.note, ties: [] },
+        [c * 1]: { keys: ['b'], duration: c * 2, type: NotationType.rest, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -619,8 +619,8 @@ it(i + '. ' + 'renders correctly - 3/4 [--c]', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: c * 2, type: NotationType.rest, ties: [] },
-        [c * 2]: { tick: c * 2, keys: ['b'], duration: c * 1, type: NotationType.note, ties: [] }
+        [0]: { keys: ['a'], duration: c * 2, type: NotationType.rest, ties: [] },
+        [c * 2]: { keys: ['b'], duration: c * 1, type: NotationType.note, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -641,8 +641,8 @@ it(i + '. ' + 'renders correctly - 9/8 [c.------]', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: q * 3, type: NotationType.note, ties: [] },
-        [q * 3]: { tick: q * 3, keys: ['b'], duration: q * 6, type: NotationType.rest, ties: [] }
+        [0]: { keys: ['a'], duration: q * 3, type: NotationType.note, ties: [] },
+        [q * 3]: { keys: ['b'], duration: q * 6, type: NotationType.rest, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -663,8 +663,8 @@ it(i + '. ' + 'renders correctly - 9/8 [------c.]', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: q * 6, type: NotationType.rest, ties: [] },
-        [q * 6]: { tick: 0 * 6, keys: ['b'], duration: q * 3, type: NotationType.note, ties: [] }
+        [0]: { keys: ['a'], duration: q * 6, type: NotationType.rest, ties: [] },
+        [q * 6]: { keys: ['b'], duration: q * 3, type: NotationType.note, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -686,8 +686,8 @@ it(i + '. ' + 'renders correctly - 2/4 [----s]', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: (q * 3) + sq, type: NotationType.rest, ties: [] },
-        [(q * 3) + sq]: { tick: (q * 3) + sq, keys: ['b'], duration: sq, type: NotationType.note, ties: [] }
+        [0]: { keys: ['a'], duration: (q * 3) + sq, type: NotationType.rest, ties: [] },
+        [(q * 3) + sq]: { keys: ['b'], duration: sq, type: NotationType.note, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -709,9 +709,9 @@ it(i + '. ' + 'renders correctly - 6/8 [c_ss---]', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: sq * 5, type: NotationType.note, ties: [] },
-        [sq * 5]: { tick: sq * 4, keys: ['b'], duration: sq, type: NotationType.note, ties: [] },
-        [sq * 6]: { tick: sq * 5, keys: ['c'], duration: q * 3, type: NotationType.rest, ties: [] }
+        [0]: { keys: ['a'], duration: sq * 5, type: NotationType.note, ties: [] },
+        [sq * 5]: { keys: ['b'], duration: sq, type: NotationType.note, ties: [] },
+        [sq * 6]: { keys: ['c'], duration: q * 3, type: NotationType.rest, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -732,9 +732,9 @@ it(i + '. ' + 'renders correctly - 2/4 [qcq]', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: q, type: NotationType.note, ties: [] },
-        [q]: { tick: q, keys: ['b'], duration: q * 2, type: NotationType.note, ties: [] },
-        [q * 3]: { tick: q * 3, keys: ['b'], duration: q, type: NotationType.note, ties: [] }
+        [0]: { keys: ['a'], duration: q, type: NotationType.note, ties: [] },
+        [q]: { keys: ['b'], duration: q * 2, type: NotationType.note, ties: [] },
+        [q * 3]: { keys: ['b'], duration: q, type: NotationType.note, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -756,8 +756,8 @@ it(i + '. ' + 'renders correctly - 2/4 [sq._c]', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: sq, type: NotationType.note, ties: [] },
-        [sq]: { tick: sq, keys: ['b'], duration: sq * 7, type: NotationType.note, ties: [] }
+        [0]: { keys: ['a'], duration: sq, type: NotationType.note, ties: [] },
+        [sq]: { keys: ['b'], duration: sq * 7, type: NotationType.note, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -778,8 +778,8 @@ it(i + '. ' + 'renders correctly - 3/4 [m_qq]', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: q * 5, type: NotationType.note, ties: [] },
-        [q * 5]: { tick: q, keys: ['a'], duration: q, type: NotationType.note, ties: [] }
+        [0]: { keys: ['a'], duration: q * 5, type: NotationType.note, ties: [] },
+        [q * 5]: { keys: ['a'], duration: q, type: NotationType.note, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -800,9 +800,9 @@ it(i + '. ' + 'renders correctly - 3/4 [qq_c.q]', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: q, type: NotationType.note, ties: [] },
-        [q]: { tick: q, keys: ['a'], duration: q * 4, type: NotationType.note, ties: [] },
-        [q * 5]: { tick: q * 5, keys: ['b'], duration: q, type: NotationType.note, ties: [] }
+        [0]: { keys: ['a'], duration: q, type: NotationType.note, ties: [] },
+        [q]: { keys: ['a'], duration: q * 4, type: NotationType.note, ties: [] },
+        [q * 5]: { keys: ['b'], duration: q, type: NotationType.note, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -823,8 +823,8 @@ it(i + '. ' + 'renders correctly - 3/4 [c.q_c]', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: q * 3, type: NotationType.note, ties: [] },
-        [q * 3]: { tick: q * 3, keys: ['b'], duration: q * 3, type: NotationType.note, ties: [] }
+        [0]: { keys: ['a'], duration: q * 3, type: NotationType.note, ties: [] },
+        [q * 3]: { keys: ['b'], duration: q * 3, type: NotationType.note, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -845,8 +845,8 @@ it(i + '. ' + 'renders correctly - 3/4 [qq_m]', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: q * 1, type: NotationType.note, ties: [] },
-        [q * 1]: { tick: q * 1, keys: ['b'], duration: q * 5, type: NotationType.note, ties: [] }
+        [0]: { keys: ['a'], duration: q * 1, type: NotationType.note, ties: [] },
+        [q * 1]: { keys: ['b'], duration: q * 5, type: NotationType.note, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -867,8 +867,8 @@ it(i + '. ' + 'renders correctly - 6/8 [qq_m]', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: q * 1, type: NotationType.note, ties: [] },
-        [q * 1]: { tick: q * 1, keys: ['b'], duration: q * 5, type: NotationType.note, ties: [] }
+        [0]: { keys: ['a'], duration: q * 1, type: NotationType.note, ties: [] },
+        [q * 1]: { keys: ['b'], duration: q * 5, type: NotationType.note, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -889,8 +889,8 @@ it(i + '. ' + 'renders correctly - 9/8 [m._cq]', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: q * 8, type: NotationType.note, ties: [] },
-        [q * 8]: { tick: q * 8, keys: ['b'], duration: q * 1, type: NotationType.note, ties: [] }
+        [0]: { keys: ['a'], duration: q * 8, type: NotationType.note, ties: [] },
+        [q * 8]: { keys: ['b'], duration: q * 1, type: NotationType.note, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -902,6 +902,50 @@ it(i + '. ' + 'renders correctly - 9/8 [m._cq]', () => {
 
 i++
 
+it(i + '. ' + 'renders correctly - 2/4 [qq.]', () => {
+    const q = 6;
+    const len = q * 4;
+
+    const flow: EntriesByTick = {
+        [0]: [createTimeSignature({ beats: 2, beatType: 4, groupings: getDefaultGroupings(2), subdivisions: 12 }, 0)]
+    }
+
+    const track: NotationTrack = {
+        [0]: { keys: ['a'], duration: q, type: NotationType.note, ties: [] },
+        [q]: { keys: ['b'], duration: q * 3, type: NotationType.note, ties: [] }
+    }
+
+    const barlines = getFirstBeats(len, flow);
+    const output = splitAsPerMeter(len, flow, track, barlines);
+    const log = debugTrack(len, output);
+
+    expect(log).toBe('o----¬o----------------¬');
+});
+
+i++;
+
+it(i + '. ' + 'renders correctly - 2/4 [q.q]', () => {
+    const q = 6;
+    const len = q * 4;
+
+    const flow: EntriesByTick = {
+        [0]: [createTimeSignature({ beats: 2, beatType: 4, groupings: getDefaultGroupings(2), subdivisions: 12 }, 0)]
+    }
+
+    const track: NotationTrack = {
+        [0]: { keys: ['a'], duration: q * 3, type: NotationType.note, ties: [] },
+        [q * 3]: { keys: ['b'], duration: q, type: NotationType.note, ties: [] }
+    }
+
+    const barlines = getFirstBeats(len, flow);
+    const output = splitAsPerMeter(len, flow, track, barlines);
+    const log = debugTrack(len, output);
+
+    expect(log).toBe('o----------------¬o----¬');
+});
+
+i++;
+
 it(i + '. ' + 'renders correctly - 4/4 [cm.]', () => {
     const c = 12;
     const len = c * 4;
@@ -911,8 +955,8 @@ it(i + '. ' + 'renders correctly - 4/4 [cm.]', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: c, type: NotationType.note, ties: [] },
-        [c]: { tick: c, keys: ['b'], duration: c * 3, type: NotationType.note, ties: [] }
+        [0]: { keys: ['a'], duration: c, type: NotationType.note, ties: [] },
+        [c]: { keys: ['b'], duration: c * 3, type: NotationType.note, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -920,6 +964,28 @@ it(i + '. ' + 'renders correctly - 4/4 [cm.]', () => {
     const log = debugTrack(len, output);
 
     expect(log).toBe('o----------¬o----------------------------------¬');
+});
+
+i++;
+
+it(i + '. ' + 'renders correctly - 4/4 [m.c]', () => {
+    const c = 12;
+    const len = c * 4;
+
+    const flow: EntriesByTick = {
+        [0]: [createTimeSignature({ beats: 4, beatType: 4, groupings: getDefaultGroupings(4), subdivisions: 12 }, 0)]
+    }
+
+    const track: NotationTrack = {
+        [0]: { keys: ['a'], duration: c * 3, type: NotationType.note, ties: [] },
+        [c * 3]: { keys: ['b'], duration: c, type: NotationType.note, ties: [] }
+    }
+
+    const barlines = getFirstBeats(len, flow);
+    const output = splitAsPerMeter(len, flow, track, barlines);
+    const log = debugTrack(len, output);
+
+    expect(log).toBe('o----------------------------------¬o----------¬');
 });
 
 i++;
@@ -934,8 +1000,8 @@ it(i + '. ' + 'renders correctly - 4/4 [sq._c_m]', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: sq, type: NotationType.note, ties: [] },
-        [sq]: { tick: sq, keys: ['b'], duration: sq * 15, type: NotationType.note, ties: [] }
+        [0]: { keys: ['a'], duration: sq, type: NotationType.note, ties: [] },
+        [sq]: { keys: ['b'], duration: sq * 15, type: NotationType.note, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -956,10 +1022,10 @@ it(i + '. ' + 'renders correctly - 4/4 [qc._qcq]', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: q * 1, type: NotationType.note, ties: [] },
-        [q * 1]: { tick: q * 1, keys: ['b'], duration: q * 4, type: NotationType.note, ties: [] },
-        [q * 5]: { tick: q * 5, keys: ['b'], duration: q * 2, type: NotationType.note, ties: [] },
-        [q * 7]: { tick: q * 7, keys: ['b'], duration: q * 1, type: NotationType.note, ties: [] }
+        [0]: { keys: ['a'], duration: q * 1, type: NotationType.note, ties: [] },
+        [q * 1]: { keys: ['b'], duration: q * 4, type: NotationType.note, ties: [] },
+        [q * 5]: { keys: ['b'], duration: q * 2, type: NotationType.note, ties: [] },
+        [q * 7]: { keys: ['b'], duration: q * 1, type: NotationType.note, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);
@@ -980,11 +1046,11 @@ it(i + '. ' + 'renders correctly - 4/4 [qqqq_c.q]', () => {
     }
 
     const track: NotationTrack = {
-        [0]: { tick: 0, keys: ['a'], duration: q * 1, type: NotationType.note, ties: [] },
-        [q * 1]: { tick: q * 1, keys: ['a'], duration: q * 1, type: NotationType.note, ties: [] },
-        [q * 2]: { tick: q * 2, keys: ['b'], duration: q * 1, type: NotationType.note, ties: [] },
-        [q * 3]: { tick: q * 3, keys: ['b'], duration: q * 4, type: NotationType.note, ties: [] },
-        [q * 7]: { tick: q * 7, keys: ['b'], duration: q * 1, type: NotationType.note, ties: [] }
+        [0]: { keys: ['a'], duration: q * 1, type: NotationType.note, ties: [] },
+        [q * 1]: { keys: ['a'], duration: q * 1, type: NotationType.note, ties: [] },
+        [q * 2]: { keys: ['b'], duration: q * 1, type: NotationType.note, ties: [] },
+        [q * 3]: { keys: ['b'], duration: q * 4, type: NotationType.note, ties: [] },
+        [q * 7]: { keys: ['b'], duration: q * 1, type: NotationType.note, ties: [] }
     }
 
     const barlines = getFirstBeats(len, flow);

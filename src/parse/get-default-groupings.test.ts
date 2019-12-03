@@ -3,7 +3,7 @@ import { getDefaultGroupings } from "./get-default-groupings";
 
 it('is grouped correctly (0)', () => {
     const groups = getDefaultGroupings(0);
-    expect(groups).toEqual([2]);
+    expect(groups).toEqual([2, 2]);
 });
 
 it('is grouped correctly (1)', () => {

@@ -5,7 +5,7 @@ import { getNearestEntryToTick } from "./get-nearest-entry-to-tick";
 import { getTicksPerBeat } from "./get-ticks-per-beat";
 import { TimeSignature } from "../entries/time-signature";
 import { getIsEmpty } from "./get-is-empty";
-import { spltNotationTrack, Splits } from "./split-notation-track";
+import { splitNotationTrack } from "./split-notation-track";
 import { getDefaultGroupings } from "./get-default-groupings";
 import { getIsWritable } from "./get-is-writable";
 import { getBeatGroupingBoundries } from "./get-beat-group-boundries";
@@ -14,96 +14,104 @@ import { getNearestNotationToTick } from "./get-nearest-notation-to-tick";
 function getNextGroupingAndBeat(grouping: number, beatType: number) {
 
     switch (grouping) {
+
         case 2:
-            return { groupings: [1, 1, 1, 1], beatType: beatType * 2 };
+            return { groupings: [1, 1], beats: 2, beatType: beatType };
         case 3:
-            return { groupings: [1, 1, 1], beatType: beatType };
+            return { groupings: [1, 1, 1], beats: 3, beatType: beatType };
         case 4:
-            return { groupings: [1, 1, 1, 1], beatType: beatType };
+            return { groupings: [1, 1, 1, 1], beats: 4, beatType: beatType };
 
         case 1:
         default:
-            return { groupings: [1, 1, 1, 1], beatType: beatType * 4 };
+            return { groupings: [1, 1, 1, 1], beats: 4, beatType: beatType * 4 };
     }
 
 }
 
-export function splitUnit(start: number, stop: number, subdivisions: number, originalBeatType: number, beatType: number, groupings: number[], track: NotationTrack, isFullBar: boolean): Splits {
-    let splits: Splits = {};
+export function splitUnit(start: number, stop: number, subdivisions: number, beats: number, beatType: number, groupings: number[], longestDottedRest: number, track: NotationTrack, isFullBar: boolean): NotationTrack {
 
-    const originalTicksPerBeat = getTicksPerBeat(subdivisions, originalBeatType);
     const ticksPerBeat = getTicksPerBeat(subdivisions, beatType);
     const groupingBoundries = getBeatGroupingBoundries(start, ticksPerBeat, groupings);
-    const lastGrouping = groupingBoundries[groupingBoundries.length - 2];
-    const longestDottedRest = ((originalTicksPerBeat / 2) / 2) * 3;
 
     // if the unit is empty we stop the reccursion as there is no need for higher fidelity
     const unitIsEmpty = getIsEmpty(start, stop, track);
     if (unitIsEmpty) {
 
+        const lastGroupingBoundry = groupingBoundries[groupingBoundries.length - 2];
+
         // we will use semi-breve rest for all full bars
         if (isFullBar && track[start].type !== NotationType.rest && !getIsWritable(track[start].duration, subdivisions)) {
-            splits[lastGrouping] = true;
+            track = splitNotationTrack(track, lastGroupingBoundry);
         }
-
-        return splits;
 
     } else {
 
-        if (groupings.length === 2) {
+        if (groupings.length === 2 || groupings.length === 4) {
 
-            const middle = groupingBoundries[1];
-            const found = getNearestNotationToTick(middle, track);
+            if (beats % 2 !== 0) {
+                // 6/8 etc....
 
-            if (found) {
-                if (found.at !== middle) {
-                    splits[middle] = true;
+                const middle = groupingBoundries[groupings.length / 2];
+                const found = getNearestNotationToTick(middle, track);
+                if (found && found.entry.type === NotationType.rest) {
+                    track = splitNotationTrack(track, middle);
                 }
+
+            } else {
+
+                const quarter = (groupingBoundries[groupings.length / 2] - start) / 2;
+
+                const firstBeat = start;
+                const secondBeat = start + quarter;
+                const thirdBeat = groupingBoundries[groupings.length / 2];
+                const fourthBeat = start + (quarter * 3);
+
+                if (track[firstBeat] && track[firstBeat].type === NotationType.rest && track[firstBeat].duration === longestDottedRest) {
+                    // don't chop dotted rests if they are shorter than the allowed longest duration
+                } else if (track[secondBeat] && track[secondBeat].type !== NotationType.rest && track[fourthBeat] && getIsEmpty(secondBeat, fourthBeat, track)) {
+                    // 2/4 [qcq] dont't split middle
+                } else if (track[secondBeat] && track[secondBeat].type !== NotationType.rest && getIsEmpty(secondBeat, stop, track)) {
+                    // 2/4 [qc.] dont't split middle
+                } else if (track[firstBeat] && track[firstBeat].type !== NotationType.rest && getIsEmpty(firstBeat, fourthBeat, track)) {
+                    // 2/4 [c.q] don't split middle
+                } else {
+                    track = splitNotationTrack(track, thirdBeat);
+                }
+
             }
 
         }
 
         if (groupings.length === 3) {
 
+            const firstBeat = groupingBoundries[0];
+            const secondBeat = groupingBoundries[1];
+            const thirdBeat = groupingBoundries[2];
+
             // split all rests at beats
             for (let i = 0; i < groupingBoundries.length; i++) {
                 const boundry = groupingBoundries[i];
                 const found = getNearestNotationToTick(boundry, track);
-                if (found && found.at !== boundry && found.entry.type === NotationType.rest) {
-                    splits[boundry] = true;
+                if (found && found.entry.type === NotationType.rest) {
+                    track = splitNotationTrack(track, boundry);
                 }
             }
 
             // make sure it doesn't look compound! (c. at end of bar) 
-            const middle = (stop - start) / 2;
+            const middle = start + (ticksPerBeat * 1.5);
             if (track[middle] && getIsEmpty(middle, stop, track)) {
-                splits[groupingBoundries[2]] = true;
+                track = splitNotationTrack(track, thirdBeat);
             };
 
-            // sustain two beats into a none
-            if (!getIsEmpty(groupingBoundries[0], groupingBoundries[1], track)) {
-                splits[groupingBoundries[1]] = true;
+            // sustain two beats into one
+            if (!getIsEmpty(firstBeat, secondBeat, track)) {
+                track = splitNotationTrack(track, secondBeat);
             }
 
             // if we haven't made any splits we split at the first boundry
-            if (Object.keys(splits).length === 0 && !track[groupingBoundries[1]] && !track[groupingBoundries[2]]) {
-                splits[groupingBoundries[2]] = true;
-            }
-
-        }
-
-        if (groupings.length === 4) {
-
-            const middle = groupingBoundries[2];
-            const found = getNearestNotationToTick(middle, track);
-
-            if (found) {
-                if (found.entry.type === NotationType.rest) {
-                    const durationRemaining = found.entry.duration - (found.at < groupingBoundries[0] ? groupingBoundries[0] - found.at: 0) - (found.at > groupingBoundries[5] ? (found.at + found.entry.duration) - groupingBoundries[5] : 0);
-                    if (durationRemaining !== longestDottedRest && found.at !== middle) {
-                        splits[middle] = true;
-                    }
-                }
+            if (!track[groupingBoundries[1]] && !track[groupingBoundries[2]]) {
+                track = splitNotationTrack(track, thirdBeat);
             }
 
         }
@@ -112,25 +120,23 @@ export function splitUnit(start: number, stop: number, subdivisions: number, ori
             const next = groupingBoundries[i + 1];
             if (next) {
                 const grouping = groupings[i];
-                const { groupings: nextGroupings, beatType: nextBeatType } = getNextGroupingAndBeat(grouping, beatType);
-                splits = {
-                    ...splits,
-                    ...splitUnit(curr, next, subdivisions, originalBeatType, nextBeatType, nextGroupings, track, false)
-                }
+                const { groupings: nextGroupings, beats: nextBeats, beatType: nextBeatType } = getNextGroupingAndBeat(grouping, beatType);
+                track = splitUnit(curr, next, subdivisions, nextBeats, nextBeatType, nextGroupings, longestDottedRest, track, false);
             }
         });
 
     }
 
-    return splits;
+    return track;
 }
 
 export function splitAsPerMeter(length: number, flow: EntriesByTick, track: NotationTrack, barlines: number[]) {
 
     // split at barlines
-    track = spltNotationTrack(length, track, barlines.reduce<Splits>((out, tick) => ({ ...out, [tick]: true }), {}));
 
-    let splits: Splits = {};
+    barlines.forEach(tick => {
+        track = splitNotationTrack(track, tick);
+    });
 
     barlines.forEach((barline, i) => {
         const start = barline;
@@ -142,15 +148,11 @@ export function splitAsPerMeter(length: number, flow: EntriesByTick, track: Nota
         const subdivisions = timeSig ? timeSig.subdivisions : 12;
         const beatType = timeSig ? timeSig.beatType : 4;
 
-        splits = {
-            ...splits,
-            ...splitUnit(start, stop, subdivisions, beatType, beatType, groupings, track, true)
-        }
+        const ticksPerBeat = getTicksPerBeat(subdivisions, beatType);
+        const longestDottedRest = ((ticksPerBeat / 2) / 2) * 3;
+
+        track = splitUnit(start, stop, subdivisions, timeSig ? timeSig.beats : 0, beatType, groupings, longestDottedRest, track, true);
     });
 
-    const result = spltNotationTrack(length, track, splits);
-
-    // console.log(track, '\n', result, '\n', splits);
-
-    return result;
+    return track;
 }

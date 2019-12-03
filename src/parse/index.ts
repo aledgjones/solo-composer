@@ -23,13 +23,9 @@ import { drawFinalBarline } from "./draw-final-barline";
 
 import { Converter } from "./converter";
 
-import { drawRest } from "../entries/rest";
-import { debugTicks } from "../debug/debug-ticks";
-import { debugTrack } from "../debug/debug-track";
 import { NotationTrack } from "./notation-track";
 import { splitAsPerMeter } from "./split-as-per-meter";
 import { getFirstBeats } from "./get-first-beats";
-import { spltNotationTrack } from "./split-notation-track";
 
 export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, converter: Converter): RenderInstructions {
 
