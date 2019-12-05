@@ -1,10 +1,9 @@
-import { EngravingConfig } from "../services/engraving";
 import { VerticalMeasurements } from "./measure-vertical-layout";
-import { createBarline, drawBarline } from "../entries/barline";
 import { Stave } from "../services/stave";
+import { drawBarline, Barline } from "../entries/barline";
+import { Entry } from "../entries";
 
-export function drawFinalBarline(x: number, y: number, staves: Stave[], metrics: VerticalMeasurements, config: EngravingConfig) {
+export function drawFinalBarline(x: number, y: number, staves: Stave[], metrics: VerticalMeasurements, barline: Entry<Barline>) {
     // its just easier to create a barline entry and draw with this.
-    const barline = createBarline({ type: config.finalBarlineType }, 0);
-    return drawBarline(x - barline._bounds.width, y, staves, metrics, barline);
+    return drawBarline(x, y, staves, metrics, barline);
 }

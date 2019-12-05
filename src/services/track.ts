@@ -18,12 +18,15 @@ export interface Track {
     }
 }
 
-export function createTrack(entriesOrder: EntryKey[] = [], entriesByKey: Entries): Track {
+export function createTrack(events: Entry<any>[]): Track {
     return {
         key: shortid(),
         entries: {
-            order: entriesOrder,
-            byKey: entriesByKey
+            order: events.map(e => e._key),
+            byKey: events.reduce((out: { [key: string]: Entry<any> }, e) => {
+                out[e._key] = e;
+                return out;
+            }, {})
         }
     }
 }

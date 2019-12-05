@@ -212,8 +212,8 @@ export const flowActions = (dispatch: any): FlowActions => {
 const createFlow = (players: PlayerKey[], staves: { [key: string]: Stave }): Flow => {
 
     const events = [
-        createTimeSignature({ beats: 0, beatType: 4, groupings: getDefaultGroupings(4), subdivisions: 12 }, 0),
-        createKeySignature({ offset: 0, mode: KeySignatureMode.major }, 0)
+        createTimeSignature({ beats: 6, beatType: 8, groupings: getDefaultGroupings(6), subdivisions: 12 }, 0),
+        createKeySignature({ offset: -2, mode: KeySignatureMode.major }, 0)
     ];
 
     return {
@@ -221,13 +221,7 @@ const createFlow = (players: PlayerKey[], staves: { [key: string]: Stave }): Flo
         title: 'Untitled Flow',
         players,
         staves,
-        length: 12,
-        master: createTrack(
-            events.map(e => e._key),
-            events.reduce((out: { [key: string]: Entry<any> }, e) => {
-                out[e._key] = e;
-                return out;
-            }, {})
-        )
+        length: 6 * 6 * 4,
+        master: createTrack(events)
     }
 }

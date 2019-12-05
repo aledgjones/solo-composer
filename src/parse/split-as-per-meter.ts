@@ -49,12 +49,12 @@ export function splitUnit(start: number, stop: number, subdivisions: number, bea
 
         if (groupings.length === 2 || groupings.length === 4) {
 
-            if (beats % 2 !== 0) {
+            if (beats % 3 === 0) {
                 // 6/8 etc....
 
                 const middle = groupingBoundries[groupings.length / 2];
                 const found = getNearestNotationToTick(middle, track);
-                if (found && found.entry.type === NotationType.rest) {
+                if (found) {
                     track = splitNotationTrack(track, middle);
                 }
 

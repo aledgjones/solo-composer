@@ -15,16 +15,10 @@ export interface InstructionBase {
 export type Instruction<T> = InstructionBase & T;
 export type MergedInstruction<T> = InstructionBase & T;
 
-export type RenderLayers = {
-    debug: Instruction<any>[];
-    score: Instruction<any>[];
-    selection: Instruction<any>[];
-}
-
 export interface RenderInstructions {
     height: number;
     width: number;
-    layers: RenderLayers
+    entries: Instruction<any>[];
 }
 
 export function mergeInstructions(...instructions: Instruction<any>[]) {

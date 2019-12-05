@@ -1,10 +1,13 @@
+import { NotationBaseLength } from "./notation-track";
+
 function isWritable(duration: number, subdivisions: number) {
     switch (duration / subdivisions) {
-        case .25: // semiquaver
-        case .5: // quaver
-        case 1: // crotchet
-        case 2: // minim
-        case 4: // whole
+        case NotationBaseLength.semiquaver:
+        case NotationBaseLength.quaver:
+        case NotationBaseLength.crotchet:
+        case NotationBaseLength.minim:
+        case NotationBaseLength.semibreve:
+        case NotationBaseLength.breve:
             return true;
         default:
             return false;
@@ -13,9 +16,9 @@ function isWritable(duration: number, subdivisions: number) {
 }
 
 export function getIsWritable(duration: number, subdivisions: number) {
-    let glyph = isWritable(duration, subdivisions);
-    if (!glyph) {
-        glyph = isWritable((duration / 3) * 2, subdivisions);
+    let writable = isWritable(duration, subdivisions);
+    if (!writable) {
+        writable = isWritable((duration / 3) * 2, subdivisions);
     }
-    return glyph;
+    return writable;
 }

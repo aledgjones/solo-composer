@@ -13,7 +13,7 @@ export function render(ctx: OffscreenCanvasRenderingContext2D, instructions: Ren
     ctx.canvas.width = px(instructions.width);
     clearCanvas(ctx);
 
-    instructions.layers.score.forEach((instruction: MergedInstruction<any>) => {
+    instructions.entries.forEach((instruction: MergedInstruction<any>) => {
         switch (instruction.type) {
             case InstructionType.path:
                 renderPaths(ctx, instruction, px);

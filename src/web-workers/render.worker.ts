@@ -8,6 +8,7 @@ import { RenderInstructions } from "../parse/instructions";
 import { Timer } from "../debug/timer";
 import { defaultEngravingConfig, EngravingConfig } from "../services/engraving";
 import { getConvertedConfig } from "../parse/get-converted-config";
+import { RenderEvents } from "./render-events";
 
 const ctx: Worker = self as any;
 
@@ -17,11 +18,11 @@ let context: OffscreenCanvasRenderingContext2D | null;
 let converterGenerator: ConverterGenerator;
 let converter: Converter;
 let config: EngravingConfig;
-let instructions: RenderInstructions = { height: 200.0, width: 200.0, layers: { debug: [], score: [], selection: [] } };
+let instructions: RenderInstructions = { height: 200.0, width: 200.0, entries: [] };
 
 async function route(e: any) {
     switch (e.data.type) {
-        case 'INIT': {
+        case RenderEvents.Init: {
             const canvas: OffscreenCanvas = e.data.canvas;
             const mm: number = e.data.mm;
 
@@ -34,7 +35,7 @@ async function route(e: any) {
             go();
             break;
         }
-        case 'UPDATE':
+        case RenderEvents.Update:
         default:
             const timer = Timer('parse');
             score = e.data.score;
@@ -51,6 +52,7 @@ function go() {
         config = getConvertedConfig({ ...defaultEngravingConfig, ...score.engraving.score }, converter);
         instructions = parse(score, flowKey, config, converter);
         render(context, instructions, converter);
+        ctx.postMessage({type: RenderEvents.Resize, width: converter.spaces.toPX(instructions.width), height: converter.spaces.toPX(instructions.height)});
     }
 }
 

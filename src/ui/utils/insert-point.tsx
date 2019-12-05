@@ -1,13 +1,14 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, CSSProperties } from 'react';
 
 interface Props {
-    insert: any;
-    className: string;
+    insert: HTMLElement;
+    className?: string;
+    style?: CSSProperties;
 }
 
 export function InsertPoint(props: Props) {
 
-    const { insert, className } = props;
+    const { insert, className, style } = props;
 
     const container = useRef<HTMLDivElement>(null);
 
@@ -23,5 +24,5 @@ export function InsertPoint(props: Props) {
         }
     }, [insert]);
 
-    return <div className={className} ref={container} />;
+    return <div style={style} className={className} ref={container} />;
 }

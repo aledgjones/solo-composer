@@ -22,24 +22,27 @@ export function getWidthOfMM() {
     document.body.appendChild(div);
     const width = div.clientWidth;
     document.body.removeChild(div);
-    return width;
+    return width * (window.devicePixelRatio * 2);
 }
 
 export function getConverter(width: number) {
+
+    const accuracy = 2;
+
     return (space: number): Converter => {
         return {
             px: {
                 toSpaces: (px: number) => {
                     const mm = new Big(px).div(width);
-                    return parseFloat(mm.div(space).round(2, 1).toString());
+                    return parseFloat(mm.div(space).toFixed(accuracy));
                 }
             },
             mm: {
-                toPX: (mm: number) => parseFloat(new Big(mm).times(width).round(2, 1).toString()),
-                toSpaces: (mm: number) => parseFloat(new Big(mm).div(space).round(2, 1).toString())
+                toPX: (mm: number) => parseFloat(new Big(mm).times(width).toFixed(accuracy)),
+                toSpaces: (mm: number) => parseFloat(new Big(mm).div(space).toFixed(accuracy))
             },
             spaces: {
-                toPX: (spaces: number) => parseFloat(new Big(spaces).times(space).times(width).round(2, 1).toString())
+                toPX: (spaces: number) => parseFloat(new Big(spaces).times(space).times(width).toFixed(accuracy))
             }
         }
     };

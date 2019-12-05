@@ -21,7 +21,7 @@ export function createTimeSignature(def: TimeSignatureDef, tick: number): Entry<
         _type: EntryType.timeSignature,
         _key: shortid(),
         _box: { width: isHidden ? 0 : 1.75, height: 4 },
-        _bounds: { width: isHidden ? 0 : 3, height: 4 },
+        _bounds: { width: isHidden ? 0 : 1.75, height: 4 },
         _offset: { top: 0, left: 0 },
         _tick: tick,
 

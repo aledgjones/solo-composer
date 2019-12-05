@@ -4,6 +4,7 @@ import { useEffect, useMemo } from "react";
 import { Score } from "../services/score";
 import { FlowKey } from "../services/flow";
 import { getWidthOfMM } from '../parse/converter';
+import { RenderEvents } from '../web-workers/render-events';
 
 export function useRenderWriteMode(score: Score, flowKey: FlowKey) {
 
@@ -12,7 +13,7 @@ export function useRenderWriteMode(score: Score, flowKey: FlowKey) {
         const canvas = document.createElement('canvas');
         const offscreen: any = canvas.transferControlToOffscreen();
         const mm = getWidthOfMM();
-        worker.postMessage({ type: 'INIT', mm, canvas: offscreen }, [offscreen]);
+        worker.postMessage({ type: RenderEvents.Init, mm, canvas: offscreen }, [offscreen]);
         return { worker, canvas, offscreen };
     }, []);
 
@@ -21,10 +22,16 @@ export function useRenderWriteMode(score: Score, flowKey: FlowKey) {
     }, [score, flowKey, offscreen, worker]);
 
     useEffect(() => {
+        const cb = (e: any) => {
+            canvas.style.height = `${e.data.height / (window.devicePixelRatio * 2)}px`;
+            canvas.style.width = `${e.data.width / (window.devicePixelRatio * 2)}px`;
+        }
+        worker.addEventListener('message', cb);
         return () => {
+            worker.removeEventListener('message', cb);
             worker.terminate();
         }
-    }, [worker]);
+    }, [worker, canvas]);
 
     return canvas;
 }

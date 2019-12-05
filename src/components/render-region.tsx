@@ -19,9 +19,7 @@ export const RenderRegion: FC<Props> = (({ children, className }) => {
   }, []);
 
   return <div className={merge("render-region", className)} style={{ backgroundImage: bg }}>
-    <div className="render-region__zoom-box">
-      {children}
-    </div>
+    {children}
   </div>;
 });
 

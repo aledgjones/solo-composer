@@ -1,5 +1,6 @@
 import { buildText, TextStyles } from '../render/text';
 import { buildCircle, CircleStyles } from '../render/circle';
+import { NotationBaseLength } from '../parse/notation-track';
 
 export interface RestDef {
     duration: number;
@@ -7,53 +8,50 @@ export interface RestDef {
 
 export interface Rest extends RestDef { };
 
-function glyphFromDuration(duration: number, subdivisions: number) {
-    switch (duration / subdivisions) {
-        case .25: // semiquaver
+function glyphFromDuration(baseLength?: NotationBaseLength) {
+    switch (baseLength) {
+        case NotationBaseLength.semiquaver:
             return '\u{E4E7}';
-        case .5: // quaver
+        case NotationBaseLength.quaver:
             return '\u{E4E6}';
-        case 1: // crotchet
+        case NotationBaseLength.crotchet:
             return '\u{E4E5}';
-        case 2: // minim
+        case NotationBaseLength.minim:
             return '\u{E4E4}';
-        case 4: // whole
-            return '\u{E4E3}'
+        case NotationBaseLength.semibreve:
+            return '\u{E4E3}';
+        case NotationBaseLength.breve:
+            return '\u{E4E2}';
         default:
             return undefined;
     }
 }
 
-function offsetFromDuration(duration: number, subdivisions: number) {
-    switch (duration / subdivisions) {
-        case 4:
+function verticalOffsetFromDuration(baseLength?: NotationBaseLength) {
+    switch (baseLength) {
+        case NotationBaseLength.semibreve:
             return -1;
         default:
             return 0;
     }
 }
 
-export function drawRest(x: number, y: number, duration: number, subdivisions: number) {
+export function drawRest(x: number, y: number, length?: NotationBaseLength, dotted?: boolean) {
 
-    let isDotted = false;
-    let glyph = glyphFromDuration(duration, subdivisions);
-    let offset = offsetFromDuration(duration, subdivisions);
+    const glyph = glyphFromDuration(length);
+    const offset = verticalOffsetFromDuration(length);
+
     if (!glyph) {
-        glyph = glyphFromDuration((duration / 3) * 2, subdivisions);
-        offset = offsetFromDuration(duration, subdivisions);
-        if (glyph) {
-            isDotted = true;
-        } else {
-            console.error('could not render rest duration', `duration: ${duration}`, `${subdivisions}/crotchet`);
-            return [];
-        }
+        console.error('could not render rest duration', `base duration: ${length}`);
+        return [];
     }
 
     const instructions = [];
 
     const styles: TextStyles = { color: '#000000', align: 'left', size: 4, font: `Music`, baseline: 'top' };
     instructions.push(buildText(styles, x, y + offset, glyph));
-    if (isDotted) {
+    
+    if (dotted) {
         const styles: CircleStyles = { color: '#000000' };
         instructions.push(buildCircle(styles, x + 1.5, y + 1.5 + offset, .2));
     }
