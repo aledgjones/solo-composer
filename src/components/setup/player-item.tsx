@@ -3,13 +3,13 @@ import { SortableElement } from 'react-sortable-hoc';
 import { mdiChevronDown, mdiPlus, mdiDeleteOutline, mdiChevronUp, mdiAccount, mdiAccountGroup } from '@mdi/js';
 import Color from 'color';
 
-import { Icon } from '../ui';
-import { Player, PlayerType } from '../services/player';
-import { Instruments, InstrumentCounts } from '../services/instrument';
-import { Theme } from '../const';
+import { Icon } from '../../ui';
+import { Player, PlayerType } from '../../services/player';
+import { Instruments, InstrumentCounts } from '../../services/instrument';
+import { Theme } from '../../const';
 import { InstrumentItem } from './instrument-item';
 import { Handle } from './handle';
-import { SelectionType } from '../states/setup';
+import { SelectionType } from '.';
 
 import './player-item.css';
 

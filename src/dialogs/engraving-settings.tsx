@@ -3,16 +3,10 @@ import { Theme } from '../const';
 
 import { EngravingState, LayoutType, PartialEngravingConfig, defaultEngravingConfig } from '../services/engraving';
 import { BracketingType, BracketEndStyle } from '../parse/draw-brackets';
-import { ListItem } from './list-item';
-
-import { Card } from '../ui/components/card';
-import { Backdrop } from '../ui/components/backdrop';
-import { Button } from '../ui';
-import { Select } from '../ui/components/select';
-import { Option } from '../ui/components/option';
-import { InputNumber } from '../ui/components/input-number';
 
 import './engraving-settings.css';
+import { Backdrop, Card, Select, Option, InputNumber, Button } from '../ui';
+import { ListItem } from '../components/shared/list-item';
 
 enum Page {
     staves = 1,

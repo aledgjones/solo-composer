@@ -2,11 +2,11 @@ import React from 'react';
 import { SortableContainer } from 'react-sortable-hoc';
 import { mdiPlus } from '@mdi/js';
 
-import { Icon } from '../ui';
-import { Player } from '../services/player';
+import { Icon } from '../../ui';
+import { Player } from '../../services/player';
+import { Instruments, InstrumentCounts } from '../../services/instrument';
 import { PlayerItem } from './player-item';
-import { Instruments, InstrumentCounts } from '../services/instrument';
-import { SelectionType, Selection } from '../states/setup';
+import { SelectionType, Selection } from '.';
 
 import './player-list.css';
 

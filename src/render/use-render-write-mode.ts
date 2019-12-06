@@ -4,7 +4,7 @@ import { useEffect, useMemo } from "react";
 import { Score } from "../services/score";
 import { FlowKey } from "../services/flow";
 import { getWidthOfMM } from '../parse/converter';
-import { RenderEvents } from '../web-workers/render-events';
+import { RenderEvents } from './render-events';
 
 export function useRenderWriteMode(score: Score, flowKey: FlowKey) {
 

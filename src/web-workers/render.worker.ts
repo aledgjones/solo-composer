@@ -5,10 +5,10 @@ import { render } from "../render";
 import { Score } from "../services/score";
 import { FlowKey } from "../services/flow";
 import { RenderInstructions } from "../parse/instructions";
-import { Timer } from "../debug/timer";
+import { Timer } from "../ui/utils/timer";
 import { defaultEngravingConfig, EngravingConfig } from "../services/engraving";
 import { getConvertedConfig } from "../parse/get-converted-config";
-import { RenderEvents } from "./render-events";
+import { RenderEvents } from "../render/render-events";
 
 const ctx: Worker = self as any;
 
@@ -52,7 +52,7 @@ function go() {
         config = getConvertedConfig({ ...defaultEngravingConfig, ...score.engraving.score }, converter);
         instructions = parse(score, flowKey, config, converter);
         render(context, instructions, converter);
-        ctx.postMessage({type: RenderEvents.Resize, width: converter.spaces.toPX(instructions.width), height: converter.spaces.toPX(instructions.height)});
+        ctx.postMessage({ type: RenderEvents.Resize, width: converter.spaces.toPX(instructions.width), height: converter.spaces.toPX(instructions.height) });
     }
 }
 

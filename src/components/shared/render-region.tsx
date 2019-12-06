@@ -1,8 +1,8 @@
 import React, { FC, useMemo } from 'react';
 import Color from 'color';
 
-import { Theme } from '../const';
-import { merge } from '../ui/utils/merge';
+import { Theme } from '../../const';
+import { merge } from '../../ui/utils/merge';
 
 import './render-region.css';
 

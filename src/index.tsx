@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { MainShell } from './states/main-shell';
+import { MainShell } from './components/shell';
 import * as serviceWorker from './serviceWorker';
 import 'app-reset/app-reset.css';
 import './ui/index.css';

@@ -1,16 +1,17 @@
 import React, { FC, useState } from 'react';
-import { Theme } from '../const';
+import { Theme } from '../../const';
 import { mdiSettingsOutline } from '@mdi/js';
 
-import { Tabs, Tab, Icon } from '../ui';
-import { useAppState } from '../services/state';
-import { TabState } from '../services/tab';
+import { useAppState } from '../../services/state';
+import { TabState } from '../../services/tab';
 
-import { Setup } from './setup';
-import { Write } from './write';
-import { EngravingSettings } from '../components/engraving-settings';
+import { Tabs, Tab, Icon } from '../../ui';
+import { Setup } from '../setup';
+import { Write } from '../write';
 
-import './main-shell.css';
+import { EngravingSettings } from '../../dialogs/engraving-settings';
+
+import './shell.css';
 
 export const MainShell: FC = () => {
 

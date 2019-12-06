@@ -1,11 +1,11 @@
 import React, { FC, useState, useMemo } from 'react';
-import { Score } from '../services/score';
-import { InsertPoint } from '../ui/utils/insert-point';
+import { Score } from '../../services/score';
+import { InsertPoint } from '../../ui/utils/insert-point';
 
-import { Theme } from '../const';
+import { Theme } from '../../const';
 import Color from 'color';
 
-import { useRenderWriteMode } from '../render/use-render-write-mode';
+import { useRenderWriteMode } from '../../render/use-render-write-mode';
 
 import './render-write-mode.css';
 

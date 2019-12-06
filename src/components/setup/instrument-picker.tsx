@@ -2,15 +2,13 @@ import React, { FC, useState, useMemo } from 'react';
 import { mdiChevronRight } from '@mdi/js';
 import Color from 'color';
 
-import { InstrumentDef, useInstrumentList, getFirstInstrumentDefFromPartialPath } from '../services/instrument-defs';
-import { Theme } from '../const';
+import { InstrumentDef, useInstrumentList, getFirstInstrumentDefFromPartialPath } from '../../services/instrument-defs';
+import { Theme } from '../../const';
 
-import { Card } from '../ui/components/card';
-import { Backdrop } from '../ui/components/backdrop';
-import { Icon, Button } from '../ui';
+import { Card, Backdrop, Icon, Button } from '../../ui';
+import { ListItem } from '../shared/list-item';
 
 import './instrument-picker.css';
-import { ListItem } from './list-item';
 
 interface Props {
   onSelect: (def: InstrumentDef) => void;

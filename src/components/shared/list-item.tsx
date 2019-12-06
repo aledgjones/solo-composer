@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from 'react';
 import Color from 'color';
 
-import { Theme } from '../const';
+import { Theme } from '../../const';
 
 import './list-item.css';
 

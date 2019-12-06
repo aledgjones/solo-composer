@@ -1,17 +1,17 @@
 import React, { FC, useState, useMemo, useCallback } from 'react';
 
-import { State, Actions } from '../services/state';
-import { PlayerType, Player } from '../services/player';
-import { Flow, FlowKey } from '../services/flow';
-import { InstrumentDef } from '../services/instrument-defs';
-import { useCounts } from '../services/instrument';
-import { StaveKey } from '../services/stave';
+import { State, Actions } from '../../services/state';
+import { PlayerType, Player } from '../../services/player';
+import { Flow, FlowKey } from '../../services/flow';
+import { InstrumentDef } from '../../services/instrument-defs';
+import { useCounts } from '../../services/instrument';
+import { StaveKey } from '../../services/stave';
 
-import { PlayerList } from '../components/player-list';
-import { FlowList } from '../components/flow-list';
-import { InstrumentPicker } from '../components/instrument-picker';
-import { RenderRegion } from '../components/render-region';
-import { RenderWriteMode } from '../components/render-write-mode';
+import { PlayerList } from './player-list';
+import { FlowList } from './flow-list';
+import { InstrumentPicker } from './instrument-picker';
+import { RenderRegion } from '../shared/render-region';
+import { RenderWriteMode } from '../shared/render-write-mode';
 
 import './setup.css';
 

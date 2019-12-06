@@ -46,7 +46,7 @@ export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, c
 
     const instruments = getInstruments(score.players, score.instruments, flow);
     const staves = getStaves(instruments, flow);
-    const flowEntries = flow.master.entries.order.map(flowKey => flow.master.entries.byKey[flowKey]);
+    const flowEntries = entriesByTick(flow.master.entries.order, flow.master.entries.byKey);
 
     const counts = getCounts(score.players, score.instruments, score.config);
     const names = getNames(instruments, counts, NameType.long);
@@ -59,12 +59,11 @@ export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, c
     const x = config.framePadding.left + namesWidth + config.staveInstrumentNameGap + measureBracketAndBraces(verticalMeasurements);
     const y = config.framePadding.top;
 
-    const flowEntriesByTick = entriesByTick(flow.master.entries.order, flow.master.entries.byKey);
-    const barlines = getFirstBeats(flow.length, flowEntriesByTick);
+    const barlines = getFirstBeats(flow.length, flowEntries);
     const normalBarline = createBarline({ type: BarlineType.normal }, 0);
     const finalBarline = createBarline({ type: config.finalBarlineType }, 0);
 
-    const notationTracks = getWrittenDurations(flow.length, flowEntriesByTick, staves, barlines);
+    const notationTracks = getWrittenDurations(flow.length, flowEntries, staves, barlines);
 
     // 2) create a rhythmic grid for the whole flow (ie. spacings)
     // 3) assign widths to ticks
@@ -94,7 +93,7 @@ export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, c
         const placementX = tickWidths[tick];
         currentX = currentX + placementX[0];
 
-        const timeSig = getNearestEntryToTick<TimeSignature>(tick, flowEntriesByTick, EntryType.timeSignature);
+        const timeSig = getNearestEntryToTick<TimeSignature>(tick, flowEntries, EntryType.timeSignature);
         const subdivisions = timeSig ? timeSig.entry.subdivisions : 12;
 
         staves.forEach(stave => {
@@ -132,7 +131,7 @@ export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, c
             ...drawStaves(x, y, prologueWidth + notationWidth + finalBarline._bounds.width, staves, verticalMeasurements),
             ...drawStavePrologue(x, y, prologueWidths, verticalMeasurements, flowEntries, staves, 0),
 
-            ...drawBarlines(x + prologueWidth, y, barlines, flowEntriesByTick, staves, verticalMeasurements, tickWidths),
+            ...drawBarlines(x + prologueWidth, y, barlines, flowEntries, staves, verticalMeasurements, tickWidths),
             ...drawInstructions,
             ...drawFinalBarline(x + prologueWidth + notationWidth, y, staves, verticalMeasurements, finalBarline)
         )

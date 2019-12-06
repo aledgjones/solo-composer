@@ -1,13 +1,15 @@
 import React, { useCallback, useMemo, MouseEvent } from 'react';
 import { SortableElement } from 'react-sortable-hoc';
 import { mdiDeleteOutline, mdiFileDocumentBoxOutline } from '@mdi/js';
+
+import { Theme } from '../../const';
 import Color from 'color';
 
-import { Icon, Checkbox } from '../ui';
-import { Flow, FlowKey } from '../services/flow';
-import { Theme } from '../const';
+import { Flow, FlowKey } from '../../services/flow';
+
+import { Icon, Checkbox } from '../../ui';
 import { Handle } from './handle';
-import { SelectionType, Selection } from '../states/setup';
+import { SelectionType, Selection } from '.';
 
 import './flow-item.css';
 

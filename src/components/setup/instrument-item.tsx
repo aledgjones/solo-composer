@@ -2,9 +2,9 @@ import React, { FC, useMemo } from 'react';
 import { mdiChevronRight } from '@mdi/js';
 import Color from 'color';
 
-import { Theme } from '../const';
-import { Instrument } from '../services/instrument';
-import { Icon } from '../ui';
+import { Theme } from '../../const';
+import { Instrument } from '../../services/instrument';
+import { Icon } from '../../ui';
 
 import './instrument-item.css';
 
