@@ -1,12 +1,12 @@
 import React, { FC, useState } from 'react';
 import { Theme } from '../const';
 
+import { Backdrop, Card, Select, Option, InputNumber, Button } from '../ui';
+import { ListItem } from '../components/shared/list-item';
 import { EngravingState, LayoutType, PartialEngravingConfig, defaultEngravingConfig } from '../services/engraving';
 import { BracketingType, BracketEndStyle } from '../parse/draw-brackets';
 
 import './engraving-settings.css';
-import { Backdrop, Card, Select, Option, InputNumber, Button } from '../ui';
-import { ListItem } from '../components/shared/list-item';
 
 enum Page {
     staves = 1,

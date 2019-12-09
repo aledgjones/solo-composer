@@ -1,0 +1,31 @@
+.play {
+  height: calc(100vh - 48px);
+}
+
+.play__header {
+  height: 52px;
+  background-color: #13191e;
+}
+
+.play__header-left {
+  width: 25%;
+  padding: 8px;
+}
+
+.play__header-right {
+  width: 75%;
+  
+}
+
+/* .play__left-panel {
+  width: 25%;
+  background-color: #182127;
+  height: 100%;
+  border-right: solid 4px #13191e;
+}
+
+.play__left-panel-header {
+  padding: 8px;
+  height: 52px;
+  background-color: #13191e;
+} */

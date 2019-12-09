@@ -11,24 +11,22 @@ export function getFirstBeats(length: number, flow: EntriesByTick) {
 
     let tick = 0;
     while (tick < length) {
-        const foundTimeSig = getNearestEntryToTick<TimeSignature>(tick, flow, EntryType.timeSignature);
-        const timeSigAt = foundTimeSig ? foundTimeSig.at : 0;
-        const timeSig = foundTimeSig && foundTimeSig.entry;
-        const ticksPerBeat = getTicksPerBeat(timeSig ? timeSig.subdivisions : 12, timeSig ? timeSig.beatType : 4);
+        const timeSig = getNearestEntryToTick<TimeSignature>(tick, flow, EntryType.timeSignature);
+        const ticksPerBeat = getTicksPerBeat(timeSig.entry ? timeSig.entry.subdivisions : 12, timeSig.entry ? timeSig.entry.beatType : 4);
 
-        const isFirstBeat = getDistanceFromBarline(tick, ticksPerBeat, timeSigAt, timeSig) === 0;
+        const isFirstBeat = getDistanceFromBarline(tick, ticksPerBeat, timeSig.at, timeSig.entry) === 0;
 
         if (isFirstBeat) {
             ticks.push(tick);
         }
 
-        if (!timeSig || timeSig.beats === 0) {
+        if (!timeSig.entry || timeSig.entry.beats === 0) {
             // if free time we have to go through each tick to find next time signature if there is one.
             tick++;
         } else {
             // we know where the next barline will be if we have a time signature.
             // we just need to check it hasn't changed so leap frog to end of bar.
-            tick += ticksPerBeat * timeSig.beats;
+            tick += ticksPerBeat * timeSig.entry.beats;
         }
     }
 

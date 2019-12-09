@@ -5,13 +5,20 @@ import { renderTexts } from "./text";
 import { renderCircles } from "./circle";
 import { Converter } from "../parse/converter";
 
-export function render(ctx: OffscreenCanvasRenderingContext2D, instructions: RenderInstructions, converter: Converter) {
-
+export function resize(ctx: OffscreenCanvasRenderingContext2D, instructions: RenderInstructions, converter: Converter) {
     const px = converter.spaces.toPX;
+    const height = px(instructions.height);
+    const width = px(instructions.width);
+    if (ctx.canvas.height !== height || ctx.canvas.width !== width) {
+        ctx.canvas.height = height;
+        ctx.canvas.width = width;
+        clearCanvas(ctx);
+    }
+    return { height: ctx.canvas.height, width: ctx.canvas.width };
+}
 
-    ctx.canvas.height = px(instructions.height);
-    ctx.canvas.width = px(instructions.width);
-    clearCanvas(ctx);
+export function render(ctx: OffscreenCanvasRenderingContext2D, instructions: RenderInstructions, converter: Converter) {
+    const px = converter.spaces.toPX;
 
     instructions.entries.forEach((instruction: MergedInstruction<any>) => {
         switch (instruction.type) {

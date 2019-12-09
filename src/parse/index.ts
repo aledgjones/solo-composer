@@ -12,7 +12,6 @@ import { measureNames } from "./measure-names";
 import { RenderInstructions, mergeInstructions, Instruction } from "./instructions";
 import { measureBracketAndBraces } from "./measure-brackets-and-braces";
 import { measureStavePrologue, drawStavePrologue } from "./draw-stave-prologue";
-import { notateTones } from "./notate-tones";
 
 import { drawNames } from "./draw-names";
 import { drawBraces } from "./draw-braces";
@@ -35,12 +34,6 @@ import { getNearestEntryToTick } from "./get-nearest-entry-to-tick";
 import { TimeSignature } from "../entries/time-signature";
 
 export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, converter: Converter): RenderInstructions {
-
-    const instructions: RenderInstructions = {
-        height: 0.0,
-        width: 0.0,
-        entries: []
-    };
 
     const flow = score.flows.byKey[flowKey];
 
@@ -86,7 +79,7 @@ export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, c
     let currentX = x + prologueWidth;
     for (let tick = 0; tick < flow.length; tick++) {
 
-        if(tick !== 0 && barlines.includes(tick)) {
+        if (tick !== 0 && barlines.includes(tick)) {
             drawInstructions.push(...drawBarline(currentX, y, staves, verticalMeasurements, normalBarline));
         }
 
@@ -94,7 +87,7 @@ export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, c
         currentX = currentX + placementX[0];
 
         const timeSig = getNearestEntryToTick<TimeSignature>(tick, flowEntries, EntryType.timeSignature);
-        const subdivisions = timeSig ? timeSig.entry.subdivisions : 12;
+        const subdivisions = timeSig.entry ? timeSig.entry.subdivisions : 12;
 
         staves.forEach(stave => {
             stave.tracks.order.forEach(trackKey => {

@@ -1,7 +1,7 @@
 import { getConverter, Converter, ConverterGenerator } from "../parse/converter";
 import { loadFont } from "../render/load-font";
 import { parse } from "../parse";
-import { render } from "../render";
+import { render, resize } from "../render";
 import { Score } from "../services/score";
 import { FlowKey } from "../services/flow";
 import { RenderInstructions } from "../parse/instructions";
@@ -12,6 +12,7 @@ import { RenderEvents } from "../render/render-events";
 
 const ctx: Worker = self as any;
 
+let ready = false;
 let score: Score;
 let flowKey: FlowKey;
 let context: OffscreenCanvasRenderingContext2D | null;
@@ -32,6 +33,8 @@ async function route(e: any) {
             await loadFont('Music', '/bravura.woff2');
             await loadFont('Libre Baskerville', '/libre-baskerville.woff2');
 
+            ready = true;
+
             go();
             break;
         }
@@ -47,12 +50,14 @@ async function route(e: any) {
 }
 
 function go() {
-    if (context) {
+    if (context && ready) {
         converter = converterGenerator(score.engraving.score.space || defaultEngravingConfig.space);
         config = getConvertedConfig({ ...defaultEngravingConfig, ...score.engraving.score }, converter);
         instructions = parse(score, flowKey, config, converter);
+
+        const { height, width } = resize(context, instructions, converter);
+        ctx.postMessage({ type: RenderEvents.Resize, width, height });
         render(context, instructions, converter);
-        ctx.postMessage({ type: RenderEvents.Resize, width: converter.spaces.toPX(instructions.width), height: converter.spaces.toPX(instructions.height) });
     }
 }
 

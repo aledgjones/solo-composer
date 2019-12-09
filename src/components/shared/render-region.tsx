@@ -1,4 +1,5 @@
 import React, { FC, useMemo } from 'react';
+import ScrollContainer from 'react-indiana-drag-scroll';
 import Color from 'color';
 
 import { Theme } from '../../const';
@@ -18,8 +19,8 @@ export const RenderRegion: FC<Props> = (({ children, className }) => {
     return `linear-gradient(${start}, ${stop})`;
   }, []);
 
-  return <div className={merge("render-region", className)} style={{ backgroundImage: bg }}>
+  return <ScrollContainer className={merge("render-region", className)} style={{ backgroundImage: bg }}>
     {children}
-  </div>;
+  </ScrollContainer>;
 });
 

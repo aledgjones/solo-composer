@@ -45,9 +45,18 @@
 }
 
 .ui-select--disabled .ui-select__input {
-    color: rgb(84,84,84) !important;
-    border: 1px dashed rgb(175,175,175);
+    color: rgb(84, 84, 84) !important;
+    border: 1px dashed rgb(175, 175, 175);
     background-color: transparent !important;
     cursor: default;
     pointer-events: none;
+}
+
+.ui-select--dark .ui-select__display {
+    color: white;
+}
+
+.ui-select--dark .ui-select__input {
+    background-color: #232c32;
+    border: 1px solid #232c32 !important;
 }

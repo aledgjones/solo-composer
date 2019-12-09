@@ -12,6 +12,8 @@ interface Props {
     className?: string;
     style?: CSSProperties;
 
+    dark?: boolean;
+
     value: any;
     label?: string;
     color: string;
@@ -22,7 +24,7 @@ interface Props {
     onChange: (value: any) => void;
 }
 
-export const Select: FC<Props> = ({ id, className, style, value, label, children, margin, onChange, color, required, disabled }) => {
+export const Select: FC<Props> = ({ id, className, style, dark, value, label, children, margin, onChange, color, required, disabled }) => {
 
     const [open, setOpen] = useState<boolean>(false);
 
@@ -41,12 +43,12 @@ export const Select: FC<Props> = ({ id, className, style, value, label, children
     const hasValue = value !== undefined || value !== null || value !== '';
 
     return <div className={merge('ui-input__container', { 'ui-input__container--margin': margin }, className)}>
-        
+
         {label && <p className="ui-input__label">{label}</p>}
-        
+
         <div
             id={id}
-            className={merge('ui-select', { 'ui-select--disabled': disabled })}
+            className={merge('ui-select', { 'ui-select--dark': dark, 'ui-select--disabled': disabled })}
             style={style}
         >
 

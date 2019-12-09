@@ -21,6 +21,7 @@
     "react": "^16.12.0",
     "react-app-rewired": "^2.1.5",
     "react-dom": "^16.12.0",
+    "react-indiana-drag-scroll": "^1.5.2",
     "react-scripts": "3.1.2",
     "react-sortable-hoc": "^1.10.1",
     "roman-numerals": "^0.3.2",

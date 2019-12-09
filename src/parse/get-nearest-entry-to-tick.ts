@@ -1,19 +1,21 @@
 import { EntriesByTick } from "../services/track";
-import { Entry, EntryType } from "../entries";
+import { EntryType } from "../entries";
 
-export function getNearestEntryToTick<T>(_tick: number, track: EntriesByTick, type?: EntryType): { at: number, entry: Entry<T> } | undefined {
+export function getNearestEntryToTick<T>(tick: number, track: EntriesByTick, type?: EntryType) {
 
-    for (let tick = _tick; tick >= 0; tick--) {
+    for (let _tick = tick; _tick >= 0; _tick--) {
 
-        const trackEntries = track[tick] || [];
+        const trackEntries = track[_tick] || [];
         for (let entry of trackEntries) {
             if (!type || entry._type === type) {
                 return {
-                    at: tick,
+                    at: _tick,
                     entry: entry
                 }
             }
         }
 
     }
+
+    return { at: 0, entry: undefined }
 }

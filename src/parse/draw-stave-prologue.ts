@@ -20,19 +20,19 @@ export function measureStavePrologue(tick: number, flowEntries: EntriesByTick, s
         const staveEntries = entriesByTick(stave.master.entries.order, stave.master.entries.byKey);
         const clef = getNearestEntryToTick<Clef>(tick, staveEntries, EntryType.clef);
 
-        if (clef) {
+        if (clef.entry) {
             if (clef.entry._bounds.width > measurements[1]) {
                 measurements[1] = clef.entry._bounds.width;
             }
         }
 
-        if (clef && key) {
+        if (clef.entry && key.entry) {
             if (key.entry._bounds.width > measurements[2]) {
                 measurements[2] = key.entry._bounds.width;
             }
         }
 
-        if (time) {
+        if (time.entry) {
             if (time.entry._bounds.width > measurements[3]) {
                 measurements[3] = time.entry._bounds.width;
             }
@@ -59,19 +59,19 @@ export function drawStavePrologue(x: number, y: number, prologueWidths: [number,
         const top = y + verticalMeasurements.staves[stave.key].y;
         let left = x + spacerWidth;
 
-        if (clef) {
+        if (clef.entry) {
             out.push(drawClef(left, top, clef.entry));
         }
 
         left += clefWidth;
 
-        if (clef && key) {
+        if (clef.entry && key.entry) {
             out.push(...drawKeySignature(left, top, clef.entry, key.entry));
         }
 
         left += keyWidth;
 
-        if (time) {
+        if (time.entry) {
             out.push(...drawTimeSignature(left, top, time.entry));
         }
 

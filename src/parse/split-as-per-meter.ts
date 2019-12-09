@@ -142,16 +142,16 @@ export function splitAsPerMeter(length: number, flow: EntriesByTick, track: Nota
         const start = barline;
         const stop = barlines[i + 1] || length;
 
-        const foundTimeSig = getNearestEntryToTick<TimeSignature>(start, flow, EntryType.timeSignature);
-        const timeSig = foundTimeSig && foundTimeSig.entry;
-        const groupings = timeSig ? timeSig.groupings : getDefaultGroupings(0);
-        const subdivisions = timeSig ? timeSig.subdivisions : 12;
-        const beatType = timeSig ? timeSig.beatType : 4;
+        const timeSig = getNearestEntryToTick<TimeSignature>(start, flow, EntryType.timeSignature);
+        const groupings = timeSig.entry ? timeSig.entry.groupings : getDefaultGroupings(0);
+        const subdivisions = timeSig.entry ? timeSig.entry.subdivisions : 12;
+        const beats = timeSig.entry ? timeSig.entry.beats : 0;
+        const beatType = timeSig.entry ? timeSig.entry.beatType : 4;
 
         const ticksPerBeat = getTicksPerBeat(subdivisions, beatType);
         const longestDottedRest = ((ticksPerBeat / 2) / 2) * 3;
 
-        track = splitUnit(start, stop, subdivisions, timeSig ? timeSig.beats : 0, beatType, groupings, longestDottedRest, track, true);
+        track = splitUnit(start, stop, subdivisions, beats, beatType, groupings, longestDottedRest, track, true);
     });
 
     return track;
