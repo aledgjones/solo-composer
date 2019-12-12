@@ -1,8 +1,10 @@
 import shortid from 'shortid';
 import ArrayMove from 'array-move';
-import { InstrumentKey, Instrument, Instruments } from './instrument';
+import { InstrumentKey, Instrument, Instruments, InstrumentCounts } from './instrument';
 import { Staves, createStave, StaveKey } from './stave';
 import { instrumentDefs } from './instrument-defs';
+import { useMemo } from 'react';
+import { mdiAccount, mdiAccountGroup } from '@mdi/js';
 
 export const PLAYER_CREATE = '@player/create';
 export const PLAYER_REMOVE = '@player/remove';
@@ -121,4 +123,43 @@ const createPlayer = (type: PlayerType): Player => {
         type,
         instruments: []
     }
+}
+
+export function usePlayerName(player: Player, instruments: Instruments, counts: InstrumentCounts) {
+    return useMemo(() => {
+        if (player.instruments.length === 0) {
+            switch (player.type) {
+                case PlayerType.solo:
+                    return 'Empty-handed Player';
+                default:
+                    return 'Empty-handed Section'
+            }
+        } else {
+            const len = player.instruments.length;
+            return player.instruments.reduce((output, key, i) => {
+                const isFirst = i === 0;
+                const isLast = i === len - 1;
+                const count = counts[key];
+                const name = instruments[key].longName + (count ? ` ${count}` : '');
+                if (isFirst) {
+                    return name;
+                } else if (isLast) {
+                    return output + ' & ' + name;
+                } else {
+                    return output + ', ' + name;
+                }
+            }, '');
+        }
+    }, [player.type, player.instruments, instruments, counts]);
+}
+
+export function usePlayerIcon(player: Player) {
+    return useMemo(() => {
+        switch (player.type) {
+            case PlayerType.solo:
+                return mdiAccount;
+            default:
+                return mdiAccountGroup;
+        }
+    }, [player]);
 }

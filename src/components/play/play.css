@@ -1,31 +1,74 @@
 .play {
+  position: relative;
   height: calc(100vh - 48px);
+  overflow: auto;
 }
 
-.play__header {
-  height: 52px;
+.play__x-fixed {
+  position: sticky;
+  left: 0;
+  width: 350px;
+  z-index: 1;
+  /* border-right: solid 4px #13191e; */
+}
+
+.play__header-select {
+  position: sticky;
+  top: 0;
+  height: 48px;
+  width: 100%;
   background-color: #13191e;
+  z-index: 10;
+  padding: 0 8px;
 }
 
-.play__header-left {
-  width: 25%;
-  padding: 8px;
+.play__select .ui-select__input {
+  height: 48px;
+  /* background-color: #232c32; */
 }
 
-.play__header-right {
-  width: 75%;
-  
+.play__scrollable {
+  position: absolute;
+  top: 0;
+  padding-left: 350px;
+  min-width: 100vw;
+  min-height: 100%;
 }
 
-/* .play__left-panel {
-  width: 25%;
-  background-color: #182127;
+.play__ticks {
+  position: sticky;
+  top: 0;
+  display: flex;
+  height: 48px;
+  background-color: #13191e;
+  padding-left: 64px;
+}
+
+.play__tick {
+  position: absolute;
   height: 100%;
-  border-right: solid 4px #13191e;
 }
 
-.play__left-panel-header {
-  padding: 8px;
-  height: 52px;
-  background-color: #13191e;
-} */
+.play__tick--half-beat:before {
+  content: '';
+  width: 2px;
+  height: 25%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: #464d52;
+}
+
+.play__tick--beat:before {
+  height: 50%;
+}
+
+
+.play__tick:last-child:before,
+.play__tick--first-beat:before {
+  height: 100%;
+}
+
+.play__player-controls {
+  padding: 8px 8px 0 8px;
+}

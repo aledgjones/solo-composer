@@ -1,6 +1,6 @@
 .player-list {
   height: 100%;
-  width: 25%;
+  width: 350px;
   background-color: #182127;
 }
 
@@ -9,7 +9,7 @@
   align-items: center;
   height: 48px;
   color: white;
-  padding: 0px 16px;
+  padding: 0px 24px;
   flex-shrink: 0;
   background-color: #13191e;
 }

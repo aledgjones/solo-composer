@@ -1,0 +1,21 @@
+.player-controls {
+    background-color: #232c32;
+    margin-bottom: 8px;
+    color: white;
+}
+
+.player-controls__header {
+    height: 48px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+}
+
+.player-controls__name {
+    flex-grow: 1;
+}
+.player__instruments {
+    display: inline-block;
+    width: 100%;
+    padding: 0 0 0px 16px;
+}

@@ -149,3 +149,9 @@ export function getInstruments(players: PlayerState, instruments: Instruments, f
 export function instrumentFamily(instrument?: Instrument) {
     return instrument ? instrument.id.split('.')[0] : '';
 }
+
+export function useInstrumentName(instrument: Instrument, count: string | undefined) {
+    return useMemo(() => {
+        return instrument.longName + (count ? ` ${count}` : '');
+    }, [instrument, count]);
+}

@@ -7,7 +7,7 @@
 .setup__middle {
   display: flex;
   flex-direction: column;
-  width: 50%;
+  width: calc(100% - 700px);
   border-left: solid 4px #13191e;
   border-right: solid 4px #13191e;
 }

@@ -6,7 +6,7 @@
 
 .ui-select__display {
     flex-grow: 1;
-    padding: 0 12px;
+    padding-right: 12px;
 }
 
 .ui-select__input {
@@ -15,7 +15,7 @@
     width: 100%;
     border: 1px solid rgb(175, 175, 175);
     min-height: 36px;
-    padding-right: 12px;
+    padding: 0 12px;
     cursor: pointer;
 }
 
@@ -57,6 +57,5 @@
 }
 
 .ui-select--dark .ui-select__input {
-    background-color: #232c32;
-    border: 1px solid #232c32 !important;
+    border: 1px solid transparent !important;
 }

@@ -6,13 +6,14 @@ import { useAppState } from '../../services/state';
 import { TabState } from '../../services/tab';
 
 import { Tabs, Tab, Icon } from '../../ui';
+
 import { Setup } from '../setup';
 import { Write } from '../write';
+import { Play } from '../play';
 
 import { EngravingSettings } from '../../dialogs/engraving-settings';
 
 import './shell.css';
-import { Play } from '../play';
 
 export const MainShell: FC = () => {
 
@@ -33,9 +34,7 @@ export const MainShell: FC = () => {
       </div>
     </div>
     {state.tab === TabState.setup && <Setup state={state} actions={actions} />}
-    {state.tab === TabState.write && <Write state={state} actions={actions} />}
+    {state.tab === TabState.write && <Write state={state} actions={actions} settings={settings} onSettingsClose={() => setSettings(false)} />}
     {state.tab === TabState.play && <Play state={state} actions={actions} />}
-
-    {settings && <EngravingSettings config={state.score.engraving} onClose={() => setSettings(false)} onUpdate={(layout, instruction) => actions.score.engraving.set(layout, instruction)} />}
   </>;
 }

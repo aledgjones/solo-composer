@@ -4,7 +4,7 @@ import { mdiChevronDown, mdiPlus, mdiDeleteOutline, mdiChevronUp, mdiAccount, md
 import Color from 'color';
 
 import { Icon } from '../../ui';
-import { Player, PlayerType } from '../../services/player';
+import { Player, PlayerType, usePlayerName, usePlayerIcon } from '../../services/player';
 import { Instruments, InstrumentCounts } from '../../services/instrument';
 import { Theme } from '../../const';
 import { InstrumentItem } from './instrument-item';
@@ -53,40 +53,8 @@ export const PlayerItem = SortableElement<Props>((props: Props) => {
         return Color(bg).isDark() ? '#ffffff' : '#000000';
     }, [bg]);
 
-    const name = useMemo(() => {
-        if (player.instruments.length === 0) {
-            switch (player.type) {
-                case PlayerType.solo:
-                    return 'Empty-handed Player';
-                default:
-                    return 'Empty-handed Section'
-            }
-        } else {
-            const len = player.instruments.length;
-            return player.instruments.reduce((output, key, i) => {
-                const isFirst = i === 0;
-                const isLast = i === len - 1;
-                const count = counts[key];
-                const name = instruments[key].longName + (count ? ` ${count}` : '');
-                if (isFirst) {
-                    return name;
-                } else if (isLast) {
-                    return output + ' & ' + name;
-                } else {
-                    return output + ', ' + name;
-                }
-            }, '');
-        }
-    }, [player.type, player.instruments, instruments, counts]);
-
-    const icon = useMemo(() => {
-        switch (player.type) {
-            case PlayerType.solo:
-                return mdiAccount;
-            default:
-                return mdiAccountGroup;
-        }
-    }, [player]);
+    const name = usePlayerName(player, instruments, counts);
+    const icon = usePlayerIcon(player);
 
     return <div className="player-item" style={{ backgroundColor: bg, color: fg }} onClick={onSelect}>
         <div className="player-item__header">

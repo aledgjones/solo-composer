@@ -3,7 +3,7 @@ import { mdiChevronRight } from '@mdi/js';
 import Color from 'color';
 
 import { Theme } from '../../const';
-import { Instrument } from '../../services/instrument';
+import { Instrument, useInstrumentName } from '../../services/instrument';
 import { Icon } from '../../ui';
 
 import './instrument-item.css';
@@ -28,9 +28,7 @@ export const InstrumentItem: FC<Props> = ({ selected, instrument, count }) => {
     return Color(bg).isDark() ? '#ffffff' : '#000000';
   }, [bg]);
 
-  const name = useMemo(() => {
-    return instrument.longName + (count ? ` ${count}` : '');
-  }, [instrument, count]);
+  const name = useInstrumentName(instrument, count);
 
   return <div className="instrument-item" style={{ backgroundColor: bg, color: fg }}>
     <span>{name}</span>
