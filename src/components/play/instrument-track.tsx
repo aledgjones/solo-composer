@@ -7,7 +7,7 @@ import { Tick } from './ticks';
 import { Staves } from '../../services/stave';
 import { EntryType, Entry } from '../../entries';
 import { Tone } from '../../entries/tone';
-import { getMIDIPitchValue, C0 } from '../../entries/tone';
+import { getMIDIPitch, C0 } from '../../parse/get-midi-pitch';
 
 import './instrument-track.css';
 
@@ -19,7 +19,7 @@ interface Props {
 }
 
 function getTop(pitch: string, offset: number, slotHeight: number) {
-    const value = getMIDIPitchValue(pitch);
+    const value = getMIDIPitch(pitch);
     return (16 - (value - (C0 + offset))) * slotHeight;
 }
 

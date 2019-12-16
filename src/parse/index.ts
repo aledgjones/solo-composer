@@ -65,7 +65,7 @@ export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, c
     const tickWidths: [number, number][] = [];
     for (let tick = 0; tick < flow.length; tick++) {
         const pre = barlines.includes(tick) ? 1 : 0;
-        tickWidths.push([pre, .5]);
+        tickWidths.push([pre, .75]);
     }
 
     const notationWidth = tickWidths.reduce<number>((sum, tick) => sum + tick[0] + tick[1], 0);

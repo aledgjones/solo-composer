@@ -7,14 +7,11 @@ import { State, Actions } from '../../services/state';
 import { Select, Option } from '../../ui';
 import { Theme } from '../../const';
 
-import { getCounts, getInstruments } from '../../services/instrument';
+import { getCounts } from '../../services/instrument';
 import { PlayerControls } from './player-contols';
 import { useTicks, Ticks } from './ticks';
 import { PlayerTrack } from './player-track';
 import { entriesByTick } from '../../services/track';
-import { getWrittenDurations } from '../../parse/get-written-durations';
-import { getStaves } from '../../services/stave';
-import { getFirstBeats } from '../../parse/get-first-beats';
 
 import './play.css';
 
@@ -32,7 +29,7 @@ export const Play: FC<Props> = ({ state, actions }) => {
     const colors = useMemo(() => {
         const len = state.score.players.order.length;
         return colormap({
-            colormap: 'cool',
+            colormap: [{ "index": 0, "rgb": [90, 74, 142] }, { "index": 1, "rgb": [255, 0, 255] }],
             nshades: len < 9 ? 9 : len
         });
     }, [state.score.players.order.length]);
@@ -50,7 +47,7 @@ export const Play: FC<Props> = ({ state, actions }) => {
 
     const flow = state.score.flows.byKey[flowKey];
     const flowEntriesByTick = useMemo(() => entriesByTick(flow.master.entries.order, flow.master.entries.byKey), [flow.master.entries]);
-    
+
     const counts = getCounts(state.score.players, state.score.instruments, state.score.config);
     const ticks = useTicks(flow.length, flowEntriesByTick, zoom);
 

@@ -1,7 +1,7 @@
 import Big from 'big.js';
 import { decode } from 'base64-arraybuffer';
 import { Envelope, envelope } from './envelope';
-import { getMIDIPitchValue } from '../entries/tone';
+import { getMIDIPitch } from '../parse/get-midi-pitch';
 
 export type Pitch = string | number;
 
@@ -47,7 +47,7 @@ export class PatchPlayer {
 
     constructor(private ac: AudioContext, private destination: GainNode) { };
 
-    private getMIDIPitchValue = getMIDIPitchValue;
+    private getMIDIPitchValue = getMIDIPitch;
 
     private getSample(pitch: Pitch) {
 
