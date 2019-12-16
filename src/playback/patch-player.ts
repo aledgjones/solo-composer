@@ -1,7 +1,7 @@
-
+import Big from 'big.js';
 import { decode } from 'base64-arraybuffer';
-import { isString } from 'lodash';
 import { Envelope, envelope } from './envelope';
+import { getMIDIPitchValue } from '../entries/tone';
 
 export type Pitch = string | number;
 
@@ -47,22 +47,7 @@ export class PatchPlayer {
 
     constructor(private ac: AudioContext, private destination: GainNode) { };
 
-    private getMIDIPitchValue(pitch: Pitch) {
-
-        if (isString(pitch)) {
-            const C0 = 24;
-            const letters = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-
-            const octave = parseInt(pitch.slice(-1));
-            const note = pitch.slice(0, -1);
-            const output = C0 + (octave * 12) + letters.indexOf(note);
-
-            return output;
-        } else {
-            return pitch;
-        }
-
-    }
+    private getMIDIPitchValue = getMIDIPitchValue;
 
     private getSample(pitch: Pitch) {
 
@@ -93,12 +78,11 @@ export class PatchPlayer {
             const entry = data.samples[key];
             const buffer = decode(entry.data);
             const audio = await this.ac.decodeAudioData(buffer);
-            const sampleTime = 1 / audio.sampleRate;
             const MIDICode = this.getMIDIPitchValue(key);
             this.patch.samples[MIDICode] = {
                 loop: entry.loop,
-                loopStart: entry.loopStart * sampleTime,
-                loopEnd: entry.loopEnd * sampleTime,
+                loopStart: parseFloat(new Big(entry.loopStart).div(audio.sampleRate).toString()),
+                loopEnd: parseFloat(new Big(entry.loopEnd).div(audio.sampleRate).toString()),
                 buffer: audio
             }
         }
@@ -117,20 +101,18 @@ export class PatchPlayer {
         sourceNode.detune.value = detune;
         if (loop) {
             sourceNode.loop = true;
-            sourceNode.loopStart = loopStart / buffer.sampleRate;
-            sourceNode.loopEnd = loopEnd / buffer.sampleRate;
+            sourceNode.loopStart = loopStart;
+            sourceNode.loopEnd = loopEnd;
         }
 
         const startAt = this.ac.currentTime + when;
         const env = envelope(this.ac, startAt, { ...this.patch.envelope, gateTime: duration });
-        const stopAt = startAt + env.duration;
 
         sourceNode.connect(env.node);
         env.node.connect(velocityNode);
         velocityNode.connect(this.destination);
 
-        sourceNode.start(startAt);
-        sourceNode.stop(stopAt);
+        sourceNode.start(startAt, 0, env.duration);
 
         sourceNode.onended = () => {
             sourceNode.disconnect();

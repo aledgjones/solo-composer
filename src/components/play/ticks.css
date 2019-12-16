@@ -1,0 +1,28 @@
+.ticks {
+    display: flex;
+    height: 48px;
+    z-index: 1;
+}
+
+.tick {
+    position: relative;
+    height: 100%;
+}
+
+.tick--half-beat:before {
+    content: '';
+    width: 2px;
+    height: 25%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: #464d52;
+}
+
+.tick--beat:before {
+    height: 50%;
+}
+
+.tick:last-child:before, .tick--first-beat:before {
+    height: 100%;
+}

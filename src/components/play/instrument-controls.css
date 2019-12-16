@@ -1,17 +1,28 @@
 .instrument-controls {
+    display: flex;
     background-color: #2e373c;
-    margin-bottom: 8px;
     color: white;
-    height: 200px;
+    height: 224px;
+    width: 100%;
+}
+
+.instrument-controls__wrapper {
+    display: flex;
+    margin-bottom: 8px;
 }
 
 .instrument-controls__header {
     height: 48px;
     display: flex;
     align-items: center;
-    padding: 0 16px;
+    padding: 0 16px 0 12px;
 }
 
 .instrument-controls__name {
     flex-grow: 1;
+}
+
+.instrument-controls__wrapper:last-child,
+.instrument-controls__wrapper:last-child {
+    margin-bottom: 0;
 }

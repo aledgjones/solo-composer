@@ -25,6 +25,10 @@ export interface NotationTrack {
     [tick: number]: Notation;
 }
 
+export interface NotationTracks {
+    [trackKey: string]: NotationTrack;
+}
+
 export function getNotationBaseLength(duration: number, subdivisions: number): NotationBaseLength | undefined {
     const length = duration / subdivisions;
     if (NotationBaseLength[length]) {

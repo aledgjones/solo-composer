@@ -20,6 +20,7 @@
     "base64-arraybuffer": "^0.2.0",
     "big.js": "^5.2.2",
     "color": "^3.1.2",
+    "colormap": "^2.3.1",
     "envelope-generator": "^3.0.0",
     "freeverb": "^1.1.2",
     "lodash": "^4.17.15",

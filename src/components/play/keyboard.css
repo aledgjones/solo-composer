@@ -1,0 +1,25 @@
+.keyboard {
+    position: relative;
+    width: 56px;
+    min-width: 56px;
+    background-color: white;
+    background-image: url('../../assets/piano.svg');
+    background-position: 0 -1px;
+    background-size: 56px 112.5px;
+    background-repeat: repeat-y;
+}
+
+.keyboard__name {
+    position: absolute;
+    right: 2px;
+    color: black;
+    font-size: 10px;
+}
+
+.keyboard__name--1 {
+    top: 34px;
+}
+
+.keyboard__name--2 {
+    top: 146px;
+}

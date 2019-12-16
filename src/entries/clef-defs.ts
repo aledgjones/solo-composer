@@ -1,7 +1,7 @@
 export enum ClefType {
-    C = 1,
-    F,
-    G
+    C = 'C',
+    F = 'F',
+    G = 'G'
 }
 
 export interface ClefDef {

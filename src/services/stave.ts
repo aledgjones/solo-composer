@@ -23,18 +23,15 @@ export function createStave(staveDef: StaveDef, staveKey: StaveKey = shortid()):
     const master = createTrack([clef]);
 
     const events: Entry<any>[] = [
-        createTone({duration: 6}, 0),
-        createTone({duration: 12}, 6),
-        createTone({duration: 27}, 18),
-
-        createTone({duration: 3}, 45),
-        createTone({duration: 6}, 48),
-        createTone({duration: 6}, 60),
-
-        createTone({duration: 36}, 72),
-
-        createTone({duration: 9}, 108),
-        createTone({duration: 27}, 117)
+        createTone({ duration: 6, pitch: 'C4' }, 0),
+        createTone({ duration: 12, pitch: 'D4' }, 6),
+        createTone({ duration: 27, pitch: 'E4' }, 18),
+        createTone({ duration: 3, pitch: 'F4' }, 45),
+        createTone({ duration: 6, pitch: 'B3' }, 48),
+        createTone({ duration: 6, pitch: 'C4' }, 60),
+        createTone({ duration: 36, pitch: 'C4' }, 72),
+        createTone({ duration: 9, pitch: 'D4' }, 108),
+        createTone({ duration: 27, pitch: 'E4' }, 117)
     ];
     const primary = createTrack(events);
 

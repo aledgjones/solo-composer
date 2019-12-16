@@ -213,8 +213,7 @@ const createFlow = (players: PlayerKey[], staves: { [key: string]: Stave }): Flo
 
     const events = [
         createTimeSignature({ beats: 6, beatType: 8, groupings: getDefaultGroupings(6), subdivisions: 12 }, 0),
-        createKeySignature({ offset: -2, mode: KeySignatureMode.major }, 0),
-        createTimeSignature({ beats: 3, beatType: 4, groupings: getDefaultGroupings(3), subdivisions: 12 }, 72),
+        createKeySignature({ offset: -2, mode: KeySignatureMode.major }, 0)
     ];
 
     return {

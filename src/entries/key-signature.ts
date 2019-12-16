@@ -42,7 +42,7 @@ export enum AccidentalType {
 }
 
 interface Patterns {
-    [clefType: number]: {
+    [clefType: string]: {
         [clefOffset: number]: {
             [accidentalType: number]: number[]
         }

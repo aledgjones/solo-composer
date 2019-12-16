@@ -10,11 +10,15 @@ import { InstrumentControls } from './instrument-contols';
 
 interface Props {
     player: Player;
+    expanded: boolean;
     instruments: Instruments;
     counts: InstrumentCounts;
+    color: string;
+
+    onToggleExpand: (key: string) => void;
 }
 
-export const PlayerControls: FC<Props> = ({ player, instruments, counts }) => {
+export const PlayerControls: FC<Props> = ({ player, expanded, instruments, counts, color, onToggleExpand }) => {
 
     const name = usePlayerName(player, instruments, counts);
     const icon = usePlayerIcon(player);
@@ -23,15 +27,15 @@ export const PlayerControls: FC<Props> = ({ player, instruments, counts }) => {
         <div className="player-controls__header">
             <Icon style={{ marginRight: 16 }} size={24} color="#ffffff" path={icon} />
             <span className="player-controls__name">{name}</span>
-            <Icon style={{ marginLeft: 12 }} size={24} color="#ffffff" path={mdiChevronDown} />
+            <Icon style={{ marginLeft: 12, transform: `rotateZ(${expanded ? '180deg' : '0'})` }} size={24} color="#ffffff" path={mdiChevronDown} onClick={() => onToggleExpand(player.key)} />
         </div>
-        <div className="player__instruments">
+        {expanded && <div className="player-controls__instruments">
             {player.instruments.map(instrumentKey => {
                 const instrument = instruments[instrumentKey];
                 const count = counts[instrumentKey];
-                return <InstrumentControls key={instrumentKey} instrument={instrument} count={count} />
+                return <InstrumentControls key={instrumentKey} color={color} instrument={instrument} count={count} />
             })}
-        </div>
+        </div>}
     </div>;
 }
 

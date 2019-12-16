@@ -1,15 +1,20 @@
-import React, { FC, useState, useMemo, useCallback, useEffect } from 'react';
+import React, { FC, useState, useCallback, useMemo } from 'react';
+import ScrollContainer from 'react-indiana-drag-scroll';
+import colormap from 'colormap';
 
 import { State, Actions } from '../../services/state';
 
-import { Select, Option, Button } from '../../ui';
+import { Select, Option } from '../../ui';
 import { Theme } from '../../const';
 
-import { getCounts } from '../../services/instrument';
+import { getCounts, getInstruments } from '../../services/instrument';
 import { PlayerControls } from './player-contols';
-import { useTicks } from './ticks';
-import { merge } from '../../ui/utils/merge';
-import { showcase } from '../../playback/showcase';
+import { useTicks, Ticks } from './ticks';
+import { PlayerTrack } from './player-track';
+import { entriesByTick } from '../../services/track';
+import { getWrittenDurations } from '../../parse/get-written-durations';
+import { getStaves } from '../../services/stave';
+import { getFirstBeats } from '../../parse/get-first-beats';
 
 import './play.css';
 
@@ -20,29 +25,38 @@ interface Props {
 
 export const Play: FC<Props> = ({ state, actions }) => {
 
-    const [play, setPlay] = useState();
-
-    useEffect(() => {
-        showcase().then(resp => {
-            console.log('sounds loaded');
-            setPlay(() => {
-                return resp;
-            });
-        });
-    }, []);
-
-
     const [zoom, setZoom] = useState<number>(1.5);
     const [flowKey, setFlowKey] = useState(state.score.flows.order[0]);
     const [expanded, setExpanded] = useState<string[]>([]);
 
-    const flow = state.score.flows.byKey[flowKey];
+    const colors = useMemo(() => {
+        const len = state.score.players.order.length;
+        return colormap({
+            colormap: 'cool',
+            nshades: len < 9 ? 9 : len
+        });
+    }, [state.score.players.order.length]);
 
+    const onToggleExpand = useCallback((key: string) => {
+        setExpanded(current => {
+            const filtered = current.filter(item => item !== key);
+            if (filtered.length === current.length) {
+                return [...current, key];
+            } else {
+                return filtered;
+            }
+        })
+    }, []);
+
+    const flow = state.score.flows.byKey[flowKey];
+    const flowEntriesByTick = useMemo(() => entriesByTick(flow.master.entries.order, flow.master.entries.byKey), [flow.master.entries]);
+    
     const counts = getCounts(state.score.players, state.score.instruments, state.score.config);
-    const ticks = useTicks(flow, zoom);
+    const ticks = useTicks(flow.length, flowEntriesByTick, zoom);
 
     return <>
-        <div className="play">
+
+        <ScrollContainer ignoreElements=".play__x-fixed" vertical={false} className="play">
 
             <div className="play__x-fixed">
                 <div className="play__header-select">
@@ -54,10 +68,10 @@ export const Play: FC<Props> = ({ state, actions }) => {
                     </Select>
                 </div>
                 <div className="play__player-controls">
-                    {state.score.players.order.map(playerKey => {
+                    {state.score.players.order.map((playerKey, i) => {
                         if (flow.players.includes(playerKey)) {
                             const player = state.score.players.byKey[playerKey];
-                            return <PlayerControls key={playerKey} player={player} instruments={state.score.instruments} counts={counts} />
+                            return <PlayerControls key={playerKey} color={colors[i]} expanded={expanded.includes(playerKey)} player={player} instruments={state.score.instruments} counts={counts} onToggleExpand={onToggleExpand} />
                         } else {
                             return null;
                         }
@@ -66,16 +80,19 @@ export const Play: FC<Props> = ({ state, actions }) => {
             </div>
 
             <div className="play__scrollable">
-                <div className="play__ticks">
-                    {ticks.map((tick, i) => {
-                        return <div key={i} style={{ width: tick.width, left: tick.x }} className={merge('play__tick', { 'play__tick--first-beat': tick.isFirstBeat, 'play__tick--beat': tick.isBeat, 'play__tick--half-beat': tick.isHalfBeat })} />
+                <Ticks className="play__ticks" ticks={ticks} />
+                <div className="play__track-area">
+                    {state.score.players.order.map((playerKey, i) => {
+                        if (flow.players.includes(playerKey)) {
+                            const player = state.score.players.byKey[playerKey];
+                            return <PlayerTrack key={playerKey} color={colors[i]} expanded={expanded.includes(playerKey)} player={player} instruments={state.score.instruments} staves={flow.staves} ticks={ticks} />
+                        } else {
+                            return null;
+                        }
                     })}
-                </div>
-                <div className="play__area">
-                    <Button disabled={!play} color="blue" onClick={play}>play</Button>
                 </div>
             </div>
 
-        </div>
+        </ScrollContainer>
     </>;
 }

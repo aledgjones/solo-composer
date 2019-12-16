@@ -1,9 +1,10 @@
 import { buildText, TextStyles } from '../render/text';
 import { buildCircle, CircleStyles } from '../render/circle';
-import { NotationBaseLength, Notation } from '../parse/notation-track';
+import { NotationBaseLength } from '../parse/notation-track';
 
 export interface NoteDef {
     duration: number;
+    pitch: string;
 }
 
 export interface Note extends NoteDef { };

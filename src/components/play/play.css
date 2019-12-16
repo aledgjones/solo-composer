@@ -7,9 +7,8 @@
 .play__x-fixed {
   position: sticky;
   left: 0;
-  width: 350px;
-  z-index: 1;
-  /* border-right: solid 4px #13191e; */
+  width: 342px;
+  z-index: 2;
 }
 
 .play__header-select {
@@ -24,51 +23,28 @@
 
 .play__select .ui-select__input {
   height: 48px;
-  /* background-color: #232c32; */
 }
 
 .play__scrollable {
   position: absolute;
   top: 0;
-  padding-left: 350px;
+  padding-left: 342px;
   min-width: 100vw;
   min-height: 100%;
+  z-index: 1;
 }
 
 .play__ticks {
   position: sticky;
   top: 0;
-  display: flex;
-  height: 48px;
   background-color: #13191e;
-  padding-left: 64px;
 }
 
-.play__tick {
-  position: absolute;
-  height: 100%;
-}
-
-.play__tick--half-beat:before {
-  content: '';
-  width: 2px;
-  height: 25%;
-  position: absolute;
-  left: 0;
-  top: 0;
-  background-color: #464d52;
-}
-
-.play__tick--beat:before {
-  height: 50%;
-}
-
-
-.play__tick:last-child:before,
-.play__tick--first-beat:before {
-  height: 100%;
+.play__track-area {
+  padding-top: 8px;
 }
 
 .play__player-controls {
-  padding: 8px 8px 0 8px;
+  background-color: #182127;
+  padding: 8px 0 0 8px;
 }

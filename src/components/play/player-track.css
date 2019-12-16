@@ -1,0 +1,11 @@
+.player-track {
+    background-color: #2e373c;
+    margin-bottom: 8px;
+    color: white;
+}
+
+.player-track__instruments {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}

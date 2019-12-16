@@ -44,21 +44,21 @@ export const useAppState = (): [State, Actions] => {
         let player = actions.score.players.create(PlayerType.solo);
         actions.score.players.assignInstrument(player.key, instrument);
 
-        instrument = actions.score.instruments.create(instrumentDefs['strings.violin']);
-        player = actions.score.players.create(PlayerType.solo);
-        actions.score.players.assignInstrument(player.key, instrument);
+        // instrument = actions.score.instruments.create(instrumentDefs['strings.violin']);
+        // player = actions.score.players.create(PlayerType.solo);
+        // actions.score.players.assignInstrument(player.key, instrument);
 
-        instrument = actions.score.instruments.create(instrumentDefs['strings.viola']);
-        player = actions.score.players.create(PlayerType.solo);
-        actions.score.players.assignInstrument(player.key, instrument);
+        // instrument = actions.score.instruments.create(instrumentDefs['strings.viola']);
+        // player = actions.score.players.create(PlayerType.solo);
+        // actions.score.players.assignInstrument(player.key, instrument);
 
-        instrument = actions.score.instruments.create(instrumentDefs['strings.violoncello']);
-        player = actions.score.players.create(PlayerType.solo);
-        actions.score.players.assignInstrument(player.key, instrument);
+        // instrument = actions.score.instruments.create(instrumentDefs['strings.violoncello']);
+        // player = actions.score.players.create(PlayerType.solo);
+        // actions.score.players.assignInstrument(player.key, instrument);
 
-        instrument = actions.score.instruments.create(instrumentDefs['keyboards.piano']);
-        player = actions.score.players.create(PlayerType.solo);
-        actions.score.players.assignInstrument(player.key, instrument);
+        // instrument = actions.score.instruments.create(instrumentDefs['keyboards.piano']);
+        // player = actions.score.players.create(PlayerType.solo);
+        // actions.score.players.assignInstrument(player.key, instrument);
 
     }, [actions.score.instruments, actions.score.players]);
 
