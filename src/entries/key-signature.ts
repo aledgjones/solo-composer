@@ -20,7 +20,7 @@ export interface KeySignature extends KeySignatureDef {
 export function createKeySignature(def: KeySignatureDef, tick: number): Entry<KeySignature> {
     // convert to positive number
     const width = def.offset < 0 ? def.offset * -1 : def.offset;
-    const padding = width > 0 ? .75 : 0;
+    const padding = width > 0 ? 1 : 0;
     return {
         _type: EntryType.keySignature,
         _key: shortid(),

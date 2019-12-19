@@ -8,7 +8,7 @@ export function createClef(def: ClefDef, tick: number): Entry<Clef> {
         _type: EntryType.clef,
         _key: shortid(),
         _box: { width: 2.8, height: 4 },
-        _bounds: { width: 3.55, height: 4 },
+        _bounds: { width: 3.8, height: 4 },
         _offset: { top: 0, left: 0 },
         _tick: tick,
 

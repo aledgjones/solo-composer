@@ -5,10 +5,13 @@ import { Stave, StaveKey, Staves, createStave } from './stave';
 import { removeProps } from '../ui/utils/remove-props';
 import { instrumentDefs } from './instrument-defs';
 import { Instruments } from './instrument';
-import { Track, createTrack } from './track';
+import { Track, createTrack, entriesByTick } from './track';
 import { TimeSignatureDef, TimeSignature, createTimeSignature } from '../entries/time-signature';
-import { Entry } from '../entries';
+import { Entry, EntryType } from '../entries';
 import { getTicksPerBeat } from '../parse/get-ticks-per-beat';
+import { getEntryAtTick } from '../parse/get-entry-at-tick';
+import { KeySignatureDef, createKeySignature, KeySignature } from '../entries/key-signature';
+import { BarlineDef, createBarline, Barline } from '../entries/barline';
 
 export const FLOW_CREATE = '@flow/create';
 export const FLOW_REORDER = '@flow/reorder';
@@ -16,6 +19,8 @@ export const FLOW_REMOVE = '@flow/remove';
 export const FLOW_ASSIGN_PLAYER = '@flow/assign-player';
 export const FLOW_REMOVE_PLAYER = '@flow/remove-player';
 export const FLOW_CREATE_TIME_SIGNATURE = '@flow/create-time-signature';
+export const FLOW_CREATE_KEY_SIGNATURE = '@flow/create-key-signature';
+export const FLOW_CREATE_BARLINE = '@flow/create-barline';
 export const FLOW_SET_LENGTH = '@flow/set-length';
 
 export interface FlowActions {
@@ -24,7 +29,9 @@ export interface FlowActions {
     remove: (flow: Flow) => void;
     assignPlayer: (flowKey: FlowKey, player: Player, instruments: Instruments) => void;
     removePlayer: (flowKey: FlowKey, playerKey: PlayerKey, staveKeys: StaveKey[]) => void;
-    createTimeSignature: (def: TimeSignatureDef, tick: number, flow: Flow) => void;
+    createTimeSignature: (def: TimeSignatureDef, tick: number, flowKey: string) => void;
+    createKeySignature: (def: KeySignatureDef, tick: number, flowKey: string) => void;
+    createBarline: (def: BarlineDef, tick: number, flowKey: string) => void;
 }
 
 export type FlowKey = string;
@@ -180,9 +187,63 @@ export const flowReducer = (state: FlowState, action: any) => {
                 }, state.byKey)
             }
         }
+        // this also includes updating an exisitng time sig to avoid having more than one
         case FLOW_CREATE_TIME_SIGNATURE: {
             const flowKey = action.payload.flowKey;
-            const timeSignature: Entry<TimeSignature> = action.payload.timeSignature;
+            const entry: Entry<TimeSignature> = action.payload.entry;
+            const flow = state.byKey[flowKey];
+
+            // extend the length to fit the whole bar if shorter
+            const ticksPerBeat = getTicksPerBeat(entry.subdivisions, entry.beatType);
+            const ticksPerBar = entry.beats * ticksPerBeat;
+            let length = flow.length;
+            if (flow.length - entry._tick < ticksPerBar) {
+                length = entry._tick + ticksPerBar;
+            }
+
+            // if there is already a time sig at tick, replace with new entry
+            const entries = entriesByTick(flow.master.entries.order, flow.master.entries.byKey);
+            const old = getEntryAtTick<TimeSignature>(entry._tick, entries, EntryType.timeSignature);
+            if (old.entry) {
+                entry._key = old.entry._key;
+            }
+
+            return {
+                order: state.order,
+                byKey: state.order.reduce((output: { [key: string]: Flow }, _flowKey: string) => {
+                    if (_flowKey === flowKey) {
+                        const flow = state.byKey[_flowKey];
+                        output[_flowKey] = {
+                            ...flow,
+                            length,
+                            master: {
+                                ...flow.master,
+                                entries: {
+                                    order: !old.entry ? [...flow.master.entries.order, entry._key] : flow.master.entries.order,
+                                    byKey: {
+                                        ...flow.master.entries.byKey,
+                                        [entry._key]: entry
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return output;
+                }, state.byKey)
+            }
+        }
+        case FLOW_CREATE_KEY_SIGNATURE: {
+            const flowKey = action.payload.flowKey;
+            const entry: Entry<KeySignature> = action.payload.entry;
+            const flow = state.byKey[flowKey];
+
+            // if there is already a key sig at tick, replace with new entry
+            const entries = entriesByTick(flow.master.entries.order, flow.master.entries.byKey);
+            const old = getEntryAtTick<KeySignature>(entry._tick, entries, EntryType.keySignature);
+            if (old.entry) {
+                entry._key = old.entry._key;
+            }
+
             return {
                 order: state.order,
                 byKey: state.order.reduce((output: { [key: string]: Flow }, _flowKey: string) => {
@@ -193,10 +254,45 @@ export const flowReducer = (state: FlowState, action: any) => {
                             master: {
                                 ...flow.master,
                                 entries: {
-                                    order: [...flow.master.entries.order, timeSignature._key],
+                                    order: !old.entry ? [...flow.master.entries.order, entry._key] : flow.master.entries.order,
                                     byKey: {
                                         ...flow.master.entries.byKey,
-                                        [timeSignature._key]: timeSignature
+                                        [entry._key]: entry
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return output;
+                }, state.byKey)
+            }
+        }
+        case FLOW_CREATE_BARLINE: {
+            const flowKey = action.payload.flowKey;
+            const entry: Entry<Barline> = action.payload.entry;
+            const flow = state.byKey[flowKey];
+
+            // if there is already a barline at tick, replace with new entry
+            const entries = entriesByTick(flow.master.entries.order, flow.master.entries.byKey);
+            const old = getEntryAtTick<Barline>(entry._tick, entries, EntryType.barline);
+            if (old.entry) {
+                entry._key = old.entry._key;
+            }
+
+            return {
+                order: state.order,
+                byKey: state.order.reduce((output: { [key: string]: Flow }, _flowKey: string) => {
+                    if (_flowKey === flowKey) {
+                        const flow = state.byKey[_flowKey];
+                        output[_flowKey] = {
+                            ...flow,
+                            master: {
+                                ...flow.master,
+                                entries: {
+                                    order: !old.entry ? [...flow.master.entries.order, entry._key] : flow.master.entries.order,
+                                    byKey: {
+                                        ...flow.master.entries.byKey,
+                                        [entry._key]: entry
                                     }
                                 }
                             }
@@ -249,23 +345,30 @@ export const flowActions = (dispatch: any): FlowActions => {
         removePlayer: (flowKey, playerKey, staveKeys) => {
             dispatch({ type: FLOW_REMOVE_PLAYER, payload: { flowKey, playerKey, staveKeys } });
         },
-        createTimeSignature: (timeSignatureDef, tick, flow) => {
-            const ticksPerBeat = getTicksPerBeat(timeSignatureDef.subdivisions, timeSignatureDef.beatType);
-            const ticksPerBar = timeSignatureDef.beats * ticksPerBeat;
-            if (flow.length - tick < ticksPerBar) {
-                dispatch({
-                    type: FLOW_SET_LENGTH,
-                    payload: {
-                        flowKey: flow.key,
-                        length: tick + ticksPerBar
-                    }
-                });
-            }
+        createTimeSignature: (timeSignatureDef, tick, flowKey) => {
             dispatch({
                 type: FLOW_CREATE_TIME_SIGNATURE,
                 payload: {
-                    flowKey: flow.key,
-                    timeSignature: createTimeSignature(timeSignatureDef, tick)
+                    flowKey,
+                    entry: createTimeSignature(timeSignatureDef, tick)
+                }
+            });
+        },
+        createKeySignature: (keySignatureDef, tick, flowKey) => {
+            dispatch({
+                type: FLOW_CREATE_KEY_SIGNATURE,
+                payload: {
+                    flowKey,
+                    entry: createKeySignature(keySignatureDef, tick)
+                }
+            });
+        },
+        createBarline: (barlineDef, tick, flowKey) => {
+            dispatch({
+                type: FLOW_CREATE_BARLINE,
+                payload: {
+                    flowKey,
+                    entry: createBarline(barlineDef, tick)
                 }
             });
         }

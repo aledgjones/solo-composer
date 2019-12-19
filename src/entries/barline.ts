@@ -39,15 +39,15 @@ function measureBarlineBox(type: BarlineType): Box {
 function measureBarlineBounds(type: BarlineType): Box {
     switch (type) {
         case BarlineType.double:
-            return { width: .5, height: 4 };
+            return { width: 1.5, height: 4 };
         case BarlineType.final:
             return { width: 1, height: 4 };
         case BarlineType.start_repeat:
         case BarlineType.end_repeat:
-            return { width: 2, height: 4 };
+            return { width: 3, height: 4 };
         case BarlineType.normal:
         default:
-            return { width: 0, height: 4 };
+            return { width: 1, height: 4 };
     }
 }
 

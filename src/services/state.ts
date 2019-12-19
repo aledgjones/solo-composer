@@ -5,8 +5,8 @@ import { log } from "../ui/utils/log";
 import { instrumentDefs } from "./instrument-defs";
 import { PlayerType } from "./player";
 import { getDefaultGroupings } from "../parse/get-default-groupings";
-
-const LOGGING = false;
+import { KeySignatureMode } from "../entries/key-signature";
+import { BarlineType } from "../entries/barline";
 
 export interface State {
     tab: TabState;
@@ -39,10 +39,9 @@ export const useAppState = (): [State, Actions] => {
         }
     }, [dispatch]);
 
-    const flow = useMemo(() => {
-        const flowKey = state.score.flows.order[0];
-        return state.score.flows.byKey[flowKey];
-    }, []);
+    const flowKey = useMemo(() => {
+        return state.score.flows.order[0];
+    }, [state.score.flows.order]);
 
     useEffect(() => {
 
@@ -50,14 +49,18 @@ export const useAppState = (): [State, Actions] => {
         const player = actions.score.players.create(PlayerType.solo);
         actions.score.players.assignInstrument(player.key, instrument);
 
-        actions.score.flows.createTimeSignature({ beats: 4, beatType: 4, subdivisions: 12, groupings: getDefaultGroupings(4) }, 0, flow);
-        actions.score.flows.createTimeSignature({ beats: 6, beatType: 8, subdivisions: 12, groupings: getDefaultGroupings(6) }, 48, flow);
+        actions.score.flows.createTimeSignature({ beats: 2, beatType: 4, subdivisions: 12, groupings: getDefaultGroupings(2) }, 0, flowKey);
+        actions.score.flows.createTimeSignature({ beats: 4, beatType: 4, subdivisions: 12, groupings: getDefaultGroupings(4), drawAs: 'c' }, 48, flowKey);
 
-    }, [actions.score.instruments, actions.score.players, actions.score.flows, flow]);
+        actions.score.flows.createKeySignature({ mode: KeySignatureMode.major, offset: -5 }, 0, flowKey);
+        actions.score.flows.createKeySignature({ mode: KeySignatureMode.major, offset: 3 }, 48, flowKey);
 
-    if (LOGGING) {
-        log(state, 'state');
-    }
+        actions.score.flows.createBarline({ type: BarlineType.start_repeat }, 0, flowKey);
+        actions.score.flows.createBarline({ type: BarlineType.end_repeat }, 24, flowKey);
+
+    }, [actions.score.instruments, actions.score.players, actions.score.flows, flowKey]);
+
+    log(state, 'state');
 
     return [state, actions];
 }
