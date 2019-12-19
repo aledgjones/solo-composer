@@ -30,8 +30,5 @@ export enum EntryType {
     clef,
     keySignature,
     timeSignature,
-    tone,
-
-    // not drawn
-    subdivisionChange
+    tone
 }
