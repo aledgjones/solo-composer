@@ -24,7 +24,7 @@ function glyphFromDuration(baseLength?: NotationBaseLength) {
     }
 }
 
-export function drawNote(x: number, y: number, length?: NotationBaseLength, dotted?: boolean) {
+export function drawNote(x: number, y: number, offset: number, length?: NotationBaseLength, dotted?: boolean) {
 
     const glyph = glyphFromDuration(length);
 
@@ -35,12 +35,13 @@ export function drawNote(x: number, y: number, length?: NotationBaseLength, dott
 
     const instructions = [];
 
-    const styles: TextStyles = { color: '#000000', align: 'left', size: 4, font: `Music`, baseline: 'top' };
-    instructions.push(buildText(styles, x, y, glyph));
-    
+    const styles: TextStyles = { color: '#000000', align: 'left', size: 4, font: `Music`, baseline: 'middle' };
+    instructions.push(buildText(styles, x, y + offset, glyph));
+
     if (dotted) {
         const styles: CircleStyles = { color: '#000000' };
-        instructions.push(buildCircle(styles, x + 1.5, y + 1.5, .2));
+        const shift = (offset * 2) % 2 === 0 ? -.5 : 0;
+        instructions.push(buildCircle(styles, x + 1.75, y + offset + shift, .2));
     }
 
     return instructions;

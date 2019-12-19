@@ -2,11 +2,7 @@ import React, { FC } from 'react';
 
 import './keyboard.css';
 
-interface Props {
-
-}
-
-export const Keyboard: FC<Props> = ({ }) => {
+export const Keyboard: FC = () => {
     const octave = 4;
 
     return <div className="keyboard">

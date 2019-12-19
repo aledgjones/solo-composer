@@ -1,5 +1,5 @@
 import { EntriesByTick } from "../services/track";
-import { EntryType } from "../entries";
+import { EntryType, Entry } from "../entries";
 
 export function getNearestEntryToTick<T>(tick: number, track: EntriesByTick, type?: EntryType) {
 
@@ -10,7 +10,7 @@ export function getNearestEntryToTick<T>(tick: number, track: EntriesByTick, typ
             if (!type || entry._type === type) {
                 return {
                     at: _tick,
-                    entry: entry
+                    entry: entry as Entry<T>
                 }
             }
         }

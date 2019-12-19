@@ -36,12 +36,27 @@ function measureBarlineBox(type: BarlineType): Box {
     }
 }
 
+function measureBarlineBounds(type: BarlineType): Box {
+    switch (type) {
+        case BarlineType.double:
+            return { width: .5, height: 4 };
+        case BarlineType.final:
+            return { width: 1, height: 4 };
+        case BarlineType.start_repeat:
+        case BarlineType.end_repeat:
+            return { width: 2, height: 4 };
+        case BarlineType.normal:
+        default:
+            return { width: 0, height: 4 };
+    }
+}
+
 export function createBarline(def: BarlineDef, tick: number): Entry<Barline> {
     return {
         _type: EntryType.barline,
         _key: shortid(),
         _box: measureBarlineBox(def.type),
-        _bounds: measureBarlineBox(def.type),
+        _bounds: measureBarlineBounds(def.type),
         _offset: { top: 0, left: 0 },
         _tick: tick,
 

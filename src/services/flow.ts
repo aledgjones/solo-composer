@@ -6,16 +6,17 @@ import { removeProps } from '../ui/utils/remove-props';
 import { instrumentDefs } from './instrument-defs';
 import { Instruments } from './instrument';
 import { Track, createTrack } from './track';
-import { createTimeSignature } from '../entries/time-signature';
-import { getDefaultGroupings } from '../parse/get-default-groupings';
-import { createKeySignature, KeySignatureMode } from '../entries/key-signature';
+import { TimeSignatureDef, TimeSignature, createTimeSignature } from '../entries/time-signature';
 import { Entry } from '../entries';
+import { getTicksPerBeat } from '../parse/get-ticks-per-beat';
 
 export const FLOW_CREATE = '@flow/create';
 export const FLOW_REORDER = '@flow/reorder';
 export const FLOW_REMOVE = '@flow/remove';
 export const FLOW_ASSIGN_PLAYER = '@flow/assign-player';
 export const FLOW_REMOVE_PLAYER = '@flow/remove-player';
+export const FLOW_CREATE_TIME_SIGNATURE = '@flow/create-time-signature';
+export const FLOW_SET_LENGTH = '@flow/set-length';
 
 export interface FlowActions {
     create: (playerKeys: PlayerKey[], players: Players, instruments: Instruments) => FlowKey;
@@ -23,6 +24,7 @@ export interface FlowActions {
     remove: (flow: Flow) => void;
     assignPlayer: (flowKey: FlowKey, player: Player, instruments: Instruments) => void;
     removePlayer: (flowKey: FlowKey, playerKey: PlayerKey, staveKeys: StaveKey[]) => void;
+    createTimeSignature: (def: TimeSignatureDef, tick: number, flow: Flow) => void;
 }
 
 export type FlowKey = string;
@@ -156,11 +158,52 @@ export const flowReducer = (state: FlowState, action: any) => {
                                 ...staves
                             }
                         }
-                    } else {
-                        output[flowKey] = flow;
                     }
                     return output;
-                }, {})
+                }, state.byKey)
+            }
+        }
+        case FLOW_SET_LENGTH: {
+            const flowKey = action.payload.flowKey;
+            const length: number = action.payload.length;
+            return {
+                order: state.order,
+                byKey: state.order.reduce((output: { [key: string]: Flow }, _flowKey: string) => {
+                    if (_flowKey === flowKey) {
+                        const flow = state.byKey[_flowKey];
+                        output[_flowKey] = {
+                            ...flow,
+                            length
+                        }
+                    }
+                    return output;
+                }, state.byKey)
+            }
+        }
+        case FLOW_CREATE_TIME_SIGNATURE: {
+            const flowKey = action.payload.flowKey;
+            const timeSignature: Entry<TimeSignature> = action.payload.timeSignature;
+            return {
+                order: state.order,
+                byKey: state.order.reduce((output: { [key: string]: Flow }, _flowKey: string) => {
+                    if (_flowKey === flowKey) {
+                        const flow = state.byKey[_flowKey];
+                        output[_flowKey] = {
+                            ...flow,
+                            master: {
+                                ...flow.master,
+                                entries: {
+                                    order: [...flow.master.entries.order, timeSignature._key],
+                                    byKey: {
+                                        ...flow.master.entries.byKey,
+                                        [timeSignature._key]: timeSignature
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return output;
+                }, state.byKey)
             }
         }
         default:
@@ -205,23 +248,37 @@ export const flowActions = (dispatch: any): FlowActions => {
         },
         removePlayer: (flowKey, playerKey, staveKeys) => {
             dispatch({ type: FLOW_REMOVE_PLAYER, payload: { flowKey, playerKey, staveKeys } });
+        },
+        createTimeSignature: (timeSignatureDef, tick, flow) => {
+            const ticksPerBeat = getTicksPerBeat(timeSignatureDef.subdivisions, timeSignatureDef.beatType);
+            const ticksPerBar = timeSignatureDef.beats * ticksPerBeat;
+            if (flow.length - tick < ticksPerBar) {
+                dispatch({
+                    type: FLOW_SET_LENGTH,
+                    payload: {
+                        flowKey: flow.key,
+                        length: tick + ticksPerBar
+                    }
+                });
+            }
+            dispatch({
+                type: FLOW_CREATE_TIME_SIGNATURE,
+                payload: {
+                    flowKey: flow.key,
+                    timeSignature: createTimeSignature(timeSignatureDef, tick)
+                }
+            });
         }
     }
 }
 
 const createFlow = (players: PlayerKey[], staves: { [key: string]: Stave }): Flow => {
-
-    const events = [
-        createTimeSignature({ beats: 4, beatType: 4, groupings: getDefaultGroupings(4), subdivisions: 12, drawAs: 'c' }, 0),
-        createKeySignature({ offset: -2, mode: KeySignatureMode.major }, 0)
-    ];
-
     return {
         key: shortid(),
         title: 'Untitled Flow',
         players,
         staves,
-        length: 12 * 4 * 4,
-        master: createTrack(events)
+        length: 12,
+        master: createTrack([])
     }
 }

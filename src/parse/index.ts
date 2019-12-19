@@ -32,6 +32,9 @@ import { createBarline, drawBarline, BarlineType } from "../entries/barline";
 import { drawNote } from "../entries/note";
 import { getNearestEntryToTick } from "./get-nearest-entry-to-tick";
 import { TimeSignature } from "../entries/time-signature";
+import { Clef } from "../entries/clef-defs";
+import { Tone } from "../entries/tone";
+import { getStepsBetweenPitces } from "./get-steps-between-pitches";
 
 export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, converter: Converter): RenderInstructions {
 
@@ -39,24 +42,26 @@ export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, c
 
     const instruments = getInstruments(score.players, score.instruments, flow);
     const staves = getStaves(instruments, flow);
-    const flowEntries = entriesByTick(flow.master.entries.order, flow.master.entries.byKey);
+    const flowEntriesByTick = entriesByTick(flow.master.entries.order, flow.master.entries.byKey);
 
     const counts = getCounts(score.players, score.instruments, score.config);
     const names = getNames(instruments, counts, NameType.long);
     const namesWidth = measureNames(names, config, converter);
 
     const verticalMeasurements = measureVerticalLayout(instruments, config);
-    const prologueWidths = measureStavePrologue(0, flowEntries, staves, config);
+    const prologueWidths = measureStavePrologue(0, flowEntriesByTick, staves, config);
     const prologueWidth = prologueWidths.reduce((a, b) => a + b, 0);
 
     const x = config.framePadding.left + namesWidth + config.staveInstrumentNameGap + measureBracketAndBraces(verticalMeasurements);
     const y = config.framePadding.top;
 
-    const barlines = getFirstBeats(flow.length, flowEntries);
+    const barlines = getFirstBeats(flow.length, flowEntriesByTick);
+
+    // these are helpers to render these entries
     const normalBarline = createBarline({ type: BarlineType.normal }, 0);
     const finalBarline = createBarline({ type: config.finalBarlineType }, 0);
 
-    const notationTracks = getWrittenDurations(flow.length, flowEntries, staves, barlines);
+    const notationTracks = getWrittenDurations(flow.length, flowEntriesByTick, staves, barlines);
 
     // 2) create a rhythmic grid for the whole flow (ie. spacings)
     // 3) assign widths to ticks
@@ -79,30 +84,49 @@ export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, c
     let currentX = x + prologueWidth;
     for (let tick = 0; tick < flow.length; tick++) {
 
-        if (tick !== 0 && barlines.includes(tick)) {
+        const timeSig = getNearestEntryToTick<TimeSignature>(tick, flowEntriesByTick, EntryType.timeSignature);
+        const subdivisions = timeSig.entry ? timeSig.entry.subdivisions : 12;
+
+        const flowEntriesAtTick = flowEntriesByTick[tick] || [];
+        const barline = flowEntriesAtTick.filter(entry => entry._type === EntryType.barline)[0];
+
+        if (barline) {
+            drawInstructions.push(...drawBarline(currentX, y, staves, verticalMeasurements, barline));
+            currentX += barline._bounds.width;
+        } else if (tick !== 0 && (timeSig.entry && timeSig.entry.beats > 0) && barlines.includes(tick)) {
             drawInstructions.push(...drawBarline(currentX, y, staves, verticalMeasurements, normalBarline));
+            currentX += normalBarline._bounds.width;
         }
 
         const placementX = tickWidths[tick];
         currentX = currentX + placementX[0];
 
-        const timeSig = getNearestEntryToTick<TimeSignature>(tick, flowEntries, EntryType.timeSignature);
-        const subdivisions = timeSig.entry ? timeSig.entry.subdivisions : 12;
-
         staves.forEach(stave => {
+
+            const staveEntriesByTick = entriesByTick(stave.master.entries.order, stave.master.entries.byKey);
+            const clef = getNearestEntryToTick<Clef>(tick, staveEntriesByTick, EntryType.clef);
+            const clefPitch = clef.entry ? clef.entry.type : 'G4';
+            const clefOffset = clef.entry ? clef.entry.offset : 3;
+
             stave.tracks.order.forEach(trackKey => {
 
-                const track = notationTracks[trackKey];
+                const notationTrack = notationTracks[trackKey];
                 const top = y + verticalMeasurements.staves[stave.key].y;
+                const tones = stave.tracks.byKey[trackKey].entries.byKey;
 
-                if (track[tick]) {
-                    const entry = track[tick];
+                if (notationTrack[tick]) {
+                    const entry = notationTrack[tick];
                     const length = getNotationBaseLength(entry.duration, subdivisions);
                     const isDotted = getIsDotted(entry.duration, subdivisions);
                     if (entry.type === NotationType.rest) {
                         drawInstructions.push(...drawRest(currentX, top, length, isDotted));
                     } else {
-                        drawInstructions.push(...drawNote(currentX, top, length, isDotted));
+                        entry.keys.forEach(key => {
+                            const tone = tones[key] as Tone;
+                            const toneOffset = getStepsBetweenPitces(clefPitch, tone.pitch);
+                            const offset = (clefOffset / 2) - (toneOffset / 2);
+                            drawInstructions.push(...drawNote(currentX, top, offset, length, isDotted));
+                        });
                     }
                 }
 
@@ -122,9 +146,9 @@ export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, c
             ...drawBrackets(x, y, verticalMeasurements, config),
             ...drawSubBrackets(x, y, verticalMeasurements),
             ...drawStaves(x, y, prologueWidth + notationWidth + finalBarline._bounds.width, staves, verticalMeasurements),
-            ...drawStavePrologue(x, y, prologueWidths, verticalMeasurements, flowEntries, staves, 0),
+            ...drawStavePrologue(x, y, prologueWidths, verticalMeasurements, flowEntriesByTick, staves, 0),
 
-            ...drawBarlines(x + prologueWidth, y, barlines, flowEntries, staves, verticalMeasurements, tickWidths),
+            ...drawBarlines(x + prologueWidth, y, barlines, flowEntriesByTick, staves, verticalMeasurements, tickWidths),
             ...drawInstructions,
             ...drawFinalBarline(x + prologueWidth + notationWidth, y, staves, verticalMeasurements, finalBarline)
         )

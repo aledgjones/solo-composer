@@ -47,7 +47,7 @@ export function useTicks(length: number, flowEntriesByTick: EntriesByTick, zoom:
             const width = Math.ceil((36 / ticksPerQuaver) * zoom);
             const isBeat = getIsBeat(tick, ticksPerBeat, timeSig.at);
             const isHalfBeat = getIsBeat(tick, ticksPerQuaver, timeSig.at);
-            const isFirstBeat = getDistanceFromBarline(tick, ticksPerBeat, timeSig.at, timeSig.entry ? timeSig.entry.beats : 0) === 0;
+            const isFirstBeat = getDistanceFromBarline(tick, ticksPerBeat, timeSig.at, timeSig.entry ? timeSig.entry.beats : undefined) === 0;
 
             ticks.push({ x, width, isBeat, isHalfBeat, isFirstBeat });
 

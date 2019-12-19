@@ -3,7 +3,7 @@ import { decode } from 'base64-arraybuffer';
 import { Envelope, envelope } from './envelope';
 import { getMIDIPitch } from '../parse/get-midi-pitch';
 
-export type Pitch = string | number;
+export type Pitch = string;
 
 interface PatchFromFile {
     envelope: Envelope;
@@ -89,7 +89,7 @@ export class PatchPlayer {
 
     }
 
-    public play(pitch: number | string, velocity: number, duration: number, when: number = 0) {
+    public play(pitch: Pitch, velocity: number, duration: number, when: number = 0) {
 
         const { loop, loopStart, loopEnd, buffer, detune } = this.getSample(pitch);
 
