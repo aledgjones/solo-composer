@@ -50,13 +50,8 @@ export const useAppState = (): [State, Actions] => {
         actions.score.players.assignInstrument(player.key, instrument);
 
         actions.score.flows.createTimeSignature({ beats: 2, beatType: 4, subdivisions: 12, groupings: getDefaultGroupings(2) }, 0, flowKey);
-        actions.score.flows.createTimeSignature({ beats: 4, beatType: 4, subdivisions: 12, groupings: getDefaultGroupings(4), drawAs: 'c' }, 48, flowKey);
-
         actions.score.flows.createKeySignature({ mode: KeySignatureMode.major, offset: -5 }, 0, flowKey);
-        actions.score.flows.createKeySignature({ mode: KeySignatureMode.major, offset: 3 }, 48, flowKey);
-
-        actions.score.flows.createBarline({ type: BarlineType.start_repeat }, 0, flowKey);
-        actions.score.flows.createBarline({ type: BarlineType.end_repeat }, 24, flowKey);
+        actions.score.flows.setLength(96, flowKey);
 
     }, [actions.score.instruments, actions.score.players, actions.score.flows, flowKey]);
 

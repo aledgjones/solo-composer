@@ -32,6 +32,7 @@ export interface FlowActions {
     createTimeSignature: (def: TimeSignatureDef, tick: number, flowKey: string) => void;
     createKeySignature: (def: KeySignatureDef, tick: number, flowKey: string) => void;
     createBarline: (def: BarlineDef, tick: number, flowKey: string) => void;
+    setLength: (length: number, flowKey: string) => void;
 }
 
 export type FlowKey = string;
@@ -371,6 +372,15 @@ export const flowActions = (dispatch: any): FlowActions => {
                     entry: createBarline(barlineDef, tick)
                 }
             });
+        },
+        setLength: (length, flowKey) => {
+            dispatch({
+                type: FLOW_SET_LENGTH,
+                payload: {
+                    flowKey,
+                    length
+                }
+            })
         }
     }
 }
