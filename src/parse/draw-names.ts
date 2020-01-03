@@ -7,13 +7,13 @@ export function drawNames(x: number, y: number, width: number, instruments: Inst
 
     const styles: TextStyles = {
         color: '#000000',
-        font: config.staveInstrumentNameFont,
-        size: config.staveInstrumentNameSize,
-        align: config.staveInstrumentNameAlign,
+        font: config.instrumentName.font,
+        size: config.instrumentName.size,
+        align: config.instrumentName.align,
         baseline: 'middle'
     };
 
-    const left = config.staveInstrumentNameAlign === 'left' ? x : x + width;
+    const left = config.instrumentName.align === 'left' ? x : x + width;
 
     return instruments.map(instrument => {
         const top = y + verticalMeasurements.instruments[instrument.key].y + (verticalMeasurements.instruments[instrument.key].height / 2);

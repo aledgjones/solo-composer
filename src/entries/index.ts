@@ -30,5 +30,9 @@ export enum EntryType {
     clef,
     keySignature,
     timeSignature,
-    tone
+    tone,
+    absoluteTempo,
+    relativeTempo,
+    gradualTempo,
+    resetTempo
 }

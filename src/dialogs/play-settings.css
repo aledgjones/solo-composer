@@ -1,0 +1,22 @@
+.play-settings__port {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.play-settings__port:last-child {
+    margin-bottom: 0;
+}
+
+.play-settings__port-description {
+    flex-grow: 1;
+}
+
+.play-settings__port-name {
+    margin-bottom: 2px;
+}
+
+.play-settings__port-manufacturer {
+    color: rgb(100,100,100);
+    font-size: 10px;    
+}

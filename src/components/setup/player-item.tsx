@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useMemo, MouseEvent } from 'react';
 import { SortableElement } from 'react-sortable-hoc';
-import { mdiChevronDown, mdiPlus, mdiDeleteOutline, mdiChevronUp, mdiAccount, mdiAccountGroup } from '@mdi/js';
+import { mdiChevronDown, mdiPlus, mdiDeleteOutline, mdiChevronUp } from '@mdi/js';
 import Color from 'color';
 
 import { Icon } from '../../ui';

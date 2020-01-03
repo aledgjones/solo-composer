@@ -22,7 +22,7 @@ export function getWidthOfMM() {
     document.body.appendChild(div);
     const width = div.clientWidth;
     document.body.removeChild(div);
-    return width * (window.devicePixelRatio * 2);
+    return width * (window.devicePixelRatio);
 }
 
 export function getConverter(width: number) {

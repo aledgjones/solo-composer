@@ -14,10 +14,8 @@ export interface EngravingConfig {
     staveSpacing: Spaces;
     systemStartPadding: Spaces;
 
-    staveInstrumentNameSize: Spaces;
-    staveInstrumentNameFont: string;
-    staveInstrumentNameAlign: CanvasTextAlign;
-    staveInstrumentNameGap: Spaces;
+    instrumentName: { size: Spaces; font: string; align: CanvasTextAlign; gap: Spaces; };
+    tempo: { size: Spaces; font: string; align: CanvasTextAlign; distanceFromStave: number };
 
     bracketing: BracketingType;
     bracketEndStyle: BracketEndStyle;
@@ -52,10 +50,8 @@ export const defaultEngravingConfig: EngravingConfig = {
     staveSpacing: 6,
     systemStartPadding: .75,
 
-    staveInstrumentNameSize: 1.75,
-    staveInstrumentNameFont: 'Libre Baskerville',
-    staveInstrumentNameAlign: 'right',
-    staveInstrumentNameGap: 2,
+    instrumentName: { size: 1.75, font: 'Libre Baskerville', align: 'right', gap: 2 },
+    tempo: { size: 1.75, font: 'Libre Baskerville', align: 'left', distanceFromStave: 2 },
 
     bracketing: BracketingType.orchestral,
     bracketEndStyle: BracketEndStyle.wing,

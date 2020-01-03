@@ -23,8 +23,8 @@ export function useRenderWriteMode(score: Score, flowKey: FlowKey) {
 
     useEffect(() => {
         const cb = (e: any) => {
-            canvas.style.height = `${e.data.height / (window.devicePixelRatio * 2)}px`;
-            canvas.style.width = `${e.data.width / (window.devicePixelRatio * 2)}px`;
+            canvas.style.height = `${e.data.height / (window.devicePixelRatio)}px`;
+            canvas.style.width = `${e.data.width / (window.devicePixelRatio)}px`;
         }
         worker.addEventListener('message', cb);
         return () => {

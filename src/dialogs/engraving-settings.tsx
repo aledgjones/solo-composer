@@ -6,7 +6,10 @@ import { ListItem } from '../components/shared/list-item';
 import { EngravingState, LayoutType, PartialEngravingConfig, defaultEngravingConfig } from '../services/engraving';
 import { BracketingType, BracketEndStyle } from '../parse/draw-brackets';
 
+import './generic-settings.css';
 import './engraving-settings.css';
+
+import staveSpace from '../assets/engraving/stave-space.svg';
 
 enum Page {
     staves = 1,
@@ -31,17 +34,17 @@ export const EngravingSettings: FC<Props> = ({ config, onUpdate, onClose }) => {
     }
 
     return <Backdrop visible={true}>
-        <Card animate className="general-settings">
-            <div className="general-settings__content">
-                <div className="general-settings__left-panel">
+        <Card animate className="generic-settings">
+            <div className="generic-settings__content">
+                <div className="generic-settings__left-panel">
                     <ListItem selected={page === Page.bracketsAndBraces} onClick={() => setPage(Page.bracketsAndBraces)}>Brackets &amp; Braces</ListItem>
                     <ListItem selected={page === Page.staves} onClick={() => setPage(Page.staves)}>Staves</ListItem>
                 </div>
-                <div className="general-settings__right-panel">
+                <div className="generic-settings__right-panel">
 
                     {page === Page.bracketsAndBraces && <>
-                        <div className="general-settings__header">Approach</div>
-                        <div className="general-settings__section">
+                        <div className="generic-settings__header">Approach</div>
+                        <div className="generic-settings__section">
                             <Select margin required color={Theme.primary} label="Ensemble type" value={engraving.bracketing} onChange={(val: BracketingType) => onUpdate(key, { bracketing: val })}>
                                 <Option value={BracketingType.none} displayAs="None">None</Option>
                                 <Option value={BracketingType.orchestral} displayAs="Orchestral">Orchestral</Option>
@@ -56,8 +59,8 @@ export const EngravingSettings: FC<Props> = ({ config, onUpdate, onClose }) => {
                                 <Option value={false} displayAs="No sub brackets">No sub brackets</Option>
                             </Select>
                         </div>
-                        <div className="general-settings__header">Design</div>
-                        <div className="general-settings__section">
+                        <div className="generic-settings__header">Design</div>
+                        <div className="generic-settings__section">
                             <Select required color={Theme.primary} label="Bracet cap style" value={engraving.bracketEndStyle} onChange={(val: BracketEndStyle) => onUpdate(key, { bracketEndStyle: val })}>
                                 <Option value={BracketEndStyle.none} displayAs="None">None</Option>
                                 <Option value={BracketEndStyle.line} displayAs="Lines">Lines</Option>
@@ -67,15 +70,16 @@ export const EngravingSettings: FC<Props> = ({ config, onUpdate, onClose }) => {
                     </>}
 
                     {page === Page.staves && <>
-                        <div className="general-settings__header">Space Size</div>
-                        <div className="general-settings__section">
+                        <div className="generic-settings__header">Space Size</div>
+                        <div className="generic-settings__section">
+                            <img src={staveSpace} className="generic-settings__example" />
                             <InputNumber label="Space size" value={engraving.space} precision={2} step={.01} units="mm" color={Theme.primary} errorColor={Theme.error} onChange={(val: number) => onUpdate(key, { space: val })} />
                         </div>
                     </>}
 
                     {/* {page === Page.staffLabels && <>
-                        <div className="general-settings__header">Numbering</div>
-                        <div className="general-settings__section">
+                        <div className="generic-settings__header">Numbering</div>
+                        <div className="generic-settings__section">
                             <Select required color={color} placeholder="Numbering Style" value={config.autoCountStyle} onChange={(val: InstrumentAutoCountStyle) => onUpdate(key, { autoCountStyle: val })}>
                                 <Option value={InstrumentAutoCountStyle.arabic} displayAs="Arabic Numbering (1, 2, 3 etc.)">Arabic Numbering (1, 2, 3 etc.)</Option>
                                 <Option value={InstrumentAutoCountStyle.roman} displayAs="Roman Numbering (I, II, III etc.)">Roman Numbering (I, II, III etc.)</Option>
@@ -85,13 +89,13 @@ export const EngravingSettings: FC<Props> = ({ config, onUpdate, onClose }) => {
 
                 </div>
             </div>
-            <div className="general-settings__buttons">
+            <div className="generic-settings__buttons">
                 <Select style={{ width: 300, marginRight: 8 }} required value={key} color={Theme.primary} onChange={setKey}>
                     <Option value={LayoutType.score} displayAs="Score">Score</Option>
                     <Option value={LayoutType.part} displayAs="Part">Part</Option>
                 </Select>
                 <Button compact color={Theme.primary} outline>Reset All</Button>
-                <div className="general-settings__spacer" />
+                <div className="generic-settings__spacer" />
                 <Button compact color={Theme.primary} onClick={onClose}>Close</Button>
             </div>
         </Card>

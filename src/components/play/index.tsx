@@ -12,15 +12,19 @@ import { PlayerControls } from './player-contols';
 import { useTicks, Ticks } from './ticks';
 import { PlayerTrack } from './player-track';
 import { entriesByTick } from '../../services/track';
+import { PlaySettings } from '../../dialogs/play-settings';
 
 import './play.css';
 
 interface Props {
     state: State;
     actions: Actions;
+
+    settings: boolean;
+    onSettingsClose: () => void;
 }
 
-export const Play: FC<Props> = ({ state, actions }) => {
+export const Play: FC<Props> = ({ state, actions, settings, onSettingsClose }) => {
 
     const [zoom, setZoom] = useState<number>(1.5);
     const [flowKey, setFlowKey] = useState(state.score.flows.order[0]);
@@ -91,5 +95,7 @@ export const Play: FC<Props> = ({ state, actions }) => {
             </div>
 
         </ScrollContainer>
+
+        {settings && <PlaySettings state={state.playback} actions={actions.playback} onClose={() => onSettingsClose()} />}
     </>;
 }

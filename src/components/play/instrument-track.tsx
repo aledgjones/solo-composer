@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import Color from 'color';
 
 import { Instrument } from '../../services/instrument';
 import { background } from './track-background';
@@ -46,6 +45,8 @@ export const InstrumentTrack: FC<Props> = ({ color, instrument, staves, ticks })
                         const left = ticks[entry._tick].x;
                         const width = getWidth(entry._tick, entry.duration, ticks);
                         return <div key={entry._key} className="instrument-track__tone" style={{ backgroundColor: color, top, left, height: slot, width }} />;
+                    } else {
+                        return null;
                     }
                 });
             });

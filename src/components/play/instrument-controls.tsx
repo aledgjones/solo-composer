@@ -4,7 +4,6 @@ import { mdiPiano } from '@mdi/js';
 import { useInstrumentName, Instrument } from '../../services/instrument';
 import { Icon } from '../../ui';
 import { Keyboard } from './keyboard';
-import { Theme } from '../../const';
 
 import './instrument-controls.css';
 

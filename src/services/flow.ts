@@ -12,6 +12,7 @@ import { getTicksPerBeat } from '../parse/get-ticks-per-beat';
 import { getEntryAtTick } from '../parse/get-entry-at-tick';
 import { KeySignatureDef, createKeySignature, KeySignature } from '../entries/key-signature';
 import { BarlineDef, createBarline, Barline } from '../entries/barline';
+import { createAbsoluteTempo, AbsoluteTempoDef, AbsoluteTempo } from '../entries/absolute-tempo';
 
 export const FLOW_CREATE = '@flow/create';
 export const FLOW_REORDER = '@flow/reorder';
@@ -21,6 +22,7 @@ export const FLOW_REMOVE_PLAYER = '@flow/remove-player';
 export const FLOW_CREATE_TIME_SIGNATURE = '@flow/create-time-signature';
 export const FLOW_CREATE_KEY_SIGNATURE = '@flow/create-key-signature';
 export const FLOW_CREATE_BARLINE = '@flow/create-barline';
+export const FLOW_CREATE_ABSOLUTE_TEMPO = '@flow/create-absolute-tempo';
 export const FLOW_SET_LENGTH = '@flow/set-length';
 
 export interface FlowActions {
@@ -32,6 +34,7 @@ export interface FlowActions {
     createTimeSignature: (def: TimeSignatureDef, tick: number, flowKey: string) => void;
     createKeySignature: (def: KeySignatureDef, tick: number, flowKey: string) => void;
     createBarline: (def: BarlineDef, tick: number, flowKey: string) => void;
+    createAbsoluteTempo: (def: AbsoluteTempoDef, tick: number, flowKey: string) => void;
     setLength: (length: number, flowKey: string) => void;
 }
 
@@ -303,6 +306,41 @@ export const flowReducer = (state: FlowState, action: any) => {
                 }, state.byKey)
             }
         }
+        case FLOW_CREATE_ABSOLUTE_TEMPO: {
+            const flowKey = action.payload.flowKey;
+            const entry: Entry<AbsoluteTempo> = action.payload.entry;
+            const flow = state.byKey[flowKey];
+
+            // if there is already a barline at tick, replace with new entry
+            const entries = entriesByTick(flow.master.entries.order, flow.master.entries.byKey);
+            const old = getEntryAtTick<AbsoluteTempo>(entry._tick, entries, EntryType.absoluteTempo);
+            if (old.entry) {
+                entry._key = old.entry._key;
+            }
+
+            return {
+                order: state.order,
+                byKey: state.order.reduce((output: { [key: string]: Flow }, _flowKey: string) => {
+                    if (_flowKey === flowKey) {
+                        const flow = state.byKey[_flowKey];
+                        output[_flowKey] = {
+                            ...flow,
+                            master: {
+                                ...flow.master,
+                                entries: {
+                                    order: !old.entry ? [...flow.master.entries.order, entry._key] : flow.master.entries.order,
+                                    byKey: {
+                                        ...flow.master.entries.byKey,
+                                        [entry._key]: entry
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return output;
+                }, state.byKey)
+            }
+        }
         default:
             return state;
     }
@@ -370,6 +408,15 @@ export const flowActions = (dispatch: any): FlowActions => {
                 payload: {
                     flowKey,
                     entry: createBarline(barlineDef, tick)
+                }
+            });
+        },
+        createAbsoluteTempo: (absoluteTempoDef, tick, flowKey) => {
+            dispatch({
+                type: FLOW_CREATE_BARLINE,
+                payload: {
+                    flowKey,
+                    entry: createAbsoluteTempo(absoluteTempoDef, tick)
                 }
             });
         },

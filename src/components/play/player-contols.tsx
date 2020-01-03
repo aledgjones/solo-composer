@@ -6,7 +6,7 @@ import { Icon } from '../../ui';
 import { mdiChevronDown } from '@mdi/js';
 
 import './player-controls.css';
-import { InstrumentControls } from './instrument-contols';
+import { InstrumentControls } from './instrument-controls';
 
 interface Props {
     player: Player;
