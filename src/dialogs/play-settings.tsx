@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react';
 import { Theme, APP_SHORT_NAME } from '../const';
+import { mdiMidiPort } from '@mdi/js';
 
 import { Backdrop, Card, Button, Icon } from '../ui';
 import { ListItem } from '../components/shared/list-item';
@@ -7,7 +8,6 @@ import { PlaybackState, PlaybackActions } from '../services/playback';
 
 import './generic-settings.css';
 import './play-settings.css';
-import { mdiMidiPort } from '@mdi/js';
 
 enum Page {
     internal = 1,
