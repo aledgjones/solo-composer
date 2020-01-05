@@ -133,11 +133,12 @@ export function useCounts(players: PlayerState, instruments: Instruments, config
 
 /**
  * get an array of instruments
+ * optionally filter by the flow
  */
-export function getInstruments(players: PlayerState, instruments: Instruments, flow: Flow): Instrument[] {
+export function getInstruments(players: PlayerState, instruments: Instruments, flow?: Flow): Instrument[] {
     return players.order.reduce((output: Instrument[], playerKey) => {
         const player = players.byKey[playerKey];
-        if (flow.players.includes(player.key)) {
+        if (!flow || flow.players.includes(player.key)) {
             player.instruments.forEach(instrumentKey => {
                 output.push(instruments[instrumentKey]);
             });
@@ -150,8 +151,12 @@ export function instrumentFamily(instrument?: Instrument) {
     return instrument ? instrument.id.split('.')[0] : '';
 }
 
-export function useInstrumentName(instrument: Instrument, count: string | undefined) {
+export function useInstrumentName(instrument?: Instrument, count?: string) {
     return useMemo(() => {
-        return instrument.longName + (count ? ` ${count}` : '');
+        if (instrument) {
+            return instrument.longName + (count ? ` ${count}` : '');
+        } else {
+            return '';
+        }
     }, [instrument, count]);
 }

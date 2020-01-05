@@ -11,16 +11,21 @@ import { Setup } from '../setup';
 import { Write } from '../write';
 import { Play } from '../play';
 
+import { useAutoSetup } from '../../playback/auto-setup';
+
 import './shell.css';
 
 export const MainShell: FC = () => {
 
     const [state, actions] = useAppState();
-    const [settings, setSettings] = useState(false);
+    const [settings, setSettings] = useState(true);
 
     useEffect(() => {
         actions.playback.midi.init();
-    }, [actions.playback.midi])
+        actions.playback.sampler.init();
+    }, [actions.playback.midi, actions.playback.sampler]);
+
+    useAutoSetup(state, actions);
 
     return <>
         <div className="main-shell__topbar">

@@ -96,6 +96,6 @@ export const Play: FC<Props> = ({ state, actions, settings, onSettingsClose }) =
 
         </ScrollContainer>
 
-        {settings && <PlaySettings state={state.playback} actions={actions.playback} onClose={() => onSettingsClose()} />}
+        {settings && <PlaySettings state={state} actions={actions.playback} onClose={() => onSettingsClose()} />}
     </>;
 }

@@ -13,7 +13,7 @@ export enum TabState {
 }
 
 export const tabEmptyState = (): TabState => {
-    return TabState.write;
+    return TabState.play;
 }
 
 export const tabReducer = (state: TabState, action: any) => {

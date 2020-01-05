@@ -58,11 +58,11 @@ export const midiActions = (dispatch: any): MidiActions => {
         test: (id: string) => {
             const output = webMidi.getOutputById(id);
             if (output) {
-                output.playNote('C4', 1, { duration: 100 })
-                output.playNote('D4', 1, { duration: 100, time: '+200' })
-                output.playNote(['E4', 'C5'], 1, { duration: 100, time: '+400' })
-                output.playNote('F4', 1, { duration: 100, time: '+600' })
-                output.playNote(['G4', 'G5'], 1, { duration: 100, time: '+800' })
+                output.playNote('C4', 1, { duration: 100 });
+                output.playNote('D4', 1, { duration: 100, time: '+200' });
+                output.playNote('E4', 1, { duration: 100, time: '+400' });
+                output.playNote('F4', 1, { duration: 100, time: '+600' });
+                output.playNote('G4', 1, { duration: 100, time: '+800' });
             }
         }
     }

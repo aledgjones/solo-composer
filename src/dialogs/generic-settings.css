@@ -18,8 +18,9 @@
 }
 
 .generic-settings__right-panel {
-    flex-grow: 1;
+    width: calc(100% - 250px);
     overflow: auto;
+
 }
 
 .generic-settings__header {

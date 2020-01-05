@@ -2,49 +2,35 @@ import { PatchPlayer, Pitch } from "./patch-player";
 
 export class InstrumentPlayer {
 
-    private patch?: PatchPlayer;
     private patches: { [patchName: string]: PatchPlayer } = {};
     private gainNode: GainNode;
 
-    constructor(private ac: AudioContext, destination: AudioDestinationNode) {
+    constructor(private ac: AudioContext) {
         this.gainNode = ac.createGain();
-        this.gainNode.connect(destination);
+        this.gainNode.connect(ac.destination);
     }
 
-    public setGain(value: number) {
+    public gain(value: number) {
         this.gainNode.gain.value = value;
     }
 
-    public async load(patchUrls: { [patchName: string]: string }, progress?: (val: number) => void) {
-        const patchNames = Object.keys(patchUrls);
-        const total = patchNames.length;
+    public async load(patchUrls: { [expression: string]: string }, progress?: (val: number) => void) {
+        const expressions = Object.keys(patchUrls);
+        const total = expressions.length;
         let completed = 0;
-        const loaders = patchNames.map(async name => {
-            this.patches[name] = new PatchPlayer(this.ac, this.gainNode);
-            await this.patches[name].loadPatch(patchUrls[name]);
+        const loaders = expressions.map(async expression => {
+            this.patches[expression] = new PatchPlayer(this.ac, this.gainNode);
+            await this.patches[expression].loadPatch(patchUrls[expression]);
             completed++;
             if (progress) {
                 progress(completed / total);
             }
         });
         await Promise.all(loaders);
-        this.patch = this.patches[patchNames[0]];
-        return this;
     }
 
-    public toPatch(name: string) {
-        if (this.patches[name]) {
-            this.patch = this.patches[name]
-        } else {
-            console.warn(`Patch ${name} does not exist on this instrument. Try:`);
-            const keys = Object.keys(this.patches);
-            keys.forEach(key => console.warn(key));
-        }
-    }
-
-    public play(pitch: Pitch, velocity: number, duration: number, when?: number) {
-        if (this.patch) {
-            this.patch.play(pitch, velocity, duration, when);
-        }
+    public play(patch: string, pitch: Pitch, velocity: number, duration: number, when?: number) {
+        const output = this.patches[patch] || this.patches['default'];
+        output.play(pitch, velocity, duration, when);
     }
 }
