@@ -1,8 +1,14 @@
 import React, { FC } from 'react';
+import { mdiChevronRight } from '@mdi/js';
+
 import { PlaybackActions } from '../services/playback';
 import { Channel } from '../services/sampler';
 import { useInstrumentName, Instruments, InstrumentCounts } from '../services/instrument';
 import { merge } from '../ui/utils/merge';
+import { Spinner, Icon } from '../ui';
+import { Theme } from '../const';
+import { SamplerCurrentState } from '../playback/sampler';
+import { Expressions } from '../playback/expressions';
 
 interface Props {
     i: number;
@@ -24,8 +30,14 @@ export const PlaySettingsChannel: FC<Props> = ({ i, channel, instruments, counts
     const name = useInstrumentName(instrument, count);
 
     return <div className="play-settings__row">
-        <div className="play-settings__cell play-settings__channel">{i + 1}</div>
-        <div className={merge("play-settings__cell play-settings__assigned", { 'play-settings__assigned--unassigned': !name })}>{name || 'Unassigned'}</div>
-        <div className="play-settings__cell play-settings__map">{channel.patchName}</div>
+        <div className={merge("play-settings__cell play-settings__channel", { 'play-settings__cell--unassigned': !channel.patchName })}>
+            {channel.state === SamplerCurrentState.loading && <Spinner className="play-settings__spinner" size={18} color={Theme.primary} max={1} value={channel.progress} />}
+            {channel.state === SamplerCurrentState.ready && i + 1}
+        </div>
+        <div className={merge("play-settings__cell play-settings__map", { 'play-settings__cell--unassigned': !channel.patchName })}>{channel.patchName || 'Unassigned'}</div>
+        <div className={merge("play-settings__cell play-settings__assigned", { 'play-settings__cell--unassigned': !name })}>{name || 'Unassigned'}</div>
+        <div className="play-settings__cell play-settings__loader">
+            <Icon size={24} color="rgb(50,50,50)" path={mdiChevronRight} onClick={() => actions.sampler.test(channel.key, Expressions.default)} />
+        </div>
     </div>
 }

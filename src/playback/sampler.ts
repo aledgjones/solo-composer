@@ -1,8 +1,9 @@
 import shortid from 'shortid';
-import { Output, OutputType, Listener, Action } from "./output";
+import { Output, OutputType, Listener, Action, ChannelKey } from "./output";
 import { APP_SHORT_NAME, APP_CREATOR } from '../const';
 import { InstrumentPlayer } from './instrument-player';
-import { SAMPLER_SET_STATE, SAMPLER_SET_PROGRESS, SAMPLER_CREATE_CHANNEL } from '../services/sampler';
+import { SAMPLER_SET_STATE, SAMPLER_SET_PROGRESS, SAMPLER_LOAD_PATCHES } from '../services/sampler';
+import { Pitch } from './patch-player';
 
 export interface Patches {
     [patchKey: string]: string;
@@ -30,13 +31,18 @@ export class Sampler implements Output {
         const keys = Object.keys(patchUrls);
         const patches = keys.map(key => patchUrls[key]);
 
-        this.dispatch({ type: SAMPLER_CREATE_CHANNEL, payload: { patches, channel, patchName } });
+        this.dispatch({ type: SAMPLER_LOAD_PATCHES, payload: { patches, channel, patchName } });
         this.channels[channel] = new InstrumentPlayer(this.audioContext);
         await this.channels[channel].load(patchUrls, (val) => {
             this.dispatch({ type: SAMPLER_SET_PROGRESS, payload: { progress: val, channel } });
         });
         this.dispatch({ type: SAMPLER_SET_STATE, payload: { state: SamplerCurrentState.ready, channel } });
 
+    }
+
+    public play(channel: ChannelKey, patch: string, pitch: Pitch, velocity: number, duration: number, when?: number) {
+        const playback = this.channels[channel];
+        playback.play(patch, pitch, velocity, duration, when);
     }
 
     private dispatch(action: Action) {

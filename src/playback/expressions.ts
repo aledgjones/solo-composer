@@ -1,9 +1,11 @@
 export enum Expressions {
+    default = 'default',
     legato = 'legato',
     staccato = 'staccato',
     spiccato = 'spiccato',
     pizzicato = 'pizzicato',
-    tremelo = 'tremelo',
+    tremolo = 'tremolo',
+    
     forte = 'forte',
     piano = 'piano'
 }

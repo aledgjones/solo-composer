@@ -43,37 +43,43 @@ export const EngravingSettings: FC<Props> = ({ config, onUpdate, onClose }) => {
                 <div className="generic-settings__right-panel">
 
                     {page === Page.bracketsAndBraces && <>
-                        <div className="generic-settings__header">Approach</div>
-                        <div className="generic-settings__section">
-                            <Select margin required color={Theme.primary} label="Ensemble type" value={engraving.bracketing} onChange={(val: BracketingType) => onUpdate(key, { bracketing: val })}>
-                                <Option value={BracketingType.none} displayAs="None">None</Option>
-                                <Option value={BracketingType.orchestral} displayAs="Orchestral">Orchestral</Option>
-                                <Option value={BracketingType.smallEnsemble} displayAs="Small ensemble">Small ensemble</Option>
-                            </Select>
-                            <Select margin required color={Theme.primary} label="Bracket groups with only one instrument" value={engraving.bracketSingleStaves} onChange={(val: boolean) => onUpdate(key, { bracketSingleStaves: val })}>
-                                <Option value={true} displayAs="Use bracket">Use bracket</Option>
-                                <Option value={false} displayAs="No bracket">No bracket</Option>
-                            </Select>
-                            <Select required color={Theme.primary} label="Sub bracket instruments of the same type" value={engraving.subBracket} onChange={(val: boolean) => onUpdate(key, { subBracket: val })}>
-                                <Option value={true} displayAs="Use sub brackets">Use sub brackets</Option>
-                                <Option value={false} displayAs="No sub brackets">No sub brackets</Option>
-                            </Select>
+                        <div className="generic-settings__group">
+                            <div className="generic-settings__header">Approach</div>
+                            <div className="generic-settings__section">
+                                <Select margin required color={Theme.primary} label="Ensemble type" value={engraving.bracketing} onChange={(val: BracketingType) => onUpdate(key, { bracketing: val })}>
+                                    <Option value={BracketingType.none} displayAs="None">None</Option>
+                                    <Option value={BracketingType.orchestral} displayAs="Orchestral">Orchestral</Option>
+                                    <Option value={BracketingType.smallEnsemble} displayAs="Small ensemble">Small ensemble</Option>
+                                </Select>
+                                <Select margin required color={Theme.primary} label="Bracket groups with only one instrument" value={engraving.bracketSingleStaves} onChange={(val: boolean) => onUpdate(key, { bracketSingleStaves: val })}>
+                                    <Option value={true} displayAs="Use bracket">Use bracket</Option>
+                                    <Option value={false} displayAs="No bracket">No bracket</Option>
+                                </Select>
+                                <Select required color={Theme.primary} label="Sub bracket instruments of the same type" value={engraving.subBracket} onChange={(val: boolean) => onUpdate(key, { subBracket: val })}>
+                                    <Option value={true} displayAs="Use sub brackets">Use sub brackets</Option>
+                                    <Option value={false} displayAs="No sub brackets">No sub brackets</Option>
+                                </Select>
+                            </div>
                         </div>
-                        <div className="generic-settings__header">Design</div>
-                        <div className="generic-settings__section">
-                            <Select required color={Theme.primary} label="Bracet cap style" value={engraving.bracketEndStyle} onChange={(val: BracketEndStyle) => onUpdate(key, { bracketEndStyle: val })}>
-                                <Option value={BracketEndStyle.none} displayAs="None">None</Option>
-                                <Option value={BracketEndStyle.line} displayAs="Lines">Lines</Option>
-                                <Option value={BracketEndStyle.wing} displayAs="Wings">Wings</Option>
-                            </Select>
+                        <div className="generic-settings__group">
+                            <div className="generic-settings__header">Design</div>
+                            <div className="generic-settings__section">
+                                <Select required color={Theme.primary} label="Bracet cap style" value={engraving.bracketEndStyle} onChange={(val: BracketEndStyle) => onUpdate(key, { bracketEndStyle: val })}>
+                                    <Option value={BracketEndStyle.none} displayAs="None">None</Option>
+                                    <Option value={BracketEndStyle.line} displayAs="Lines">Lines</Option>
+                                    <Option value={BracketEndStyle.wing} displayAs="Wings">Wings</Option>
+                                </Select>
+                            </div>
                         </div>
                     </>}
 
                     {page === Page.staves && <>
-                        <div className="generic-settings__header">Space Size</div>
-                        <div className="generic-settings__section">
-                            <img src={staveSpace} className="generic-settings__example" />
-                            <InputNumber label="Space size" value={engraving.space} precision={2} step={.01} units="mm" color={Theme.primary} errorColor={Theme.error} onChange={(val: number) => onUpdate(key, { space: val })} />
+                        <div className="generic-settings__group">
+                            <div className="generic-settings__header">Space Size</div>
+                            <div className="generic-settings__section">
+                                <img src={staveSpace} className="generic-settings__example" />
+                                <InputNumber label="Space size" value={engraving.space} precision={2} step={.01} units="mm" color={Theme.primary} errorColor={Theme.error} onChange={(val: number) => onUpdate(key, { space: val })} />
+                            </div>
                         </div>
                     </>}
 

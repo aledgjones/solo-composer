@@ -1,4 +1,5 @@
 import { PatchPlayer, Pitch } from "./patch-player";
+import { Expressions } from "./expressions";
 
 export class InstrumentPlayer {
 
@@ -30,7 +31,7 @@ export class InstrumentPlayer {
     }
 
     public play(patch: string, pitch: Pitch, velocity: number, duration: number, when?: number) {
-        const output = this.patches[patch] || this.patches['default'];
+        const output = this.patches[patch] || this.patches[Expressions.default];
         output.play(pitch, velocity, duration, when);
     }
 }

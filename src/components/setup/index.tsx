@@ -62,11 +62,15 @@ export const Setup: FC<Props> = ({ state, actions }) => {
 
     const onSelectInstrument = useCallback((def: InstrumentDef) => {
         if (selection) {
+            const channel = actions.playback.sampler.createChannel();
             const instrument = actions.score.instruments.create(def);
+
             actions.score.players.assignInstrument(selection.key, instrument);
+            actions.playback.sampler.assignInstrument(instrument.key, channel);
+            actions.playback.sampler.load(channel, def);
         }
         setDialogOpen(false);
-    }, [selection, actions.score.instruments, actions.score.players]);
+    }, [selection, actions.score.instruments, actions.score.players, actions.playback.sampler]);
 
     const onCancelInstrument = useCallback(() => {
         setDialogOpen(false);

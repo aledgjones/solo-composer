@@ -64,6 +64,18 @@ export function getFirstInstrumentDefFromPartialPath(path: string[]): Instrument
 }
 
 export const instrumentDefs: InstrumentDefs = {
+    "percussion.timpani": {
+        id: "percussion.timpani",
+        path: ['Percussion', 'Timpani'],
+        longName: "Timpani",
+        shortName: "Tmp.",
+        staves: [
+            { lines: 5, clef: { type: ClefType.F, offset: 2 } }],
+        patches: {
+            [Expressions.default]: '/patches/timpani/forte.json',
+            [Expressions.forte]: '/patches/timpani/forte.json'
+        }
+    },
     "keyboards.piano": {
         id: "keyboards.piano",
         path: ['Keyboards', 'Piano'],
@@ -74,6 +86,7 @@ export const instrumentDefs: InstrumentDefs = {
             { lines: 5, clef: { type: ClefType.F, offset: 2 } }
         ],
         patches: {
+            [Expressions.default]: '/patches/grand-piano/forte.json',
             [Expressions.forte]: '/patches/grand-piano/forte.json',
             [Expressions.piano]: '/patches/grand-piano/piano.json'
         }
@@ -87,10 +100,11 @@ export const instrumentDefs: InstrumentDefs = {
             { lines: 5, clef: { type: ClefType.G, offset: 6 } }
         ],
         patches: {
+            [Expressions.default]: '/patches/violin/legato.json',
             [Expressions.legato]: '/patches/violin/legato.json',
             [Expressions.pizzicato]: '/patches/violin/pizzicato.json',
-            [Expressions.spiccato]: '/patches/violin/spiccato.json'
-
+            [Expressions.spiccato]: '/patches/violin/spiccato.json',
+            [Expressions.tremolo]: '/patches/violin/tremolo.json'
         }
     },
     "strings.viola": {
@@ -102,7 +116,11 @@ export const instrumentDefs: InstrumentDefs = {
             { lines: 5, clef: { type: ClefType.C, offset: 4 } }
         ],
         patches: {
-
+            [Expressions.default]: '/patches/violin/legato.json',
+            [Expressions.legato]: '/patches/violin/legato.json',
+            [Expressions.pizzicato]: '/patches/violin/pizzicato.json',
+            [Expressions.spiccato]: '/patches/violin/spiccato.json',
+            [Expressions.tremolo]: '/patches/violin/tremolo.json'
         }
     },
     "strings.violoncello": {
@@ -114,7 +132,8 @@ export const instrumentDefs: InstrumentDefs = {
             { lines: 5, clef: { type: ClefType.F, offset: 2 } }
         ],
         patches: {
-
+            [Expressions.default]: '/patches/violoncello/legato.json',
+            [Expressions.legato]: '/patches/violoncello/legato.json'
         }
     },
     "strings.contrabass": {
@@ -126,7 +145,7 @@ export const instrumentDefs: InstrumentDefs = {
             { lines: 5, clef: { type: ClefType.F, offset: 2 } }
         ],
         patches: {
-
+            [Expressions.default]: ''
         }
     },
     "brass.trombone": {
@@ -138,7 +157,7 @@ export const instrumentDefs: InstrumentDefs = {
             { lines: 5, clef: { type: ClefType.F, offset: 2 } }
         ],
         patches: {
-
+            [Expressions.default]: ''
         }
     },
     "woodwinds.piccolo": {
@@ -150,7 +169,7 @@ export const instrumentDefs: InstrumentDefs = {
             { lines: 5, clef: { type: ClefType.G, offset: 6 } }
         ],
         patches: {
-            
+            [Expressions.default]: ''
         }
     },
     "woodwinds.flute": {
@@ -162,6 +181,7 @@ export const instrumentDefs: InstrumentDefs = {
             { lines: 5, clef: { type: ClefType.G, offset: 6 } }
         ],
         patches: {
+            [Expressions.default]: "/patches/flute/legato.json",
             [Expressions.legato]: "/patches/flute/legato.json"
         }
     },
@@ -174,7 +194,7 @@ export const instrumentDefs: InstrumentDefs = {
             { lines: 5, clef: { type: ClefType.G, offset: 6 } }
         ],
         patches: {
-
+            [Expressions.default]: ''
         }
     },
     "woodwinds.clarinet.a": {
@@ -186,7 +206,8 @@ export const instrumentDefs: InstrumentDefs = {
             { lines: 5, clef: { type: ClefType.G, offset: 6 } }
         ],
         patches: {
-            
+            [Expressions.default]: "/patches/clarinet/legato.json",
+            [Expressions.legato]: "/patches/clarinet/legato.json"
         }
     },
     "woodwinds.clarinet.b-flat": {
@@ -198,7 +219,21 @@ export const instrumentDefs: InstrumentDefs = {
             { lines: 5, clef: { type: ClefType.G, offset: 6 } }
         ],
         patches: {
-            
+            [Expressions.default]: "/patches/clarinet/legato.json",
+            [Expressions.legato]: "/patches/clarinet/legato.json"
+        }
+    },
+    "woodwinds.bass-clarinet": {
+        id: "woodwinds.bass-clarinet",
+        path: ['Woodwinds', 'Bass Clarinet'],
+        longName: "Bass Clarinet",
+        shortName: "B Cl.",
+        staves: [
+            { lines: 5, clef: { type: ClefType.G, offset: 6 } }
+        ],
+        patches: {
+            [Expressions.default]: "/patches/bass-clarinet/legato.json",
+            [Expressions.legato]: "/patches/bass-clarinet/legato.json"
         }
     },
     "woodwinds.bassoon": {
@@ -210,7 +245,7 @@ export const instrumentDefs: InstrumentDefs = {
             { lines: 5, clef: { type: ClefType.F, offset: 2 } }
         ],
         patches: {
-            
+            [Expressions.default]: ''
         }
     }
 }

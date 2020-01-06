@@ -19,7 +19,7 @@ export function useAutoSetup(state: State, actions: Actions) {
         const player = actions.score.players.create(PlayerType.solo);
         actions.score.players.assignInstrument(player.key, instrument);
 
-        const channel = shortid();
+        const channel = actions.playback.sampler.createChannel();
         actions.playback.sampler.load(channel, def);
         actions.playback.sampler.assignInstrument(instrument.key, channel);
 

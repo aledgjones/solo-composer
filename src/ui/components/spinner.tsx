@@ -43,6 +43,13 @@ export const Spinner: FC<Props> = ({ id, className, style, size, color, max, val
         }}
         viewBox="25 25 50 50"
     >
+        {!animate && <circle
+            className="ui-spinner__circle"
+            cx="50"
+            cy="50"
+            r="20"
+            stroke="rgb(175, 175, 175)"
+        />}
         <circle
             className="ui-spinner__circle"
             cx="50"
@@ -52,6 +59,5 @@ export const Spinner: FC<Props> = ({ id, className, style, size, color, max, val
             strokeDasharray={dasharray}
             strokeDashoffset={dashoffset}
         />
-
     </svg>;
 }
