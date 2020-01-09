@@ -17,21 +17,18 @@ interface PatchFromFile {
     }
 }
 
-interface Patch {
-    envelope: Envelope;
-    samples: {
-        [note: string]: {
-            loop: boolean;
-            loopStart: number;
-            loopEnd: number;
-            buffer: AudioBuffer;
-        }
-    }
+interface Sample {
+    loop: boolean;
+    loopStart: number;
+    loopEnd: number;
+    buffer: AudioBuffer;
+}
+
+interface Samples {
+    [note: string]: Sample;
 }
 
 export class PatchPlayer {
-
-    private patch: Patch = { envelope: this.defaultEnvelope(), samples: {} };
 
     private defaultEnvelope(): Envelope {
         return {
@@ -45,32 +42,36 @@ export class PatchPlayer {
         }
     };
 
-    constructor(private ac: AudioContext, private destination: GainNode) { };
-
+    private envelope = this.defaultEnvelope();
+    private samples: Samples = {};
     private getMIDIPitchValue = getMIDIPitch;
+    private nodes: AudioBufferSourceNode[] = [];
+
+    constructor(private ac: AudioContext, private destination: GainNode) { };
 
     private getSample(pitch: Pitch) {
 
         const MIDIPitchValue = this.getMIDIPitchValue(pitch);
 
-        if (this.patch.samples[MIDIPitchValue]) {
-            return { ...this.patch.samples[MIDIPitchValue], detune: 0 };
+        if (this.samples[MIDIPitchValue]) {
+            return { ...this.samples[MIDIPitchValue], detune: 0 };
         } else {
-            const pitches = Object.keys(this.patch.samples);
+            const pitches = Object.keys(this.samples);
             const closest = pitches.reduce<number>((prev, curr) => {
                 return (Math.abs(parseInt(curr) - MIDIPitchValue) < Math.abs(prev - MIDIPitchValue) ? parseInt(curr) : prev);
             }, parseInt(pitches[0]));
-            return { ...this.patch.samples[closest], detune: 100 * (MIDIPitchValue - closest) };
+            return { ...this.samples[closest], detune: 100 * (MIDIPitchValue - closest) };
         }
 
     }
 
     public async loadPatch(url: string) {
 
+        this.envelope = this.defaultEnvelope();
+        this.samples = {};
+
         const resp = await fetch(url);
         const data: PatchFromFile = await resp.json();
-
-        this.patch = { envelope: data.envelope, samples: {} };
 
         const keys = Object.keys(data.samples);
         for (let i = 0; i < keys.length; i++) {
@@ -79,7 +80,7 @@ export class PatchPlayer {
             const buffer = decode(entry.data);
             const audio = await this.ac.decodeAudioData(buffer);
             const MIDICode = this.getMIDIPitchValue(key);
-            this.patch.samples[MIDICode] = {
+            this.samples[MIDICode] = {
                 loop: entry.loop,
                 loopStart: parseFloat(new Big(entry.loopStart).div(audio.sampleRate).toString()),
                 loopEnd: parseFloat(new Big(entry.loopEnd).div(audio.sampleRate).toString()),
@@ -106,7 +107,7 @@ export class PatchPlayer {
         }
 
         const startAt = this.ac.currentTime + when;
-        const env = envelope(this.ac, startAt, { ...this.patch.envelope, gateTime: duration });
+        const env = envelope(this.ac, startAt, { ...this.envelope, gateTime: duration });
 
         sourceNode.connect(env.node);
         env.node.connect(velocityNode);
@@ -118,10 +119,17 @@ export class PatchPlayer {
             sourceNode.disconnect();
             env.node.disconnect();
             velocityNode.disconnect();
+            this.nodes = this.nodes.filter(node => {
+                return node !== sourceNode;
+            });
         }
+
+        this.nodes.push(sourceNode);
 
     }
 
-
+    public stopAll() {
+        this.nodes.forEach(node => node.stop(0));
+    }
 
 }

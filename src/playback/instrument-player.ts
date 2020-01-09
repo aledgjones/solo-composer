@@ -34,4 +34,11 @@ export class InstrumentPlayer {
         const output = this.patches[patch] || this.patches[Expressions.default];
         output.play(pitch, velocity, duration, when);
     }
+
+    public stopAll() {
+        const patches = Object.keys(this.patches);
+        patches.forEach(patch => {
+            this.patches[patch].stopAll();
+        })
+    }
 }

@@ -19,9 +19,10 @@ export interface Output {
     type: OutputType;
     manufacturer: string;
 
-    load: (channel: string, patchUrls: Patches, patchName: string) => void;
+    load: (channel: ChannelKey, patchUrls: Patches, patchName: string) => void;
     // gain: (channel: number, gain: number) => void;
     play: (channel: ChannelKey, patch: string, pitch: Pitch, velocity: number, duration: number, when?: number) => void;
-
+    stopAll: () => void;
+    
     listen: (cb: Listener) => void;
 }

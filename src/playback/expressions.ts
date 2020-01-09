@@ -4,8 +4,5 @@ export enum Expressions {
     staccato = 'staccato',
     spiccato = 'spiccato',
     pizzicato = 'pizzicato',
-    tremolo = 'tremolo',
-    
-    forte = 'forte',
-    piano = 'piano'
+    tremolo = 'tremolo'
 }

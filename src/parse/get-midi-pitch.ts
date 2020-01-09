@@ -1,7 +1,7 @@
 import { isString } from 'lodash';
 import { Pitch } from '../playback/patch-player';
 
-export const C0 = 12;
+export const C0 = 24;
 
 export function getMIDIPitch(pitch: Pitch) {
 
@@ -33,7 +33,9 @@ export function getMIDIPitch(pitch: Pitch) {
                 return basePitch + i - 1;
             };
         }
+        
         return basePitch;
+
     } else {
         return pitch;
     }

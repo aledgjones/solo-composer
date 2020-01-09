@@ -51,7 +51,7 @@ export const Setup: FC<Props> = ({ state, actions }) => {
         setDialogOpen(true);
     }, [actions.score.players]);
 
-    const onAddInstrument = useCallback((key: string) => {
+    const onAddInstrument = useCallback(() => {
         setDialogOpen(true);
     }, []);
 

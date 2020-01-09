@@ -3,7 +3,6 @@ import { InstrumentKey } from "./instrument";
 import { InstrumentDef } from "./instrument-defs";
 import shortid from "shortid";
 import { ChannelKey } from "../playback/output";
-import { Expressions } from "../playback/expressions";
 
 const sampler = new Sampler();
 
@@ -16,17 +15,21 @@ export const SAMPLER_ASSIGN_INSTRUMENT_TO_CHANNEL = '@sampler/assign-instrument-
 export interface SamplerActions {
     init: () => void;
     createChannel: () => string;
-    load: (channel: string, def: InstrumentDef) => Promise<void>;
+    load: (channel: ChannelKey, def: InstrumentDef) => Promise<void>;
     assignInstrument: (instrumentKey: string, channel: string) => void;
-    test: (channel: string, patch: string) => void;
+    stopAll: () => void;
+    test: (channel: ChannelKey, patch: string) => void;
 }
 
 export interface Channel {
     key: string;
     state: SamplerCurrentState;
     progress: number;
-    patches: string[];
     patchName?: string;
+    patches: {
+        order: string[];
+        byKey: Patches;
+    };
     assigned?: InstrumentKey;
 }
 
@@ -70,7 +73,8 @@ export const samplerReducer = (state: SamplerState, action: any) => {
         }
         case SAMPLER_LOAD_PATCHES: {
             const channel = action.payload.channel;
-            const patches = action.payload.patches;
+            const patchesOrder = action.payload.patchesByKey;
+            const patchesByKey = action.payload.patchesOrder;
             const patchName = action.payload.patchName;
             return {
                 ...state,
@@ -83,7 +87,10 @@ export const samplerReducer = (state: SamplerState, action: any) => {
                             state: SamplerCurrentState.loading,
                             progress: 0,
                             patchName,
-                            patches
+                            patches: {
+                                order: patchesOrder,
+                                byKey: patchesByKey
+                            }
                         }
                     }
                 }
@@ -162,16 +169,19 @@ export const samplerActions = (dispatch: any): SamplerActions => {
             // the sampler itself doesn't actually care about this so just dispatch directly
             dispatch({ type: SAMPLER_ASSIGN_INSTRUMENT_TO_CHANNEL, payload: { instrumentKey, channel } })
         },
+        stopAll: () => {
+            sampler.stopAll();
+        },
         test: (channel, patch) => {
-            sampler.play(channel, patch, 'C4', 1, 0.25, 0.0);
-            sampler.play(channel, patch, 'D4', 1, 0.25, 0.25);
-            sampler.play(channel, patch, 'E4', 1, 0.25, 0.5);
-            sampler.play(channel, patch, 'F4', 1, 0.25, 0.75);
-            sampler.play(channel, patch, 'G4', 1, 0.25, 1.0);
-            sampler.play(channel, patch, 'F4', 1, 0.25, 1.25);
-            sampler.play(channel, patch, 'E4', 1, 0.25, 1.5);
-            sampler.play(channel, patch, 'D4', 1, 0.25, 1.75);
-            sampler.play(channel, patch, 'C4', 1, 1.0, 2.0);
+            sampler.play(channel, patch, 'C4', 0.6, 0.25, 0.0);
+            sampler.play(channel, patch, 'D4', 0.7, 0.25, 0.25);
+            sampler.play(channel, patch, 'E4', 0.8, 0.25, 0.5);
+            sampler.play(channel, patch, 'F4', 0.9, 0.25, 0.75);
+            sampler.play(channel, patch, 'G4', 1.0, 0.25, 1.0);
+            sampler.play(channel, patch, 'F4', 0.9, 0.25, 1.25);
+            sampler.play(channel, patch, 'E4', 0.8, 0.25, 1.5);
+            sampler.play(channel, patch, 'D4', 0.7, 0.25, 1.75);
+            sampler.play(channel, patch, 'C4', 0.6, 1.0, 2.0);
         }
     }
 }

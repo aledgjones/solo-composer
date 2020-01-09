@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import shortid from 'shortid';
 import { Actions, State } from '../services/state';
 import { instrumentDefs } from '../services/instrument-defs';
 import { PlayerType } from '../services/player';
