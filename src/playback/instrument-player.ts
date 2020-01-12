@@ -31,7 +31,7 @@ export class InstrumentPlayer {
     }
 
     public play(patch: string, pitch: Pitch, velocity: number, duration: number, when?: number) {
-        const output = this.patches[patch] || this.patches[Expressions.default];
+        const output = this.patches[patch] || this.patches[Expressions.natural];
         output.play(pitch, velocity, duration, when);
     }
 

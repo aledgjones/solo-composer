@@ -37,7 +37,7 @@ export const PlaySettingsChannel: FC<Props> = ({ i, channel, instruments, counts
         <div className={merge("play-settings__cell play-settings__map", { 'play-settings__cell--unassigned': !channel.patchName })}>{channel.patchName || 'Unassigned'}</div>
         <div className={merge("play-settings__cell play-settings__assigned", { 'play-settings__cell--unassigned': !name })}>{name || 'Unassigned'}</div>
         <div className="play-settings__cell play-settings__loader">
-            <Icon size={24} color="rgb(50,50,50)" path={mdiChevronRight} onClick={() => actions.sampler.test(channel.key, Expressions.default)} />
+            <Icon size={24} color="rgb(50,50,50)" path={mdiChevronRight} onClick={() => actions.sampler.test(channel.key, Expressions.natural)} />
         </div>
     </div>
 }
