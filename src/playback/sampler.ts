@@ -3,7 +3,7 @@ import { Output, OutputType, Listener, Action, ChannelKey } from "./output";
 import { APP_SHORT_NAME, APP_CREATOR } from '../const';
 import { InstrumentPlayer } from './instrument-player';
 import { SAMPLER_SET_STATE, SAMPLER_SET_PROGRESS, SAMPLER_LOAD_PATCHES } from '../services/sampler';
-import { Pitch } from './patch-player';
+import { Pitch } from './utils';
 
 export interface Patches {
     [patchKey: string]: string;

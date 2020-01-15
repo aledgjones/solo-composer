@@ -1,8 +1,6 @@
 import { decode } from 'base64-arraybuffer';
 import { Envelope, envelope } from './envelope';
-import { getMIDIPitch } from '../parse/get-midi-pitch';
-
-export type Pitch = string;
+import { Pitch, toMidiPitchNumber, toMidiPitchString } from './utils';
 
 interface PatchFromFile {
     envelope: Envelope;
@@ -35,9 +33,13 @@ export class PatchPlayer {
         }
     };
 
+    private millisecondsToSeconds(ms: number) {
+        return ms / 1000;
+    }
+
     private envelope = this.defaultEnvelope();
     private samples: Samples = {};
-    private getMIDIPitchValue = getMIDIPitch;
+    private getMIDIPitchValue = toMidiPitchNumber;
     private nodes: AudioBufferSourceNode[] = [];
 
     constructor(private ac: AudioContext, private destination: GainNode) { };
@@ -79,19 +81,29 @@ export class PatchPlayer {
 
     }
 
+    /**
+     * Play a patch
+     *
+     * @param pitch         eg. C4
+     * @param velocity      1-127
+     * @param duration      ms
+     * @param when          ms 
+     */
     public play(pitch: Pitch, velocity: number, duration: number, when: number = 0) {
+
+        console.log(toMidiPitchString(pitch), when);
 
         const { buffer, detune } = this.getSample(pitch);
 
         const velocityNode = this.ac.createGain();
-        velocityNode.gain.value = velocity;
+        velocityNode.gain.value = velocity / 127.0;
 
         const sourceNode = this.ac.createBufferSource();
         sourceNode.buffer = buffer;
         sourceNode.detune.value = detune;
 
-        const startAt = this.ac.currentTime + when;
-        const env = envelope(this.ac, startAt, { ...this.envelope, gateTime: duration });
+        const startAt = this.ac.currentTime + this.millisecondsToSeconds(when);
+        const env = envelope(this.ac, startAt, { ...this.envelope, gateTime: this.millisecondsToSeconds(duration) });
 
         sourceNode.connect(env.node);
         env.node.connect(velocityNode);

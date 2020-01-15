@@ -1,5 +1,5 @@
 import { Patches } from "./sampler";
-import { Pitch } from "./patch-player";
+import { Pitch } from "./utils";
 
 export enum OutputType {
     midi = 1,

@@ -4,10 +4,11 @@
 
 import shortid from 'shortid';
 import { Entry, EntryType } from ".";
+import { Pitch } from '../playback/utils';
 
 export interface ToneDef {
     duration: number; // in ticks
-    pitch: string;
+    pitch: Pitch;
 }
 
 export interface Tone extends ToneDef {

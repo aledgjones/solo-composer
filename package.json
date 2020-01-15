@@ -31,6 +31,7 @@
     "sample-player": "^0.5.5",
     "shortid": "^2.2.15",
     "sortablejs": "^1.10.2",
+    "tonal-midi": "^0.69.7",
     "typescript": "3.6.3",
     "webmidi": "^2.5.1",
     "worker-loader": "^2.0.0"

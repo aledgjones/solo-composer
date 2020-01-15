@@ -6,7 +6,7 @@ import { Tick } from './ticks';
 import { Staves } from '../../services/stave';
 import { EntryType, Entry } from '../../entries';
 import { Tone } from '../../entries/tone';
-import { getMIDIPitch, C0 } from '../../parse/get-midi-pitch';
+import { toMidiPitchNumber, Pitch } from '../../playback/utils';
 
 import './instrument-track.css';
 
@@ -17,9 +17,10 @@ interface Props {
     ticks: Tick[];
 }
 
-function getTop(pitch: string, offset: number, slotHeight: number) {
-    const value = getMIDIPitch(pitch);
-    return (16 - (value - (C0 + offset))) * slotHeight;
+function getTop(pitch: Pitch, offset: number, slotHeight: number) {
+    const value = toMidiPitchNumber(pitch);
+    const base = toMidiPitchNumber("C0");
+    return (16 - (value - (base + offset))) * slotHeight;
 }
 
 function getWidth(start: number, duration: number, ticks: Tick[]) {

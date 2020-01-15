@@ -12,12 +12,12 @@ import { getNearestEntryToTick } from "./get-nearest-entry-to-tick";
 import { widthUpTo, WidthOf } from "./measure-tick";
 import { getNotationBaseLength, getIsDotted, NotationType, NotationTracks } from "./notation-track";
 import { drawRest } from "./draw-rest";
-import { getStepsBetweenPitces } from "./get-steps-between-pitches";
 import { drawNote } from "./draw-note";
 import { Tone } from "../entries/tone";
 import { drawAbsoluteTempo, AbsoluteTempo } from "../entries/absolute-tempo";
 import { EngravingConfig } from "../services/engraving";
 import { Converter } from "./converter";
+import { getStepsBetweenPitches } from "../playback/utils";
 
 export function drawTick(tick: number, isFirstBeat: boolean, x: number, y: number, widths: number[], verticalMeasurements: VerticalMeasurements, flowEntries: EntriesByTick, staves: Stave[], notationTracks: NotationTracks, config: EngravingConfig, converter: Converter) {
     const output = [];
@@ -47,7 +47,7 @@ export function drawTick(tick: number, isFirstBeat: boolean, x: number, y: numbe
         }
     }
 
-    if(tempo.entry) {
+    if (tempo.entry) {
         output.push(...drawAbsoluteTempo(x + widthUpTo(widths, WidthOf.time), y, tempo.entry, config, converter))
     }
 
@@ -88,7 +88,7 @@ export function drawTick(tick: number, isFirstBeat: boolean, x: number, y: numbe
                 } else {
                     entry.keys.forEach(key => {
                         const tone = tones[key] as Tone;
-                        const toneOffset = getStepsBetweenPitces(clefPitch, tone.pitch);
+                        const toneOffset = getStepsBetweenPitches(clefPitch, tone.pitch);
                         const offset = (clefOffset / 2) - (toneOffset / 2);
                         output.push(...drawNote(x + widthUpTo(widths, WidthOf.noteSpacing), top, offset, length, isDotted));
                     });

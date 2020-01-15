@@ -1,5 +1,6 @@
-import { PatchPlayer, Pitch } from "./patch-player";
+import { PatchPlayer } from "./patch-player";
 import { Expressions } from "./expressions";
+import { Pitch } from "./utils";
 
 export class InstrumentPlayer {
 
@@ -30,6 +31,14 @@ export class InstrumentPlayer {
         await Promise.all(loaders);
     }
 
+    /**
+     * Play a patch
+     *
+     * @param pitch         eg. C4
+     * @param velocity      1-127
+     * @param duration      ms
+     * @param when          ms 
+     */
     public play(patch: string, pitch: Pitch, velocity: number, duration: number, when?: number) {
         const output = this.patches[patch] || this.patches[Expressions.natural];
         output.play(pitch, velocity, duration, when);

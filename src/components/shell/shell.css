@@ -10,11 +10,15 @@ body {
   justify-content: space-between;
   width: 100%;
   background-color: #0d1216;
-  padding-right: 16px;
   box-shadow: 0 0 4px rgba(0,0,0,.8);
 }
 
-.main-shaell__topbar-right {
+.main-shell__topbar-right {
+  padding: 0 16px;
   display: flex;
   align-items: center;
+}
+
+.main-shell__tabs {
+  flex-grow: 1;
 }

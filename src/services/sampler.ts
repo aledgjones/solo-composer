@@ -173,15 +173,15 @@ export const samplerActions = (dispatch: any): SamplerActions => {
             sampler.stopAll();
         },
         test: (channel, patch) => {
-            sampler.play(channel, patch, 'C4', 0.6, 0.25, 0.0);
-            sampler.play(channel, patch, 'D4', 0.7, 0.25, 0.25);
-            sampler.play(channel, patch, 'E4', 0.8, 0.25, 0.5);
-            sampler.play(channel, patch, 'F4', 0.9, 0.25, 0.75);
-            sampler.play(channel, patch, 'G4', 1.0, 0.25, 1.0);
-            sampler.play(channel, patch, 'F4', 0.9, 0.25, 1.25);
-            sampler.play(channel, patch, 'E4', 0.8, 0.25, 1.5);
-            sampler.play(channel, patch, 'D4', 0.7, 0.25, 1.75);
-            sampler.play(channel, patch, 'C4', 0.6, 1.0, 2.0);
+            sampler.play(channel, patch, 'C4', 100, 250, 0);
+            sampler.play(channel, patch, 'D4', 105, 250, 250);
+            sampler.play(channel, patch, 'E4', 110, 250, 500);
+            sampler.play(channel, patch, 'F4', 115, 250, 750);
+            sampler.play(channel, patch, 'G4', 120, 250, 1000);
+            sampler.play(channel, patch, 'F4', 115, 250, 1250);
+            sampler.play(channel, patch, 'E4', 110, 250, 1500);
+            sampler.play(channel, patch, 'D4', 105, 250, 1750);
+            sampler.play(channel, patch, 'C4', 100, 1000, 2000);
         }
     }
 }

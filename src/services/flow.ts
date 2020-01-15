@@ -4,8 +4,8 @@ import { PlayerKey, PLAYER_CREATE, PLAYER_REMOVE, PLAYER_ASSIGN_INSTRUMENT, Play
 import { Stave, StaveKey, Staves, createStave } from './stave';
 import { removeProps } from '../ui/utils/remove-props';
 import { instrumentDefs } from './instrument-defs';
-import { Instruments } from './instrument';
-import { Track, createTrack, entriesByTick } from './track';
+import { Instruments, INSTRUMENT_CREATE_TONE } from './instrument';
+import { Track, createTrack, entriesByTick, TrackKey } from './track';
 import { TimeSignatureDef, TimeSignature, createTimeSignature } from '../entries/time-signature';
 import { Entry, EntryType } from '../entries';
 import { getTicksPerBeat } from '../parse/get-ticks-per-beat';
@@ -13,6 +13,7 @@ import { getEntryAtTick } from '../parse/get-entry-at-tick';
 import { KeySignatureDef, createKeySignature, KeySignature } from '../entries/key-signature';
 import { BarlineDef, createBarline, Barline } from '../entries/barline';
 import { createAbsoluteTempo, AbsoluteTempoDef, AbsoluteTempo } from '../entries/absolute-tempo';
+import { Tone } from '../entries/tone';
 
 export const FLOW_CREATE = '@flow/create';
 export const FLOW_REORDER = '@flow/reorder';
@@ -179,16 +180,13 @@ export const flowReducer = (state: FlowState, action: any) => {
             const length: number = action.payload.length;
             return {
                 order: state.order,
-                byKey: state.order.reduce((output: { [key: string]: Flow }, _flowKey: string) => {
-                    if (_flowKey === flowKey) {
-                        const flow = state.byKey[_flowKey];
-                        output[_flowKey] = {
-                            ...flow,
-                            length
-                        }
+                byKey: {
+                    ...state.byKey,
+                    [flowKey]: {
+                        ...state.byKey[flowKey],
+                        length
                     }
-                    return output;
-                }, state.byKey)
+                }
             }
         }
         // this also includes updating an exisitng time sig to avoid having more than one
@@ -214,26 +212,23 @@ export const flowReducer = (state: FlowState, action: any) => {
 
             return {
                 order: state.order,
-                byKey: state.order.reduce((output: { [key: string]: Flow }, _flowKey: string) => {
-                    if (_flowKey === flowKey) {
-                        const flow = state.byKey[_flowKey];
-                        output[_flowKey] = {
-                            ...flow,
-                            length,
-                            master: {
-                                ...flow.master,
-                                entries: {
-                                    order: !old.entry ? [...flow.master.entries.order, entry._key] : flow.master.entries.order,
-                                    byKey: {
-                                        ...flow.master.entries.byKey,
-                                        [entry._key]: entry
-                                    }
+                byKey: {
+                    ...state.byKey,
+                    [flowKey]: {
+                        ...state.byKey[flowKey],
+                        length,
+                        master: {
+                            ...state.byKey[flowKey].master,
+                            entries: {
+                                order: !old.entry ? [...state.byKey[flowKey].master.entries.order, entry._key] : state.byKey[flowKey].master.entries.order,
+                                byKey: {
+                                    ...state.byKey[flowKey].master.entries.byKey,
+                                    [entry._key]: entry
                                 }
                             }
                         }
                     }
-                    return output;
-                }, state.byKey)
+                }
             }
         }
         case FLOW_CREATE_KEY_SIGNATURE: {
@@ -250,25 +245,22 @@ export const flowReducer = (state: FlowState, action: any) => {
 
             return {
                 order: state.order,
-                byKey: state.order.reduce((output: { [key: string]: Flow }, _flowKey: string) => {
-                    if (_flowKey === flowKey) {
-                        const flow = state.byKey[_flowKey];
-                        output[_flowKey] = {
-                            ...flow,
-                            master: {
-                                ...flow.master,
-                                entries: {
-                                    order: !old.entry ? [...flow.master.entries.order, entry._key] : flow.master.entries.order,
-                                    byKey: {
-                                        ...flow.master.entries.byKey,
-                                        [entry._key]: entry
-                                    }
+                byKey: {
+                    ...state.byKey,
+                    [flowKey]: {
+                        ...state.byKey[flowKey],
+                        master: {
+                            ...state.byKey[flowKey].master,
+                            entries: {
+                                order: !old.entry ? [...state.byKey[flowKey].master.entries.order, entry._key] : state.byKey[flowKey].master.entries.order,
+                                byKey: {
+                                    ...state.byKey[flowKey].master.entries.byKey,
+                                    [entry._key]: entry
                                 }
                             }
                         }
                     }
-                    return output;
-                }, state.byKey)
+                }
             }
         }
         case FLOW_CREATE_BARLINE: {
@@ -285,25 +277,22 @@ export const flowReducer = (state: FlowState, action: any) => {
 
             return {
                 order: state.order,
-                byKey: state.order.reduce((output: { [key: string]: Flow }, _flowKey: string) => {
-                    if (_flowKey === flowKey) {
-                        const flow = state.byKey[_flowKey];
-                        output[_flowKey] = {
-                            ...flow,
-                            master: {
-                                ...flow.master,
-                                entries: {
-                                    order: !old.entry ? [...flow.master.entries.order, entry._key] : flow.master.entries.order,
-                                    byKey: {
-                                        ...flow.master.entries.byKey,
-                                        [entry._key]: entry
-                                    }
+                byKey: {
+                    ...state.byKey,
+                    [flowKey]: {
+                        ...state.byKey[flowKey],
+                        master: {
+                            ...state.byKey[flowKey].master,
+                            entries: {
+                                order: !old.entry ? [...state.byKey[flowKey].master.entries.order, entry._key] : state.byKey[flowKey].master.entries.order,
+                                byKey: {
+                                    ...state.byKey[flowKey].master.entries.byKey,
+                                    [entry._key]: entry
                                 }
                             }
                         }
                     }
-                    return output;
-                }, state.byKey)
+                }
             }
         }
         case FLOW_CREATE_ABSOLUTE_TEMPO: {
@@ -311,7 +300,7 @@ export const flowReducer = (state: FlowState, action: any) => {
             const entry: Entry<AbsoluteTempo> = action.payload.entry;
             const flow = state.byKey[flowKey];
 
-            // if there is already a barline at tick, replace with new entry
+            // if there is already a absolute tempo at tick, replace with new entry
             const entries = entriesByTick(flow.master.entries.order, flow.master.entries.byKey);
             const old = getEntryAtTick<AbsoluteTempo>(entry._tick, entries, EntryType.absoluteTempo);
             if (old.entry) {
@@ -320,25 +309,61 @@ export const flowReducer = (state: FlowState, action: any) => {
 
             return {
                 order: state.order,
-                byKey: state.order.reduce((output: { [key: string]: Flow }, _flowKey: string) => {
-                    if (_flowKey === flowKey) {
-                        const flow = state.byKey[_flowKey];
-                        output[_flowKey] = {
-                            ...flow,
-                            master: {
-                                ...flow.master,
-                                entries: {
-                                    order: !old.entry ? [...flow.master.entries.order, entry._key] : flow.master.entries.order,
-                                    byKey: {
-                                        ...flow.master.entries.byKey,
-                                        [entry._key]: entry
-                                    }
+                byKey: {
+                    ...state.byKey,
+                    [flowKey]: {
+                        ...state.byKey[flowKey],
+                        master: {
+                            ...state.byKey[flowKey].master,
+                            entries: {
+                                order: !old.entry ? [...state.byKey[flowKey].master.entries.order, entry._key] : state.byKey[flowKey].master.entries.order,
+                                byKey: {
+                                    ...state.byKey[flowKey].master.entries.byKey,
+                                    [entry._key]: entry
                                 }
                             }
                         }
                     }
-                    return output;
-                }, state.byKey)
+                }
+            }
+        }
+        case INSTRUMENT_CREATE_TONE: {
+            // SO FAR THIS IS DUMB - WE NEED TO MAKE IT SMARTER AT SHIFTING BEATS etc.
+            const flowKey: FlowKey = action.payload.flowKey;
+            const staveKey: StaveKey = action.payload.staveKey;
+            const trackKey: TrackKey = action.payload.trackKey;
+            const tone: Entry<Tone> = action.payload.tone;
+            return {
+                order: state.order,
+                byKey: {
+                    ...state.byKey,
+                    [flowKey]: {
+                        ...state.byKey[flowKey],
+                        staves: {
+                            ...state.byKey[flowKey].staves,
+                            [staveKey]: {
+                                ...state.byKey[flowKey].staves[staveKey],
+                                tracks: {
+                                    ...state.byKey[flowKey].staves[staveKey].tracks,
+                                    byKey: {
+                                        ...state.byKey[flowKey].staves[staveKey].tracks.byKey,
+                                        [trackKey]: {
+                                            ...state.byKey[flowKey].staves[staveKey].tracks.byKey[trackKey],
+                                            entries: {
+                                                order: [...state.byKey[flowKey].staves[staveKey].tracks.byKey[trackKey].entries.order, tone._key],
+                                                byKey: {
+                                                    ...state.byKey[flowKey].staves[staveKey].tracks.byKey[trackKey].entries.byKey,
+                                                    [tone._key]: tone
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                }
             }
         }
         default:

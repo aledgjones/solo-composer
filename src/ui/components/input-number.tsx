@@ -1,4 +1,4 @@
-import React, { useCallback, CSSProperties, FC, ChangeEvent, useState, useEffect } from 'react';
+import React, { useCallback, CSSProperties, FC, ChangeEvent, useState, useEffect, KeyboardEvent } from 'react';
 import { mdiChevronUp, mdiChevronDown } from '@mdi/js';
 import { merge } from '../utils/merge';
 import Big from 'big.js';
@@ -73,6 +73,21 @@ export const InputNumber: FC<Props> = ({ id, className, style, value, precision,
 
     }, [step, value, display, error, precision, onChange]);
 
+    const onKeyDown = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
+        switch (e.key) {
+            case 'ArrowUp':
+                e.preventDefault();
+                onIncrease();
+                break;
+            case 'ArrowDown':
+                e.preventDefault();
+                onDecrease();
+                break;
+            default:
+                break;
+        }
+    }, [step, onIncrease, onDecrease]);
+
     const border = () => {
         if (error) {
             return `1px solid ${errorColor}`;
@@ -94,6 +109,7 @@ export const InputNumber: FC<Props> = ({ id, className, style, value, precision,
                 className="ui-input__display"
                 value={display}
                 onChange={_onChange}
+                onKeyDown={onKeyDown}
                 onFocus={() => setFocus(true)}
                 onBlur={onBlur}
             />

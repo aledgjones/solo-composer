@@ -6,17 +6,21 @@ import { InstrumentDef } from './instrument-defs';
 import { PlayerKey, PLAYER_REMOVE, PlayerState } from './player';
 import { StaveKey, createStave } from './stave';
 import { removeProps } from '../ui/utils/remove-props';
-import { Flow } from './flow';
+import { Flow, FlowKey } from './flow';
 import { ConfigState } from './config';
+import { TrackKey } from './track';
+import { ToneDef, createTone } from '../entries/tone';
 
 export const INSTRUMENT_CREATE = '@instrument/create';
 export const INSTRUMENT_REMOVE = '@instrument/remove';
+export const INSTRUMENT_CREATE_TONE = '@instrument/create-tone';
 
 export type InstrumentKey = string;
 
 export interface InstrumentActions {
     create: (def: InstrumentDef) => Instrument;
     remove: (instrumentKey: InstrumentKey) => void;
+    createTone: (flowKey: FlowKey, staveKey: StaveKey, trackKey: TrackKey, def: ToneDef, tick: number) => void;
 }
 
 export interface Instrument {
@@ -64,6 +68,15 @@ export const instrumentActions = (dispatch: any): InstrumentActions => {
         },
         remove: (instrumentKey) => {
             dispatch({ type: INSTRUMENT_REMOVE, payload: instrumentKey });
+        },
+        createTone: (flowKey, staveKey, trackKey, def, tick) => {
+            const tone = createTone(def, tick);
+            dispatch({
+                type: INSTRUMENT_CREATE_TONE,
+                payload: {
+                    flowKey, staveKey, trackKey, tone
+                }
+            });
         }
     }
 }

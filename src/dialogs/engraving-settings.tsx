@@ -77,7 +77,7 @@ export const EngravingSettings: FC<Props> = ({ config, onUpdate, onClose }) => {
                         <div className="generic-settings__group">
                             <div className="generic-settings__header">Space Size</div>
                             <div className="generic-settings__section">
-                                <img src={staveSpace} className="generic-settings__example" />
+                                <img alt="Stave spacing" src={staveSpace} className="generic-settings__example" />
                                 <InputNumber label="Space size" value={engraving.space} precision={2} step={.01} units="mm" color={Theme.primary} errorColor={Theme.error} onChange={(val: number) => onUpdate(key, { space: val })} />
                             </div>
                         </div>
