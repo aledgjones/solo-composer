@@ -2,6 +2,7 @@ import shortid from 'shortid';
 import { Entry, EntryType } from ".";
 import { ClefDef, Clef, ClefType } from './clef-defs';
 import { buildText, TextStyles } from '../render/text';
+import { Justify, Align } from '../render/apply-styles';
 
 export function createClef(def: ClefDef, tick: number): Entry<Clef> {
     return {
@@ -31,6 +32,6 @@ function glyphFromType(type: ClefType) {
 
 export function drawClef(x: number, y: number, clef: Entry<Clef>) {
     const glyph = glyphFromType(clef.type);
-    const styles: TextStyles = { color: '#000000', align: 'left', size: 4, font: `Music`, baseline: 'middle' };
+    const styles: TextStyles = { color: '#000000', justify: Justify.start, align: Align.middle, size: 4, font: `Music` };
     return buildText(styles, x, y + (.5 * clef.offset), glyph);
 }

@@ -1,27 +1,22 @@
+export enum Justify {
+    start = "flex-start",
+    middle = "center",
+    end = "flex-end"
+}
+
+export enum Align {
+    top = 'flex-start',
+    middle = 'center',
+    bottom = 'flex-end'
+}
+
 export type Styles = Partial<{
-    color: string;
-    thickness: number;
     font: string;
     size: number;
-    align: CanvasTextAlign;
-    baseline: CanvasTextBaseline;
 }>
 
-export function applyStyles(ctx: OffscreenCanvasRenderingContext2D, { color, thickness, font, size, align, baseline }: Styles, px: (spaces: number) => number) {
-    if (color) {
-        ctx.fillStyle = color;
-        ctx.strokeStyle = color;
-    }
-    if (thickness) {
-        ctx.lineWidth = px(thickness);
-    }
+export function applyStyles(ctx: OffscreenCanvasRenderingContext2D, { font, size }: Styles, px: (spaces: number) => number) {
     if (font && size) {
         ctx.font = `${px(size)}px ${font}`;
-    }
-    if (align) {
-        ctx.textAlign = align;
-    }
-    if (baseline) {
-        ctx.textBaseline = baseline;
     }
 }

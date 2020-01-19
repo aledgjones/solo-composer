@@ -1,4 +1,4 @@
-import { Styles, applyStyles } from "../render/apply-styles";
+import { Styles, applyStyles, Justify } from "../render/apply-styles";
 import { Converter } from "./converter";
 
 export function measureText(styles: Styles, text: string, converter: Converter) {

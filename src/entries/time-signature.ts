@@ -1,6 +1,7 @@
 import shortid from 'shortid';
 import { Entry, EntryType } from ".";
 import { TextStyles, buildText } from '../render/text';
+import { Justify, Align } from '../render/apply-styles';
 
 export interface TimeSignatureDef {
     beats: number; // 0 = free
@@ -69,8 +70,8 @@ export function drawTimeSignature(x: number, y: number, time: Entry<TimeSignatur
         color: '#000000',
         font: 'Music',
         size: 4,
-        align: 'left',
-        baseline: 'middle'
+        justify: Justify.start,
+        align: Align.middle
     }
 
     if (time.drawAs) {

@@ -1,5 +1,4 @@
 import { VerticalMeasurements } from "./measure-vertical-layout";
-import { Converter } from "./converter";
 import { PathInstruction, buildPath } from "../render/path";
 
 export function drawSubBrackets(x: number, y: number, metrics: VerticalMeasurements) {

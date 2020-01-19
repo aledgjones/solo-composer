@@ -4,6 +4,7 @@ import { Track, createTrack, Tracks } from './track';
 import { createClef } from '../entries/clef';
 import { Instrument } from './instrument';
 import { Flow } from './flow';
+import { createTone } from '../entries/tone';
 
 export type StaveKey = string;
 
@@ -19,7 +20,7 @@ export interface Stave {
 export function createStave(staveDef: StaveDef, staveKey: StaveKey = shortid()): Stave {
     const clef = createClef(staveDef.clef, 0);
     const master = createTrack([clef]);
-    const primary = createTrack([]);
+    const primary = createTrack([createTone({pitch: 'F4', duration: 12 }, 0)]);
 
     return {
         key: staveKey,

@@ -48,7 +48,7 @@ export function drawTick(tick: number, isFirstBeat: boolean, x: number, y: numbe
     }
 
     if (tempo.entry) {
-        output.push(...drawAbsoluteTempo(x + widthUpTo(widths, WidthOf.time), y, tempo.entry, config, converter))
+        output.push(drawAbsoluteTempo(x + widthUpTo(widths, WidthOf.time), y, tempo.entry, config, converter))
     }
 
     staves.forEach(stave => {

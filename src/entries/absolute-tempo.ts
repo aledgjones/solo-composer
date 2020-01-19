@@ -4,14 +4,13 @@ import { Instruction } from '../parse/instructions';
 import { buildText, TextStyles } from '../render/text';
 import { EngravingConfig } from '../services/engraving';
 import { Converter } from '../parse/converter';
-import { measureText } from '../parse/measure-text';
 import { NotationBaseLength } from '../parse/notation-track';
-import { buildCircle } from '../render/circle';
+import { Align } from '../render/apply-styles';
 
 export interface AbsoluteTempoDef {
     text?: string;
     beat: NotationBaseLength;
-    dotted: boolean;
+    dotted: number;
     beatPerMinute: number;
 
     parenthesis: boolean;
@@ -54,47 +53,43 @@ function glyphFromDuration(baseLength?: NotationBaseLength) {
 export function drawAbsoluteTempo(x: number, y: number, tempo: Entry<AbsoluteTempo>, config: EngravingConfig, converter: Converter) {
 
     const instructions: Instruction<any> = [];
-    const styles: TextStyles = { color: '#000000', font: config.tempo.font, size: config.tempo.size, align: config.tempo.align, baseline: 'bottom' };
+    const styles: TextStyles = { color: '#000000', font: config.tempo.font, size: config.tempo.size, justify: config.tempo.align, align: Align.bottom };
 
     let left = x;
-    let top = y - config.tempo.distanceFromStave;
+    let top = y - config.tempo.distanceFromStave - config.tempo.size;
+    let output = '';
 
     if (tempo.textVisible && tempo.text) {
-        instructions.push(buildText(styles, left, top, tempo.text));
-        left += measureText(styles, tempo.text + ' ', converter);
+        output += `${tempo.text} `;
     }
 
     if (tempo.beatPerMinuteVisible) {
         // open parens
         if (tempo.parenthesis) {
-            instructions.push(buildText(styles, left, top, '('));
-            left += measureText(styles, '(', converter);
+            output += '(';
         }
 
-        // note
-        const musicStyles: TextStyles = { ...styles, font: 'Music', size: config.tempo.size + (config.tempo.size * .125), baseline: 'bottom' };
         const glyph = glyphFromDuration(tempo.beat);
-
-        instructions.push(buildText(musicStyles, left, top + (config.tempo.size * .125), glyph));
-        left += measureText(musicStyles, glyph, converter);
+        output += `@${glyph}`;
 
         // dotted
-        if (tempo.dotted) {
-            instructions.push(buildCircle({ color: '#000000' }, left + (config.tempo.size * .2), top - (config.tempo.size * .4), config.tempo.size * .0625));
-            left += config.tempo.size * .2625;
+        if (tempo.dotted > 0) {
+            for (let i = 0; i < tempo.dotted; i++) {
+                output += '\u{E1E7}';
+            }
         }
 
+        output += '@';
+
         // equation
-        const equation = ` = ${tempo.beatPerMinute}`;
-        instructions.push(buildText(styles, left, top, equation));
-        left += measureText(styles, equation, converter);
+        output += ` = ${tempo.beatPerMinute}`;
 
         // close parens
         if (tempo.parenthesis) {
-            instructions.push(buildText(styles, left, top, ')'));
+            output += ')';
         }
     }
 
-    return instructions;
+    return buildText(styles, left, top, output);
 
 }

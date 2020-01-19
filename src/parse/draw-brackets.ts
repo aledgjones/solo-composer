@@ -3,6 +3,7 @@ import { EngravingConfig } from "../services/engraving";
 import { buildPath } from "../render/path";
 import { buildText, TextStyles } from "../render/text";
 import { Instruction } from "./instructions";
+import { Justify, Align } from "../render/apply-styles";
 
 export enum BracketingType {
     none = 1,
@@ -54,10 +55,10 @@ export function drawBrackets(x: number, y: number, metrics: VerticalMeasurements
             const glyphBottom = '\u{E004}';
             const styles: TextStyles = {
                 color: '#000000',
-                align: 'left',
+                justify: Justify.start,
+                align: Align.middle,
                 font: 'Music',
-                size: 4,
-                baseline: 'middle'
+                size: 4
             };
             out.push(
                 buildText(styles, capLeft, top, glyphTop),

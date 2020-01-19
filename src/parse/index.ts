@@ -9,7 +9,7 @@ import { entriesByTick } from "../services/track";
 
 import { measureVerticalLayout } from "./measure-vertical-layout";
 import { measureNames } from "./measure-names";
-import { RenderInstructions, mergeInstructions, Instruction } from "./instructions";
+import { RenderInstructions, Instruction } from "./instructions";
 import { measureBracketAndBraces } from "./measure-brackets-and-braces";
 import { measureTick } from "./measure-tick";
 
@@ -80,7 +80,7 @@ export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, c
     return {
         height: config.framePadding.top + verticalMeasurements.systemHeight + config.framePadding.bottom,
         width: x + notationWidth + config.framePadding.right,
-        entries: mergeInstructions(
+        entries: [
             ...drawNames(config.framePadding.left, y, namesWidth, instruments, names, verticalMeasurements, config),
             ...drawBraces(x, y, verticalMeasurements),
             ...drawBrackets(x, y, verticalMeasurements, config),
@@ -88,7 +88,7 @@ export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, c
             ...drawStaves(x, y, notationWidth + finalBarline._bounds.width, staves, verticalMeasurements),
             ...drawInstructions,
             ...drawFinalBarline(x + notationWidth, y, staves, verticalMeasurements, finalBarline)
-        )
+        ]
     };
 
 }

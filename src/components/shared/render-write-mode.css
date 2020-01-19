@@ -6,20 +6,27 @@
 
 .render-write-mode__flow-name {
   position: absolute;
-  top: 40px;
-  left: 40px;
+  top: 0;
+  left: 0;
   z-index: 1;
   padding: 6px;
   font-size: 12px;
 }
 
 .render-write-mode__container {
-  display: inline-block;
+  position: relative;
   box-shadow: 0 0 8px rgba(0, 0, 0, .2);
+  background-color: white;
 }
 
-.render-write-mode__container canvas {
-  display: inline-block;
-  background-color: white;
-  display: block;
+.render-write-mode__text-layer {
+  position: relative;
+  z-index: 2;
+}
+
+.render-write-mode__svg-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
 }

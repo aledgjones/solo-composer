@@ -1,6 +1,7 @@
 import { buildText, TextStyles } from '../render/text';
 import { buildCircle, CircleStyles } from '../render/circle';
 import { NotationBaseLength } from './notation-track';
+import { Justify, Align } from '../render/apply-styles';
 
 export interface NoteDef {
     duration: number;
@@ -35,7 +36,7 @@ export function drawNote(x: number, y: number, offset: number, length?: Notation
 
     const instructions = [];
 
-    const styles: TextStyles = { color: '#000000', align: 'left', size: 4, font: `Music`, baseline: 'middle' };
+    const styles: TextStyles = { color: '#000000', justify: Justify.start, align: Align.middle, size: 4, font: `Music` };
     instructions.push(buildText(styles, x, y + offset, glyph));
 
     if (dotted) {

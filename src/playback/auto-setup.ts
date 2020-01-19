@@ -22,9 +22,9 @@ export function useAutoSetup(state: State, actions: Actions) {
         actions.playback.sampler.load(channel, def);
         actions.playback.sampler.assignInstrument(instrument.key, channel);
 
-        actions.score.flows.createTimeSignature({ beats: 4, beatType: 4, subdivisions: 12, groupings: getDefaultGroupings(4) }, 0, flowKey);
-        actions.score.flows.createKeySignature({ mode: KeySignatureMode.major, offset: 1 }, 0, flowKey);
-        actions.score.flows.createAbsoluteTempo({ text: 'Allegro', beat: NotationBaseLength.crotchet, dotted: false, beatPerMinute: 120, textVisible: true, beatPerMinuteVisible: true, parenthesis: true }, 0, flowKey);
+        actions.score.flows.createTimeSignature({ beats: 6, beatType: 8, subdivisions: 12, groupings: getDefaultGroupings(6) }, 0, flowKey);
+        actions.score.flows.createKeySignature({ mode: KeySignatureMode.major, offset: 4 }, 0, flowKey);
+        actions.score.flows.createAbsoluteTempo({ text: 'Allegro', beat: NotationBaseLength.crotchet, dotted: 0, beatPerMinute: 120, textVisible: true, beatPerMinuteVisible: true, parenthesis: true }, 0, flowKey);
 
     }, [actions.score.instruments, actions.score.players, actions.score.flows, actions.playback.sampler, state.score.flows.order]);
 }

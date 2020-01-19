@@ -2,6 +2,7 @@ import shortid from 'shortid';
 import { ClefType, Clef } from './clef-defs';
 import { Entry, EntryType } from ".";
 import { TextStyles, buildText } from '../render/text';
+import { Justify, Align } from '../render/apply-styles';
 
 export enum KeySignatureMode {
     major = 1,
@@ -103,8 +104,8 @@ export function drawKeySignature(x: number, y: number, clef: Entry<Clef>, key: E
         color: '#000000',
         font: 'Music',
         size: 4,
-        align: 'left',
-        baseline: 'middle'
+        justify: Justify.start,
+        align: Align.middle
     }
 
     // calc naturals here - find out rules for naturalising
