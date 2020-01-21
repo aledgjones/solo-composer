@@ -12,6 +12,7 @@ import { Handle } from './handle';
 import { SelectionType } from '.';
 
 import './player-item.css';
+import { Text } from '../shared/text';
 
 interface Props {
     player: Player;
@@ -62,7 +63,7 @@ export const PlayerItem = SortableElement<Props>((props: Props) => {
                 <Icon style={{ marginRight: 16 }} path={icon} size={24} color={fg} />
             </Handle>
 
-            <span className="player-item__name">{name}</span>
+            <Text style={{whiteSpace: 'pre'}} className="player-item__name">{name}</Text>
 
             {selected && <>
                 <Icon style={{ marginLeft: 12 }} size={24} color={fg} path={mdiDeleteOutline} onClick={onRemove} />

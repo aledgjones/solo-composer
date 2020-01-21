@@ -12,7 +12,12 @@
 }
 
 .player-controls__name {
+    display: flex;
+    align-items: center;
     flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .player-controls__instruments {

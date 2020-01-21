@@ -2,3 +2,8 @@
     font-family: 'Music';
     src: url('/bravura.woff2') format('woff2');
 }
+
+@font-face {
+    font-family: 'Music Text';
+    src: url('/bravura-text.woff2') format('woff2');
+}

@@ -18,7 +18,7 @@ interface Props {
 
 export const Icon: FC<Props> = ({ id, className, style, path, size, color, disabled, onClick }) => {
     const _onClick = useCallback((e) => onClick && onClick(e), [onClick]);
-    const bg = useMemo(() => Color(color).alpha(.1).rgb().string(), [color]);
+    const bg = useMemo(() => Color(color).alpha(.1).string(), [color]);
 
     return <div
         id={id}

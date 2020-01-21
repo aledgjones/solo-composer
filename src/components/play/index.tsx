@@ -1,6 +1,6 @@
 import React, { FC, useState, useCallback, useMemo } from 'react';
 import ScrollContainer from 'react-indiana-drag-scroll';
-import colormap from 'colormap';
+import { createColors, rgbHex } from 'color-map';
 
 import { State, Actions } from '../../services/state';
 
@@ -31,11 +31,20 @@ export const Play: FC<Props> = ({ state, actions, settings, onSettingsClose }) =
     const [expanded, setExpanded] = useState<string[]>([]);
 
     const colors = useMemo(() => {
-        const len = state.score.players.order.length;
-        return colormap({
-            colormap: [{ "index": 0, "rgb": [90, 74, 142] }, { "index": 1, "rgb": [255, 0, 255] }],
-            nshades: len < 9 ? 9 : len
+
+        const len = state.score.players.order.length > 9 ? state.score.players.order.length : 9;
+
+        const offset = 206;
+        const width = 359 - 100;
+        const step = Math.floor(width / len);
+
+        return Array(len).fill('').map((entry, i) => {
+            const base = (step * i) + offset;
+            const color = `hsl(${base > 359 ? base - 359 : base}, 100%, 35%)`;
+            console.log(color);
+            return color;
         });
+
     }, [state.score.players.order.length]);
 
     const onToggleExpand = useCallback((key: string) => {

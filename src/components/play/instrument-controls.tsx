@@ -6,6 +6,7 @@ import { Icon } from '../../ui';
 import { Keyboard } from './keyboard';
 
 import './instrument-controls.css';
+import { Text } from '../shared/text';
 
 interface Props {
     instrument: Instrument;
@@ -21,7 +22,7 @@ export const InstrumentControls: FC<Props> = ({ instrument, count, color }) => {
         <div className="instrument-controls">
             <div className="instrument-controls__header">
                 <Icon style={{ marginRight: 16 }} size={24} color="#ffffff" path={mdiPiano} />
-                <span className="instrument-controls__name">{name}</span>
+                <Text className="instrument-controls__name">{name}</Text>
             </div>
         </div>
         <Keyboard />

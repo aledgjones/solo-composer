@@ -54,7 +54,7 @@ export function drawRest(x: number, y: number, length?: NotationBaseLength, dott
     
     if (dotted) {
         const styles: CircleStyles = { color: '#000000' };
-        instructions.push(buildCircle(styles, x + 1.5, y + 1.5 + offset, .2));
+        instructions.push(buildCircle(styles, x + 1.5, y - .5 + offset, .2));
     }
 
     return instructions;

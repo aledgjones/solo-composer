@@ -10,7 +10,8 @@ import { parse } from '../../parse';
 import { Instruction, InstructionType } from '../../parse/instructions';
 import { PathInstruction } from '../../render/path';
 import { TextInstruction } from '../../render/text';
-import { Align } from '../../render/apply-styles';
+import { CircleInstruction } from '../../render/circle';
+import { Text } from './text';
 
 import './render-write-mode.css';
 
@@ -51,10 +52,10 @@ export const RenderWriteMode: FC<Props> = (({ score }) => {
                             });
                             return <path fill="none" d={def.join(" ")} stroke={path.styles.color} strokeWidth={px(path.styles.thickness)} />
                         case InstructionType.circle:
-                            // renderCircles(ctx, instruction, px);
-                            break;
+                            const circle = instruction as CircleInstruction;
+                            return <circle cx={px(circle.x)} cy={px(circle.y)} r={px(circle.radius)} fill={circle.styles.color} />
                         default:
-                            break;
+                            return null;
                     }
                 })}
             </svg>
@@ -63,19 +64,9 @@ export const RenderWriteMode: FC<Props> = (({ score }) => {
                     switch (instruction.type) {
                         case InstructionType.text:
                             const text = instruction as TextInstruction;
-                            const regex = /(@[^\s@]*@)/g;
-                            const result = text.value.split(regex);
-                            return <div style={{ whiteSpace: 'pre', position: 'absolute', display: 'flex', alignItems: text.styles.align, justifyContent: text.styles.justify, height: 0, width: 0, left: px(text.x), top: px(text.y), lineHeight: '1em' }}>
-                                {result.map(str => {
-                                    if (regex.test(str)) {
-                                        return <span style={{ position: 'relative', top: px(0.25), letterSpacing: '.2em', fontFamily: 'Music', fontSize: px(text.styles.size) }}>{str.slice(1, -1)}</span>;
-                                    } else {
-                                        return <span style={{ fontFamily: text.styles.font, fontSize: px(text.styles.size) }}>{str}</span>;
-                                    }
-                                })}
-                            </div>;
+                            return <Text style={{ fontFamily: text.styles.font, fontSize: px(text.styles.size), whiteSpace: 'pre', position: 'absolute', display: 'flex', alignItems: text.styles.align, justifyContent: text.styles.justify, height: 0, width: 0, left: px(text.x), top: px(text.y), lineHeight: '1em' }}>{text.value}</Text>;
                         default:
-                            break;
+                            return null;
                     }
                 })}
             </div>

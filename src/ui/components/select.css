@@ -4,6 +4,10 @@
     position: relative;
 }
 
+.ui-select--margin {
+    margin-bottom: 20px;
+}
+
 .ui-select__display {
     flex-grow: 1;
     padding-right: 12px;
@@ -30,6 +34,7 @@
     overflow: auto;
     padding: 8px 0;
     touch-action: pan-y;
+    z-index: 100000;
 }
 
 .ui-select__card * {
@@ -37,6 +42,7 @@
 }
 
 .ui-select__item {
+    cursor: pointer;
     padding: 8px 12px;
 }
 
@@ -57,5 +63,5 @@
 }
 
 .ui-select--dark .ui-select__input {
-    border: 1px solid transparent !important;
+    border: 1px solid white !important;
 }

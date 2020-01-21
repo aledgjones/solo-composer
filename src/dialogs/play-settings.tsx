@@ -11,6 +11,7 @@ import { PlaySettingsChannel } from './play-settings-channel';
 
 import './generic-settings.css';
 import './play-settings.css';
+import { DialogHeader } from './dialog-header';
 
 enum Page {
     internal = 1,
@@ -46,14 +47,11 @@ export const PlaySettings: FC<Props> = ({ state, actions, onClose }) => {
 
                     {page === Page.internal && <>
                         <div className="generic-settings__group">
-                            <div className="generic-settings__header">Channels</div>
-                        </div>
-                        <div className="generic-settings__group">
-                            <div className="play-settings__header">
+                            <DialogHeader className="play-settings__header">
                                 <div className="play-settings__cell play-settings__channel" />
                                 <div className="play-settings__cell play-settings__map">Patch Map</div>
                                 <div className="play-settings__cell play-settings__assigned">Assigned</div>
-                            </div>
+                            </DialogHeader>
                             {channels.map((channel, i) => {
                                 return <PlaySettingsChannel key={channel.key} i={i} channel={channel} actions={actions} instruments={state.score.instruments} counts={counts} />
                             })}
@@ -63,7 +61,7 @@ export const PlaySettings: FC<Props> = ({ state, actions, onClose }) => {
                     {page === Page.midi && <>
 
                         <div className="generic-settings__group">
-                            <div className="generic-settings__header">Midi Inputs</div>
+                            <DialogHeader>Midi Inputs</DialogHeader>
                             <div className="generic-settings__section">
                                 {midi.inputs.map(input => {
                                     return <div key={input.id} className="play-settings__port">
@@ -78,7 +76,7 @@ export const PlaySettings: FC<Props> = ({ state, actions, onClose }) => {
                         </div>
 
                         <div className="generic-settings__group">
-                            <div className="generic-settings__header">Midi Outputs</div>
+                            <DialogHeader>Midi Outputs</DialogHeader>
                             <div className="generic-settings__section">
                                 {midi.outputs.map(output => {
                                     return <div key={output.id} className="play-settings__port">

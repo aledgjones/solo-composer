@@ -7,6 +7,7 @@ import { mdiChevronDown } from '@mdi/js';
 
 import './player-controls.css';
 import { InstrumentControls } from './instrument-controls';
+import { Text } from '../shared/text';
 
 interface Props {
     player: Player;
@@ -26,7 +27,7 @@ export const PlayerControls: FC<Props> = ({ player, expanded, instruments, count
     return <div className="player-controls">
         <div className="player-controls__header">
             <Icon style={{ marginRight: 16 }} size={24} color="#ffffff" path={icon} />
-            <span className="player-controls__name">{name}</span>
+            <Text style={{whiteSpace: 'pre'}} className="player-controls__name">{name}</Text>
             <Icon style={{ marginLeft: 12, transform: `rotateZ(${expanded ? '180deg' : '0'})` }} size={24} color="#ffffff" path={mdiChevronDown} onClick={() => onToggleExpand(player.key)} />
         </div>
         {expanded && <div className="player-controls__instruments">

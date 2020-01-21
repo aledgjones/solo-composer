@@ -1,6 +1,6 @@
 import { entriesByTick, EntriesByTick } from "../services/track";
 import { Stave } from "../services/stave";
-import { NotationTrack, NotationTracks } from "./notation-track";
+import { NotationTracks } from "./notation-track";
 import { notateTones } from "./notate-tones";
 import { splitAsPerMeter } from "./split-as-per-meter";
 

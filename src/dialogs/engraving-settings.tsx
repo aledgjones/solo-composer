@@ -5,11 +5,12 @@ import { Backdrop, Card, Select, Option, InputNumber, Button } from '../ui';
 import { ListItem } from '../components/shared/list-item';
 import { EngravingState, LayoutType, PartialEngravingConfig, defaultEngravingConfig } from '../services/engraving';
 import { BracketingType, BracketEndStyle } from '../parse/draw-brackets';
+import { DialogHeader } from './dialog-header';
+
+import staveSpace from '../assets/engraving/stave-space.svg';
 
 import './generic-settings.css';
 import './engraving-settings.css';
-
-import staveSpace from '../assets/engraving/stave-space.svg';
 
 enum Page {
     staves = 1,
@@ -44,7 +45,7 @@ export const EngravingSettings: FC<Props> = ({ config, onUpdate, onClose }) => {
 
                     {page === Page.bracketsAndBraces && <>
                         <div className="generic-settings__group">
-                            <div className="generic-settings__header">Approach</div>
+                            <DialogHeader>Approach</DialogHeader>
                             <div className="generic-settings__section">
                                 <Select margin required color={Theme.primary} label="Ensemble type" value={engraving.bracketing} onChange={(val: BracketingType) => onUpdate(key, { bracketing: val })}>
                                     <Option value={BracketingType.none} displayAs="None">None</Option>
@@ -62,7 +63,7 @@ export const EngravingSettings: FC<Props> = ({ config, onUpdate, onClose }) => {
                             </div>
                         </div>
                         <div className="generic-settings__group">
-                            <div className="generic-settings__header">Design</div>
+                            <DialogHeader>Design</DialogHeader>
                             <div className="generic-settings__section">
                                 <Select required color={Theme.primary} label="Bracet cap style" value={engraving.bracketEndStyle} onChange={(val: BracketEndStyle) => onUpdate(key, { bracketEndStyle: val })}>
                                     <Option value={BracketEndStyle.none} displayAs="None">None</Option>
@@ -75,7 +76,7 @@ export const EngravingSettings: FC<Props> = ({ config, onUpdate, onClose }) => {
 
                     {page === Page.staves && <>
                         <div className="generic-settings__group">
-                            <div className="generic-settings__header">Space Size</div>
+                            <DialogHeader>Space Size</DialogHeader>
                             <div className="generic-settings__section">
                                 <img alt="Stave spacing" src={staveSpace} className="generic-settings__example" />
                                 <InputNumber label="Space size" value={engraving.space} precision={2} step={.01} units="mm" color={Theme.primary} errorColor={Theme.error} onChange={(val: number) => onUpdate(key, { space: val })} />

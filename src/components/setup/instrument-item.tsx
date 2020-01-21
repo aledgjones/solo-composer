@@ -7,6 +7,7 @@ import { Instrument, useInstrumentName } from '../../services/instrument';
 import { Icon } from '../../ui';
 
 import './instrument-item.css';
+import { Text } from '../shared/text';
 
 interface Props {
   selected: boolean;
@@ -18,7 +19,7 @@ export const InstrumentItem: FC<Props> = ({ selected, instrument, count }) => {
 
   const bg: string = useMemo(() => {
     if (selected) {
-      return Color(Theme.primary).lighten(.3).rgb().string();
+      return Color(Theme.primary).lighten(.3).string();
     } else {
       return 'rgb(57, 66, 71)';
     }
@@ -31,7 +32,7 @@ export const InstrumentItem: FC<Props> = ({ selected, instrument, count }) => {
   const name = useInstrumentName(instrument, count);
 
   return <div className="instrument-item" style={{ backgroundColor: bg, color: fg }}>
-    <span>{name}</span>
+    <Text className="instrument-item__name">{name}</Text>
     <Icon style={{ marginLeft: 8 }} size={18} color={fg} path={mdiChevronRight} />
   </div>;
 }

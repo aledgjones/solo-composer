@@ -1,6 +1,5 @@
 import { Instrument, instrumentFamily } from "../services/instrument";
 import { BracketingType } from "./draw-brackets";
-import { EngravingConfig } from "../services/engraving";
 
 export enum BracketSpan {
     none,

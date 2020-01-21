@@ -1,3 +1,7 @@
+.play-settings__header {
+    padding: 0;
+}
+
 .play-settings__port {
     display: flex;
     align-items: center;
@@ -19,17 +23,6 @@
 .play-settings__port-manufacturer {
     color: rgb(100, 100, 100);
     font-size: 10px;
-}
-
-.play-settings__header {
-    display: flex;
-    align-items: center;
-    background-color: rgb(235, 235, 235);
-    border-bottom: 1px solid rgb(175, 175, 175);
-    height: 48px;
-    position: sticky;
-    top: 0;
-    z-index: 10;
 }
 
 .play-settings__row {

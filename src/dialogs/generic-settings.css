@@ -28,9 +28,6 @@
     align-items: center;
     padding: 0 20px;
     height: 40px;
-    background-color: rgb(200, 200, 200);
-    border-top: 1px solid rgb(175, 175, 175);
-    border-bottom: 1px solid rgb(175, 175, 175);
     position: sticky;
     top: 0;
     z-index: 10;

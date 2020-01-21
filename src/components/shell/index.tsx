@@ -1,11 +1,11 @@
-import React, { FC, useState, useEffect, useCallback } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { Theme } from '../../const';
 import { mdiSettingsOutline } from '@mdi/js';
 
 import { useAppState } from '../../services/state';
 import { TabState } from '../../services/tab';
 
-import { Tabs, Tab, Icon, Button } from '../../ui';
+import { Tabs, Tab, Icon } from '../../ui';
 
 import { Setup } from '../setup';
 import { Write } from '../write';
@@ -13,7 +13,6 @@ import { Play } from '../play';
 
 import { useAutoSetup } from '../../playback/auto-setup';
 import { Transport } from './transport';
-import midi from '../../assets/example.mid.json';
 
 import './shell.css';
 

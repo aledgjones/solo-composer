@@ -86,7 +86,7 @@ export const InputNumber: FC<Props> = ({ id, className, style, value, precision,
             default:
                 break;
         }
-    }, [step, onIncrease, onDecrease]);
+    }, [onIncrease, onDecrease]);
 
     const border = () => {
         if (error) {

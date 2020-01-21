@@ -5,6 +5,8 @@ import { PlayerType } from '../services/player';
 import { KeySignatureMode } from '../entries/key-signature';
 import { NotationBaseLength } from '../parse/notation-track';
 import { getDefaultGroupings } from '../parse/get-default-groupings';
+import { BarlineType } from '../entries/barline';
+import { LayoutType } from '../services/engraving';
 
 export function useAutoSetup(state: State, actions: Actions) {
     useEffect(() => {
@@ -22,7 +24,7 @@ export function useAutoSetup(state: State, actions: Actions) {
         actions.playback.sampler.load(channel, def);
         actions.playback.sampler.assignInstrument(instrument.key, channel);
 
-        actions.score.flows.createTimeSignature({ beats: 6, beatType: 8, subdivisions: 12, groupings: getDefaultGroupings(6) }, 0, flowKey);
+        actions.score.flows.createTimeSignature({ beats: 4, beatType: 4, subdivisions: 12, groupings: getDefaultGroupings(4) }, 0, flowKey);
         actions.score.flows.createKeySignature({ mode: KeySignatureMode.major, offset: 4 }, 0, flowKey);
         actions.score.flows.createAbsoluteTempo({ text: 'Allegro', beat: NotationBaseLength.crotchet, dotted: 0, beatPerMinute: 120, textVisible: true, beatPerMinuteVisible: true, parenthesis: true }, 0, flowKey);
 

@@ -240,7 +240,7 @@ export const instrumentDefs: InstrumentDefs = {
     "woodwinds.clarinet.b-flat": {
         id: "woodwinds.clarinet.b-flat",
         path: ['Woodwinds', 'Clarinet', 'B Flat'],
-        longName: "Clarinet in B♭",
+        longName: "Clarinet in B@\u{E260}@",
         shortName: "Cl.",
         staves: [
             { lines: 5, clef: { type: ClefType.G, offset: 6 } }

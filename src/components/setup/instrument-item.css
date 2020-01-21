@@ -1,11 +1,16 @@
 .instrument-item {
   display: flex;
-  align-items:center;
+  align-items: center;
   height: 28px;
   font-size: 12px;
   padding: 0 4px 0 8px;
   margin-bottom: 4px;
   line-height: 1em;
+}
+
+.instrument-item__name {
+  display: flex;
+  align-items: center;
 }
 
 .instrument-item:last-child {

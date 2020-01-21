@@ -26,7 +26,7 @@ export function getWidthOfMM() {
 }
 
 export function getConverter(width: number, space: number): Converter {
-    const accuracy = 2;
+    const accuracy = undefined;
     return {
         px: {
             toSpaces: (px: number) => {
