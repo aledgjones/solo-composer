@@ -44,17 +44,17 @@ export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, c
     const x = config.framePadding.left + namesWidth + config.instrumentName.gap + measureBracketAndBraces(verticalMeasurements);
     const y = config.framePadding.top;
 
-    const barlines = getFirstBeats(flow.length, flowEntriesByTick);
+    const firstBeats = getFirstBeats(flow.length, flowEntriesByTick);
     const finalBarline = createBarline({ type: config.finalBarlineType }, 0);
 
-    const notationTracks = getWrittenDurations(flow.length, flowEntriesByTick, staves, barlines);
+    const notationTracks = getWrittenDurations(flow.length, flowEntriesByTick, staves, firstBeats);
 
     // 2) create a rhythmic grid for the whole flow (ie. spacings)
     // 3) assign widths to ticks
 
     const tickWidths: number[][] = [];
     for (let tick = 0; tick < flow.length; tick++) {
-        const width = measureTick(tick, barlines.includes(tick), flowEntriesByTick, staves, config);
+        const width = measureTick(tick, firstBeats.includes(tick), flowEntriesByTick, staves, notationTracks, config);
         tickWidths.push(width);
     }
 
@@ -73,7 +73,7 @@ export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, c
 
     let currentX = x + config.systemStartPadding;
     for (let tick = 0; tick < flow.length; tick++) {
-        drawInstructions.push(...drawTick(tick, barlines.includes(tick), currentX, y, tickWidths[tick], verticalMeasurements, flowEntriesByTick, staves, notationTracks, config, converter));
+        drawInstructions.push(...drawTick(tick, firstBeats.includes(tick), currentX, y, tickWidths[tick], verticalMeasurements, flowEntriesByTick, staves, notationTracks, config));
         currentX += tickWidths[tick].reduce<number>((sum, width) => sum + width, 0);
     }
 

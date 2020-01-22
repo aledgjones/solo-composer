@@ -50,9 +50,8 @@ function glyphFromDuration(baseLength?: NotationBaseLength) {
     }
 }
 
-export function drawAbsoluteTempo(x: number, y: number, tempo: Entry<AbsoluteTempo>, config: EngravingConfig, converter: Converter) {
+export function drawAbsoluteTempo(x: number, y: number, tempo: Entry<AbsoluteTempo>, config: EngravingConfig) {
 
-    const instructions: Instruction<any> = [];
     const styles: TextStyles = { color: '#000000', font: config.tempo.font, size: config.tempo.size, justify: config.tempo.align, align: Align.bottom };
 
     let left = x;

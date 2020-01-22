@@ -3,7 +3,7 @@ import { EntryType } from "../../entries";
 import { TimeSignature } from "../../entries/time-signature";
 import { getDistanceFromBarline } from "../../parse/get-distance-from-barline";
 import { getIsBeat } from "../../parse/get-is-beat";
-import { getNearestEntryToTick } from "../../parse/get-nearest-entry-to-tick";
+import { getNearestEntriesToTick } from "../../parse/get-nearest-entry-to-tick";
 import { getTicksPerBeat } from "../../parse/get-ticks-per-beat";
 import { EntriesByTick } from "../../services/track";
 import { merge } from '../../ui/utils/merge';
@@ -37,17 +37,18 @@ export function useTicks(length: number, flowEntriesByTick: EntriesByTick, zoom:
         const ticks = [];
         let x = 0;
         for (let tick = 0; tick < length + 1; tick++) {
-            const timeSig = getNearestEntryToTick<TimeSignature>(tick, flowEntriesByTick, EntryType.timeSignature);
-            const subdivisions = timeSig.entry ? timeSig.entry.subdivisions : 12;
-            const beatType = timeSig.entry ? timeSig.entry.beatType : 4;
+            const timeSigResult = getNearestEntriesToTick<TimeSignature>(tick, flowEntriesByTick, EntryType.timeSignature);
+            const timeSig = timeSigResult.entries[0];
+            const subdivisions = timeSig ? timeSig.subdivisions : 12;
+            const beatType = timeSig ? timeSig.beatType : 4;
 
             const ticksPerBeat = getTicksPerBeat(subdivisions, beatType);
             const ticksPerQuaver = getTicksPerBeat(subdivisions, 8);
 
             const width = Math.ceil((36 / ticksPerQuaver) * zoom);
-            const isBeat = getIsBeat(tick, ticksPerBeat, timeSig.at);
-            const isHalfBeat = getIsBeat(tick, ticksPerQuaver, timeSig.at);
-            const isFirstBeat = getDistanceFromBarline(tick, ticksPerBeat, timeSig.at, timeSig.entry ? timeSig.entry.beats : undefined) === 0;
+            const isBeat = getIsBeat(tick, ticksPerBeat, timeSigResult.at);
+            const isHalfBeat = getIsBeat(tick, ticksPerQuaver, timeSigResult.at);
+            const isFirstBeat = getDistanceFromBarline(tick, ticksPerBeat, timeSigResult.at, timeSig ? timeSig.beats : undefined) === 0;
 
             ticks.push({ x, width, isBeat, isHalfBeat, isFirstBeat });
 

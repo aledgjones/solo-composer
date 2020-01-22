@@ -1,7 +1,7 @@
-import { NotationTrack, NotationType } from "./notation-track";
+import { NotationTrack, NotationType, NotationBaseLength } from "./notation-track";
 import { EntriesByTick } from "../services/track";
 import { EntryType } from "../entries";
-import { getNearestEntryToTick } from "./get-nearest-entry-to-tick";
+import { getNearestEntriesToTick } from "./get-nearest-entry-to-tick";
 import { getTicksPerBeat } from "./get-ticks-per-beat";
 import { TimeSignature } from "../entries/time-signature";
 import { getIsEmpty } from "./get-is-empty";
@@ -14,7 +14,6 @@ import { getNearestNotationToTick } from "./get-nearest-notation-to-tick";
 function getNextGroupingAndBeat(grouping: number, beatType: number) {
 
     switch (grouping) {
-
         case 2:
             return { groupings: [1, 1], beats: 2, beatType: beatType };
         case 3:
@@ -37,14 +36,10 @@ export function splitUnit(start: number, stop: number, subdivisions: number, bea
     // if the unit is empty we stop the reccursion as there is no need for higher fidelity
     const unitIsEmpty = getIsEmpty(start, stop, track);
     if (unitIsEmpty) {
-
         const lastGroupingBoundry = groupingBoundries[groupingBoundries.length - 2];
-
-        // we will use semi-breve rest for all full bars
         if (isFullBar && track[start].type !== NotationType.rest && !getIsWritable(track[start].duration, subdivisions)) {
             track = splitNotationTrack(track, lastGroupingBoundry);
         }
-
     } else {
 
         if (groupings.length === 2 || groupings.length === 4) {
@@ -142,11 +137,12 @@ export function splitAsPerMeter(length: number, flow: EntriesByTick, track: Nota
         const start = barline;
         const stop = barlines[i + 1] || length;
 
-        const timeSig = getNearestEntryToTick<TimeSignature>(start, flow, EntryType.timeSignature);
-        const groupings = timeSig.entry ? timeSig.entry.groupings : getDefaultGroupings(0);
-        const subdivisions = timeSig.entry ? timeSig.entry.subdivisions : 12;
-        const beats = timeSig.entry ? timeSig.entry.beats : 0;
-        const beatType = timeSig.entry ? timeSig.entry.beatType : 4;
+        const timeSigResult = getNearestEntriesToTick<TimeSignature>(start, flow, EntryType.timeSignature);
+        const timeSig = timeSigResult.entries[0];
+        const groupings = timeSig ? timeSig.groupings : getDefaultGroupings(0);
+        const subdivisions = timeSig ? timeSig.subdivisions : 12;
+        const beats = timeSig ? timeSig.beats : 0;
+        const beatType = timeSig ? timeSig.beatType : 4;
 
         const ticksPerBeat = getTicksPerBeat(subdivisions, beatType);
         const longestDottedRest = ((ticksPerBeat / 2) / 2) * 3;

@@ -20,7 +20,7 @@ export interface Stave {
 export function createStave(staveDef: StaveDef, staveKey: StaveKey = shortid()): Stave {
     const clef = createClef(staveDef.clef, 0);
     const master = createTrack([clef]);
-    const primary = createTrack([createTone({pitch: 'A3', duration: 12 }, 0), createTone({pitch: 'F3', duration: 12 }, 0)]);
+    const primary = createTrack([createTone({pitch: 'A3', duration: 12 }, 0), createTone({pitch: 'G3', duration: 12 }, 0)]);
 
     return {
         key: staveKey,

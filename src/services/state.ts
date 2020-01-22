@@ -1,4 +1,4 @@
-import { useReducer, useMemo } from "react";
+import { useReducer, useMemo, useCallback } from "react";
 
 import { TabState, tabReducer, tabEmptyState, tabActions, TabActions } from "./tab";
 import { scoreActions, scoreReducer, scoreEmptyState, Score, ScoreActions } from "./score";
@@ -19,7 +19,7 @@ export interface Actions {
 }
 
 export const useAppState = (): [State, Actions] => {
-    const [state, dispatch] = useReducer(
+    const [state, _dispatch] = useReducer(
         (_state: State, action): State => {
             return {
                 tab: tabReducer(_state.tab, action),
@@ -34,6 +34,11 @@ export const useAppState = (): [State, Actions] => {
         }
     );
 
+    const dispatch = useCallback((action: any) => {
+        console.log(action);
+        _dispatch(action);
+    }, [_dispatch]);
+
     const actions = useMemo((): Actions => {
         return {
             tab: tabActions(dispatch),
@@ -42,7 +47,7 @@ export const useAppState = (): [State, Actions] => {
         }
     }, [dispatch]);
 
-    // log(state.playback, 'playback');
+    // log(state, 'store');
 
     return [state, actions];
 }

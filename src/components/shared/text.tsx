@@ -11,11 +11,11 @@ export const Text: FC<Props> = ({ className, style, children }) => {
     const text = children ? children.toString() : '';
     const result = text.split(regex);
     return <div className={className} style={style}>
-        {result.map(str => {
+        {result.map((str, i) => {
             if (regex.test(str)) {
-                return <span style={{ padding: '0 .05em', display: 'inline-block', lineHeight: '1em', fontSize: '1.5em', fontFamily: 'Music Text' }}>{str.slice(1, -1)}</span>;
+                return <span key={i} style={{ padding: '0 .05em', display: 'inline-block', lineHeight: '1em', fontSize: '1.5em', fontFamily: 'Music Text' }}>{str.slice(1, -1)}</span>;
             } else {
-                return <span>{str}</span>;
+                return <span key={i}>{str}</span>;
             }
         })}
     </div>;

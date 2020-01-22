@@ -9,7 +9,7 @@ import { Track, createTrack, entriesByTick, TrackKey } from './track';
 import { TimeSignatureDef, TimeSignature, createTimeSignature } from '../entries/time-signature';
 import { Entry, EntryType } from '../entries';
 import { getTicksPerBeat } from '../parse/get-ticks-per-beat';
-import { getEntryAtTick } from '../parse/get-entry-at-tick';
+import { getEntriesAtTick } from '../parse/get-entry-at-tick';
 import { KeySignatureDef, createKeySignature, KeySignature } from '../entries/key-signature';
 import { BarlineDef, createBarline, Barline } from '../entries/barline';
 import { createAbsoluteTempo, AbsoluteTempoDef, AbsoluteTempo } from '../entries/absolute-tempo';
@@ -205,9 +205,9 @@ export const flowReducer = (state: FlowState, action: any) => {
 
             // if there is already a time sig at tick, replace with new entry
             const entries = entriesByTick(flow.master.entries.order, flow.master.entries.byKey);
-            const old = getEntryAtTick<TimeSignature>(entry._tick, entries, EntryType.timeSignature);
-            if (old.entry) {
-                entry._key = old.entry._key;
+            const old = getEntriesAtTick<TimeSignature>(entry._tick, entries, EntryType.timeSignature)[0];
+            if (old) {
+                entry._key = old._key;
             }
 
             return {
@@ -220,7 +220,7 @@ export const flowReducer = (state: FlowState, action: any) => {
                         master: {
                             ...state.byKey[flowKey].master,
                             entries: {
-                                order: !old.entry ? [...state.byKey[flowKey].master.entries.order, entry._key] : state.byKey[flowKey].master.entries.order,
+                                order: !old ? [...state.byKey[flowKey].master.entries.order, entry._key] : state.byKey[flowKey].master.entries.order,
                                 byKey: {
                                     ...state.byKey[flowKey].master.entries.byKey,
                                     [entry._key]: entry
@@ -238,9 +238,9 @@ export const flowReducer = (state: FlowState, action: any) => {
 
             // if there is already a key sig at tick, replace with new entry
             const entries = entriesByTick(flow.master.entries.order, flow.master.entries.byKey);
-            const old = getEntryAtTick<KeySignature>(entry._tick, entries, EntryType.keySignature);
-            if (old.entry) {
-                entry._key = old.entry._key;
+            const old = getEntriesAtTick<KeySignature>(entry._tick, entries, EntryType.keySignature)[0];
+            if (old) {
+                entry._key = old._key;
             }
 
             return {
@@ -252,7 +252,7 @@ export const flowReducer = (state: FlowState, action: any) => {
                         master: {
                             ...state.byKey[flowKey].master,
                             entries: {
-                                order: !old.entry ? [...state.byKey[flowKey].master.entries.order, entry._key] : state.byKey[flowKey].master.entries.order,
+                                order: !old ? [...state.byKey[flowKey].master.entries.order, entry._key] : state.byKey[flowKey].master.entries.order,
                                 byKey: {
                                     ...state.byKey[flowKey].master.entries.byKey,
                                     [entry._key]: entry
@@ -270,9 +270,9 @@ export const flowReducer = (state: FlowState, action: any) => {
 
             // if there is already a barline at tick, replace with new entry
             const entries = entriesByTick(flow.master.entries.order, flow.master.entries.byKey);
-            const old = getEntryAtTick<Barline>(entry._tick, entries, EntryType.barline);
-            if (old.entry) {
-                entry._key = old.entry._key;
+            const old = getEntriesAtTick<Barline>(entry._tick, entries, EntryType.barline)[0];
+            if (old) {
+                entry._key = old._key;
             }
 
             return {
@@ -284,7 +284,7 @@ export const flowReducer = (state: FlowState, action: any) => {
                         master: {
                             ...state.byKey[flowKey].master,
                             entries: {
-                                order: !old.entry ? [...state.byKey[flowKey].master.entries.order, entry._key] : state.byKey[flowKey].master.entries.order,
+                                order: !old ? [...state.byKey[flowKey].master.entries.order, entry._key] : state.byKey[flowKey].master.entries.order,
                                 byKey: {
                                     ...state.byKey[flowKey].master.entries.byKey,
                                     [entry._key]: entry
@@ -302,9 +302,9 @@ export const flowReducer = (state: FlowState, action: any) => {
 
             // if there is already a absolute tempo at tick, replace with new entry
             const entries = entriesByTick(flow.master.entries.order, flow.master.entries.byKey);
-            const old = getEntryAtTick<AbsoluteTempo>(entry._tick, entries, EntryType.absoluteTempo);
-            if (old.entry) {
-                entry._key = old.entry._key;
+            const old = getEntriesAtTick<AbsoluteTempo>(entry._tick, entries, EntryType.absoluteTempo)[0];
+            if (old) {
+                entry._key = old._key;
             }
 
             return {
@@ -316,7 +316,7 @@ export const flowReducer = (state: FlowState, action: any) => {
                         master: {
                             ...state.byKey[flowKey].master,
                             entries: {
-                                order: !old.entry ? [...state.byKey[flowKey].master.entries.order, entry._key] : state.byKey[flowKey].master.entries.order,
+                                order: !old ? [...state.byKey[flowKey].master.entries.order, entry._key] : state.byKey[flowKey].master.entries.order,
                                 byKey: {
                                     ...state.byKey[flowKey].master.entries.byKey,
                                     [entry._key]: entry
