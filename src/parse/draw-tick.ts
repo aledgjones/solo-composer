@@ -2,7 +2,7 @@ import { drawClef } from "../entries/clef";
 import { Clef } from "../entries/clef-defs";
 import { drawKeySignature, KeySignature } from "../entries/key-signature";
 import { drawTimeSignature, TimeSignature } from "../entries/time-signature";
-import { EntryType } from "../entries";
+import { EntryType, Entry } from "../entries";
 import { Stave } from "../services/stave";
 import { VerticalMeasurements } from "./measure-vertical-layout";
 import { EntriesByTick, entriesByTick } from "../services/track";
@@ -10,14 +10,14 @@ import { getEntriesAtTick } from "./get-entry-at-tick";
 import { Barline, createBarline, BarlineType, drawBarline } from "../entries/barline";
 import { getNearestEntriesToTick } from "./get-nearest-entry-to-tick";
 import { widthUpTo, WidthOf } from "./measure-tick";
-import { getNotationBaseLength, getIsDotted, NotationType, NotationTracks } from "./notation-track";
+import { getNotationBaseLength, getIsDotted, NotationTracks } from "./notation-track";
 import { drawRest } from "./draw-rest";
-import { drawNote } from "./draw-note";
+import { drawNotehead } from "./draw-note";
 import { Tone } from "../entries/tone";
 import { drawAbsoluteTempo, AbsoluteTempo } from "../entries/absolute-tempo";
 import { EngravingConfig } from "../services/engraving";
-import { Converter } from "./converter";
-import { getStepsBetweenPitches } from "../playback/utils";
+import { getStemDirection, stepsFromTop } from "./get stem-direction";
+import { drawNoteStem } from "./draw-note-stem";
 
 export function drawTick(tick: number, isFirstBeat: boolean, x: number, y: number, widths: number[], verticalMeasurements: VerticalMeasurements, flowEntries: EntriesByTick, staves: Stave[], notationTracks: NotationTracks, config: EngravingConfig) {
     const output = [];
@@ -59,9 +59,6 @@ export function drawTick(tick: number, isFirstBeat: boolean, x: number, y: numbe
         const clefResult = getNearestEntriesToTick<Clef>(tick, staveEntries, EntryType.clef);
         const clef = clefResult.entries[0];
 
-        const clefPitch = clef ? clef.type : 'G4';
-        const clefOffset = clef ? clef.offset : 3;
-
         const top = y + verticalMeasurements.staves[stave.key].y;
 
         if (clef && clefResult.at === tick) {
@@ -79,21 +76,23 @@ export function drawTick(tick: number, isFirstBeat: boolean, x: number, y: numbe
         stave.tracks.order.forEach(trackKey => {
 
             const notationTrack = notationTracks[trackKey];
-            const tones = stave.tracks.byKey[trackKey].entries.byKey;
 
             if (notationTrack[tick]) {
                 const entry = notationTrack[tick];
                 const length = getNotationBaseLength(entry.duration, subdivisions);
                 const isDotted = getIsDotted(entry.duration, subdivisions);
-                if (entry.type === NotationType.rest) {
+
+                if (entry.tones.length === 0) {
                     output.push(...drawRest(x + widthUpTo(widths, WidthOf.noteSpacing), top, length, isDotted));
                 } else {
-                    entry.keys.forEach(key => {
-                        const tone = tones[key] as Tone;
-                        const toneOffset = getStepsBetweenPitches(clefPitch, tone.pitch);
-                        const offset = (clefOffset / 2) - (toneOffset / 2);
-                        output.push(...drawNote(x + widthUpTo(widths, WidthOf.noteSpacing), top, offset, length, isDotted));
+
+                    const stemDirection = getStemDirection(entry.tones, clef);
+                    output.push(drawNoteStem(x + widthUpTo(widths, WidthOf.noteSpacing), top, entry.tones, clef, stemDirection));
+                    entry.tones.forEach(tone => {
+                        const offset = stepsFromTop(tone, clef) / 2;
+                        output.push(...drawNotehead(x + widthUpTo(widths, WidthOf.noteSpacing), top, offset, length, isDotted));
                     });
+
                 }
             }
 

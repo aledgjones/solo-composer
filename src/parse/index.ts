@@ -49,9 +49,6 @@ export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, c
 
     const notationTracks = getWrittenDurations(flow.length, flowEntriesByTick, staves, firstBeats);
 
-    // 2) create a rhythmic grid for the whole flow (ie. spacings)
-    // 3) assign widths to ticks
-
     const tickWidths: number[][] = [];
     for (let tick = 0; tick < flow.length; tick++) {
         const width = measureTick(tick, firstBeats.includes(tick), flowEntriesByTick, staves, notationTracks, config);
@@ -64,10 +61,6 @@ export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, c
         });
         return sum;
     }, 0);
-
-    // 4) any scaling can be applied to the second tick width for fitting into pages etc later on
-
-    // 5) draw items at tick positions
 
     const drawInstructions: Instruction<any>[] = [];
 

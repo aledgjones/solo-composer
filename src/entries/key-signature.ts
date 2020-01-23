@@ -112,7 +112,7 @@ export function drawKeySignature(x: number, y: number, clef: Entry<Clef>, key: E
 
     if (key.offset < 0) {
         const glyph = glyphFromType(AccidentalType.flat);
-        const pattern = patterns[clef.type][clef.offset][AccidentalType.flat];
+        const pattern = patterns[clef.pitch][clef.offset][AccidentalType.flat];
         for (let i = 0; i > key.offset; i--) {
             instructions.push(buildText(styles, x + (i * -1), y + (.5 * pattern[i * -1]), glyph));
         }
@@ -120,7 +120,7 @@ export function drawKeySignature(x: number, y: number, clef: Entry<Clef>, key: E
 
     if (key.offset > 0) {
         const glyph = glyphFromType(AccidentalType.sharp);
-        const pattern = patterns[clef.type][clef.offset][AccidentalType.sharp];
+        const pattern = patterns[clef.pitch][clef.offset][AccidentalType.sharp];
         for (let i = 0; i < key.offset; i++) {
             instructions.push(buildText(styles, x + i, y + (.5 * pattern[i]), glyph));
         }

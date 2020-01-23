@@ -5,7 +5,7 @@ export enum ClefType {
 }
 
 export interface ClefDef {
-    type: ClefType;
+    pitch: ClefType;
     offset: number;
 }
 

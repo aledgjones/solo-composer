@@ -70,8 +70,8 @@ export const instrumentDefs: InstrumentDefs = {
         longName: "Harp",
         shortName: "Hrp.",
         staves: [
-            { lines: 5, clef: { type: ClefType.G, offset: 6 } },
-            { lines: 5, clef: { type: ClefType.F, offset: 2 } }
+            { lines: 5, clef: { pitch: ClefType.G, offset: 6 } },
+            { lines: 5, clef: { pitch: ClefType.F, offset: 2 } }
         ],
         patches: {
             [Expressions.natural]: '/patches/harp/legato.json'
@@ -83,7 +83,7 @@ export const instrumentDefs: InstrumentDefs = {
         longName: "Timpani",
         shortName: "Tmp.",
         staves: [
-            { lines: 5, clef: { type: ClefType.F, offset: 2 } }
+            { lines: 5, clef: { pitch: ClefType.F, offset: 2 } }
         ],
         patches: {
             [Expressions.natural]: '/patches/timpani/legato.json'
@@ -95,8 +95,8 @@ export const instrumentDefs: InstrumentDefs = {
         longName: "Piano",
         shortName: "Pno.",
         staves: [
-            { lines: 5, clef: { type: ClefType.G, offset: 6 } },
-            { lines: 5, clef: { type: ClefType.F, offset: 2 } }
+            { lines: 5, clef: { pitch: ClefType.G, offset: 6 } },
+            { lines: 5, clef: { pitch: ClefType.F, offset: 2 } }
         ],
         patches: {
             [Expressions.natural]: '/patches/piano/legato.json'
@@ -108,7 +108,7 @@ export const instrumentDefs: InstrumentDefs = {
         longName: "Violin",
         shortName: "Vln.",
         staves: [
-            { lines: 5, clef: { type: ClefType.G, offset: 6 } }
+            { lines: 5, clef: { pitch: ClefType.G, offset: 6 } }
         ],
         patches: {
             [Expressions.natural]: '/patches/violin/legato.json',
@@ -123,7 +123,7 @@ export const instrumentDefs: InstrumentDefs = {
         longName: "Viola",
         shortName: "Vla.",
         staves: [
-            { lines: 5, clef: { type: ClefType.C, offset: 4 } }
+            { lines: 5, clef: { pitch: ClefType.C, offset: 4 } }
         ],
         patches: {
             [Expressions.natural]: '/patches/viola/legato.json',
@@ -137,7 +137,7 @@ export const instrumentDefs: InstrumentDefs = {
         longName: "Violoncello",
         shortName: "Vc.",
         staves: [
-            { lines: 5, clef: { type: ClefType.F, offset: 2 } }
+            { lines: 5, clef: { pitch: ClefType.F, offset: 2 } }
         ],
         patches: {
             [Expressions.natural]: '/patches/violoncello/legato.json',
@@ -151,7 +151,7 @@ export const instrumentDefs: InstrumentDefs = {
         longName: "Contrabass",
         shortName: "Cb.",
         staves: [
-            { lines: 5, clef: { type: ClefType.F, offset: 2 } }
+            { lines: 5, clef: { pitch: ClefType.F, offset: 2 } }
         ],
         patches: {
             [Expressions.natural]: '/patches/contrabass/legato.json',
@@ -165,7 +165,7 @@ export const instrumentDefs: InstrumentDefs = {
         longName: "Trombone",
         shortName: "Tbn.",
         staves: [
-            { lines: 5, clef: { type: ClefType.F, offset: 2 } }
+            { lines: 5, clef: { pitch: ClefType.F, offset: 2 } }
         ],
         patches: {
             [Expressions.natural]: '/patches/trombone/legato.json',
@@ -178,7 +178,7 @@ export const instrumentDefs: InstrumentDefs = {
         longName: "Piccolo",
         shortName: "Pc.",
         staves: [
-            { lines: 5, clef: { type: ClefType.G, offset: 6 } }
+            { lines: 5, clef: { pitch: ClefType.G, offset: 6 } }
         ],
         patches: {
             [Expressions.natural]: '/patches/piccolo/legato.json',
@@ -191,7 +191,7 @@ export const instrumentDefs: InstrumentDefs = {
         longName: "Flute",
         shortName: "Fl.",
         staves: [
-            { lines: 5, clef: { type: ClefType.G, offset: 6 } }
+            { lines: 5, clef: { pitch: ClefType.G, offset: 6 } }
         ],
         patches: {
             [Expressions.natural]: "/patches/flute/legato.json",
@@ -204,7 +204,7 @@ export const instrumentDefs: InstrumentDefs = {
         longName: "Oboe",
         shortName: "Ob.",
         staves: [
-            { lines: 5, clef: { type: ClefType.G, offset: 6 } }
+            { lines: 5, clef: { pitch: ClefType.G, offset: 6 } }
         ],
         patches: {
             [Expressions.natural]: '/patches/oboe/legato.json',
@@ -217,7 +217,7 @@ export const instrumentDefs: InstrumentDefs = {
         longName: "Cor Anglais",
         shortName: "Cor E.",
         staves: [
-            { lines: 5, clef: { type: ClefType.G, offset: 6 } }
+            { lines: 5, clef: { pitch: ClefType.G, offset: 6 } }
         ],
         patches: {
             [Expressions.natural]: '/patches/cor-anglais/legato.json',
@@ -230,7 +230,7 @@ export const instrumentDefs: InstrumentDefs = {
         longName: "Clarinet in A",
         shortName: "Cl.",
         staves: [
-            { lines: 5, clef: { type: ClefType.G, offset: 6 } }
+            { lines: 5, clef: { pitch: ClefType.G, offset: 6 } }
         ],
         patches: {
             [Expressions.natural]: "/patches/clarinet/legato.json",
@@ -243,7 +243,7 @@ export const instrumentDefs: InstrumentDefs = {
         longName: "Clarinet in B@\u{E260}@",
         shortName: "Cl.",
         staves: [
-            { lines: 5, clef: { type: ClefType.G, offset: 6 } }
+            { lines: 5, clef: { pitch: ClefType.G, offset: 6 } }
         ],
         patches: {
             [Expressions.natural]: "/patches/clarinet/legato.json",
@@ -256,7 +256,7 @@ export const instrumentDefs: InstrumentDefs = {
         longName: "Bass Clarinet",
         shortName: "B Cl.",
         staves: [
-            { lines: 5, clef: { type: ClefType.G, offset: 6 } }
+            { lines: 5, clef: { pitch: ClefType.G, offset: 6 } }
         ],
         patches: {
             [Expressions.natural]: "/patches/bass-clarinet/legato.json",
@@ -269,7 +269,7 @@ export const instrumentDefs: InstrumentDefs = {
         longName: "Bassoon",
         shortName: "Bn.",
         staves: [
-            { lines: 5, clef: { type: ClefType.F, offset: 2 } }
+            { lines: 5, clef: { pitch: ClefType.F, offset: 2 } }
         ],
         patches: {
             [Expressions.natural]: '/patches/bassoon/legato.json',

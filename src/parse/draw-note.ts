@@ -25,7 +25,7 @@ function glyphFromDuration(baseLength?: NotationBaseLength) {
     }
 }
 
-export function drawNote(x: number, y: number, offset: number, length?: NotationBaseLength, dotted?: boolean) {
+export function drawNotehead(x: number, y: number, offset: number, length?: NotationBaseLength, dotted?: boolean) {
 
     const glyph = glyphFromDuration(length);
 

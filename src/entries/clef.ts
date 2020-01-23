@@ -31,7 +31,7 @@ function glyphFromType(type: ClefType) {
 }
 
 export function drawClef(x: number, y: number, clef: Entry<Clef>) {
-    const glyph = glyphFromType(clef.type);
+    const glyph = glyphFromType(clef.pitch);
     const styles: TextStyles = { color: '#000000', justify: Justify.start, align: Align.middle, size: 4, font: `Music` };
     return buildText(styles, x, y + (.5 * clef.offset), glyph);
 }

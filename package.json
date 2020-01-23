@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "@mdi/js": "^4.7.95",
-    "@svgdotjs/svg.js": "^3.0.16",
     "@types/big.js": "^4.0.5",
     "@types/color": "^3.0.1",
     "@types/jest": "24.0.18",

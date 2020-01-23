@@ -14,6 +14,7 @@ import { CircleInstruction } from '../../render/circle';
 import { Text } from './text';
 
 import './render-write-mode.css';
+import { Timer } from '../../ui/utils/timer';
 
 interface Props {
     score: Score;

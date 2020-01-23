@@ -18,7 +18,7 @@ export function splitNotationTrack(track: NotationTrack, split: number): Notatio
         out[event.at] = {
             ...event.entry,
             duration: split - event.at,
-            ties: event.entry.keys
+            ties: event.entry.tones.map(tone => tone._key)
         }
 
         out[split] = {

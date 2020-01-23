@@ -35,7 +35,7 @@ export const useAppState = (): [State, Actions] => {
     );
 
     const dispatch = useCallback((action: any) => {
-        console.log(action);
+        // console.log(action);
         _dispatch(action);
     }, [_dispatch]);
 

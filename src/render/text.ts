@@ -12,12 +12,13 @@ export interface TextStyles {
 export type Text = { value: string, x: number, y: number };
 export type TextInstruction = Instruction<{ styles: TextStyles } & Text>;
 
-export function buildText(styles: TextStyles, x: number, y: number, value: string): TextInstruction {
+export function buildText(styles: TextStyles, x: number, y: number, value: string, data?: any): TextInstruction {
     return {
         type: InstructionType.text,
         styles,
         x,
         y,
-        value
+        value,
+        data
     }
 }

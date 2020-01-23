@@ -3,7 +3,8 @@ import shortid from "shortid";
 import { EntriesByTick } from "../services/track";
 import { EntryKey, Entry, EntryType } from "../entries";
 import { Tone } from "../entries/tone";
-import { NotationTrack, Notation, NotationType } from "./notation-track";
+import { NotationTrack, Notation } from "./notation-track";
+import { getStepsBetweenPitches } from "../playback/utils";
 
 /**
  *  split tones into notated rhythms (none timesignature based)
@@ -21,16 +22,16 @@ export function notateTones(length: number, track: EntriesByTick, rhythmTrack: N
         const trackEntries = track[tick] || [];
         const offEntries = offsByTick[tick] || [];
 
-        const currentEvent: Notation = { keys: [], duration: 0, type: NotationType.note, ties: [] };
+        const currentEvent: Notation = { key: shortid(), tones: [], duration: 0, ties: [] };
 
         // we spilt the ongoing notes at: note off, new note or firstbeat; 
         if (previousEvent && (offEntries.length > 0 || trackEntries.length > 0)) {
             // we dont hold rests or tones that are 'off on this tick
-            const holds = previousEvent.keys.filter(key => {
-                return (previousEvent && previousEvent.type !== NotationType.rest) && !offEntries.includes(key)
+            const holds = previousEvent.tones.filter(tone => {
+                return (previousEvent && previousEvent.tones.length > 0) && !offEntries.includes(tone._key);
             });
-            currentEvent.keys = [...holds];
-            previousEvent.ties.push(...holds);
+            currentEvent.tones = [...holds];
+            previousEvent.ties.push(...holds.map(hold => hold._key));
             delete offsByTick[tick];
         }
 
@@ -38,8 +39,11 @@ export function notateTones(length: number, track: EntriesByTick, rhythmTrack: N
         trackEntries.forEach(entry => {
             if (entry._type === EntryType.tone) {
                 const tone = entry as Entry<Tone>;
-                currentEvent.keys.push(tone._key);
-
+                currentEvent.tones.push(tone);
+                // sort the keys into asc order of pitch
+                currentEvent.tones.sort((a, b) => {
+                    return getStepsBetweenPitches(b.pitch, a.pitch);
+                });
                 const off = tick + tone.duration;
                 if (offsByTick[off]) {
                     offsByTick[off].push(tone._key);
@@ -49,20 +53,12 @@ export function notateTones(length: number, track: EntriesByTick, rhythmTrack: N
             }
         });
 
-        const isRest = Object.keys(offsByTick).length === 0;
-        if (isRest) {
-            if (!previousEvent || previousEvent.type !== NotationType.rest) {
-                currentEvent.keys.push(shortid());
-                currentEvent.type = NotationType.rest;
-            }
-        }
-
         if (previousEvent) {
             previousEvent.duration++;
         }
 
-        // if there are no entries, nothing happened at this tick
-        const somethingHappened = currentEvent.keys.length > 0;
+        const isRest = Object.keys(offsByTick).length === 0;
+        const somethingHappened = !previousEvent || currentEvent.tones.length > 0 || (isRest && previousEvent.tones.length > 0);
         if (somethingHappened) {
             rhythmTrack[tick] = currentEvent;
             previousEvent = currentEvent;

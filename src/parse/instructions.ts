@@ -6,6 +6,7 @@ export enum InstructionType {
 
 export interface InstructionBase {
     type: InstructionType;
+    data?: any; // the original item that generated the instruction
 }
 export type Instruction<T> = InstructionBase & T;
 

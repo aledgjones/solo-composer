@@ -13,9 +13,9 @@ export function useAutoSetup(state: State, actions: Actions) {
     }, [state.score.flows.order]);
 
     useEffect(() => {
-        actions.score.flows.setLength(4 * 12 * 4, flowKey);
+        actions.score.flows.setLength(3 * 12 * 4, flowKey);
 
-        const def = instrumentDefs['strings.violoncello'];
+        const def = instrumentDefs['strings.viola'];
         const instrument = actions.score.instruments.create(def);
         const player = actions.score.players.create(PlayerType.solo);
         actions.score.players.assignInstrument(player.key, instrument);
@@ -24,8 +24,8 @@ export function useAutoSetup(state: State, actions: Actions) {
         actions.playback.sampler.load(channel, def);
         actions.playback.sampler.assignInstrument(instrument.key, channel);
 
-        actions.score.flows.createTimeSignature({ beats: 4, beatType: 4, subdivisions: 12, groupings: getDefaultGroupings(4) }, 0, flowKey);
-        actions.score.flows.createKeySignature({ mode: KeySignatureMode.major, offset: 4 }, 0, flowKey);
+        actions.score.flows.createTimeSignature({ beats: 3, beatType: 4, subdivisions: 12, groupings: getDefaultGroupings(3) }, 0, flowKey);
+        actions.score.flows.createKeySignature({ mode: KeySignatureMode.major, offset: 2 }, 0, flowKey);
         actions.score.flows.createAbsoluteTempo({ text: 'Allegro', beat: NotationBaseLength.crotchet, dotted: 0, beatPerMinute: 120, textVisible: true, beatPerMinuteVisible: true, parenthesis: true }, 0, flowKey);
 
     }, [actions.score.instruments, actions.score.players, actions.score.flows, actions.playback.sampler, flowKey]);

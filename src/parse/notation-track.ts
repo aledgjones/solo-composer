@@ -1,9 +1,5 @@
-import { EntryKey } from "../entries";
-
-export enum NotationType {
-    rest,
-    note
-}
+import { EntryKey, Entry } from "../entries";
+import { Tone } from "../entries/tone";
 
 export enum NotationBaseLength {
     semiquaver = .25,
@@ -15,9 +11,9 @@ export enum NotationBaseLength {
 }
 
 export interface Notation {
-    keys: EntryKey[] // these may be repeated if a tone is split up into ties notes
+    key: string;
+    tones: Entry<Tone>[] // these may be repeated if a tone is split up into ties notes
     duration: number;
-    type: NotationType;
     ties: EntryKey[];
 }
 

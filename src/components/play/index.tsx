@@ -1,6 +1,5 @@
 import React, { FC, useState, useCallback, useMemo } from 'react';
 import ScrollContainer from 'react-indiana-drag-scroll';
-import { createColors, rgbHex } from 'color-map';
 
 import { State, Actions } from '../../services/state';
 
@@ -41,7 +40,6 @@ export const Play: FC<Props> = ({ state, actions, settings, onSettingsClose }) =
         return Array(len).fill('').map((entry, i) => {
             const base = (step * i) + offset;
             const color = `hsl(${base > 359 ? base - 359 : base}, 100%, 35%)`;
-            console.log(color);
             return color;
         });
 

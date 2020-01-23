@@ -1,15 +1,15 @@
 import { Clef } from "../entries/clef-defs";
 import { KeySignature } from "../entries/key-signature";
 import { TimeSignature } from "../entries/time-signature";
-import { EntryType, Entry } from "../entries";
+import { EntryType } from "../entries";
 import { EngravingConfig } from "../services/engraving";
 import { Stave } from "../services/stave";
 import { EntriesByTick, entriesByTick } from "../services/track";
 import { getEntriesAtTick } from "./get-entry-at-tick";
 import { Barline, createBarline, BarlineType } from "../entries/barline";
-import { NotationTracks, NotationType, Notation } from "./notation-track";
-import { Tone } from "../entries/tone";
+import { NotationTracks } from "./notation-track";
 import { getStepsBetweenPitches } from "../playback/utils";
+import { getStemDirection, StemDirection } from "./get stem-direction";
 
 export enum WidthOf {
     endRepeat,
@@ -19,7 +19,7 @@ export enum WidthOf {
     time,
     startRepeat,
     accidentals,
-    offsetNoteSlot,
+    preNoteSlot,
     noteSpacing
 }
 
@@ -78,19 +78,25 @@ export function measureTick(tick: number, isFirstBeat: boolean, flowEntries: Ent
 
         stave.tracks.order.forEach(trackKey => {
             const notationTrack = notationTracks[trackKey];
-            const tones = stave.tracks.byKey[trackKey].entries.byKey;
 
+            // check to see if there are notes in the offset slot
             if (notationTrack[tick]) {
                 const entry = notationTrack[tick];
-                if (entry.type === NotationType.note) {
-                    for (let i = 0; i < entry.keys.length; i++) {
-                        const curr: Entry<Tone> = tones[entry.keys[i]];
-                        const next: Entry<Tone> | undefined = tones[entry.keys[i + 1]];
-                        if (next) {
-                            const offset = getStepsBetweenPitches(curr.pitch, next.pitch);
-                            // either 2nd or unison
-                            if (offset <= 1 || offset >= -1) {
-                                measurements[WidthOf.offsetNoteSlot] = 1;
+                if (entry.tones.length > 0) {
+                    const stemDirection = getStemDirection(entry.tones, clef);
+                    // we can only have a preNoteSlot if the stem direction is down
+                    if (stemDirection === StemDirection.down) {
+                        for (let i = 0; i < entry.tones.length; i++) {
+                            const curr = entry.tones[i];
+                            const next = entry.tones[i + 1];
+                            if (next) {
+                                const offset = getStepsBetweenPitches(curr.pitch, next.pitch);
+                                // either 2nd or unison
+                                if (offset === 0 || offset === 1) {
+                                    // as soon as we've found a shunt we can break
+                                    measurements[WidthOf.preNoteSlot] = 1.15;
+                                    break;
+                                }
                             }
                         }
                     }
