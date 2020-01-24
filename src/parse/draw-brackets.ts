@@ -2,7 +2,7 @@ import { VerticalMeasurements } from "./measure-vertical-layout";
 import { EngravingConfig } from "../services/engraving";
 import { buildPath } from "../render/path";
 import { buildText, TextStyles } from "../render/text";
-import { Instruction } from "./instructions";
+import { Instruction } from "../render/instructions";
 import { Justify, Align } from "../render/apply-styles";
 
 export enum BracketingType {

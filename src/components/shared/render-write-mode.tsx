@@ -1,20 +1,19 @@
 import React, { FC, useState, useMemo } from 'react';
-import { Score } from '../../services/score';
-
-import { Theme } from '../../const';
 import Color from 'color';
+
+import { Score } from '../../services/score';
+import { Theme } from '../../const';
 import { getWidthOfMM, getConverter } from '../../parse/converter';
 import { defaultEngravingConfig } from '../../services/engraving';
 import { getConvertedConfig } from '../../parse/get-converted-config';
 import { parse } from '../../parse';
-import { Instruction, InstructionType } from '../../parse/instructions';
+import { Instruction, InstructionType } from '../../render/instructions';
 import { PathInstruction } from '../../render/path';
 import { TextInstruction } from '../../render/text';
 import { CircleInstruction } from '../../render/circle';
 import { Text } from './text';
 
 import './render-write-mode.css';
-import { Timer } from '../../ui/utils/timer';
 
 interface Props {
     score: Score;

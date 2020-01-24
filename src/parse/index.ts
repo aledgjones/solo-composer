@@ -9,7 +9,7 @@ import { entriesByTick } from "../services/track";
 
 import { measureVerticalLayout } from "./measure-vertical-layout";
 import { measureNames } from "./measure-names";
-import { RenderInstructions, Instruction } from "./instructions";
+import { RenderInstructions, Instruction } from "../render/instructions";
 import { measureBracketAndBraces } from "./measure-brackets-and-braces";
 import { measureTick } from "./measure-tick";
 
@@ -26,8 +26,11 @@ import { Converter } from "./converter";
 import { getFirstBeats } from "./get-first-beats";
 import { getWrittenDurations } from "./get-written-durations";
 import { createBarline } from "../entries/barline";
+import { Timer } from "../ui/utils/timer";
 
 export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, converter: Converter): RenderInstructions {
+
+const timer = Timer('parse');
 
     const flow = score.flows.byKey[flowKey];
 
@@ -69,6 +72,8 @@ export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, c
         drawInstructions.push(...drawTick(tick, firstBeats.includes(tick), currentX, y, tickWidths[tick], verticalMeasurements, flowEntriesByTick, staves, notationTracks, config));
         currentX += tickWidths[tick].reduce<number>((sum, width) => sum + width, 0);
     }
+
+    timer.stop();
 
     return {
         height: config.framePadding.top + verticalMeasurements.systemHeight + config.framePadding.bottom,

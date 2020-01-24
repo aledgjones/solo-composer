@@ -9,7 +9,7 @@ import { getEntriesAtTick } from "./get-entry-at-tick";
 import { Barline, createBarline, BarlineType } from "../entries/barline";
 import { NotationTracks } from "./notation-track";
 import { getStepsBetweenPitches } from "../playback/utils";
-import { getStemDirection, StemDirection } from "./get stem-direction";
+import { getStemDirection, StemDirection } from "./get-stem-direction";
 
 export enum WidthOf {
     endRepeat,

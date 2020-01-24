@@ -25,7 +25,7 @@ export function useAutoSetup(state: State, actions: Actions) {
         actions.playback.sampler.assignInstrument(instrument.key, channel);
 
         actions.score.flows.createTimeSignature({ beats: 3, beatType: 4, subdivisions: 12, groupings: getDefaultGroupings(3) }, 0, flowKey);
-        actions.score.flows.createKeySignature({ mode: KeySignatureMode.major, offset: 2 }, 0, flowKey);
+        actions.score.flows.createKeySignature({ mode: KeySignatureMode.minor, offset: 2 }, 0, flowKey);
         actions.score.flows.createAbsoluteTempo({ text: 'Allegro', beat: NotationBaseLength.crotchet, dotted: 0, beatPerMinute: 120, textVisible: true, beatPerMinuteVisible: true, parenthesis: true }, 0, flowKey);
 
     }, [actions.score.instruments, actions.score.players, actions.score.flows, actions.playback.sampler, flowKey]);

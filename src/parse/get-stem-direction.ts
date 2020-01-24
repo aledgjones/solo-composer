@@ -1,4 +1,4 @@
-import { EntryKey, Entries, Entry } from "../entries";
+import { Entry } from "../entries";
 import { Clef } from "../entries/clef-defs";
 import { Tone } from "../entries/tone";
 import { getStepsBetweenPitches } from "../playback/utils";

@@ -1,4 +1,4 @@
-import { Instruction, InstructionType } from "../parse/instructions";
+import { Instruction, InstructionType } from "./instructions";
 
 export interface PathStyles { color: string, thickness: number };
 

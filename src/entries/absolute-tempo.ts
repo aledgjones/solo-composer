@@ -1,9 +1,7 @@
 import shortid from 'shortid';
 import { Entry, EntryType } from ".";
-import { Instruction } from '../parse/instructions';
 import { buildText, TextStyles } from '../render/text';
 import { EngravingConfig } from '../services/engraving';
-import { Converter } from '../parse/converter';
 import { NotationBaseLength } from '../parse/notation-track';
 import { Align } from '../render/apply-styles';
 

@@ -2,7 +2,7 @@ import { drawClef } from "../entries/clef";
 import { Clef } from "../entries/clef-defs";
 import { drawKeySignature, KeySignature } from "../entries/key-signature";
 import { drawTimeSignature, TimeSignature } from "../entries/time-signature";
-import { EntryType, Entry } from "../entries";
+import { EntryType } from "../entries";
 import { Stave } from "../services/stave";
 import { VerticalMeasurements } from "./measure-vertical-layout";
 import { EntriesByTick, entriesByTick } from "../services/track";
@@ -13,10 +13,9 @@ import { widthUpTo, WidthOf } from "./measure-tick";
 import { getNotationBaseLength, getIsDotted, NotationTracks } from "./notation-track";
 import { drawRest } from "./draw-rest";
 import { drawNotehead } from "./draw-note";
-import { Tone } from "../entries/tone";
 import { drawAbsoluteTempo, AbsoluteTempo } from "../entries/absolute-tempo";
 import { EngravingConfig } from "../services/engraving";
-import { getStemDirection, stepsFromTop } from "./get stem-direction";
+import { getStemDirection, stepsFromTop } from "./get-stem-direction";
 import { drawNoteStem } from "./draw-note-stem";
 
 export function drawTick(tick: number, isFirstBeat: boolean, x: number, y: number, widths: number[], verticalMeasurements: VerticalMeasurements, flowEntries: EntriesByTick, staves: Stave[], notationTracks: NotationTracks, config: EngravingConfig) {

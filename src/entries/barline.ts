@@ -3,7 +3,7 @@ import { Entry, EntryType, Box } from ".";
 import { VerticalMeasurements } from '../parse/measure-vertical-layout';
 import { buildPath } from '../render/path';
 import { Stave } from '../services/stave';
-import { Instruction } from '../parse/instructions';
+import { Instruction } from '../render/instructions';
 import { buildCircle } from '../render/circle';
 
 export enum BarlineType {

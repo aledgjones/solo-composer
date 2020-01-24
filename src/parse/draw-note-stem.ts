@@ -1,7 +1,7 @@
-import { EntryKey, Entries, Entry } from '../entries';
+import { Entry } from '../entries';
 import { buildPath } from '../render/path';
 import { Tone } from '../entries/tone';
-import { StemDirection, stepsFromTop } from './get stem-direction';
+import { StemDirection, stepsFromTop } from './get-stem-direction';
 import { Clef } from '../entries/clef-defs';
 
 export function drawNoteStem(x: number, y: number, tones: Entry<Tone>[], clef: Entry<Clef>, stemDirection: StemDirection) {

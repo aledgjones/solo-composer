@@ -3,10 +3,6 @@ import { Instrument, InstrumentKey } from "../services/instrument";
 import { StaveKey } from '../services/stave';
 import { isSpan, BracketSpan } from './is-span';
 import { EngravingConfig } from '../services/engraving';
-import { Converter } from './converter';
-
-// type YPositions = { [key: string]: number };
-// type YHeights = { [key: string]: number };
 
 export interface VerticalMeasurements {
     systemHeight: number;
