@@ -4,7 +4,7 @@ import { TabState, tabReducer, tabEmptyState, tabActions, TabActions } from "./t
 import { scoreActions, scoreReducer, scoreEmptyState, Score, ScoreActions } from "./score";
 import { PlaybackState, PlaybackActions, playbackReducer, playbackEmptyState, playbackActions } from "./playback";
 
-// import { log } from "../ui/utils/log";
+import { log } from "../ui/utils/log";
 
 export interface State {
     tab: TabState;
@@ -47,7 +47,7 @@ export const useAppState = (): [State, Actions] => {
         }
     }, [dispatch]);
 
-    // log(state, 'store');
+    log(state, 'store');
 
     return [state, actions];
 }
