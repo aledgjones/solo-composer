@@ -1,4 +1,4 @@
-import { entriesByTick, EntriesByTick } from "../services/track";
+import { entriesByTick, EntriesByTick, Tracks } from "../services/track";
 import { Stave } from "../services/stave";
 import { NotationTracks } from "./notation-track";
 import { notateTones } from "./notate-tones";
@@ -7,12 +7,12 @@ import { splitAsPerMeter } from "./split-as-per-meter";
 /**
  * Convert tones into written notaition values
  */
-export function getWrittenDurations(length: number, flowEntriesByTick: EntriesByTick, staves: Stave[], barlines: number[]) {
+export function getWrittenDurations(length: number, flowEntriesByTick: EntriesByTick, staves: Stave[], tracks: Tracks, barlines: number[]) {
 
     return staves.reduce<NotationTracks>((output, stave) => {
-        stave.tracks.order.forEach(trackKey => {
+        stave.tracks.forEach(trackKey => {
 
-            const track = stave.tracks.byKey[trackKey];
+            const track = tracks[trackKey];
             const trackEventsByTick = entriesByTick(track.entries.order, track.entries.byKey);
 
             let notationTrack = {};

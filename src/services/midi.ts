@@ -19,9 +19,11 @@ export const midiActions = (store: Store<State>) => {
         init: () => {
             webMidi.enable(function (err) {
                 const update = () => {
-                    store.update(s => s.playback.midi = {
-                        inputs: webMidi.inputs,
-                        outputs: webMidi.outputs
+                    store.update(s => {
+                        s.playback.midi = {
+                            inputs: webMidi.inputs,
+                            outputs: webMidi.outputs
+                        }
                     });
                 }
                 webMidi.addListener('connected', update);

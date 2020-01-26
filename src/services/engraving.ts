@@ -68,6 +68,10 @@ export const engravingEmptyState = (): EngravingState => {
 
 export const engravingActions = (store: Store<State>) => {
     return {
-        set: (layout: LayoutType, config: PartialEngravingConfig) => store.update(s => s.score.engraving[layout] = {...s.score.engraving[layout], ...config})
+        set: (layout: LayoutType, config: PartialEngravingConfig) => {
+            store.update(s => {
+                s.score.engraving[layout] = { ...s.score.engraving[layout], ...config }
+            });
+        }
     }
 }

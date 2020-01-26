@@ -16,6 +16,10 @@ export const configEmptyState = (): ConfigState => {
 
 export const configActions = (store: Store<State>) => {
     return {
-        set: (config: PartialConfig) => store.update(s => s.score.config = { ...s.score.config, ...config })
+        set: (config: PartialConfig) => {
+            store.update(s => {
+                s.score.config = { ...s.score.config, ...config }
+            });
+        }
     }
 }

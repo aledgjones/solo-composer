@@ -47,8 +47,8 @@ export const Setup: FC<Props> = () => {
     }, [score.players]);
 
     const onCreatePlayer = useCallback(() => {
-        const player = actions.score.players.create(PlayerType.solo);
-        setSelection({ key: player.key, type: SelectionType.player });
+        const playerKey = actions.score.players.create(PlayerType.solo);
+        setSelection({ key: playerKey, type: SelectionType.player });
         setDialogOpen(true);
     }, [actions.score.players]);
 

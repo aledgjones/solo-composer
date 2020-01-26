@@ -1,28 +1,32 @@
 import { useEffect, useMemo } from 'react';
-import { Actions, State } from '../services/state';
 import { instrumentDefs } from '../services/instrument-defs';
 import { PlayerType } from '../services/player';
 import { KeySignatureMode } from '../entries/key-signature';
 import { NotationBaseLength } from '../parse/notation-track';
 import { getDefaultGroupings } from '../parse/get-default-groupings';
+import { useAppActions, useAppState } from '../services/state';
+import { Score } from '../services/score';
 
-export function useAutoSetup(state: State, actions: Actions) {
+export function useAutoSetup() {
+
+    const actions = useAppActions();
+    const score = useAppState<Score>(s => s.score);
 
     const flowKey = useMemo(() => {
-        return state.score.flows.order[0];
-    }, [state.score.flows.order]);
+        return score.flows.order[0];
+    }, [score.flows.order]);
 
     useEffect(() => {
-        actions.score.flows.setLength(3 * 12 * 4, flowKey);
+        actions.score.flows.setLength(flowKey, 3 * 12 * 4);
 
         const def = instrumentDefs['strings.viola'];
-        const instrument = actions.score.instruments.create(def);
-        const player = actions.score.players.create(PlayerType.solo);
-        actions.score.players.assignInstrument(player.key, instrument);
+        const instrumentKey = actions.score.instruments.create(def);
+        const playerKey = actions.score.players.create(PlayerType.solo);
+        actions.score.players.assignInstrument(playerKey, instrumentKey);
 
         const channel = actions.playback.sampler.createChannel();
         actions.playback.sampler.load(channel, def);
-        actions.playback.sampler.assignInstrument(instrument.key, channel);
+        actions.playback.sampler.assignInstrument(instrumentKey, channel);
 
         actions.score.flows.createTimeSignature({ beats: 3, beatType: 4, subdivisions: 12, groupings: getDefaultGroupings(3) }, 0, flowKey);
         actions.score.flows.createKeySignature({ mode: KeySignatureMode.minor, offset: 2 }, 0, flowKey);

@@ -50,7 +50,7 @@ const timer = Timer('parse');
     const firstBeats = getFirstBeats(flow.length, flowEntriesByTick);
     const finalBarline = createBarline({ type: config.finalBarlineType }, 0);
 
-    const notationTracks = getWrittenDurations(flow.length, flowEntriesByTick, staves, firstBeats);
+    const notationTracks = getWrittenDurations(flow.length, flowEntriesByTick, staves, flow.tracks, firstBeats);
 
     const tickWidths: number[][] = [];
     for (let tick = 0; tick < flow.length; tick++) {

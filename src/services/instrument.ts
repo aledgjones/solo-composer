@@ -35,7 +35,9 @@ export const instrumentActions = (store: Store<State>) => {
         create: (def: InstrumentDef) => {
             const staveKeys = def.staves.map(staveDef => shortid());
             const instrument = createInstrument(def, staveKeys);
-            store.update(s => s.score.instruments[instrument.key] = instrument);
+            store.update(s => {
+                s.score.instruments[instrument.key] = instrument;
+            });
             return instrument.key;
         },
         remove: (instrumentKey: InstrumentKey) => {

@@ -80,7 +80,9 @@ export const samplerActions = (store: Store<State>) => {
             });
         },
         assignInstrument: (instrumentKey: InstrumentKey, channel: ChannelKey) => {
-            store.update(s => s.playback.sampler.channels.byKey[channel].assigned = instrumentKey);
+            store.update(s => {
+                s.playback.sampler.channels.byKey[channel].assigned = instrumentKey;
+            });
         },
         stopAll: () => {
             sampler.stopAll();

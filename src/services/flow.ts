@@ -79,6 +79,7 @@ export const flowActions = (store: Store<State>) => {
         remove: (flowKey: FlowKey) => {
             store.update(s => {
                 s.score.flows.order = s.score.flows.order.filter(key => key !== flowKey);
+                delete s.score.flows.byKey[flowKey];
             })
         },
         assignPlayer: (flowKey: FlowKey, playerKey: PlayerKey) => {

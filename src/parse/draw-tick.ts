@@ -72,7 +72,7 @@ export function drawTick(tick: number, isFirstBeat: boolean, x: number, y: numbe
             output.push(...drawTimeSignature(x + widthUpTo(widths, WidthOf.time), top, time));
         }
 
-        stave.tracks.order.forEach(trackKey => {
+        stave.tracks.forEach(trackKey => {
 
             const notationTrack = notationTracks[trackKey];
 

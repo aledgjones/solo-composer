@@ -14,10 +14,12 @@ import { Play } from '../play';
 import { Transport } from './transport';
 
 import './shell.css';
+import { useAutoSetup } from '../../playback/auto-setup';
 
 export const MainShell: FC = () => {
 
     useLogger();
+    useAutoSetup();
 
     const actions = useAppActions();
     const tab = useAppState<TabState>(s => s.ui.tab);

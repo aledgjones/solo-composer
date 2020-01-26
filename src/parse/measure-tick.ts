@@ -76,7 +76,7 @@ export function measureTick(tick: number, isFirstBeat: boolean, flowEntries: Ent
             measurements[WidthOf.clef] = clef._bounds.width;
         }
 
-        stave.tracks.order.forEach(trackKey => {
+        stave.tracks.forEach(trackKey => {
             const notationTrack = notationTracks[trackKey];
 
             // check to see if there are notes in the offset slot

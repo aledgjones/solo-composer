@@ -52,7 +52,7 @@ export const playerActions = (store: Store<State>) => {
                 });
 
             });
-            return player;
+            return player.key;
         },
         reorder: (instruction: { oldIndex: number, newIndex: number }) => {
             store.update(s => {
@@ -84,7 +84,7 @@ export const playerActions = (store: Store<State>) => {
             });
         },
         assignInstrument: (playerKey: PlayerKey, instrumentKey: InstrumentKey) => {
-            store.update((s, ss) => {
+            store.update(s => {
 
                 // add the instrument to the player
                 s.score.players.byKey[playerKey].instruments.push(instrumentKey);
