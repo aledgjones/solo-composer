@@ -23,7 +23,6 @@ interface Props {
 
 export const Play: FC<Props> = ({ settings, onSettingsClose }) => {
 
-    const actions = useAppActions();
     const score = useAppState<Score>(s => s.score);
 
     const [zoom, setZoom] = useState<number>(1.5);

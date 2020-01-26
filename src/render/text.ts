@@ -1,5 +1,16 @@
 import { Instruction, InstructionType } from "./instructions";
-import { Justify, Align } from "./apply-styles";
+
+export enum Justify {
+    start = "flex-start",
+    middle = "center",
+    end = "flex-end"
+}
+
+export enum Align {
+    top = 'flex-start',
+    middle = 'center',
+    bottom = 'flex-end'
+}
 
 export interface TextStyles {
     color: string;
@@ -9,11 +20,12 @@ export interface TextStyles {
     align: Align;
 };
 
-export type Text = { value: string, x: number, y: number };
-export type TextInstruction = Instruction<{ styles: TextStyles } & Text>;
+export type Text = { styles: TextStyles, value: string, x: number, y: number };
+export type TextInstruction = Instruction<Text>;
 
-export function buildText(styles: TextStyles, x: number, y: number, value: string): TextInstruction {
+export function buildText(key: string, styles: TextStyles, x: number, y: number, value: string): TextInstruction {
     return {
+        key,
         type: InstructionType.text,
         styles,
         x,

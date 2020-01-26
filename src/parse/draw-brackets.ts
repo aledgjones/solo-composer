@@ -1,9 +1,8 @@
 import { VerticalMeasurements } from "./measure-vertical-layout";
 import { EngravingConfig } from "../services/engraving";
 import { buildPath } from "../render/path";
-import { buildText, TextStyles } from "../render/text";
+import { buildText, TextStyles, Justify, Align } from "../render/text";
 import { Instruction } from "../render/instructions";
-import { Justify, Align } from "../render/apply-styles";
 
 export enum BracketingType {
     none = 1,
@@ -40,12 +39,12 @@ export function drawBrackets(x: number, y: number, metrics: VerticalMeasurements
         const bottom = y + stop.y + stop.height + tweekForWing;
 
         // vertical thick line
-        out.push(buildPath(thick, [left, top - tweekForStave], [left, bottom + tweekForStave]));
+        out.push(buildPath(`${bracket.start}-vertical-bar`, thick, [left, top - tweekForStave], [left, bottom + tweekForStave]));
 
         if (isLine) {
             out.push(
-                buildPath(thin, [left - .25, top], [x, top]),
-                buildPath(thin, [left - .25, bottom], [x, bottom])
+                buildPath(`${bracket.start}-cap--top`, thin, [left - .25, top], [x, top]),
+                buildPath(`${bracket.start}-cap--bottom`, thin, [left - .25, bottom], [x, bottom])
             )
         }
 
@@ -61,8 +60,8 @@ export function drawBrackets(x: number, y: number, metrics: VerticalMeasurements
                 size: 4
             };
             out.push(
-                buildText(styles, capLeft, top, glyphTop),
-                buildText(styles, capLeft, bottom, glyphBottom)
+                buildText(`${bracket.start}-wing--top`, styles, capLeft, top, glyphTop),
+                buildText(`${bracket.start}-wing--bottom`, styles, capLeft, bottom, glyphBottom)
             )
         }
 

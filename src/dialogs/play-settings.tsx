@@ -7,14 +7,12 @@ import { ListItem } from '../components/shared/list-item';
 import { useCounts, Instruments } from '../services/instrument';
 import { useAppState, useAppActions } from '../services/state';
 import { PlaySettingsChannel } from './play-settings-channel';
+import { DialogHeader } from './dialog-header';
+import { MidiState } from '../services/midi';
+import { ChannelState } from '../services/sampler';
 
 import './generic-settings.css';
 import './play-settings.css';
-import { DialogHeader } from './dialog-header';
-import { MidiState } from '../services/midi';
-import { Channel, ChannelState } from '../services/sampler';
-import { PlayerState } from '../services/player';
-import { ConfigState } from '../services/config';
 
 enum Page {
     internal = 1,

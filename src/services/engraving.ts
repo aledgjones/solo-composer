@@ -2,7 +2,7 @@ import { Store } from "pullstate";
 import { State } from "./state";
 import { BracketingType, BracketEndStyle } from "../parse/draw-brackets";
 import { BarlineType } from "../entries/barline";
-import { Justify } from "../render/apply-styles";
+import { Justify } from "../render/text";
 
 type MMs = number;
 type Spaces = number;

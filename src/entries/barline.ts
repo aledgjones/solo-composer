@@ -80,45 +80,44 @@ export function drawBarline(x: number, y: number, staves: Stave[], metrics: Vert
         switch (barline.type) {
 
             case BarlineType.double:
-
-                instructions.push(buildPath({ color: '#000000', thickness: .125 },
+                instructions.push(buildPath(`${barline._key}-${entry.start}-barline--1`, { color: '#000000', thickness: .125 },
                     [x, top],
                     [x, bottom],
                 ));
-                instructions.push(buildPath({ color: '#000000', thickness: .125 },
+                instructions.push(buildPath(`${barline._key}-${entry.start}-barline--2`, { color: '#000000', thickness: .125 },
                     [x + .5, top],
                     [x + .5, bottom]
                 ));
                 break;
 
             case BarlineType.final:
-                instructions.push(buildPath({ color: '#000000', thickness: .125 },
+                instructions.push(buildPath(`${barline._key}-${entry.start}-barline--thin`, { color: '#000000', thickness: .125 },
                     [x, top],
                     [x, bottom]
                 ));
-                instructions.push(buildPath({ color: '#000000', thickness: .5 },
+                instructions.push(buildPath(`${barline._key}-${entry.start}-barline--thick`, { color: '#000000', thickness: .5 },
                     [x + .75, top],
                     [x + .75, bottom]
                 ));
                 break;
 
             case BarlineType.end_repeat:
-                instructions.push(buildPath({ color: '#000000', thickness: .125 },
+                instructions.push(buildPath(`${barline._key}-${entry.start}-barline--thin`, { color: '#000000', thickness: .125 },
                     [x + 1, top],
                     [x + 1, bottom]
                 ));
-                instructions.push(buildPath({ color: '#000000', thickness: .5 },
+                instructions.push(buildPath(`${barline._key}-${entry.start}-barline--thick`, { color: '#000000', thickness: .5 },
                     [x + 1.75, top],
                     [x + 1.75, bottom]
                 ));
                 break;
 
             case BarlineType.start_repeat:
-                instructions.push(buildPath({ color: '#000000', thickness: .125 },
+                instructions.push(buildPath(`${barline._key}-${entry.start}-barline--thin`, { color: '#000000', thickness: .125 },
                     [x + 1, top],
                     [x + 1, bottom]
                 ));
-                instructions.push(buildPath({ color: '#000000', thickness: .5 },
+                instructions.push(buildPath(`${barline._key}-${entry.start}-barline--thick`, { color: '#000000', thickness: .5 },
                     [x + .25, top],
                     [x + .25, bottom]
                 ));
@@ -126,7 +125,7 @@ export function drawBarline(x: number, y: number, staves: Stave[], metrics: Vert
 
             case BarlineType.normal:
             default:
-                instructions.push(buildPath({ color: '#000000', thickness: .125 },
+                instructions.push(buildPath(`${barline._key}-${entry.start}-barline`, { color: '#000000', thickness: .125 },
                     [x, top],
                     [x, bottom]
                 ));
@@ -139,8 +138,8 @@ export function drawBarline(x: number, y: number, staves: Stave[], metrics: Vert
             const left = barline.type === BarlineType.start_repeat ? x + 1.75 : x + .25;
             staves.forEach(stave => {
                 const top = metrics.staves[stave.key].y;
-                instructions.push(buildCircle({ color: '#000000' }, left, y + top + 1.5, radius));
-                instructions.push(buildCircle({ color: '#000000' }, left, y + top + 2.5, radius));
+                instructions.push(buildCircle(`${barline._key}-${stave.key}-dot--top`, { color: '#000000' }, left, y + top + 1.5, radius));
+                instructions.push(buildCircle(`${barline._key}-${stave.key}-dot--bottom`, { color: '#000000' }, left, y + top + 2.5, radius));
             });
         }
 

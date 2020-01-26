@@ -1,7 +1,6 @@
-import { buildText, TextStyles } from '../render/text';
+import { buildText, TextStyles, Justify, Align } from '../render/text';
 import { buildCircle, CircleStyles } from '../render/circle';
 import { NotationBaseLength } from './notation-track';
-import { Justify, Align } from '../render/apply-styles';
 
 export interface NoteDef {
     duration: number;
@@ -25,7 +24,7 @@ function glyphFromDuration(baseLength?: NotationBaseLength) {
     }
 }
 
-export function drawNotehead(x: number, y: number, offset: number, length: NotationBaseLength | undefined, dotted: boolean) {
+export function drawNotehead(x: number, y: number, offset: number, length: NotationBaseLength | undefined, dotted: boolean, key: string) {
 
     const glyph = glyphFromDuration(length);
 
@@ -37,12 +36,12 @@ export function drawNotehead(x: number, y: number, offset: number, length: Notat
     const instructions = [];
 
     const styles: TextStyles = { color: '#000000', justify: Justify.start, align: Align.middle, size: 4, font: `Music` };
-    instructions.push(buildText(styles, x, y + offset, glyph));
+    instructions.push(buildText(`${key}-head`, styles, x, y + offset, glyph));
 
     if (dotted) {
         const styles: CircleStyles = { color: '#000000' };
         const shift = (offset * 2) % 2 === 0 ? -.5 : 0;
-        instructions.push(buildCircle(styles, x + 1.75, y + offset + shift, .2));
+        instructions.push(buildCircle(`${key}-dot`, styles, x + 1.75, y + offset + shift, .2));
     }
 
     return instructions;

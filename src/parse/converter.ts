@@ -1,4 +1,6 @@
 import Big from 'big.js';
+import { useMemo } from 'react';
+import { defaultEngravingConfig } from '../services/engraving';
 
 export type ConverterGenerator = (space: number) => Converter;
 
@@ -43,3 +45,12 @@ export function getConverter(width: number, space: number): Converter {
         }
     }
 };
+
+export function useConverter(space?: number) {
+    const mm = useMemo(() => {
+        return getWidthOfMM();
+    }, []);
+    return useMemo(() => {
+        return getConverter(mm, space || defaultEngravingConfig.space);
+    }, [mm, space]);
+}

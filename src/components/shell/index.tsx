@@ -2,8 +2,9 @@ import React, { FC, useState, useEffect, useCallback } from 'react';
 import { THEME } from '../../const';
 import { mdiSettingsOutline } from '@mdi/js';
 
-import { useLogger, useAppActions, useAppState } from '../../services/state';
+import { useAppActions, useAppState } from '../../services/state';
 import { TabState } from '../../services/ui';
+import { useAutoSetup } from '../../playback/auto-setup';
 
 import { Tabs, Tab, Icon } from '../../ui';
 
@@ -14,11 +15,10 @@ import { Play } from '../play';
 import { Transport } from './transport';
 
 import './shell.css';
-import { useAutoSetup } from '../../playback/auto-setup';
 
 export const MainShell: FC = () => {
 
-    useLogger();
+    // useLogger();
     useAutoSetup();
 
     const actions = useAppActions();

@@ -4,11 +4,12 @@ export interface CircleStyles {
     color: string;
 };
 
-export type Circle = { x: number, y: number, radius: number };
-export type CircleInstruction = Instruction<{ styles: CircleStyles } & Circle>;
+export type Circle = { styles: CircleStyles, x: number, y: number, radius: number };
+export type CircleInstruction = Instruction<Circle>;
 
-export function buildCircle(styles: CircleStyles, x: number, y: number, radius: number): CircleInstruction {
+export function buildCircle(key: string, styles: CircleStyles, x: number, y: number, radius: number): CircleInstruction {
     return {
+        key,
         type: InstructionType.circle,
         styles,
         x,

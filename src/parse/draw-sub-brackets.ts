@@ -16,7 +16,7 @@ export function drawSubBrackets(x: number, y: number, metrics: VerticalMeasureme
         const top = y + start.y;
         const bottom = y + stop.y + stop.height;
 
-        out.push(buildPath(styles, [x, top], [left, top], [left, bottom], [x, bottom]));
+        out.push(buildPath(`${bracket.start}-bracket`, styles, [x, top], [left, top], [left, bottom], [x, bottom]));
 
         return out;
     }, []);

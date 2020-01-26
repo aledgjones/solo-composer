@@ -1,9 +1,8 @@
 import shortid from 'shortid';
 import { Entry, EntryType } from ".";
-import { buildText, TextStyles } from '../render/text';
+import { buildText, TextStyles, Align } from '../render/text';
 import { EngravingConfig } from '../services/engraving';
 import { NotationBaseLength } from '../parse/notation-track';
-import { Align } from '../render/apply-styles';
 
 export interface AbsoluteTempoDef {
     text?: string;
@@ -87,6 +86,6 @@ export function drawAbsoluteTempo(x: number, y: number, tempo: Entry<AbsoluteTem
         }
     }
 
-    return buildText(styles, left, top, output);
+    return buildText(tempo._key, styles, left, top, output);
 
 }

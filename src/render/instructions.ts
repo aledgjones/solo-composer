@@ -5,6 +5,7 @@ export enum InstructionType {
 }
 
 export interface InstructionBase {
+    key: string;
     type: InstructionType;
 }
 export type Instruction<T> = InstructionBase & T;

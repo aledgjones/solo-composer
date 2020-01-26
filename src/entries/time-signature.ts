@@ -1,7 +1,6 @@
 import shortid from 'shortid';
 import { Entry, EntryType } from ".";
-import { TextStyles, buildText } from '../render/text';
-import { Justify, Align } from '../render/apply-styles';
+import { TextStyles, buildText, Justify, Align } from '../render/text';
 
 export interface TimeSignatureDef {
     beats: number; // 0 = free
@@ -63,7 +62,7 @@ function glyphFromType(val: string) {
     }
 }
 
-export function drawTimeSignature(x: number, y: number, time: Entry<TimeSignature>) {
+export function drawTimeSignature(x: number, y: number, time: Entry<TimeSignature>, staveKey: string) {
 
     const instructions = [];
     const styles: TextStyles = {
@@ -76,12 +75,12 @@ export function drawTimeSignature(x: number, y: number, time: Entry<TimeSignatur
 
     if (time.drawAs) {
         const glyph = glyphFromType(time.drawAs);
-        instructions.push(buildText(styles, x, y + 2, glyph));
+        instructions.push(buildText(time._key, styles, x, y + 2, glyph));
     } else if (time.beats !== 0) {
         const countGlyph = glyphFromType(time.beats.toString());
         const beatGlyph = glyphFromType(time.beatType.toString());
-        instructions.push(buildText(styles, x, y + 1, countGlyph));
-        instructions.push(buildText(styles, x, y + 3, beatGlyph));
+        instructions.push(buildText(`${time._key}-${staveKey}-count`, styles, x, y + 1, countGlyph));
+        instructions.push(buildText(`${time._key}-${staveKey}-beat`, styles, x, y + 3, beatGlyph));
     }
 
     return instructions;

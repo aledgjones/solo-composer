@@ -1,6 +1,6 @@
 import shortid from 'shortid';
 import { StaveDef } from "./instrument-defs";
-import { Track, createTrack, Tracks, TrackKey } from './track';
+import { Track, createTrack, TrackKey } from './track';
 import { createClef } from '../entries/clef';
 import { Instrument } from './instrument';
 import { Flow } from './flow';

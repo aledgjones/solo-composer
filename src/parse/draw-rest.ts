@@ -1,7 +1,6 @@
-import { buildText, TextStyles } from '../render/text';
+import { buildText, TextStyles, Justify, Align } from '../render/text';
 import { buildCircle, CircleStyles } from '../render/circle';
 import { NotationBaseLength } from './notation-track';
-import { Justify, Align } from '../render/apply-styles';
 
 export interface RestDef {
     duration: number;
@@ -37,7 +36,7 @@ function verticalOffsetFromDuration(baseLength?: NotationBaseLength) {
     }
 }
 
-export function drawRest(x: number, y: number, length?: NotationBaseLength, dotted?: boolean) {
+export function drawRest(x: number, y: number, length: NotationBaseLength | undefined, dotted: boolean, key: string) {
 
     const glyph = glyphFromDuration(length);
     const offset = verticalOffsetFromDuration(length);
@@ -50,11 +49,11 @@ export function drawRest(x: number, y: number, length?: NotationBaseLength, dott
     const instructions = [];
 
     const styles: TextStyles = { color: '#000000', justify: Justify.start, align: Align.middle, size: 4, font: `Music` };
-    instructions.push(buildText(styles, x, y + offset, glyph));
+    instructions.push(buildText(key, styles, x, y + offset, glyph));
     
     if (dotted) {
         const styles: CircleStyles = { color: '#000000' };
-        instructions.push(buildCircle(styles, x + 1.5, y - .5 + offset, .2));
+        instructions.push(buildCircle(`${key}-dot`, styles, x + 1.5, y - .5 + offset, .2));
     }
 
     return instructions;

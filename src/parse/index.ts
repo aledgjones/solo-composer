@@ -1,6 +1,6 @@
 import { FlowKey } from "../services/flow";
 import { Score } from "../services/score";
-import { EngravingConfig } from "../services/engraving";
+import { LayoutType, defaultEngravingConfig } from "../services/engraving";
 
 import { getInstruments, getCounts } from "../services/instrument";
 import { getNames, NameType } from "./get-names";
@@ -27,12 +27,21 @@ import { getFirstBeats } from "./get-first-beats";
 import { getWrittenDurations } from "./get-written-durations";
 import { createBarline } from "../entries/barline";
 import { Timer } from "../ui/utils/timer";
+import { useMemo } from "react";
+import { getConvertedConfig } from "./get-converted-config";
 
-export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, converter: Converter): RenderInstructions {
+export function useParse(score: Score, flowKey: FlowKey, converter: Converter) {
+    return useMemo(() => {
+        return parse(score, flowKey, converter);
+    }, [score, flowKey, converter]);
+}
 
-const timer = Timer('parse');
+export function parse(score: Score, flowKey: FlowKey, converter: Converter): RenderInstructions {
+
+    const timer = Timer('parse');
 
     const flow = score.flows.byKey[flowKey];
+    const config = getConvertedConfig({ ...defaultEngravingConfig, ...score.engraving[LayoutType.score] }, converter);
 
     const instruments = getInstruments(score.players, score.instruments, flow);
     const staves = getStaves(instruments, flow);

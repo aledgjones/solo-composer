@@ -69,7 +69,7 @@ export function drawTick(tick: number, isFirstBeat: boolean, x: number, y: numbe
         }
 
         if (time && timeResult.at === tick) {
-            output.push(...drawTimeSignature(x + widthUpTo(widths, WidthOf.time), top, time));
+            output.push(...drawTimeSignature(x + widthUpTo(widths, WidthOf.time), top, time, stave.key));
         }
 
         stave.tracks.forEach(trackKey => {
@@ -82,14 +82,14 @@ export function drawTick(tick: number, isFirstBeat: boolean, x: number, y: numbe
                 const isDotted = getIsDotted(entry.duration, subdivisions);
 
                 if (entry.tones.length === 0) {
-                    output.push(...drawRest(x + widthUpTo(widths, WidthOf.noteSpacing), top, length, isDotted));
+                    output.push(...drawRest(x + widthUpTo(widths, WidthOf.noteSpacing), top, length, isDotted, `${trackKey}-${tick}-rest`));
                 } else {
 
                     const stemDirection = getStemDirection(entry.tones, clef);
-                    output.push(drawNoteStem(x + widthUpTo(widths, WidthOf.noteSpacing), top, entry.tones, clef, stemDirection));
+                    output.push(drawNoteStem(x + widthUpTo(widths, WidthOf.noteSpacing), top, entry.tones, clef, stemDirection, `${trackKey}-${tick}-stem`));
                     entry.tones.forEach(tone => {
                         const offset = stepsFromTop(tone, clef) / 2;
-                        output.push(...drawNotehead(x + widthUpTo(widths, WidthOf.noteSpacing), top, offset, length, isDotted));
+                        output.push(...drawNotehead(x + widthUpTo(widths, WidthOf.noteSpacing), top, offset, length, isDotted, `${tone._key}-${tick}-note`));
                     });
 
                 }

@@ -1,8 +1,7 @@
 import shortid from 'shortid';
 import { ClefType, Clef } from './clef-defs';
 import { Entry, EntryType } from ".";
-import { TextStyles, buildText } from '../render/text';
-import { Justify, Align } from '../render/apply-styles';
+import { TextStyles, buildText, Justify, Align } from '../render/text';
 
 export enum KeySignatureMode {
     major = 1,
@@ -114,7 +113,7 @@ export function drawKeySignature(x: number, y: number, clef: Entry<Clef>, key: E
         const glyph = glyphFromType(AccidentalType.flat);
         const pattern = patterns[clef.pitch][clef.offset][AccidentalType.flat];
         for (let i = 0; i > key.offset; i--) {
-            instructions.push(buildText(styles, x + (i * -1), y + (.5 * pattern[i * -1]), glyph));
+            instructions.push(buildText(`${clef._key}-${i}`, styles, x + (i * -1), y + (.5 * pattern[i * -1]), glyph));
         }
     }
 
@@ -122,7 +121,7 @@ export function drawKeySignature(x: number, y: number, clef: Entry<Clef>, key: E
         const glyph = glyphFromType(AccidentalType.sharp);
         const pattern = patterns[clef.pitch][clef.offset][AccidentalType.sharp];
         for (let i = 0; i < key.offset; i++) {
-            instructions.push(buildText(styles, x + i, y + (.5 * pattern[i]), glyph));
+            instructions.push(buildText(`${clef._key}-${i}`, styles, x + i, y + (.5 * pattern[i]), glyph));
         }
     }
 

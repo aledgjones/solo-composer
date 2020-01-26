@@ -1,6 +1,5 @@
 import { VerticalMeasurements } from "./measure-vertical-layout";
-import { buildText, TextStyles } from "../render/text";
-import { Justify, Align } from "../render/apply-styles";
+import { buildText, TextStyles, Justify, Align } from "../render/text";
 
 export function drawBraces(x: number, y: number, metrics: VerticalMeasurements) {
 
@@ -19,7 +18,7 @@ export function drawBraces(x: number, y: number, metrics: VerticalMeasurements) 
         const height = (stop.y + stop.height) - start.y;
         const top = y + (stop.y + stop.height);
 
-        return buildText({...styles, size: height}, x - .25, top, '\u{E000}');
+        return buildText(`${brace.start}-brace`, { ...styles, size: height }, x - .25, top, '\u{E000}');
     });
 
 }

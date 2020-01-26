@@ -1,9 +1,8 @@
 import { Names } from "./get-names";
 import { EngravingConfig } from "../services/engraving";
 import { Converter } from "./converter";
-import { TextStyles } from "../render/text";
+import { TextStyles, Justify, Align } from "../render/text";
 import { measureText } from "./measure-text";
-import { Justify, Align } from "../render/apply-styles";
 
 
 export function measureNames(names: Names, config: EngravingConfig, converter: Converter) {

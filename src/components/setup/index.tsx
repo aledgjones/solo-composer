@@ -1,10 +1,9 @@
 import React, { FC, useState, useMemo, useCallback } from 'react';
 
-import { PlayerType, Player, PlayerKey } from '../../services/player';
-import { Flow, FlowKey } from '../../services/flow';
+import { PlayerType, PlayerKey } from '../../services/player';
+import { FlowKey } from '../../services/flow';
 import { InstrumentDef } from '../../services/instrument-defs';
 import { useCounts } from '../../services/instrument';
-import { StaveKey } from '../../services/stave';
 
 import { PlayerList } from './player-list';
 import { FlowList } from './flow-list';

@@ -3,10 +3,9 @@ import Color from 'color';
 
 import { Score } from '../../services/score';
 import { THEME } from '../../const';
-import { getWidthOfMM, getConverter } from '../../parse/converter';
-import { defaultEngravingConfig, LayoutType } from '../../services/engraving';
-import { getConvertedConfig } from '../../parse/get-converted-config';
-import { parse } from '../../parse';
+import { useConverter } from '../../parse/converter';
+import { LayoutType } from '../../services/engraving';
+import { useParse } from '../../parse';
 import { Instruction, InstructionType } from '../../render/instructions';
 import { PathInstruction } from '../../render/path';
 import { TextInstruction } from '../../render/text';
@@ -27,15 +26,8 @@ export const RenderWriteMode: FC<Props> = (({ score }) => {
         return Color(THEME.primary).isDark() ? '#ffffff' : '#000000';
     }, []);
 
-    const converter = useMemo(() => {
-        const mm = getWidthOfMM();
-        return getConverter(mm, score.engraving[LayoutType.score].space || defaultEngravingConfig.space);
-    }, [score.engraving[LayoutType.score].space]);
-
-    const instructions = useMemo(() => {
-        const config = getConvertedConfig({ ...defaultEngravingConfig, ...score.engraving[LayoutType.score] }, converter);
-        return parse(score, flowKey, config, converter);
-    }, [score, flowKey, converter]);
+    const converter = useConverter(score.engraving[LayoutType.score].space);
+    const instructions = useParse(score, flowKey, converter);
 
     const px = converter.spaces.toPX;
 
@@ -50,10 +42,10 @@ export const RenderWriteMode: FC<Props> = (({ score }) => {
                             const def = path.points.map((point, i) => {
                                 return `${i === 0 ? 'M' : 'L'} ${px(point[0])} ${px(point[1])}`;
                             });
-                            return <path fill="none" d={def.join(" ")} stroke={path.styles.color} strokeWidth={px(path.styles.thickness)} />
+                            return <path key={path.key} fill="none" d={def.join(" ")} stroke={path.styles.color} strokeWidth={px(path.styles.thickness)} />
                         case InstructionType.circle:
                             const circle = instruction as CircleInstruction;
-                            return <circle cx={px(circle.x)} cy={px(circle.y)} r={px(circle.radius)} fill={circle.styles.color} />
+                            return <circle key={circle.key} cx={px(circle.x)} cy={px(circle.y)} r={px(circle.radius)} fill={circle.styles.color} />
                         default:
                             return null;
                     }
@@ -64,7 +56,7 @@ export const RenderWriteMode: FC<Props> = (({ score }) => {
                     switch (instruction.type) {
                         case InstructionType.text:
                             const text = instruction as TextInstruction;
-                            return <Text style={{ fontFamily: text.styles.font, fontSize: px(text.styles.size), whiteSpace: 'pre', position: 'absolute', display: 'flex', alignItems: text.styles.align, justifyContent: text.styles.justify, height: 0, width: 0, left: px(text.x), top: px(text.y), lineHeight: '1em' }}>{text.value}</Text>;
+                            return <Text key={text.key} style={{ fontFamily: text.styles.font, fontSize: px(text.styles.size), whiteSpace: 'pre', position: 'absolute', display: 'flex', alignItems: text.styles.align, justifyContent: text.styles.justify, height: 0, width: 0, left: px(text.x), top: px(text.y), lineHeight: '1em' }}>{text.value}</Text>;
                         default:
                             return null;
                     }
