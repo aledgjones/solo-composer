@@ -3,25 +3,16 @@ import shortid from 'shortid';
 import { toRoman } from 'roman-numerals';
 
 import { InstrumentDef } from './instrument-defs';
-import { PlayerKey, PLAYER_REMOVE, PlayerState } from './player';
-import { StaveKey, createStave } from './stave';
-import { removeProps } from '../ui/utils/remove-props';
+import { PlayerKey, PlayerState } from './player';
+import { StaveKey } from './stave';
 import { Flow, FlowKey } from './flow';
 import { ConfigState } from './config';
 import { TrackKey } from './track';
 import { ToneDef, createTone } from '../entries/tone';
-
-export const INSTRUMENT_CREATE = '@instrument/create';
-export const INSTRUMENT_REMOVE = '@instrument/remove';
-export const INSTRUMENT_CREATE_TONE = '@instrument/create-tone';
+import { useAppState, State } from './state';
+import { Store } from 'pullstate';
 
 export type InstrumentKey = string;
-
-export interface InstrumentActions {
-    create: (def: InstrumentDef) => Instrument;
-    remove: (instrumentKey: InstrumentKey) => void;
-    createTone: (flowKey: FlowKey, staveKey: StaveKey, trackKey: TrackKey, def: ToneDef, tick: number) => void;
-}
 
 export interface Instrument {
     key: InstrumentKey;
@@ -37,45 +28,25 @@ export const instrumentEmptyState = (): Instruments => {
     return {};
 }
 
-export const instrumentReducer = (state: Instruments, action: any) => {
-    switch (action.type) {
-        case INSTRUMENT_CREATE: {
-            const instrumentKey: InstrumentKey = action.payload.instrument.key;
-            const instrument: Instrument = action.payload.instrument;
-            return { ...state, [instrumentKey]: instrument };
-        }
-        case INSTRUMENT_REMOVE: {
-            const instrumentKey: InstrumentKey = action.payload;
-            const { [instrumentKey]: removed, ...instruments } = state;
-            return instruments;
-        }
-        case PLAYER_REMOVE: {
-            const instrumentKeys: InstrumentKey[] = action.payload.player.instruments;
-            return removeProps(state, instrumentKeys);
-        }
-        default:
-            return state;
-    }
-}
-
-export const instrumentActions = (dispatch: any): InstrumentActions => {
+export const instrumentActions = (store: Store<State>) => {
     return {
-        create: (def) => {
-            const staves = def.staves.map(staveDef => createStave(staveDef));
-            const instrument = createInstrument(def, staves.map(stave => stave.key));
-            dispatch({ type: INSTRUMENT_CREATE, payload: { instrument, staves } });
-            return instrument;
+        // this purely creates an instrumnet -- players are added to flows so flow update not needed here
+        // instruments are assigned to players seperately
+        create: (def: InstrumentDef) => {
+            const staveKeys = def.staves.map(staveDef => shortid());
+            const instrument = createInstrument(def, staveKeys);
+            store.update(s => s.score.instruments[instrument.key] = instrument);
         },
-        remove: (instrumentKey) => {
-            dispatch({ type: INSTRUMENT_REMOVE, payload: instrumentKey });
+        remove: (instrumentKey: InstrumentKey) => {
+            // remove from score.instruments
+            // remove from each flow
         },
-        createTone: (flowKey, staveKey, trackKey, def, tick) => {
+        createTone: (flowKey: FlowKey, trackKey: TrackKey, def: ToneDef, tick: number) => {
             const tone = createTone(def, tick);
-            dispatch({
-                type: INSTRUMENT_CREATE_TONE,
-                payload: {
-                    flowKey, staveKey, trackKey, tone
-                }
+            store.update(s => {
+                const track = s.score.flows.byKey[flowKey].tracks[trackKey];
+                track.entries.byKey[tone._key] = tone;
+                track.entries.order.push(tone._key);
             });
         }
     }
@@ -138,7 +109,12 @@ export function getCounts(players: PlayerState, instruments: Instruments, config
 
 }
 
-export function useCounts(players: PlayerState, instruments: Instruments, config: ConfigState): InstrumentCounts {
+export function useCounts(): InstrumentCounts {
+    const { players, instruments, config } = useAppState<{ players: PlayerState, instruments: Instruments, config: ConfigState }>(s => ({
+        players: s.score.players,
+        instruments: s.score.instruments,
+        config: s.score.config
+    }));
     return useMemo(() => {
         return getCounts(players, instruments, config);
     }, [players, instruments, config]);

@@ -1,17 +1,20 @@
 import React, { FC, useState, useMemo } from 'react';
 import { mdiMidiPort } from '@mdi/js';
 
-import { Theme } from '../const';
+import { THEME } from '../const';
 import { Backdrop, Card, Button, Icon } from '../ui';
 import { ListItem } from '../components/shared/list-item';
-import { PlaybackActions } from '../services/playback';
-import { useCounts } from '../services/instrument';
-import { State } from '../services/state';
+import { useCounts, Instruments } from '../services/instrument';
+import { useAppState, useAppActions } from '../services/state';
 import { PlaySettingsChannel } from './play-settings-channel';
 
 import './generic-settings.css';
 import './play-settings.css';
 import { DialogHeader } from './dialog-header';
+import { MidiState } from '../services/midi';
+import { Channel, ChannelState } from '../services/sampler';
+import { PlayerState } from '../services/player';
+import { ConfigState } from '../services/config';
 
 enum Page {
     internal = 1,
@@ -19,22 +22,25 @@ enum Page {
 }
 
 interface Props {
-    state: State;
-    actions: PlaybackActions;
     onClose: () => void;
 }
 
-export const PlaySettings: FC<Props> = ({ state, actions, onClose }) => {
+export const PlaySettings: FC<Props> = ({ onClose }) => {
+
+    const actions = useAppActions();
+    const counts = useCounts();
+    const { midi, channelState, instruments } = useAppState<{ midi: MidiState, channelState: ChannelState, instruments: Instruments }>(s => ({
+        midi: s.playback.midi,
+        channelState: s.playback.sampler.channels,
+        instruments: s.score.instruments
+    }));
+    const channels = useMemo(() => {
+        return channelState.order.map(key => {
+            return channelState.byKey[key];
+        });
+    }, [channelState]);
 
     const [page, setPage] = useState<Page>(Page.internal);
-    const midi = state.playback.midi;
-
-    const counts = useCounts(state.score.players, state.score.instruments, state.score.config);
-    const channels = useMemo(() => {
-        return state.playback.sampler.channels.order.map(key => {
-            return state.playback.sampler.channels.byKey[key];
-        });
-    }, [state.playback.sampler.channels]);
 
     return <Backdrop visible={true}>
         <Card animate className="generic-settings">
@@ -53,7 +59,7 @@ export const PlaySettings: FC<Props> = ({ state, actions, onClose }) => {
                                 <div className="play-settings__cell play-settings__assigned">Assigned</div>
                             </DialogHeader>
                             {channels.map((channel, i) => {
-                                return <PlaySettingsChannel key={channel.key} i={i} channel={channel} actions={actions} instruments={state.score.instruments} counts={counts} />
+                                return <PlaySettingsChannel key={channel.key} i={i} channel={channel} instruments={instruments} counts={counts} />
                             })}
                         </div>
                     </>}
@@ -85,7 +91,7 @@ export const PlaySettings: FC<Props> = ({ state, actions, onClose }) => {
                                             <p className="play-settings__port-name">{output.name}</p>
                                             <p className="play-settings__port-manufacturer">{output.manufacturer || 'Unknown Manufacturer'}</p>
                                         </div>
-                                        <Button onClick={() => actions.midi.test(output.id)} compact={true} outline={true} color={Theme.primary}>Test</Button>
+                                        <Button onClick={() => actions.playback.midi.test(output.id)} compact={true} outline={true} color={THEME.primary}>Test</Button>
                                     </div>
                                 })}
                             </div>
@@ -97,7 +103,7 @@ export const PlaySettings: FC<Props> = ({ state, actions, onClose }) => {
             </div>
             <div className="generic-settings__buttons">
                 <div className="generic-settings__spacer" />
-                <Button compact color={Theme.primary} onClick={onClose}>Close</Button>
+                <Button compact color={THEME.primary} onClick={onClose}>Close</Button>
             </div>
         </Card>
     </Backdrop >;

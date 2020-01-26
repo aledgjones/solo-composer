@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, MouseEvent } from 'react';
 import { SortableElement } from 'react-sortable-hoc';
 import { mdiDeleteOutline, mdiFileDocumentBoxOutline } from '@mdi/js';
 
-import { Theme } from '../../const';
+import { THEME } from '../../const';
 import Color from 'color';
 
 import { Flow, FlowKey } from '../../services/flow';
@@ -51,7 +51,7 @@ export const FlowItem = SortableElement<Props>((props: Props) => {
 
     const bg = useMemo(() => {
         if (selected) {
-            return Theme.primary;
+            return THEME.primary;
         } else if (active) {
             return '#293237';
         } else {

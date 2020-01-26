@@ -4,10 +4,7 @@ import { EntryKey, Entries, Entry } from '../entries';
 export type TrackKey = string;
 
 export interface Tracks {
-    order: TrackKey[],
-    byKey: {
-        [trackKey: string]: Track;
-    }
+    [trackKey: string]: Track;
 };
 
 export interface Track {

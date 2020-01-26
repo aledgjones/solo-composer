@@ -1,24 +1,15 @@
+import { useMemo } from 'react';
+import { mdiAccount, mdiAccountGroup } from '@mdi/js';
 import shortid from 'shortid';
 import ArrayMove from 'array-move';
 import { InstrumentKey, Instrument, Instruments, InstrumentCounts } from './instrument';
 import { Staves, createStave, StaveKey } from './stave';
 import { instrumentDefs } from './instrument-defs';
-import { useMemo } from 'react';
-import { mdiAccount, mdiAccountGroup } from '@mdi/js';
-
-export const PLAYER_CREATE = '@player/create';
-export const PLAYER_REMOVE = '@player/remove';
-export const PLAYER_REORDER = '@player/reorder';
-export const PLAYER_ASSIGN_INSTRUMENT = '@player/assign-instrument';
+import { Store } from 'pullstate';
+import { State } from './state';
+import { createTrack } from './track';
 
 export type PlayerKey = string;
-
-export interface PlayerActions {
-    create: (type: PlayerType) => Player;
-    reorder: (instruction: { oldIndex: number, newIndex: number }) => void;
-    remove: (player: Player, instruments: Instruments) => void;
-    assignInstrument: (playerKey: PlayerKey, instrument: Instrument) => void;
-}
 
 export enum PlayerType {
     solo = 1,
@@ -39,80 +30,79 @@ export interface PlayerState {
 }
 
 export const playerEmptyState = (): PlayerState => {
-    return { order: [], byKey: {} };
-}
-
-export const playerReducer = (state: PlayerState, action: any) => {
-    switch (action.type) {
-        case PLAYER_CREATE: {
-            const key: PlayerKey = action.payload.key;
-            const player: Player = action.payload;
-            return {
-                order: [...state.order, key],
-                byKey: { ...state.byKey, [key]: player }
-            };
-        }
-        case PLAYER_REORDER: {
-            const oldIndex = action.payload.oldIndex;
-            const newIndex = action.payload.newIndex;
-            return {
-                ...state,
-                order: ArrayMove(state.order, oldIndex, newIndex)
-            }
-        }
-        case PLAYER_REMOVE: {
-            const key: PlayerKey = action.payload.player.key;
-            const { [key]: removed, ...players } = state.byKey;
-            return {
-                order: state.order.filter(_key => _key !== key),
-                byKey: players
-            }
-        }
-        case PLAYER_ASSIGN_INSTRUMENT: {
-            const playerKey: PlayerKey = action.payload.playerKey;
-            const instrumentKey: InstrumentKey = action.payload.instrumentKey;
-            const player: Player = state.byKey[playerKey];
-            return {
-                order: state.order,
-                byKey: {
-                    ...state.byKey,
-                    [playerKey]: {
-                        ...player,
-                        instruments: [...player.instruments, instrumentKey]
-                    }
-                }
-            }
-        }
-        default:
-            return state;
-    }
-}
-
-export const playerActions = (dispatch: any): PlayerActions => {
     return {
-        create: (type) => {
+        order: [],
+        byKey: {}
+    };
+}
+
+export const playerActions = (store: Store<State>) => {
+    return {
+        create: (type: PlayerType) => {
             const player = createPlayer(type);
-            dispatch({ type: PLAYER_CREATE, payload: player });
+            store.update(s => {
+
+                // add the player
+                s.score.players.order.push(player.key);
+                s.score.players.byKey[player.key] = player;
+
+                // auto include it in all flows
+                s.score.flows.order.forEach(flowKey => {
+                    s.score.flows.byKey[flowKey].players.push(player.key);
+                });
+
+            });
             return player;
         },
-        reorder: (instruction) => {
-            dispatch({ type: PLAYER_REORDER, payload: instruction });
+        reorder: (instruction: { oldIndex: number, newIndex: number }) => {
+            store.update(s => {
+                s.score.players.order = ArrayMove(s.score.players.order, instruction.oldIndex, instruction.newIndex)
+            });
         },
-        remove: (player, instruments) => {
-            const staveKeys = player.instruments.reduce((output: StaveKey[], instrumentKey) => {
-                const instrument = instruments[instrumentKey];
-                return [...output, ...instrument.staves];
-            }, []);
-            dispatch({ type: PLAYER_REMOVE, payload: { player, staveKeys } });
+        remove: (playerKey: PlayerKey) => {
+            store.update(s => {
+                s.score.players.byKey[playerKey].instruments.forEach(instrumentKey => {
+                    const instrument = s.score.instruments[instrumentKey];
+                    s.score.flows.order.forEach(flowKey => {
+                        const flow = s.score.flows.byKey[flowKey];
+                        instrument.staves.forEach(staveKey => {
+                            // delete each track
+                            flow.staves[staveKey].tracks.forEach(trackKey => {
+                                delete flow.tracks[trackKey];
+                            });
+                            // delete the stave
+                            delete flow.staves[staveKey];
+                        });
+                    });
+                    // delete the instruments
+                    delete s.score.instruments[instrumentKey];
+                });
+
+                // delete the player
+                s.score.players.order = s.score.players.order.filter(key => key !== playerKey);
+                delete s.score.players.byKey[playerKey];
+            });
         },
-        assignInstrument: (playerKey, instrument) => {
-            const instrumentKey = instrument.key;
-            const def = instrumentDefs[instrument.id];
-            const staves = instrument.staves.reduce((output: Staves, staveKey, i) => {
-                output[staveKey] = createStave(def.staves[i], staveKey);
-                return output;
-            }, {});
-            dispatch({ type: PLAYER_ASSIGN_INSTRUMENT, payload: { playerKey, instrumentKey, staves } });
+        assignInstrument: (playerKey: PlayerKey, instrumentKey: InstrumentKey) => {
+            store.update((s, ss) => {
+
+                // add the instrument to the player
+                s.score.players.byKey[playerKey].instruments.push(instrumentKey);
+
+                // add the instrument staves to each flow which contains that player
+                const def = instrumentDefs[s.score.instruments[instrumentKey].id];
+                s.score.flows.order.forEach(flowKey => {
+                    const flow = s.score.flows.byKey[flowKey];
+                    if (flow.players.includes(playerKey)) {
+                        s.score.instruments[instrumentKey].staves.forEach((staveKey, i) => {
+                            const track = createTrack([]);
+                            flow.staves[staveKey] = createStave(def.staves[i], staveKey, [track.key]);
+                            flow.tracks[track.key] = track;
+                        });
+                    }
+                });
+
+            });
         }
     }
 }

@@ -1,3 +1,5 @@
+import { Store } from "pullstate";
+import { State } from "./state";
 import { BracketingType, BracketEndStyle } from "../parse/draw-brackets";
 import { BarlineType } from "../entries/barline";
 import { Justify } from "../render/apply-styles";
@@ -28,20 +30,13 @@ export interface EngravingConfig {
     finalBarlineType: BarlineType
 }
 
-export interface EngravingState {
-    score: PartialEngravingConfig;
-    part: PartialEngravingConfig;
-}
+export type EngravingState = {
+    [layoutType in LayoutType]: PartialEngravingConfig;
+};
 
 export enum LayoutType {
-    score = 'score',
-    part = 'part'
-}
-
-export const ENGRAVING_SET = '@engraving/set';
-
-export interface EngravingActions {
-    set: (layout: LayoutType, config: PartialEngravingConfig) => void;
+    score = 1,
+    part = 2
 }
 
 export const defaultEngravingConfig: EngravingConfig = {
@@ -66,31 +61,13 @@ export const defaultEngravingConfig: EngravingConfig = {
 
 export const engravingEmptyState = (): EngravingState => {
     return {
-        score: {},
-        part: { bracketing: BracketingType.none }
+        [LayoutType.score]: {},
+        [LayoutType.part]: { bracketing: BracketingType.none }
     };
 }
 
-export const engravingReducer = (state: EngravingState, action: any) => {
-    switch (action.type) {
-        case ENGRAVING_SET: {
-            const layout: LayoutType = action.payload.layout;
-            const config: EngravingConfig = action.payload.config;
-            return {
-                ...state,
-                [layout]: {
-                    ...state[layout],
-                    ...config
-                }
-            };
-        }
-        default:
-            return state;
-    }
-}
-
-export const engravingActions = (dispatch: any): EngravingActions => {
+export const engravingActions = (store: Store<State>) => {
     return {
-        set: (layout, config) => dispatch({ type: ENGRAVING_SET, payload: { layout, config } })
+        set: (layout: LayoutType, config: PartialEngravingConfig) => store.update(s => s.score.engraving[layout] = {...s.score.engraving[layout], ...config})
     }
 }

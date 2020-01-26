@@ -1,11 +1,6 @@
 import webMidi, { Input, Output } from "webmidi";
-
-export const MIDI_SET_CONNECTIONS = '@midi/set-connections';
-
-export interface MidiActions {
-    init: () => void;
-    test: (id: string) => void;
-}
+import { Store } from "pullstate";
+import { State } from "./state";
 
 export interface MidiState {
     inputs: Input[];
@@ -19,40 +14,18 @@ export const midiEmptyState = (): MidiState => {
     };
 }
 
-export const midiReducer = (state: MidiState, action: any) => {
-    switch (action.type) {
-        case MIDI_SET_CONNECTIONS:
-            return {
-                ...state,
-                inputs: action.payload.inputs,
-                outputs: action.payload.outputs
-            }
-        default:
-            return state;
-    }
-}
-
-export const midiActions = (dispatch: any): MidiActions => {
+export const midiActions = (store: Store<State>) => {
     return {
         init: () => {
             webMidi.enable(function (err) {
-                webMidi.addListener('connected', () => {
-                    dispatch({
-                        type: MIDI_SET_CONNECTIONS, payload: {
-                            inputs: webMidi.inputs,
-                            outputs: webMidi.outputs
-                        }
+                const update = () => {
+                    store.update(s => s.playback.midi = {
+                        inputs: webMidi.inputs,
+                        outputs: webMidi.outputs
                     });
-                });
-
-                webMidi.addListener('disconnected', () => {
-                    dispatch({
-                        type: MIDI_SET_CONNECTIONS, payload: {
-                            inputs: webMidi.inputs,
-                            outputs: webMidi.outputs
-                        }
-                    });
-                });
+                }
+                webMidi.addListener('connected', update);
+                webMidi.addListener('disconnected', update);
             });
         },
         test: (id: string) => {

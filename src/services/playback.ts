@@ -1,10 +1,8 @@
-import { midiReducer, MidiState, midiEmptyState, MidiActions, midiActions } from "./midi";
-import { SamplerActions, SamplerState, samplerEmptyState, samplerReducer, samplerActions } from "./sampler";
+import { Store } from "pullstate";
+import { State } from "./state";
 
-export interface PlaybackActions {
-    midi: MidiActions;
-    sampler: SamplerActions;
-}
+import { MidiState, midiEmptyState, midiActions } from "./midi";
+import { SamplerState, samplerEmptyState, samplerActions } from "./sampler";
 
 export interface PlaybackState {
     playing: boolean;
@@ -22,20 +20,9 @@ export const playbackEmptyState = (): PlaybackState => {
     };
 }
 
-export const playbackReducer = (state: PlaybackState, action: any) => {
-    switch (action.type) {
-        default:
-            return {
-                ...state,
-                midi: midiReducer(state.midi, action),
-                sampler: samplerReducer(state.sampler, action)
-            };
-    }
-}
-
-export const playbackActions = (dispatch: any): PlaybackActions => {
+export const playbackActions = (store: Store<State>) => {
     return {
-        midi: midiActions(dispatch),
-        sampler: samplerActions(dispatch)
+        midi: midiActions(store),
+        sampler: samplerActions(store)
     }
 }

@@ -3,7 +3,7 @@ import { mdiChevronRight } from '@mdi/js';
 import Color from 'color';
 
 import { InstrumentDef, useInstrumentList, getFirstInstrumentDefFromPartialPath } from '../../services/instrument-defs';
-import { Theme } from '../../const';
+import { THEME } from '../../const';
 
 import { Card, Backdrop, Icon, Button } from '../../ui';
 import { ListItem } from '../shared/list-item';
@@ -20,7 +20,7 @@ export const InstrumentPicker: FC<Props> = ({ onSelect, onCancel }) => {
   const [selection, setSelection] = useState<InstrumentDef>(getFirstInstrumentDefFromPartialPath([]));
   const lists = useInstrumentList(selection);
 
-  const bg = Theme.primary;
+  const bg = THEME.primary;
   const fg = useMemo(() => {
     return Color(bg).isDark() ? 'rgb(255,255,255)' : 'rgb(0,0,0)';
   }, [bg]);

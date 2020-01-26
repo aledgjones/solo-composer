@@ -4,7 +4,7 @@ import ScrollContainer from 'react-indiana-drag-scroll';
 import { State, Actions } from '../../services/state';
 
 import { Select, Option } from '../../ui';
-import { Theme } from '../../const';
+import { THEME } from '../../const';
 
 import { getCounts } from '../../services/instrument';
 import { PlayerControls } from './player-contols';
@@ -68,7 +68,7 @@ export const Play: FC<Props> = ({ state, actions, settings, onSettingsClose }) =
 
             <div className="play__x-fixed">
                 <div className="play__header-select">
-                    <Select className="play__select" dark required color={Theme.primary} value={flowKey} onChange={setFlowKey}>
+                    <Select className="play__select" dark required color={THEME.primary} value={flowKey} onChange={setFlowKey}>
                         {state.score.flows.order.map((key, i) => {
                             const title = `${i + 1}. ${state.score.flows.byKey[key].title}`;
                             return <Option key={key} value={key} displayAs={title}>{title}</Option>

@@ -1,45 +1,36 @@
-import { Sampler, SamplerCurrentState, Patches } from "../playback/sampler";
-import { InstrumentKey } from "./instrument";
-import { InstrumentDef } from "./instrument-defs";
+import { Store } from "pullstate";
 import shortid from "shortid";
-import { ChannelKey } from "../playback/output";
+
+import { State } from "./state";
+import { InstrumentKey } from "./instrument";
+import { ChannelKey, PatchKey } from "../playback/output";
+import { Sampler, SamplerCurrentState, Patches } from "../playback/sampler";
+import { InstrumentDef } from "./instrument-defs";
 
 const sampler = new Sampler();
 
-export const SAMPLER_CREATE_CHANNEL = '@sampler/create-channel';
-export const SAMPLER_LOAD_PATCHES = '@sampler/load-patches';
-export const SAMPLER_SET_STATE = '@sampler/set-state';
-export const SAMPLER_SET_PROGRESS = '@sampler/set-progress';
-export const SAMPLER_ASSIGN_INSTRUMENT_TO_CHANNEL = '@sampler/assign-instrument-to-channel';
-
-export interface SamplerActions {
-    init: () => void;
-    createChannel: () => string;
-    load: (channel: ChannelKey, def: InstrumentDef) => Promise<void>;
-    assignInstrument: (instrumentKey: string, channel: string) => void;
-    stopAll: () => void;
-    test: (channel: ChannelKey, patch: string) => void;
-}
-
 export interface Channel {
-    key: string;
+    key: ChannelKey;
     state: SamplerCurrentState;
     progress: number;
-    patchName?: string;
+    patchGroupName?: string;
     patches: {
-        order: string[];
+        order: PatchKey[];
         byKey: Patches;
     };
     assigned?: InstrumentKey;
 }
 
-export interface SamplerState {
-    channels: {
-        order: ChannelKey[];
-        byKey: {
-            [channel: string]: Channel;
-        }
+
+export interface ChannelState {
+    order: ChannelKey[];
+    byKey: {
+        [channel: string]: Channel;
     }
+}
+
+export interface SamplerState {
+    channels: ChannelState;
 }
 
 export const samplerEmptyState = (): SamplerState => {
@@ -51,128 +42,50 @@ export const samplerEmptyState = (): SamplerState => {
     };
 }
 
-export const samplerReducer = (state: SamplerState, action: any) => {
-    switch (action.type) {
-        case SAMPLER_CREATE_CHANNEL: {
-            const channel = action.payload.channel;
-            return {
-                ...state,
-                channels: {
-                    order: [...state.channels.order, channel],
-                    byKey: {
-                        ...state.channels.byKey,
-                        [channel]: {
-                            key: channel,
-                            state: SamplerCurrentState.ready,
-                            progress: 1,
-                            patches: []
-                        }
-                    }
-                }
-            }
-        }
-        case SAMPLER_LOAD_PATCHES: {
-            const channel = action.payload.channel;
-            const patchesOrder = action.payload.patchesByKey;
-            const patchesByKey = action.payload.patchesOrder;
-            const patchName = action.payload.patchName;
-            return {
-                ...state,
-                channels: {
-                    order: state.channels.order,
-                    byKey: {
-                        ...state.channels.byKey,
-                        [channel]: {
-                            ...state.channels.byKey[channel],
-                            state: SamplerCurrentState.loading,
-                            progress: 0,
-                            patchName,
-                            patches: {
-                                order: patchesOrder,
-                                byKey: patchesByKey
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        case SAMPLER_SET_STATE: {
-            const channel = action.payload.channel;
-            const currentState: SamplerCurrentState = action.payload.state;
-            return {
-                ...state,
-                channels: {
-                    order: state.channels.order,
-                    byKey: {
-                        ...state.channels.byKey,
-                        [channel]: {
-                            ...state.channels.byKey[channel],
-                            state: currentState
-                        }
-                    }
-                }
-            }
-        }
-        case SAMPLER_SET_PROGRESS: {
-            const channel = action.payload.channel;
-            const progress = action.payload.progress;
-            return {
-                ...state,
-                channels: {
-                    order: state.channels.order,
-                    byKey: {
-                        ...state.channels.byKey,
-                        [channel]: {
-                            ...state.channels.byKey[channel],
-                            progress
-                        }
-                    }
-                }
-            }
-        }
-        case SAMPLER_ASSIGN_INSTRUMENT_TO_CHANNEL: {
-            const channel = action.payload.channel;
-            const assigned = action.payload.instrumentKey;
-            return {
-                ...state,
-                channels: {
-                    order: state.channels.order,
-                    byKey: {
-                        ...state.channels.byKey,
-                        [channel]: {
-                            ...state.channels.byKey[channel],
-                            assigned
-                        }
-                    }
-                }
-            }
-        }
-        default:
-            return state;
-    }
-}
-
-export const samplerActions = (dispatch: any): SamplerActions => {
+export const samplerActions = (store: Store<State>) => {
     return {
-        init: () => {
-            sampler.listen(dispatch);
-        },
         createChannel: () => {
-            const channel = shortid();
-            dispatch({ type: SAMPLER_CREATE_CHANNEL, payload: { channel } });
-            return channel;
+            const channelKey = shortid();
+            store.update(s => {
+                s.playback.sampler.channels.order.push(channelKey);
+                s.playback.sampler.channels.byKey[channelKey] = {
+                    key: channelKey,
+                    state: SamplerCurrentState.ready,
+                    progress: 1,
+                    patches: {
+                        order: [],
+                        byKey: {}
+                    }
+                }
+            });
+            return channelKey;
         },
-        load: (channel, def) => {
-            return sampler.load(channel, def.patches, def.id);
+        load: async (channelKey: ChannelKey, def: InstrumentDef) => {
+            store.update(s => {
+                const channel = s.playback.sampler.channels.byKey[channelKey];
+                channel.state = SamplerCurrentState.loading;
+                channel.patchGroupName = def.id;
+                channel.patches.order = Object.keys(def.patches);
+                channel.patches.byKey = def.patches;
+            });
+            await sampler.load(channelKey, def.patches, def.id, (progress) => {
+                store.update(s => {
+                    const channel = s.playback.sampler.channels.byKey[channelKey];
+                    channel.progress = progress;
+                });
+            });
+            store.update(s => {
+                const channel = s.playback.sampler.channels.byKey[channelKey];
+                channel.state = SamplerCurrentState.ready;
+            });
         },
-        assignInstrument: (instrumentKey, channel) => {
-            // the sampler itself doesn't actually care about this so just dispatch directly
-            dispatch({ type: SAMPLER_ASSIGN_INSTRUMENT_TO_CHANNEL, payload: { instrumentKey, channel } })
+        assignInstrument: (instrumentKey: InstrumentKey, channel: ChannelKey) => {
+            store.update(s => s.playback.sampler.channels.byKey[channel].assigned = instrumentKey);
         },
         stopAll: () => {
             sampler.stopAll();
         },
-        test: (channel, patch) => {
+        test: (channel: ChannelKey, patch: PatchKey) => {
             sampler.play(channel, patch, 'C4', 100, 250, 0);
             sampler.play(channel, patch, 'D4', 105, 250, 250);
             sampler.play(channel, patch, 'E4', 110, 250, 500);

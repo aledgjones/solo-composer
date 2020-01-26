@@ -1,53 +1,40 @@
-import { useReducer, useMemo, useCallback } from "react";
+import { useEffect, useMemo } from "react";
+import { Store, useStoreState } from "pullstate";
 
-import { TabState, tabReducer, tabEmptyState, tabActions, TabActions } from "./tab";
-import { scoreActions, scoreReducer, scoreEmptyState, Score, ScoreActions } from "./score";
-import { PlaybackState, PlaybackActions, playbackReducer, playbackEmptyState, playbackActions } from "./playback";
+import { uiEmptyState, uiActions, UiState } from "./ui";
+import { scoreActions, scoreEmptyState, Score } from "./score";
+import { PlaybackState, playbackEmptyState, playbackActions } from "./playback";
 
 import { log } from "../ui/utils/log";
 
 export interface State {
-    tab: TabState;
+    ui: UiState;
     score: Score;
     playback: PlaybackState;
 }
 
-export interface Actions {
-    tab: TabActions;
-    score: ScoreActions;
-    playback: PlaybackActions;
+const store = new Store<State>({
+    ui: uiEmptyState(),
+    score: scoreEmptyState(),
+    playback: playbackEmptyState()
+});
+
+export function useAppActions() {
+    return useMemo(() => {
+        return {
+            ui: uiActions(store),
+            score: scoreActions(store),
+            playback: playbackActions(store)
+        }
+    }, []);
 }
 
-export const useAppState = (): [State, Actions] => {
-    const [state, _dispatch] = useReducer(
-        (_state: State, action): State => {
-            return {
-                tab: tabReducer(_state.tab, action),
-                score: scoreReducer(_state.score, action),
-                playback: playbackReducer(_state.playback, action)
-            }
-        },
-        {
-            tab: tabEmptyState(),
-            score: scoreEmptyState(),
-            playback: playbackEmptyState()
-        }
-    );
+export function useAppState<T>(sub: (state: State) => any, deps?: any[]) {
+    return useStoreState<State, T>(store, sub, deps);
+}
 
-    const dispatch = useCallback((action: any) => {
-        // console.log(action);
-        _dispatch(action);
-    }, [_dispatch]);
-
-    const actions = useMemo((): Actions => {
-        return {
-            tab: tabActions(dispatch),
-            score: scoreActions(dispatch),
-            playback: playbackActions(dispatch)
-        }
-    }, [dispatch]);
-
-    log(state, 'store');
-
-    return [state, actions];
+export function useLogger() {
+    useEffect(() => {
+        store.subscribe(s => s, state => log(state, 'store'));
+    }, []);
 }

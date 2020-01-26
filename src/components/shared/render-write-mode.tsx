@@ -2,7 +2,7 @@ import React, { FC, useState, useMemo } from 'react';
 import Color from 'color';
 
 import { Score } from '../../services/score';
-import { Theme } from '../../const';
+import { THEME } from '../../const';
 import { getWidthOfMM, getConverter } from '../../parse/converter';
 import { defaultEngravingConfig } from '../../services/engraving';
 import { getConvertedConfig } from '../../parse/get-converted-config';
@@ -24,7 +24,7 @@ export const RenderWriteMode: FC<Props> = (({ score }) => {
     const [flowKey, setFlowKey] = useState(score.flows.order[0]);
 
     const fg = useMemo(() => {
-        return Color(Theme.primary).isDark() ? '#ffffff' : '#000000';
+        return Color(THEME.primary).isDark() ? '#ffffff' : '#000000';
     }, []);
 
     const converter = useMemo(() => {
@@ -41,7 +41,7 @@ export const RenderWriteMode: FC<Props> = (({ score }) => {
 
     return <div className="render-write-mode">
         <div className="render-write-mode__container" style={{ width: px(instructions.width), height: px(instructions.height) }}>
-            <p className="render-write-mode__flow-name" style={{ color: fg, backgroundColor: Theme.primary }}>{score.flows.byKey[flowKey].title}</p>
+            <p className="render-write-mode__flow-name" style={{ color: fg, backgroundColor: THEME.primary }}>{score.flows.byKey[flowKey].title}</p>
             <svg className="render-write-mode__svg-layer" width={px(instructions.width)} height={px(instructions.height)}>
                 {instructions.entries.map((instruction: Instruction<any>) => {
                     switch (instruction.type) {
