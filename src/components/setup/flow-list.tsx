@@ -13,9 +13,9 @@ interface Props {
     flows: Flow[];
     selection: Selection;
 
-    onSelectFlow: (key: string, type: SelectionType) => void;
+    onSelectFlow: (flowKey: FlowKey, type: SelectionType) => void;
     onCreateFlow: () => void;
-    onRemoveFlow: (flow: Flow) => void;
+    onRemoveFlow: (flowKey: FlowKey) => void;
     onAssignPlayer: (flowKey: FlowKey) => void;
     onRemovePlayer: (flowKey: FlowKey) => void;
 }

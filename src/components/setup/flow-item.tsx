@@ -17,8 +17,8 @@ interface Props {
     flow: Flow;
     selection: Selection;
 
-    onSelectFlow: (key: string, type: SelectionType) => void;
-    onRemoveFlow: (flow: Flow) => void;
+    onSelectFlow: (flowKey: FlowKey, type: SelectionType) => void;
+    onRemoveFlow: (flowKey: FlowKey) => void;
     onAssignPlayer: (flowKey: FlowKey) => void;
     onRemovePlayer: (flowKey: FlowKey) => void;
 }
@@ -46,8 +46,8 @@ export const FlowItem = SortableElement<Props>((props: Props) => {
 
     const onRemove = useCallback((e: MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
-        onRemoveFlow(flow);
-    }, [onRemoveFlow, flow]);
+        onRemoveFlow(flow.key);
+    }, [onRemoveFlow, flow.key]);
 
     const bg = useMemo(() => {
         if (selected) {

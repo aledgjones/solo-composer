@@ -5,9 +5,9 @@ import Color from 'color';
 import { THEME } from '../../const';
 import { Instrument, useInstrumentName } from '../../services/instrument';
 import { Icon } from '../../ui';
+import { Text } from '../shared/text';
 
 import './instrument-item.css';
-import { Text } from '../shared/text';
 
 interface Props {
   selected: boolean;

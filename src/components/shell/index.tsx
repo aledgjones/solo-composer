@@ -19,8 +19,8 @@ export const MainShell: FC = () => {
 
     useLogger();
 
-    const tab = useAppState(s => s.tab);
     const actions = useAppActions();
+    const tab = useAppState<TabState>(s => s.ui.tab);
     const [settings, setSettings] = useState(false);
 
     const openSettings = useCallback(() => setSettings(true), []);
@@ -28,12 +28,11 @@ export const MainShell: FC = () => {
 
     useEffect(() => {
         actions.playback.midi.init();
-        actions.playback.sampler.init();
-    }, [actions.playback.midi, actions.playback.sampler]);
+    }, [actions]);
 
     return <>
         <div className="main-shell__topbar">
-            <Tabs className="main-shell__tabs" value={tab} onChange={actions.tab.set} background="#0d1216" highlight={THEME.primary}>
+            <Tabs className="main-shell__tabs" value={tab} onChange={actions.ui.tab.set} background="#0d1216" highlight={THEME.primary}>
                 <Tab value={TabState.setup}>Setup</Tab>
                 <Tab value={TabState.write}>Write</Tab>
                 <Tab value={TabState.engrave}>Engrave</Tab>

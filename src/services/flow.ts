@@ -44,11 +44,10 @@ export const flowEmptyState = (): FlowState => {
 export const flowActions = (store: Store<State>) => {
     return {
         create: () => {
+            // create an empty flow
+            const flow = createFlow();
+
             store.update(s => {
-
-                // create an empty flow
-                const flow = createFlow();
-
                 //populate flow with all players/instruments
                 s.score.players.order.forEach(playerKey => {
                     const player = s.score.players.byKey[playerKey];
@@ -68,8 +67,9 @@ export const flowActions = (store: Store<State>) => {
                 // append the new flow
                 s.score.flows.order.push(flow.key);
                 s.score.flows.byKey[flow.key] = flow;
-
             });
+
+            return flow.key;
         },
         reorder: (instruction: { oldIndex: number, newIndex: number }) => {
             store.update(s => {

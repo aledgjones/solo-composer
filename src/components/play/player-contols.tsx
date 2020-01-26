@@ -1,13 +1,13 @@
 import React, { FC } from 'react';
+import { mdiChevronDown } from '@mdi/js';
 
 import { Player, usePlayerName, usePlayerIcon } from '../../services/player';
 import { Instruments, InstrumentCounts } from '../../services/instrument';
-import { Icon } from '../../ui';
-import { mdiChevronDown } from '@mdi/js';
-
-import './player-controls.css';
 import { InstrumentControls } from './instrument-controls';
 import { Text } from '../shared/text';
+import { Icon } from '../../ui';
+
+import './player-controls.css';
 
 interface Props {
     player: Player;

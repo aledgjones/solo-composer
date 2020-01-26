@@ -3,7 +3,7 @@ import { SortableContainer } from 'react-sortable-hoc';
 import { mdiPlus } from '@mdi/js';
 
 import { Icon } from '../../ui';
-import { Player } from '../../services/player';
+import { Player, PlayerKey } from '../../services/player';
 import { Instruments, InstrumentCounts } from '../../services/instrument';
 import { PlayerItem } from './player-item';
 import { SelectionType, Selection } from '.';
@@ -16,9 +16,9 @@ interface Props {
   counts: InstrumentCounts;
   selection: Selection;
 
-  onSelectPlayer: (key: string, type: SelectionType) => void;
-  onAddInstrument: (key: string) => void;
-  onRemovePlayer: (player: Player) => void;
+  onSelectPlayer: (playerKey: PlayerKey, type: SelectionType) => void;
+  onAddInstrument: (playerKey: PlayerKey) => void;
+  onRemovePlayer: (playerKey: PlayerKey) => void;
   onCreatePlayer: () => void;
 }
 

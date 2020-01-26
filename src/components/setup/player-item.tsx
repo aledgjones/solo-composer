@@ -4,15 +4,15 @@ import { mdiChevronDown, mdiPlus, mdiDeleteOutline, mdiChevronUp } from '@mdi/js
 import Color from 'color';
 
 import { Icon } from '../../ui';
-import { Player, PlayerType, usePlayerName, usePlayerIcon } from '../../services/player';
+import { Player, PlayerType, usePlayerName, usePlayerIcon, PlayerKey } from '../../services/player';
 import { Instruments, InstrumentCounts } from '../../services/instrument';
 import { THEME } from '../../const';
 import { InstrumentItem } from './instrument-item';
 import { Handle } from './handle';
 import { SelectionType } from '.';
+import { Text } from '../shared/text';
 
 import './player-item.css';
-import { Text } from '../shared/text';
 
 interface Props {
     player: Player;
@@ -20,9 +20,9 @@ interface Props {
     counts: InstrumentCounts;
     selected: boolean;
 
-    onSelectPlayer: (key: string, type: SelectionType) => void;
-    onAddInstrument: (key: string) => void;
-    onRemovePlayer: (player: Player) => void;
+    onSelectPlayer: (playerKey: PlayerKey, type: SelectionType) => void;
+    onAddInstrument: (playerKey: PlayerKey) => void;
+    onRemovePlayer: (playerKey: PlayerKey) => void;
 }
 
 export const PlayerItem = SortableElement<Props>((props: Props) => {
@@ -39,8 +39,8 @@ export const PlayerItem = SortableElement<Props>((props: Props) => {
 
     const onRemove = useCallback((e: MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
-        onRemovePlayer(player);
-    }, [onRemovePlayer, player]);
+        onRemovePlayer(player.key);
+    }, [onRemovePlayer, player.key]);
 
     const bg = useMemo(() => {
         if (selected) {
@@ -63,7 +63,7 @@ export const PlayerItem = SortableElement<Props>((props: Props) => {
                 <Icon style={{ marginRight: 16 }} path={icon} size={24} color={fg} />
             </Handle>
 
-            <Text style={{whiteSpace: 'pre'}} className="player-item__name">{name}</Text>
+            <Text style={{ whiteSpace: 'pre' }} className="player-item__name">{name}</Text>
 
             {selected && <>
                 <Icon style={{ marginLeft: 12 }} size={24} color={fg} path={mdiDeleteOutline} onClick={onRemove} />

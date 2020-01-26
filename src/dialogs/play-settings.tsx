@@ -27,18 +27,20 @@ interface Props {
 
 export const PlaySettings: FC<Props> = ({ onClose }) => {
 
-    const actions = useAppActions();
-    const counts = useCounts();
     const { midi, channelState, instruments } = useAppState<{ midi: MidiState, channelState: ChannelState, instruments: Instruments }>(s => ({
         midi: s.playback.midi,
         channelState: s.playback.sampler.channels,
         instruments: s.score.instruments
     }));
+
     const channels = useMemo(() => {
         return channelState.order.map(key => {
             return channelState.byKey[key];
         });
     }, [channelState]);
+
+    const actions = useAppActions();
+    const counts = useCounts();
 
     const [page, setPage] = useState<Page>(Page.internal);
 

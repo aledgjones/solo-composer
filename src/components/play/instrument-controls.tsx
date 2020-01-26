@@ -4,9 +4,9 @@ import { mdiPiano } from '@mdi/js';
 import { useInstrumentName, Instrument } from '../../services/instrument';
 import { Icon } from '../../ui';
 import { Keyboard } from './keyboard';
+import { Text } from '../shared/text';
 
 import './instrument-controls.css';
-import { Text } from '../shared/text';
 
 interface Props {
     instrument: Instrument;

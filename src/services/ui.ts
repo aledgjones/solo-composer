@@ -21,10 +21,12 @@ export const uiEmptyState = (): UiState => {
 
 export const uiActions = (store: Store<State>) => {
     return {
-        set: (tab: TabState) => {
-           store.update(s => {
-               s.ui.tab = tab;
-           });
+        tab: {
+            set: (tab: TabState) => {
+                store.update(s => {
+                    s.ui.tab = tab;
+                });
+            }
         }
     }
 }

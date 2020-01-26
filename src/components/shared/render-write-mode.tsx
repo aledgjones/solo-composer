@@ -4,7 +4,7 @@ import Color from 'color';
 import { Score } from '../../services/score';
 import { THEME } from '../../const';
 import { getWidthOfMM, getConverter } from '../../parse/converter';
-import { defaultEngravingConfig } from '../../services/engraving';
+import { defaultEngravingConfig, LayoutType } from '../../services/engraving';
 import { getConvertedConfig } from '../../parse/get-converted-config';
 import { parse } from '../../parse';
 import { Instruction, InstructionType } from '../../render/instructions';
@@ -29,11 +29,11 @@ export const RenderWriteMode: FC<Props> = (({ score }) => {
 
     const converter = useMemo(() => {
         const mm = getWidthOfMM();
-        return getConverter(mm, score.engraving.score.space || defaultEngravingConfig.space);
-    }, [score.engraving.score.space]);
+        return getConverter(mm, score.engraving[LayoutType.score].space || defaultEngravingConfig.space);
+    }, [score.engraving[LayoutType.score].space]);
 
     const instructions = useMemo(() => {
-        const config = getConvertedConfig({ ...defaultEngravingConfig, ...score.engraving.score }, converter);
+        const config = getConvertedConfig({ ...defaultEngravingConfig, ...score.engraving[LayoutType.score] }, converter);
         return parse(score, flowKey, config, converter);
     }, [score, flowKey, converter]);
 

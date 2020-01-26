@@ -1,7 +1,6 @@
 import React, { FC, useState, useMemo, useCallback } from 'react';
 
-import { State, Actions } from '../../services/state';
-import { PlayerType, Player } from '../../services/player';
+import { PlayerType, Player, PlayerKey } from '../../services/player';
 import { Flow, FlowKey } from '../../services/flow';
 import { InstrumentDef } from '../../services/instrument-defs';
 import { useCounts } from '../../services/instrument';
@@ -14,6 +13,8 @@ import { RenderRegion } from '../shared/render-region';
 import { RenderWriteMode } from '../shared/render-write-mode';
 
 import './setup.css';
+import { useAppState, useAppActions } from '../../services/state';
+import { Score } from '../../services/score';
 
 export enum SelectionType {
     player = 1,
@@ -23,12 +24,12 @@ export enum SelectionType {
 
 export type Selection = { key: string, type: SelectionType } | null;
 
-interface Props {
-    state: State;
-    actions: Actions;
-}
+interface Props {}
 
-export const Setup: FC<Props> = ({ state, actions }) => {
+export const Setup: FC<Props> = () => {
+
+    const actions = useAppActions();
+    const score = useAppState<Score>(s => s.score);
 
     const [selection, setSelection] = useState<Selection>(null);
     const [dialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -40,10 +41,10 @@ export const Setup: FC<Props> = ({ state, actions }) => {
     // PLAYERS
 
     const players = useMemo(() => {
-        return state.score.players.order.map(key => {
-            return state.score.players.byKey[key];
+        return score.players.order.map(key => {
+            return score.players.byKey[key];
         });
-    }, [state.score.players]);
+    }, [score.players]);
 
     const onCreatePlayer = useCallback(() => {
         const player = actions.score.players.create(PlayerType.solo);
@@ -55,18 +56,18 @@ export const Setup: FC<Props> = ({ state, actions }) => {
         setDialogOpen(true);
     }, []);
 
-    const onRemovePlayer = useCallback((player: Player) => {
-        actions.score.players.remove(player, state.score.instruments);
+    const onRemovePlayer = useCallback((playerKey: PlayerKey) => {
+        actions.score.players.remove(playerKey);
         setSelection(null);
-    }, [actions.score.players, state.score.instruments]);
+    }, [actions.score.players]);
 
     const onSelectInstrument = useCallback((def: InstrumentDef) => {
         if (selection) {
             const channel = actions.playback.sampler.createChannel();
-            const instrument = actions.score.instruments.create(def);
+            const instrumentKey = actions.score.instruments.create(def);
 
-            actions.score.players.assignInstrument(selection.key, instrument);
-            actions.playback.sampler.assignInstrument(instrument.key, channel);
+            actions.score.players.assignInstrument(selection.key, instrumentKey);
+            actions.playback.sampler.assignInstrument(instrumentKey, channel);
             actions.playback.sampler.load(channel, def);
         }
         setDialogOpen(false);
@@ -80,45 +81,39 @@ export const Setup: FC<Props> = ({ state, actions }) => {
         actions.score.players.reorder(instruction);
     }, [actions.score.players]);
 
-    const counts = useCounts(state.score.players, state.score.instruments, state.score.config);
+    const counts = useCounts();
 
     // FLOWS
 
     const flows = useMemo(() => {
-        return state.score.flows.order.map(key => {
-            return state.score.flows.byKey[key];
+        return score.flows.order.map(key => {
+            return score.flows.byKey[key];
         });
-    }, [state.score.flows]);
+    }, [score.flows]);
 
     const onCreateFlow = useCallback(() => {
-        const key = actions.score.flows.create(state.score.players.order, state.score.players.byKey, state.score.instruments);
+        const key = actions.score.flows.create();
         setSelection({ key, type: SelectionType.flow });
-    }, [actions.score.flows, state.score.players, state.score.instruments]);
+    }, [actions.score.flows]);
 
-    const onRemoveFlow = useCallback((flow: Flow) => {
-        actions.score.flows.remove(flow);
+    const onRemoveFlow = useCallback((flowKey: FlowKey) => {
+        actions.score.flows.remove(flowKey);
         setSelection(null);
     }, [actions.score.flows]);
 
     const onAssignPlayerToFlow = useCallback((flowKey: FlowKey) => {
         if (selection) {
             const playerKey = selection.key;
-            const player = state.score.players.byKey[playerKey];
-            actions.score.flows.assignPlayer(flowKey, player, state.score.instruments);
+            actions.score.flows.assignPlayer(flowKey, playerKey);
         }
-    }, [selection, actions.score.flows, state.score.instruments, state.score.players.byKey]);
+    }, [selection, actions.score.flows]);
 
     const onRemovePlayerFromFlow = useCallback((flowKey: FlowKey) => {
         if (selection) {
             const playerKey = selection.key;
-            const instruments = state.score.players.byKey[playerKey].instruments;
-            const staveKeys = instruments.reduce((output: StaveKey[], instrumentKey) => {
-                const instrument = state.score.instruments[instrumentKey];
-                return [...output, ...instrument.staves];
-            }, []);
-            actions.score.flows.removePlayer(flowKey, selection.key, staveKeys);
+            actions.score.flows.removePlayer(flowKey, playerKey);
         }
-    }, [selection, actions.score.flows, state.score.instruments, state.score.players.byKey]);
+    }, [selection, actions.score.flows]);
 
     const onSortFlows = useCallback((instruction) => {
         actions.score.flows.reorder(instruction);
@@ -128,7 +123,7 @@ export const Setup: FC<Props> = ({ state, actions }) => {
         <div className="setup">
             <PlayerList
                 players={players}
-                instruments={state.score.instruments}
+                instruments={score.instruments}
                 counts={counts}
                 selection={selection}
 
@@ -145,7 +140,7 @@ export const Setup: FC<Props> = ({ state, actions }) => {
             />
             <div className="setup__middle">
                 <RenderRegion className="setup__view">
-                    <RenderWriteMode score={state.score} />
+                    <RenderWriteMode score={score} />
                 </RenderRegion>
                 <FlowList
                     flows={flows}

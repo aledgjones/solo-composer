@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { Store } from 'pullstate';
 import shortid from 'shortid';
 import { toRoman } from 'roman-numerals';
 
@@ -10,7 +11,6 @@ import { ConfigState } from './config';
 import { TrackKey } from './track';
 import { ToneDef, createTone } from '../entries/tone';
 import { useAppState, State } from './state';
-import { Store } from 'pullstate';
 
 export type InstrumentKey = string;
 
@@ -36,6 +36,7 @@ export const instrumentActions = (store: Store<State>) => {
             const staveKeys = def.staves.map(staveDef => shortid());
             const instrument = createInstrument(def, staveKeys);
             store.update(s => s.score.instruments[instrument.key] = instrument);
+            return instrument.key;
         },
         remove: (instrumentKey: InstrumentKey) => {
             // remove from score.instruments

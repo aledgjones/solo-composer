@@ -7,6 +7,7 @@ import { Staves } from '../../services/stave';
 import { EntryType, Entry } from '../../entries';
 import { Tone } from '../../entries/tone';
 import { toMidiPitchNumber, Pitch } from '../../playback/utils';
+import { Tracks } from '../../services/track';
 
 import './instrument-track.css';
 
@@ -14,6 +15,7 @@ interface Props {
     color: string;
     instrument: Instrument;
     staves: Staves;
+    tracks: Tracks;
     ticks: Tick[];
 }
 
@@ -31,13 +33,13 @@ function getWidth(start: number, duration: number, ticks: Tick[]) {
     return width;
 }
 
-export const InstrumentTrack: FC<Props> = ({ color, instrument, staves, ticks }) => {
+export const InstrumentTrack: FC<Props> = ({ color, instrument, staves, tracks, ticks }) => {
 
     return < div className="instrument-track" style={{ backgroundImage: background }}>
         {instrument.staves.map(staveKey => {
             const stave = staves[staveKey];
-            return stave.tracks.order.map(trackKey => {
-                const track = stave.tracks.byKey[trackKey];
+            return stave.tracks.map(trackKey => {
+                const track = tracks[trackKey];
                 return track.entries.order.map(entryKey => {
                     if (track.entries.byKey[entryKey]._type === EntryType.tone) {
                         const entry = track.entries.byKey[entryKey] as Entry<Tone>;
