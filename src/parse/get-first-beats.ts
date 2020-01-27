@@ -4,6 +4,7 @@ import { EntryType } from "../entries";
 import { getTicksPerBeat } from "./get-ticks-per-beat";
 import { getDistanceFromBarline } from "./get-distance-from-barline";
 import { getNearestEntriesToTick } from "./get-nearest-entry-to-tick";
+import { getEntriesAtTick } from "./get-entry-at-tick";
 
 /**
  * Gets the first beats as number[] where number is tick index
@@ -12,20 +13,27 @@ import { getNearestEntriesToTick } from "./get-nearest-entry-to-tick";
  */
 export function getFirstBeats(length: number, flow: EntriesByTick) {
 
-    const ticks = [];
+    const ticks: { [tick: number]: boolean } = {};
+    let timeSigResult;
 
     let tick = 0;
     while (tick < length) {
-        const timeSigResult = getNearestEntriesToTick<TimeSignature>(tick, flow, EntryType.timeSignature);
-        const timeSig = timeSigResult.entries[0];
-        const ticksPerBeat = getTicksPerBeat(timeSig ? timeSig.subdivisions : 12, timeSig ? timeSig.beatType : 4);
 
-        const isFirstBeat = getDistanceFromBarline(tick, ticksPerBeat, timeSigResult.at, timeSig ? timeSig.beats : undefined) === 0;
+        const result = getEntriesAtTick<TimeSignature>(0, flow, EntryType.timeSignature);
+        if (result.entries[0]) {
+            timeSigResult = result;
+        }
+
+        const timeSigAt = timeSigResult?.at;
+        const timeSig = timeSigResult?.entries[0];
+
+        const ticksPerBeat = getTicksPerBeat(timeSig?.subdivisions, timeSig?.beatType);
+        const isFirstBeat = getDistanceFromBarline(tick, ticksPerBeat, timeSigAt, timeSig?.beats) === 0;
 
         if (isFirstBeat) {
-            ticks.push(tick);
+            ticks[tick] = true;
         }
-        
+
         tick++;
     }
 

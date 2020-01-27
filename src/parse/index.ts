@@ -30,7 +30,7 @@ import { Timer } from "../ui/utils/timer";
 
 export function parse(score: Score, flowKey: FlowKey, config: EngravingConfig, converter: Converter): RenderInstructions {
 
-const timer = Timer('parse');
+    const timer = Timer('parse');
 
     const flow = score.flows.byKey[flowKey];
 
@@ -54,7 +54,7 @@ const timer = Timer('parse');
 
     const tickWidths: number[][] = [];
     for (let tick = 0; tick < flow.length; tick++) {
-        const width = measureTick(tick, firstBeats.includes(tick), flowEntriesByTick, staves, notationTracks, config);
+        const width = measureTick(tick, firstBeats[tick], flowEntriesByTick, staves, notationTracks, config);
         tickWidths.push(width);
     }
 
@@ -69,13 +69,11 @@ const timer = Timer('parse');
 
     let currentX = x + config.systemStartPadding;
     for (let tick = 0; tick < flow.length; tick++) {
-        drawInstructions.push(...drawTick(tick, firstBeats.includes(tick), currentX, y, tickWidths[tick], verticalMeasurements, flowEntriesByTick, staves, notationTracks, config));
+        drawInstructions.push(...drawTick(tick, firstBeats[tick], currentX, y, tickWidths[tick], verticalMeasurements, flowEntriesByTick, staves, notationTracks, config));
         currentX += tickWidths[tick].reduce<number>((sum, width) => sum + width, 0);
     }
 
-    timer.stop();
-
-    return {
+    const instructions = {
         height: config.framePadding.top + verticalMeasurements.systemHeight + config.framePadding.bottom,
         width: x + notationWidth + config.framePadding.right,
         entries: [
@@ -88,5 +86,9 @@ const timer = Timer('parse');
             ...drawFinalBarline(x + notationWidth, y, staves, verticalMeasurements, finalBarline)
         ]
     };
+
+    timer.stop();
+
+    return instructions;
 
 }
