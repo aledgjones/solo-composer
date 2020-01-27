@@ -125,9 +125,11 @@ export function splitUnit(start: number, stop: number, subdivisions: number, bea
     return track;
 }
 
-export function splitAsPerMeter(length: number, flow: EntriesByTick, track: NotationTrack, barlines: number[]) {
+export function splitAsPerMeter(length: number, flow: EntriesByTick, track: NotationTrack, _barlines: {[tick: number]: boolean}) {
 
     // split at barlines
+
+    const barlines = Object.keys(_barlines).map(tick => parseInt(tick));
 
     barlines.forEach(tick => {
         track = splitNotationTrack(track, tick);

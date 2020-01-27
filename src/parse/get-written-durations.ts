@@ -7,7 +7,7 @@ import { splitAsPerMeter } from "./split-as-per-meter";
 /**
  * Convert tones into written notaition values
  */
-export function getWrittenDurations(length: number, flowEntriesByTick: EntriesByTick, staves: Stave[], tracks: Tracks, barlines: number[]) {
+export function getWrittenDurations(length: number, flowEntriesByTick: EntriesByTick, staves: Stave[], tracks: Tracks, barlines: {[tick: number]: boolean}) {
 
     return staves.reduce<NotationTracks>((output, stave) => {
         stave.tracks.forEach(trackKey => {

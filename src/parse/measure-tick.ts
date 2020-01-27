@@ -40,9 +40,9 @@ export function measureTick(tick: number, isFirstBeat: boolean, flowEntries: Ent
     const normalBarline = createBarline({ type: BarlineType.normal }, 0);
     const doubleBarline = createBarline({ type: BarlineType.double }, 0);
 
-    const key = getEntriesAtTick<KeySignature>(tick, flowEntries, EntryType.keySignature)[0];
-    const time = getEntriesAtTick<TimeSignature>(tick, flowEntries, EntryType.timeSignature)[0];
-    const barline = getEntriesAtTick<Barline>(tick, flowEntries, EntryType.barline)[0];
+    const key = getEntriesAtTick<KeySignature>(tick, flowEntries, EntryType.keySignature).entries[0];
+    const time = getEntriesAtTick<TimeSignature>(tick, flowEntries, EntryType.timeSignature).entries[0];
+    const barline = getEntriesAtTick<Barline>(tick, flowEntries, EntryType.barline).entries[0];
 
     if (time) {
         measurements[WidthOf.time] = time._bounds.width;
@@ -70,7 +70,7 @@ export function measureTick(tick: number, isFirstBeat: boolean, flowEntries: Ent
 
     staves.forEach(stave => {
         const entries = entriesByTick(stave.master.entries.order, stave.master.entries.byKey);
-        const clef = getEntriesAtTick<Clef>(tick, entries, EntryType.clef)[0];
+        const clef = getEntriesAtTick<Clef>(tick, entries, EntryType.clef).entries[0];
 
         if (clef && clef._bounds.width > measurements[1]) {
             measurements[WidthOf.clef] = clef._bounds.width;

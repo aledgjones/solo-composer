@@ -6,5 +6,8 @@ export function getEntriesAtTick<T>(tick: number, track: EntriesByTick, type?: E
     const entries: Entry<T>[] = trackEntries.filter(entry => {
         return !type || entry._type === type;
     });
-    return entries;
+    return {
+        at: tick,
+        entries
+    }
 }

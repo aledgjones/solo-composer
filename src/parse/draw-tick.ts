@@ -25,8 +25,8 @@ export function drawTick(tick: number, isFirstBeat: boolean, x: number, y: numbe
     const key = keyResult.entries[0];
     const timeResult = getNearestEntriesToTick<TimeSignature>(tick, flowEntries, EntryType.timeSignature);
     const time = timeResult.entries[0];
-    const barline = getEntriesAtTick<Barline>(tick, flowEntries, EntryType.barline)[0];
-    const tempo = getEntriesAtTick<AbsoluteTempo>(tick, flowEntries, EntryType.absoluteTempo)[0];
+    const barline = getEntriesAtTick<Barline>(tick, flowEntries, EntryType.barline).entries[0];
+    const tempo = getEntriesAtTick<AbsoluteTempo>(tick, flowEntries, EntryType.absoluteTempo).entries[0];
 
     const subdivisions = time ? time.subdivisions : 12;
 
