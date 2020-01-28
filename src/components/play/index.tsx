@@ -1,13 +1,13 @@
 import React, { FC, useState, useCallback, useMemo } from 'react';
 import ScrollContainer from 'react-indiana-drag-scroll';
 
-import { useAppState, useAppActions } from '../../services/state';
+import { useAppState } from '../../services/state';
 import { Score } from '../../services/score';
 
 import { Select, Option } from '../../ui';
 import { THEME } from '../../const';
 
-import { getCounts } from '../../services/instrument';
+import { useCounts } from '../../services/instrument';
 import { PlayerControls } from './player-contols';
 import { useTicks, Ticks } from './ticks';
 import { PlayerTrack } from './player-track';
@@ -59,7 +59,7 @@ export const Play: FC<Props> = ({ settings, onSettingsClose }) => {
     const flow = score.flows.byKey[flowKey];
     const flowEntriesByTick = useMemo(() => entriesByTick(flow.master.entries.order, flow.master.entries.byKey), [flow.master.entries]);
 
-    const counts = getCounts(score.players, score.instruments, score.config);
+    const counts = useCounts();
     const ticks = useTicks(flow.length, flowEntriesByTick, zoom);
 
     return <>
@@ -68,7 +68,7 @@ export const Play: FC<Props> = ({ settings, onSettingsClose }) => {
 
             <div className="play__x-fixed">
                 <div className="play__header-select">
-                    <Select className="play__select" dark required color={THEME.primary} value={flowKey} onChange={setFlowKey}>
+                    <Select className="play__select" dark required color={THEME.primary[500].bg} value={flowKey} onChange={setFlowKey}>
                         {score.flows.order.map((key, i) => {
                             const title = `${i + 1}. ${score.flows.byKey[key].title}`;
                             return <Option key={key} value={key} displayAs={title}>{title}</Option>

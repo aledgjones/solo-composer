@@ -1,7 +1,6 @@
 import React, { useCallback, useState, useMemo, MouseEvent } from 'react';
 import { SortableElement } from 'react-sortable-hoc';
 import { mdiChevronDown, mdiPlus, mdiDeleteOutline, mdiChevronUp } from '@mdi/js';
-import Color from 'color';
 
 import { Icon } from '../../ui';
 import { Player, PlayerType, usePlayerName, usePlayerIcon, PlayerKey } from '../../services/player';
@@ -42,17 +41,13 @@ export const PlayerItem = SortableElement<Props>((props: Props) => {
         onRemovePlayer(player.key);
     }, [onRemovePlayer, player.key]);
 
-    const bg = useMemo(() => {
+    const {fg, bg} = useMemo(() => {
         if (selected) {
-            return THEME.primary;
+            return THEME.primary[500];
         } else {
-            return undefined;
+            return THEME.grey[600];
         }
     }, [selected]);
-
-    const fg = useMemo(() => {
-        return Color(bg).isDark() ? '#ffffff' : '#000000';
-    }, [bg]);
 
     const name = usePlayerName(player, instruments, counts);
     const icon = usePlayerIcon(player);

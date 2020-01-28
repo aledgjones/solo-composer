@@ -34,7 +34,7 @@ export const MainShell: FC = () => {
 
     return <>
         <div className="main-shell__topbar">
-            <Tabs className="main-shell__tabs" value={tab} onChange={actions.ui.tab.set} background="#0d1216" highlight={THEME.primary}>
+            <Tabs className="main-shell__tabs" value={tab} onChange={actions.ui.tab.set} background="#0d1216" highlight={THEME.primary[500].bg}>
                 <Tab value={TabState.setup}>Setup</Tab>
                 <Tab value={TabState.write}>Write</Tab>
                 <Tab value={TabState.engrave}>Engrave</Tab>

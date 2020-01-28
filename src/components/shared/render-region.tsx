@@ -1,6 +1,5 @@
 import React, { FC, useMemo } from 'react';
 import ScrollContainer from 'react-indiana-drag-scroll';
-import Color from 'color';
 
 import { THEME } from '../../const';
 import { merge } from '../../ui/utils/merge';
@@ -14,8 +13,8 @@ interface Props {
 export const RenderRegion: FC<Props> = (({ children, className }) => {
 
   const bg = useMemo(() => {
-    const start = Color(THEME.primary).darken(.2).string();
-    const stop = Color(THEME.primary).lighten(.6).string();
+    const start = THEME.primary[400].bg;
+    const stop = THEME.primary[700].bg;
     return `linear-gradient(${start}, ${stop})`;
   }, []);
 

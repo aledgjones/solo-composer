@@ -1,6 +1,5 @@
-import React, { FC, useState, useMemo } from 'react';
+import React, { FC, useState } from 'react';
 import { mdiChevronRight } from '@mdi/js';
-import Color from 'color';
 
 import { InstrumentDef, useInstrumentList, getFirstInstrumentDefFromPartialPath } from '../../services/instrument-defs';
 import { THEME } from '../../const';
@@ -20,10 +19,7 @@ export const InstrumentPicker: FC<Props> = ({ onSelect, onCancel }) => {
   const [selection, setSelection] = useState<InstrumentDef>(getFirstInstrumentDefFromPartialPath([]));
   const lists = useInstrumentList(selection);
 
-  const bg = THEME.primary;
-  const fg = useMemo(() => {
-    return Color(bg).isDark() ? 'rgb(255,255,255)' : 'rgb(0,0,0)';
-  }, [bg]);
+  const { bg, fg } = THEME.primary[500];
 
   return <Backdrop visible={true}>
     <Card animate className="instrument-picker">

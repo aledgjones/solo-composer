@@ -3,7 +3,6 @@ import { SortableElement } from 'react-sortable-hoc';
 import { mdiDeleteOutline, mdiFileDocumentBoxOutline } from '@mdi/js';
 
 import { THEME } from '../../const';
-import Color from 'color';
 
 import { Flow, FlowKey } from '../../services/flow';
 
@@ -49,19 +48,15 @@ export const FlowItem = SortableElement<Props>((props: Props) => {
         onRemoveFlow(flow.key);
     }, [onRemoveFlow, flow.key]);
 
-    const bg = useMemo(() => {
+    const {bg, fg} = useMemo(() => {
         if (selected) {
-            return THEME.primary;
+            return THEME.primary[500];
         } else if (active) {
-            return '#293237';
+            return THEME.grey[700];
         } else {
-            return '#232c32';
+            return THEME.grey[600];
         }
     }, [selected, active]);
-
-    const fg = useMemo(() => {
-        return Color(bg).isDark() ? '#ffffff' : '#000000';
-    }, [bg]);
 
     return <div className="flow-item" style={{ backgroundColor: bg, color: fg }} onClick={onSelect}>
         <div className="flow-item__header">

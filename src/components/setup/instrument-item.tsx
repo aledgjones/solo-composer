@@ -1,6 +1,5 @@
 import React, { FC, useMemo } from 'react';
 import { mdiChevronRight } from '@mdi/js';
-import Color from 'color';
 
 import { THEME } from '../../const';
 import { Instrument, useInstrumentName } from '../../services/instrument';
@@ -17,17 +16,13 @@ interface Props {
 
 export const InstrumentItem: FC<Props> = ({ selected, instrument, count }) => {
 
-  const bg: string = useMemo(() => {
+  const { bg, fg } = useMemo(() => {
     if (selected) {
-      return Color(THEME.primary).lighten(.3).string();
+      return THEME.primary[600];
     } else {
-      return 'rgb(57, 66, 71)';
+      return THEME.grey[700];
     }
   }, [selected]);
-
-  const fg = useMemo(() => {
-    return Color(bg).isDark() ? '#ffffff' : '#000000';
-  }, [bg]);
 
   const name = useInstrumentName(instrument, count);
 

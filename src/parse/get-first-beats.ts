@@ -3,7 +3,6 @@ import { TimeSignature } from "../entries/time-signature";
 import { EntryType } from "../entries";
 import { getTicksPerBeat } from "./get-ticks-per-beat";
 import { getDistanceFromBarline } from "./get-distance-from-barline";
-import { getNearestEntriesToTick } from "./get-nearest-entry-to-tick";
 import { getEntriesAtTick } from "./get-entry-at-tick";
 
 /**

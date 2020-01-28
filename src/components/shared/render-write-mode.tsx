@@ -1,5 +1,4 @@
-import React, { FC, useState, useMemo } from 'react';
-import Color from 'color';
+import React, { FC, useState } from 'react';
 
 import { Score } from '../../services/score';
 import { THEME } from '../../const';
@@ -22,9 +21,7 @@ export const RenderWriteMode: FC<Props> = (({ score }) => {
 
     const [flowKey, setFlowKey] = useState(score.flows.order[0]);
 
-    const fg = useMemo(() => {
-        return Color(THEME.primary).isDark() ? '#ffffff' : '#000000';
-    }, []);
+    const { fg, bg } = THEME.primary[500];
 
     const converter = useConverter(score.engraving[LayoutType.score].space);
     const instructions = useParse(score, flowKey, converter);
@@ -33,7 +30,7 @@ export const RenderWriteMode: FC<Props> = (({ score }) => {
 
     return <div className="render-write-mode">
         <div className="render-write-mode__container" style={{ width: px(instructions.width), height: px(instructions.height) }}>
-            <p className="render-write-mode__flow-name" style={{ color: fg, backgroundColor: THEME.primary }}>{score.flows.byKey[flowKey].title}</p>
+            <p className="render-write-mode__flow-name" style={{ color: fg, backgroundColor: bg }}>{score.flows.byKey[flowKey].title}</p>
             <svg className="render-write-mode__svg-layer" width={px(instructions.width)} height={px(instructions.height)}>
                 {instructions.entries.map((instruction: Instruction<any>) => {
                     switch (instruction.type) {
@@ -45,7 +42,7 @@ export const RenderWriteMode: FC<Props> = (({ score }) => {
                             return <path key={path.key} fill="none" d={def.join(" ")} stroke={path.styles.color} strokeWidth={px(path.styles.thickness)} />
                         case InstructionType.circle:
                             const circle = instruction as CircleInstruction;
-                            return <circle key={circle.key} cx={px(circle.x)} cy={px(circle.y)} r={px(circle.radius)} fill={circle.styles.color} />
+                            return <circle key={circle.key} style={{ transform: `translate(${px(circle.x)}px, ${px(circle.y)}px)` }} r={px(circle.radius)} fill={circle.styles.color} />
                         default:
                             return null;
                     }
@@ -56,7 +53,7 @@ export const RenderWriteMode: FC<Props> = (({ score }) => {
                     switch (instruction.type) {
                         case InstructionType.text:
                             const text = instruction as TextInstruction;
-                            return <Text key={text.key} style={{ fontFamily: text.styles.font, fontSize: px(text.styles.size), whiteSpace: 'pre', position: 'absolute', display: 'flex', alignItems: text.styles.align, justifyContent: text.styles.justify, height: 0, width: 0, left: px(text.x), top: px(text.y), lineHeight: '1em' }}>{text.value}</Text>;
+                            return <Text key={text.key} style={{ transform: `translate(${px(text.x)}px, ${px(text.y)}px)`, fontFamily: text.styles.font, fontSize: px(text.styles.size), whiteSpace: 'pre', position: 'absolute', display: 'flex', alignItems: text.styles.align, justifyContent: text.styles.justify, height: 0, width: 0, lineHeight: '1em' }}>{text.value}</Text>;
                         default:
                             return null;
                     }

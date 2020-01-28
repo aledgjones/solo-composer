@@ -100,7 +100,7 @@ export const flowActions = (store: Store<State>) => {
         removePlayer: (flowKey: FlowKey, playerKey: PlayerKey) => {
             store.update(s => {
                 const flow = s.score.flows.byKey[flowKey];
-                flow.players.filter(key => key !== playerKey);
+                flow.players = flow.players.filter(key => key !== playerKey);
                 s.score.players.byKey[playerKey].instruments.forEach(instrumentKey => {
                     s.score.instruments[instrumentKey].staves.forEach(staveKey => {
                         flow.staves[staveKey].tracks.forEach(trackKey => {

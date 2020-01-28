@@ -91,7 +91,7 @@ export const PlaySettings: FC<Props> = ({ onClose }) => {
                                             <p className="play-settings__port-name">{output.name}</p>
                                             <p className="play-settings__port-manufacturer">{output.manufacturer || 'Unknown Manufacturer'}</p>
                                         </div>
-                                        <Button onClick={() => actions.playback.midi.test(output.id)} compact={true} outline={true} color={THEME.primary}>Test</Button>
+                                        <Button onClick={() => actions.playback.midi.test(output.id)} compact={true} outline={true} color={THEME.primary[500].bg}>Test</Button>
                                     </div>
                                 })}
                             </div>
@@ -103,7 +103,7 @@ export const PlaySettings: FC<Props> = ({ onClose }) => {
             </div>
             <div className="generic-settings__buttons">
                 <div className="generic-settings__spacer" />
-                <Button compact color={THEME.primary} onClick={onClose}>Close</Button>
+                <Button compact color={THEME.primary[500].bg} onClick={onClose}>Close</Button>
             </div>
         </Card>
     </Backdrop >;
