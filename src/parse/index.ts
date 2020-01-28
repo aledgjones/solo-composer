@@ -2,7 +2,6 @@ import { FlowKey } from "../services/flow";
 import { Score } from "../services/score";
 import { LayoutType, defaultEngravingConfig } from "../services/engraving";
 
-import { getInstruments, getCounts } from "../services/instrument";
 import { getNames, NameType } from "./get-names";
 import { getStaves } from "../services/stave";
 import { entriesByTick } from "../services/track";
@@ -27,18 +26,10 @@ import { getFirstBeats } from "./get-first-beats";
 import { getWrittenDurations } from "./get-written-durations";
 import { createBarline } from "../entries/barline";
 import { Timer } from "../ui/utils/timer";
-import { useMemo } from "react";
 import { getConvertedConfig } from "./get-converted-config";
-
-export function useParse(score: Score, flowKey: FlowKey, converter: Converter) {
-    return useMemo(() => {
-        return parse(score, flowKey, converter);
-    }, [score, flowKey, converter]);
-}
+import { getInstruments, getCounts } from "../services/instrument-utils";
 
 export function parse(score: Score, flowKey: FlowKey, converter: Converter): RenderInstructions {
-
-    const timer = Timer('parse');
 
     const flow = score.flows.byKey[flowKey];
     const config = getConvertedConfig({ ...defaultEngravingConfig, ...score.engraving[LayoutType.score] }, converter);
@@ -82,7 +73,7 @@ export function parse(score: Score, flowKey: FlowKey, converter: Converter): Ren
         currentX += tickWidths[tick].reduce<number>((sum, width) => sum + width, 0);
     }
 
-    const instructions = {
+    return {
         height: config.framePadding.top + verticalMeasurements.systemHeight + config.framePadding.bottom,
         width: x + notationWidth + config.framePadding.right,
         entries: [
@@ -95,9 +86,5 @@ export function parse(score: Score, flowKey: FlowKey, converter: Converter): Ren
             ...drawFinalBarline(x + notationWidth, y, staves, verticalMeasurements, finalBarline)
         ]
     };
-
-    timer.stop();
-
-    return instructions;
 
 }

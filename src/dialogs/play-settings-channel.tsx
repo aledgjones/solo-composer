@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { mdiChevronRight } from '@mdi/js';
 
 import { Channel } from '../services/sampler';
-import { useInstrumentName, Instruments, InstrumentCounts } from '../services/instrument';
+import { useInstrumentName, Instruments } from '../services/instrument';
 import { merge } from '../ui/utils/merge';
 import { Spinner, Icon } from '../ui';
 import { THEME } from '../const';
@@ -10,6 +10,7 @@ import { SamplerCurrentState } from '../playback/sampler';
 import { Expressions } from '../playback/expressions';
 import { Text } from '../components/shared/text';
 import { useAppActions } from '../services/state';
+import { InstrumentCounts } from '../services/instrument-utils';
 
 interface Props {
     i: number;

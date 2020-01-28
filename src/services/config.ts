@@ -1,6 +1,6 @@
 import { Store } from "pullstate";
 import { State } from "./state";
-import { InstrumentAutoCountStyle } from "./instrument";
+import { InstrumentAutoCountStyle } from "./instrument-utils";
 
 export type PartialConfig = Partial<ConfigState>;
 

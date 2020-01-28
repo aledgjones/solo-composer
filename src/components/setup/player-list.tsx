@@ -4,7 +4,8 @@ import { mdiPlus } from '@mdi/js';
 
 import { Icon } from '../../ui';
 import { Player, PlayerKey } from '../../services/player';
-import { Instruments, InstrumentCounts } from '../../services/instrument';
+import { Instruments } from '../../services/instrument';
+import { InstrumentCounts } from '../../services/instrument-utils';
 import { PlayerItem } from './player-item';
 import { SelectionType, Selection } from '.';
 

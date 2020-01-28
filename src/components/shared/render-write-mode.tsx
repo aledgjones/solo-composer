@@ -2,9 +2,9 @@ import React, { FC, useState } from 'react';
 
 import { Score } from '../../services/score';
 import { THEME } from '../../const';
+import { useParseWorker } from '../../parse/use-parse';
 import { useConverter } from '../../parse/converter';
 import { LayoutType } from '../../services/engraving';
-import { useParse } from '../../parse';
 import { Instruction, InstructionType } from '../../render/instructions';
 import { PathInstruction } from '../../render/path';
 import { TextInstruction } from '../../render/text';
@@ -19,14 +19,15 @@ interface Props {
 
 export const RenderWriteMode: FC<Props> = (({ score }) => {
 
-    const [flowKey, setFlowKey] = useState(score.flows.order[0]);
-
     const { fg, bg } = THEME.primary[500];
+    
+    const [flowKey, setFlowKey] = useState(score.flows.order[0]);
+    const instructions = useParseWorker(score, flowKey);
+    const px = useConverter(score.engraving[LayoutType.score].space).spaces.toPX;
 
-    const converter = useConverter(score.engraving[LayoutType.score].space);
-    const instructions = useParse(score, flowKey, converter);
-
-    const px = converter.spaces.toPX;
+    if(!instructions) {
+        return null;
+    }
 
     return <div className="render-write-mode">
         <div className="render-write-mode__container" style={{ width: px(instructions.width), height: px(instructions.height) }}>

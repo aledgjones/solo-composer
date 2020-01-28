@@ -4,7 +4,8 @@ import { mdiChevronDown, mdiPlus, mdiDeleteOutline, mdiChevronUp } from '@mdi/js
 
 import { Icon } from '../../ui';
 import { Player, PlayerType, usePlayerName, usePlayerIcon, PlayerKey } from '../../services/player';
-import { Instruments, InstrumentCounts } from '../../services/instrument';
+import { Instruments } from '../../services/instrument';
+import { InstrumentCounts } from '../../services/instrument-utils';
 import { THEME } from '../../const';
 import { InstrumentItem } from './instrument-item';
 import { Handle } from './handle';

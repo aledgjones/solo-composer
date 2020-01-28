@@ -1,4 +1,5 @@
-import { Instrument, InstrumentCounts } from "../services/instrument";
+import { Instrument } from "../services/instrument";
+import { InstrumentCounts } from "../services/instrument-utils";
 
 export enum NameType {
     long = 1,

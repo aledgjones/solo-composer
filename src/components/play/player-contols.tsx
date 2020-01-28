@@ -2,7 +2,8 @@ import React, { FC } from 'react';
 import { mdiChevronDown } from '@mdi/js';
 
 import { Player, usePlayerName, usePlayerIcon } from '../../services/player';
-import { Instruments, InstrumentCounts } from '../../services/instrument';
+import { InstrumentCounts } from '../../services/instrument-utils';
+import { Instruments } from '../../services/instrument';
 import { InstrumentControls } from './instrument-controls';
 import { Text } from '../shared/text';
 import { Icon } from '../../ui';

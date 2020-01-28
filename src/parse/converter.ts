@@ -45,10 +45,14 @@ export function getConverter(width: number, space: number, accuracy?: number): C
     }
 };
 
-export function useConverter(space?: number) {
-    const mm = useMemo(() => {
+export function useMM() {
+    return useMemo(() => {
         return getWidthOfMM();
     }, []);
+}
+
+export function useConverter(space?: number) {
+    const mm = useMM();
     return useMemo(() => {
         return getConverter(mm, space || defaultEngravingConfig.space);
     }, [mm, space]);
