@@ -64,9 +64,9 @@ export const Play: FC<Props> = ({ settings, onSettingsClose }) => {
 
     return <>
 
-        <ScrollContainer ignoreElements=".play__x-fixed" vertical={false} className="play">
+        <ScrollContainer ignoreElements=".no-scroll" vertical={false} className="play">
 
-            <div className="play__x-fixed">
+            <div className="play__x-fixed no-scroll">
                 <div className="play__header-select">
                     <Select className="play__select" dark required color={THEME.primary[500].bg} value={flowKey} onChange={setFlowKey}>
                         {score.flows.order.map((key, i) => {
@@ -93,7 +93,7 @@ export const Play: FC<Props> = ({ settings, onSettingsClose }) => {
                     {score.players.order.map((playerKey, i) => {
                         if (flow.players.includes(playerKey)) {
                             const player = score.players.byKey[playerKey];
-                            return <PlayerTrack key={playerKey} color={colors[i]} expanded={expanded.includes(playerKey)} player={player} instruments={score.instruments} staves={flow.staves} tracks={flow.tracks} ticks={ticks} />
+                            return <PlayerTrack key={playerKey} flowKey={flowKey} color={colors[i]} expanded={expanded.includes(playerKey)} player={player} instruments={score.instruments} staves={flow.staves} tracks={flow.tracks} ticks={ticks} />
                         } else {
                             return null;
                         }

@@ -10,6 +10,7 @@ import { Barline, createBarline, BarlineType } from "../entries/barline";
 import { NotationTracks } from "./notation-track";
 import { getStepsBetweenPitches } from "../playback/utils";
 import { getStemDirection, StemDirection } from "./get-stem-direction";
+import { getIsRest } from "./is-rest";
 
 export enum WidthOf {
     endRepeat,
@@ -82,7 +83,7 @@ export function measureTick(tick: number, isFirstBeat: boolean, flowEntries: Ent
             // check to see if there are notes in the offset slot
             if (notationTrack[tick]) {
                 const entry = notationTrack[tick];
-                if (entry.tones.length > 0) {
+                if (!getIsRest(entry)) {
                     const stemDirection = getStemDirection(entry.tones, clef);
                     // we can only have a preNoteSlot if the stem direction is down
                     if (stemDirection === StemDirection.down) {

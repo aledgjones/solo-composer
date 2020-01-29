@@ -4,7 +4,7 @@ import { mdiSettingsOutline } from '@mdi/js';
 
 import { useAppActions, useAppState } from '../../services/state';
 import { TabState } from '../../services/ui';
-import { useAutoSetup } from '../../playback/auto-setup';
+import { useAutoSetup } from '../../services/auto-setup';
 
 import { Tabs, Tab, Icon } from '../../ui';
 

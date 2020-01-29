@@ -10,13 +10,14 @@ import { getEntriesAtTick } from "./get-entry-at-tick";
 import { Barline, createBarline, BarlineType, drawBarline } from "../entries/barline";
 import { getNearestEntriesToTick } from "./get-nearest-entry-to-tick";
 import { widthUpTo, WidthOf } from "./measure-tick";
-import { getNotationBaseLength, getIsDotted, NotationTracks } from "./notation-track";
+import { getNotationBaseLength, getIsDotted, NotationTracks, NotationBaseLength } from "./notation-track";
 import { drawRest } from "./draw-rest";
 import { drawNotehead } from "./draw-note";
 import { drawAbsoluteTempo, AbsoluteTempo } from "../entries/absolute-tempo";
 import { EngravingConfig } from "../services/engraving";
 import { getStemDirection, stepsFromTop } from "./get-stem-direction";
 import { drawNoteStem } from "./draw-note-stem";
+import { getIsRest } from "./is-rest";
 
 export function drawTick(tick: number, isFirstBeat: boolean, x: number, y: number, widths: number[], verticalMeasurements: VerticalMeasurements, flowEntries: EntriesByTick, staves: Stave[], notationTracks: NotationTracks, config: EngravingConfig) {
     const output = [];
@@ -81,12 +82,15 @@ export function drawTick(tick: number, isFirstBeat: boolean, x: number, y: numbe
                 const length = getNotationBaseLength(entry.duration, subdivisions);
                 const isDotted = getIsDotted(entry.duration, subdivisions);
 
-                if (entry.tones.length === 0) {
+                if (getIsRest(entry)) {
                     output.push(...drawRest(x + widthUpTo(widths, WidthOf.noteSpacing), top, length, isDotted, `${trackKey}-${tick}-rest`));
                 } else {
 
-                    const stemDirection = getStemDirection(entry.tones, clef);
-                    output.push(drawNoteStem(x + widthUpTo(widths, WidthOf.noteSpacing), top, entry.tones, clef, stemDirection, `${trackKey}-${tick}-stem`));
+                    // only draw stems if the note is less tahn a semi-breve in length
+                    if (length && length < NotationBaseLength.semibreve) {
+                        const stemDirection = getStemDirection(entry.tones, clef);
+                        output.push(drawNoteStem(x + widthUpTo(widths, WidthOf.noteSpacing), top, entry.tones, clef, stemDirection, `${trackKey}-${tick}-stem`));
+                    }
                     entry.tones.forEach(tone => {
                         const offset = stepsFromTop(tone, clef) / 2;
                         output.push(...drawNotehead(x + widthUpTo(widths, WidthOf.noteSpacing), top, offset, length, isDotted, `${tone._key}-${tick}-note`));

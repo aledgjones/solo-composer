@@ -6,10 +6,12 @@ import { InstrumentTrack } from './instrument-track';
 import { Ticks, Tick } from './ticks';
 import { Staves } from '../../services/stave';
 import { Tracks } from '../../services/track';
+import { FlowKey } from '../../services/flow';
 
 import './player-track.css';
 
 interface Props {
+    flowKey: FlowKey;
     color: string;
     expanded: boolean;
     player: Player;
@@ -19,14 +21,14 @@ interface Props {
     ticks: Tick[];
 }
 
-export const PlayerTrack: FC<Props> = ({ color, expanded, player, instruments, staves, tracks, ticks }) => {
+export const PlayerTrack: FC<Props> = ({ color, expanded, player, instruments, staves, tracks, ticks, flowKey }) => {
 
     return <div className="player-track">
         <Ticks ticks={ticks} />
         {expanded && <div className="player-track__instruments">
             {player.instruments.map(instrumentKey => {
                 const instrument = instruments[instrumentKey];
-                return <InstrumentTrack key={instrumentKey} color={color} instrument={instrument} staves={staves} tracks={tracks} ticks={ticks} />
+                return <InstrumentTrack key={instrumentKey} flowKey={flowKey} color={color} instrument={instrument} staves={staves} tracks={tracks} ticks={ticks} />
             })}
         </div>}
     </div>;

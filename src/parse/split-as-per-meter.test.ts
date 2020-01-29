@@ -1,31 +1,34 @@
 import { splitAsPerMeter } from "./split-as-per-meter";
 import { createTimeSignature } from "../entries/time-signature";
 import { getDefaultGroupings } from "./get-default-groupings";
-import { NotationTrack, NotationType } from "./notation-track";
+import { NotationTrack } from "./notation-track";
 import { EntriesByTick } from "../services/track";
-import { debugTrack } from "../debug/debug-track";
 import { getFirstBeats } from "./get-first-beats";
+import { createTone } from "../entries/tone";
+import { debugNotationTrack } from "../debug/debug-notation-track";
 
-// let i = 1;
+let i = 1;
 
-// it(i + '. ' + 'splits notes at barlines only - 2/4', () => {
-//     const c = 12;
-//     const len = c * 4;
+it(i + '. ' + 'splits notes at barlines only - 2/4', () => {
+    const c = 12;
+    const len = c * 4;
 
-//     const flow: EntriesByTick = {
-//         [0]: [createTimeSignature({ beats: 2, beatType: 4, groupings: getDefaultGroupings(2), subdivisions: 12 }, 0)]
-//     }
+    const flow: EntriesByTick = {
+        [0]: [createTimeSignature({ beats: 2, beatType: 4, groupings: getDefaultGroupings(2), subdivisions: 12 }, 0)]
+    }
 
-//     const track: NotationTrack = {
-//         [0]: { tones: ['a'], duration: len, type: NotationType.note, ties: [] }
-//     }
+    const tone = createTone({pitch: 'C4', duration: 0}, 0);
 
-//     const barlines = getFirstBeats(len, flow);
-//     const output = splitAsPerMeter(len, flow, track, barlines);
-//     const log = debugTrack(len, output);
+    const track: NotationTrack = {
+        [0]: { key: 'a', tones: [tone], duration: len, ties: [] }
+    }
 
-//     expect(log).toBe('o_______________________o----------------------¬');
-// });
+    const barlines = getFirstBeats(len, flow);
+    const output = splitAsPerMeter(len, flow, track, barlines);
+    const log = debugNotationTrack(len, output);
+
+    expect(log).toBe('o_______________________o----------------------¬');
+});
 
 // i++;
 

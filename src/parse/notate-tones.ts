@@ -5,6 +5,7 @@ import { EntryKey, Entry, EntryType } from "../entries";
 import { Tone } from "../entries/tone";
 import { NotationTrack, Notation } from "./notation-track";
 import { getStepsBetweenPitches } from "../playback/utils";
+import { getIsRest } from './is-rest';
 
 /**
  *  split tones into notated rhythms (none timesignature based)
@@ -28,7 +29,7 @@ export function notateTones(length: number, track: EntriesByTick, rhythmTrack: N
         if (previousEvent && (offEntries.length > 0 || trackEntries.length > 0)) {
             // we dont hold rests or tones that are 'off on this tick
             const holds = previousEvent.tones.filter(tone => {
-                return (previousEvent && previousEvent.tones.length > 0) && !offEntries.includes(tone._key);
+                return (previousEvent && !getIsRest(previousEvent)) && !offEntries.includes(tone._key);
             });
             currentEvent.tones = [...holds];
             previousEvent.ties.push(...holds.map(hold => hold._key));
@@ -58,7 +59,7 @@ export function notateTones(length: number, track: EntriesByTick, rhythmTrack: N
         }
 
         const isRest = Object.keys(offsByTick).length === 0;
-        const somethingHappened = !previousEvent || currentEvent.tones.length > 0 || (isRest && previousEvent.tones.length > 0);
+        const somethingHappened = !previousEvent || !getIsRest(currentEvent) || (isRest && !getIsRest(previousEvent));
         if (somethingHappened) {
             rhythmTrack[tick] = currentEvent;
             previousEvent = currentEvent;
