@@ -20,18 +20,19 @@ import { drawSubBrackets } from "./draw-sub-brackets";
 import { drawStaves } from "./draw-staves";
 import { drawFinalBarline } from "./draw-final-barline";
 
-import { Converter } from "./converter";
+import { getConverter } from "./converter";
 
 import { getFirstBeats } from "./get-first-beats";
 import { getWrittenDurations } from "./get-written-durations";
 import { createBarline } from "../entries/barline";
-import { Timer } from "../ui/utils/timer";
 import { getConvertedConfig } from "./get-converted-config";
 import { getInstruments, getCounts } from "../services/instrument-utils";
 
-export function parse(score: Score, flowKey: FlowKey, converter: Converter): RenderInstructions {
+export function parse(score: Score, flowKey: FlowKey, mm: number): RenderInstructions {
 
     const flow = score.flows.byKey[flowKey];
+
+    const converter = getConverter(mm, score.engraving[LayoutType.score].space || defaultEngravingConfig.space);
     const config = getConvertedConfig({ ...defaultEngravingConfig, ...score.engraving[LayoutType.score] }, converter);
 
     const instruments = getInstruments(score.players, score.instruments, flow);
@@ -52,39 +53,30 @@ export function parse(score: Score, flowKey: FlowKey, converter: Converter): Ren
 
     const notationTracks = getWrittenDurations(flow.length, flowEntriesByTick, staves, flow.tracks, firstBeats);
 
-    const tickWidths: number[][] = [];
-    for (let tick = 0; tick < flow.length; tick++) {
-        const width = measureTick(tick, firstBeats[tick], flowEntriesByTick, staves, notationTracks, config);
-        tickWidths.push(width);
-    }
-
-    const notationWidth = tickWidths.reduce<number>((sum, tick) => {
-        tick.forEach(width => {
-            sum += width;
-        });
-        return sum;
-    }, 0);
-
     const drawInstructions: Instruction<any>[] = [];
 
-    let currentX = x + config.systemStartPadding;
+    let notationWidth = 0;
     for (let tick = 0; tick < flow.length; tick++) {
-        drawInstructions.push(...drawTick(tick, firstBeats[tick], currentX, y, tickWidths[tick], verticalMeasurements, flowEntriesByTick, staves, notationTracks, config));
-        currentX += tickWidths[tick].reduce<number>((sum, width) => sum + width, 0);
+        const widths = measureTick(tick, firstBeats[tick], flowEntriesByTick, staves, notationTracks, config);
+        const width = widths.reduce<number>((sum, width) => sum + width, 0);
+        drawInstructions.push(...drawTick(tick, firstBeats[tick], x + config.systemStartPadding + notationWidth, y, widths, verticalMeasurements, flowEntriesByTick, staves, notationTracks, config));
+        notationWidth += width;
     }
 
+    drawInstructions.push(
+        ...drawNames(config.framePadding.left, y, namesWidth, instruments, names, verticalMeasurements, config),
+        ...drawBraces(x, y, verticalMeasurements),
+        ...drawBrackets(x, y, verticalMeasurements, config),
+        ...drawSubBrackets(x, y, verticalMeasurements),
+        ...drawStaves(x, y, notationWidth + finalBarline._bounds.width, staves, verticalMeasurements),
+        ...drawFinalBarline(x + notationWidth, y, staves, verticalMeasurements, finalBarline)
+    );
+
     return {
+        space: converter.spaces.toPX(1),
         height: config.framePadding.top + verticalMeasurements.systemHeight + config.framePadding.bottom,
         width: x + notationWidth + config.framePadding.right,
-        entries: [
-            ...drawNames(config.framePadding.left, y, namesWidth, instruments, names, verticalMeasurements, config),
-            ...drawBraces(x, y, verticalMeasurements),
-            ...drawBrackets(x, y, verticalMeasurements, config),
-            ...drawSubBrackets(x, y, verticalMeasurements),
-            ...drawStaves(x, y, notationWidth + finalBarline._bounds.width, staves, verticalMeasurements),
-            ...drawInstructions,
-            ...drawFinalBarline(x + notationWidth, y, staves, verticalMeasurements, finalBarline)
-        ]
+        entries: drawInstructions
     };
 
 }

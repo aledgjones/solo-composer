@@ -16,12 +16,7 @@
 .render-write-mode__container {
   position: relative;
   box-shadow: 0 0 8px rgba(0, 0, 0, .2);
-  background-color: rgb(255,255,255);
-}
-
-.render-write-mode__text-layer {
-  position: relative;
-  z-index: 2;
+  background-color: rgb(255, 255, 255);
 }
 
 .render-write-mode__svg-layer {
@@ -29,4 +24,19 @@
   top: 0;
   left: 0;
   z-index: 1;
+  height: 100%;
+  width: 100%;
+}
+
+.render-write-mode__entry--text {
+  overflow: visible;
+}
+
+.render-write-mode__entry--text>div {
+  white-space: pre;
+  position: absolute;
+  display: flex;
+  height: 0;
+  width: 0;
+  line-height: 1em;
 }

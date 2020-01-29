@@ -1,11 +1,11 @@
 import { useMemo, useEffect, useState } from 'react';
 
-import myWorker from './parse.worker';
-
 import { FlowKey } from "../services/flow";
 import { RenderInstructions } from '../render/instructions';
 import { Score } from '../services/score';
 import { useMM } from './converter';
+
+import myWorker from './parse.worker';
 
 export function useParseWorker(score: Score, flowKey: FlowKey) {
 

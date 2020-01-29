@@ -17,16 +17,6 @@ export interface Converter {
     }
 }
 
-export function getWidthOfMM() {
-    const div = document.createElement('div');
-    div.style.position = 'fixed';
-    div.style.width = '1mm';
-    document.body.appendChild(div);
-    const width = div.clientWidth;
-    document.body.removeChild(div);
-    return width;
-}
-
 export function getConverter(width: number, space: number, accuracy?: number): Converter {
     return {
         px: {
@@ -47,13 +37,12 @@ export function getConverter(width: number, space: number, accuracy?: number): C
 
 export function useMM() {
     return useMemo(() => {
-        return getWidthOfMM();
+        const div = document.createElement('div');
+        div.style.position = 'fixed';
+        div.style.width = '1mm';
+        document.body.appendChild(div);
+        const width = div.clientWidth;
+        document.body.removeChild(div);
+        return width;
     }, []);
-}
-
-export function useConverter(space?: number) {
-    const mm = useMM();
-    return useMemo(() => {
-        return getConverter(mm, space || defaultEngravingConfig.space);
-    }, [mm, space]);
 }

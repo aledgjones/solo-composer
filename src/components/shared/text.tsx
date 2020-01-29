@@ -1,4 +1,5 @@
-import React, { FC, CSSProperties } from 'react';
+import React, { FC, CSSProperties, useMemo } from 'react';
+import './text.css';
 
 interface Props {
     className?: string;
@@ -7,15 +8,25 @@ interface Props {
 }
 
 export const Text: FC<Props> = ({ className, style, children }) => {
-    const regex = /(@[^\s@]*@)/g;
-    const text = children ? children.toString() : '';
-    const result = text.split(regex);
+    const result = useMemo(() => {
+        const regex = /(@[^\s@]*@)/g;
+        const text = children ? children.toString() : '';
+        const result = text.split(regex);
+        return result.map(str => {
+            const isToken = regex.test(str);
+            return {
+                isToken,
+                text: isToken ? str.slice(1, -1) : str
+            }
+        })
+    }, [children]);
+
     return <div className={className} style={style}>
-        {result.map((str, i) => {
-            if (regex.test(str)) {
-                return <span key={i} style={{ padding: '0 .05em', display: 'inline-block', lineHeight: '1em', fontSize: '1.5em', fontFamily: 'Music Text' }}>{str.slice(1, -1)}</span>;
+        {result.map((e, i) => {
+            if (e.isToken) {
+                return <span key={i} className="text--token">{e.text}</span>;
             } else {
-                return <span key={i}>{str}</span>;
+                return <span key={i}>{e.text}</span>;
             }
         })}
     </div>;
