@@ -64,7 +64,7 @@ export const InstrumentTrack: FC<Props> = ({ color, instrument, staves, tracks, 
     const actions = useAppActions();
 
     const border = useMemo(() => {
-        const c = Color(color).darken(.3).toString();
+        const c = Color(color).darken(.5).toString();
         return `1px solid ${c}`;
     }, [color]);
 

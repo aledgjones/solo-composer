@@ -38,7 +38,7 @@ export function splitUnit(start: number, stop: number, subdivisions: number, bea
     const unitIsEmpty = getIsEmpty(start, stop, track);
     if (unitIsEmpty) {
         const lastGroupingBoundry = groupingBoundries[groupingBoundries.length - 2];
-        if (isFullBar && getIsRest(track[start]) && !getIsWritable(track[start].duration, subdivisions)) {
+        if (isFullBar && !getIsRest(track[start]) && !getIsWritable(track[start].duration, subdivisions)) {
             track = splitNotationTrack(track, lastGroupingBoundry);
         }
     } else {

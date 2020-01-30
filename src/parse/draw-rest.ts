@@ -1,6 +1,6 @@
 import { buildText, TextStyles, Justify, Align } from '../render/text';
 import { buildCircle, CircleStyles } from '../render/circle';
-import { NotationBaseLength } from './notation-track';
+import { NotationBaseDuration } from './notation-track';
 
 export interface RestDef {
     duration: number;
@@ -8,35 +8,35 @@ export interface RestDef {
 
 export interface Rest extends RestDef { };
 
-function glyphFromDuration(baseLength?: NotationBaseLength) {
+function glyphFromDuration(baseLength?: NotationBaseDuration) {
     switch (baseLength) {
-        case NotationBaseLength.semiquaver:
+        case NotationBaseDuration.semiquaver:
             return '\u{E4E7}';
-        case NotationBaseLength.quaver:
+        case NotationBaseDuration.quaver:
             return '\u{E4E6}';
-        case NotationBaseLength.crotchet:
+        case NotationBaseDuration.crotchet:
             return '\u{E4E5}';
-        case NotationBaseLength.minim:
+        case NotationBaseDuration.minim:
             return '\u{E4E4}';
-        case NotationBaseLength.semibreve:
+        case NotationBaseDuration.semibreve:
             return '\u{E4E3}';
-        case NotationBaseLength.breve:
+        case NotationBaseDuration.breve:
             return '\u{E4E2}';
         default:
             return undefined;
     }
 }
 
-function verticalOffsetFromDuration(baseLength?: NotationBaseLength) {
+function verticalOffsetFromDuration(baseLength?: NotationBaseDuration) {
     switch (baseLength) {
-        case NotationBaseLength.semibreve:
+        case NotationBaseDuration.semibreve:
             return 1;
         default:
             return 2;
     }
 }
 
-export function drawRest(x: number, y: number, length: NotationBaseLength | undefined, dotted: boolean, key: string) {
+export function drawRest(x: number, y: number, length: NotationBaseDuration | undefined, dotted: boolean, key: string) {
 
     const glyph = glyphFromDuration(length);
     const offset = verticalOffsetFromDuration(length);

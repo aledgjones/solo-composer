@@ -1,6 +1,7 @@
 import { buildText, TextStyles, Justify, Align } from '../render/text';
 import { buildCircle, CircleStyles } from '../render/circle';
-import { NotationBaseLength } from './notation-track';
+import { NotationBaseDuration } from './notation-track';
+import { StemDirection } from './get-stem-direction';
 
 export interface NoteDef {
     duration: number;
@@ -9,39 +10,57 @@ export interface NoteDef {
 
 export interface Note extends NoteDef { };
 
-function glyphFromDuration(baseLength?: NotationBaseLength) {
+export function noteheadWidthFromDuration(baseLength?: NotationBaseDuration): number {
     switch (baseLength) {
-        case NotationBaseLength.semiquaver:
-        case NotationBaseLength.quaver:
-        case NotationBaseLength.crotchet:
+        case NotationBaseDuration.semiquaver:
+        case NotationBaseDuration.quaver:
+        case NotationBaseDuration.crotchet:
+        case NotationBaseDuration.minim:
+            return 1.15;
+        case NotationBaseDuration.semibreve:
+            return 1.15;
+        default:
+            return 0;
+    }
+}
+
+
+function glyphFromDuration(baseLength?: NotationBaseDuration) {
+    switch (baseLength) {
+        case NotationBaseDuration.semiquaver:
+        case NotationBaseDuration.quaver:
+        case NotationBaseDuration.crotchet:
             return '\u{E0A4}';
-        case NotationBaseLength.minim:
+        case NotationBaseDuration.minim:
             return '\u{E0A3}';
-        case NotationBaseLength.semibreve:
+        case NotationBaseDuration.semibreve:
             return '\u{E0A2}';
         default:
             return undefined;
     }
 }
 
-export function drawNotehead(x: number, y: number, offset: number, length: NotationBaseLength | undefined, dotted: boolean, key: string) {
+export function drawNotehead(x: number, y: number, pitchOffset: number, duration: NotationBaseDuration | undefined, dotted: boolean, stemDirection: StemDirection, hasShunts: boolean, isShunted: boolean, key: string) {
 
-    const glyph = glyphFromDuration(length);
+    const glyph = glyphFromDuration(duration);
+    const glyphWidth = noteheadWidthFromDuration(duration);
 
     if (!glyph) {
-        console.error('could not render note duration', `base duration:  ${length}`);
+        console.error('could not render note duration', `base duration:  ${duration}`);
         return [];
     }
 
     const instructions = [];
 
+    const shuntOffset = isShunted ? (stemDirection === StemDirection.up ? glyphWidth : -glyphWidth) : 0;
+
     const styles: TextStyles = { color: '#000000', justify: Justify.start, align: Align.middle, size: 4, font: `Music` };
-    instructions.push(buildText(`${key}-head`, styles, x, y + offset, glyph));
+    instructions.push(buildText(`${key}-head`, styles, x + shuntOffset, y + pitchOffset, glyph));
 
     if (dotted) {
         const styles: CircleStyles = { color: '#000000' };
-        const shift = (offset * 2) % 2 === 0 ? -.5 : 0;
-        instructions.push(buildCircle(`${key}-dot`, styles, x + 1.75, y + offset + shift, .2));
+        const shift = (pitchOffset * 2) % 2 === 0 ? -.5 : 0;
+        instructions.push(buildCircle(`${key}-dot`, styles, x + glyphWidth + (hasShunts ? glyphWidth : 0) + .5, y + pitchOffset + shift, .2));
     }
 
     return instructions;

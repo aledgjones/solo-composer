@@ -1,7 +1,7 @@
 import { EntryKey, Entry } from "../entries";
 import { Tone } from "../entries/tone";
 
-export enum NotationBaseLength {
+export enum NotationBaseDuration {
     semiquaver = .25,
     quaver = .5,
     crotchet = 1,
@@ -25,13 +25,13 @@ export interface NotationTracks {
     [trackKey: string]: NotationTrack;
 }
 
-export function getNotationBaseLength(duration: number, subdivisions: number): NotationBaseLength | undefined {
+export function getNotationBaseDuration(duration: number, subdivisions: number): NotationBaseDuration | undefined {
     const length = duration / subdivisions;
-    if (NotationBaseLength[length]) {
+    if (NotationBaseDuration[length]) {
         return length;
     } else {
         const baseLength = (length / 3) * 2;
-        if (NotationBaseLength[baseLength]) {
+        if (NotationBaseDuration[baseLength]) {
             return baseLength;
         } else {
             return undefined;
@@ -41,11 +41,11 @@ export function getNotationBaseLength(duration: number, subdivisions: number): N
 
 export function getIsDotted(duration: number, subdivisions: number): boolean {
     const length = duration / subdivisions;
-    if (NotationBaseLength[length]) {
+    if (NotationBaseDuration[length]) {
         return false;
     } else {
         const baseLength = (length / 3) * 2;
-        if (NotationBaseLength[baseLength]) {
+        if (NotationBaseDuration[baseLength]) {
             return true;
         } else {
             return false;

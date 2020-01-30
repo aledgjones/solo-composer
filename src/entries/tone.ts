@@ -3,8 +3,9 @@
 // they are converted into note entries for rendering
 
 import shortid from 'shortid';
-import { Entry, EntryType } from ".";
+import { Entry, EntryType, Box } from ".";
 import { Pitch } from '../playback/utils';
+import { NotationBaseDuration } from '../parse/notation-track';
 
 export interface ToneDef {
     duration: number; // in ticks

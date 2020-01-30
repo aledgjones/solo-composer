@@ -10,7 +10,7 @@ import { getEntriesAtTick } from "./get-entry-at-tick";
 import { Barline, createBarline, BarlineType, drawBarline } from "../entries/barline";
 import { getNearestEntriesToTick } from "./get-nearest-entry-to-tick";
 import { widthUpTo, WidthOf } from "./measure-tick";
-import { getNotationBaseLength, getIsDotted, NotationTracks, NotationBaseLength } from "./notation-track";
+import { getNotationBaseDuration, getIsDotted, NotationTracks, NotationBaseDuration } from "./notation-track";
 import { drawRest } from "./draw-rest";
 import { drawNotehead } from "./draw-note";
 import { drawAbsoluteTempo, AbsoluteTempo } from "../entries/absolute-tempo";
@@ -18,6 +18,7 @@ import { EngravingConfig } from "../services/engraving";
 import { getStemDirection, stepsFromTop } from "./get-stem-direction";
 import { drawNoteStem } from "./draw-note-stem";
 import { getIsRest } from "./is-rest";
+import { getShuntedNoteheads } from "./get-shunted-noteheads";
 
 export function drawTick(tick: number, isFirstBeat: boolean, x: number, y: number, widths: number[], verticalMeasurements: VerticalMeasurements, flowEntries: EntriesByTick, staves: Stave[], notationTracks: NotationTracks, config: EngravingConfig) {
     const output = [];
@@ -79,21 +80,25 @@ export function drawTick(tick: number, isFirstBeat: boolean, x: number, y: numbe
 
             if (notationTrack[tick]) {
                 const entry = notationTrack[tick];
-                const length = getNotationBaseLength(entry.duration, subdivisions);
+                const duration = getNotationBaseDuration(entry.duration, subdivisions);
                 const isDotted = getIsDotted(entry.duration, subdivisions);
 
                 if (getIsRest(entry)) {
-                    output.push(...drawRest(x + widthUpTo(widths, WidthOf.noteSpacing), top, length, isDotted, `${trackKey}-${tick}-rest`));
+                    output.push(...drawRest(x + widthUpTo(widths, WidthOf.noteSpacing), top, duration, isDotted, `${trackKey}-${tick}-rest`));
                 } else {
 
+                    const stemDirection = getStemDirection(entry.tones, clef);
+
                     // only draw stems if the note is less tahn a semi-breve in length
-                    if (length && length < NotationBaseLength.semibreve) {
-                        const stemDirection = getStemDirection(entry.tones, clef);
+                    if (duration && duration < NotationBaseDuration.semibreve) {
                         output.push(drawNoteStem(x + widthUpTo(widths, WidthOf.noteSpacing), top, entry.tones, clef, stemDirection, `${trackKey}-${tick}-stem`));
                     }
+
+                    const [hasShunts, shuntedNoteheads] = getShuntedNoteheads(entry.tones, stemDirection);
+
                     entry.tones.forEach(tone => {
                         const offset = stepsFromTop(tone, clef) / 2;
-                        output.push(...drawNotehead(x + widthUpTo(widths, WidthOf.noteSpacing), top, offset, length, isDotted, `${tone._key}-${tick}-note`));
+                        output.push(...drawNotehead(x + widthUpTo(widths, WidthOf.noteSpacing), top, offset, duration, isDotted, stemDirection, hasShunts, shuntedNoteheads[tone._key], `${tone._key}-${tick}-note`));
                     });
 
                 }

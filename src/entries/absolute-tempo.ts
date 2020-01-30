@@ -2,11 +2,11 @@ import shortid from 'shortid';
 import { Entry, EntryType } from ".";
 import { buildText, TextStyles, Align } from '../render/text';
 import { EngravingConfig } from '../services/engraving';
-import { NotationBaseLength } from '../parse/notation-track';
+import { NotationBaseDuration } from '../parse/notation-track';
 
 export interface AbsoluteTempoDef {
     text?: string;
-    beat: NotationBaseLength;
+    beat: NotationBaseDuration;
     dotted: number;
     beatPerMinute: number;
 
@@ -30,17 +30,17 @@ export function createAbsoluteTempo(def: AbsoluteTempoDef, tick: number): Entry<
     }
 }
 
-function glyphFromDuration(baseLength?: NotationBaseLength) {
+function glyphFromDuration(baseLength?: NotationBaseDuration) {
     switch (baseLength) {
-        case NotationBaseLength.semiquaver:
+        case NotationBaseDuration.semiquaver:
             return '\u{1D161}';
-        case NotationBaseLength.quaver:
+        case NotationBaseDuration.quaver:
             return '\u{1D160}';
-        case NotationBaseLength.crotchet:
+        case NotationBaseDuration.crotchet:
             return '\u{1D15F}';
-        case NotationBaseLength.minim:
+        case NotationBaseDuration.minim:
             return '\u{1D15E}';
-        case NotationBaseLength.semibreve:
+        case NotationBaseDuration.semibreve:
             return '\u{E0A2}';
         default:
             return '';

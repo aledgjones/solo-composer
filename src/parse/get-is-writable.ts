@@ -1,13 +1,13 @@
-import { NotationBaseLength } from "./notation-track";
+import { NotationBaseDuration } from "./notation-track";
 
 function isWritable(duration: number, subdivisions: number) {
     switch (duration / subdivisions) {
-        case NotationBaseLength.semiquaver:
-        case NotationBaseLength.quaver:
-        case NotationBaseLength.crotchet:
-        case NotationBaseLength.minim:
-        case NotationBaseLength.semibreve:
-        case NotationBaseLength.breve:
+        case NotationBaseDuration.semiquaver:
+        case NotationBaseDuration.quaver:
+        case NotationBaseDuration.crotchet:
+        case NotationBaseDuration.minim:
+        case NotationBaseDuration.semibreve:
+        case NotationBaseDuration.breve:
             return true;
         default:
             return false;
