@@ -4,7 +4,7 @@ import { Score } from "../services/score";
 import { FlowKey } from "../services/flow";
 import { Timer } from "../ui/utils/timer";
 
-const ctx: Worker = self as any;
+const ctx = self as unknown as Worker; // eslint-disable-line
 
 let latestTaskID = shortid();
 

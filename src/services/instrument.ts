@@ -5,7 +5,7 @@ import shortid from 'shortid';
 import { InstrumentDef } from './instrument-defs';
 import { PlayerState } from './player';
 import { StaveKey } from './stave';
-import { Flow, FlowKey } from './flow';
+import { FlowKey } from './flow';
 import { ConfigState } from './config';
 import { TrackKey } from './track';
 import { ToneDef, createTone } from '../entries/tone';

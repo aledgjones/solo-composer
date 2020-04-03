@@ -25,7 +25,7 @@ export const Play: FC<Props> = ({ settings, onSettingsClose }) => {
 
     const score = useAppState<Score>(s => s.score);
 
-    const [zoom, setZoom] = useState<number>(1.5);
+    const [zoom] = useState<number>(1.5);
     const [flowKey, setFlowKey] = useState(score.flows.order[0]);
     const [expanded, setExpanded] = useState<string[]>([]);
 

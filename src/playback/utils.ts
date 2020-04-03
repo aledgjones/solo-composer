@@ -8,7 +8,7 @@ const C0 = 12;
 
 export function getMidiPitchParts(pitch: Pitch): [string, string, number] {
     if (isString(pitch)) {
-        const [match, letter, acc, octave] = REGEX.exec(pitch) || [];
+        const [, letter, acc, octave] = REGEX.exec(pitch) || [];
         return [letter, acc, +octave];
     } else {
         const octave = Math.floor((pitch - C0) / 12);
@@ -45,8 +45,8 @@ export function toMidiPitchString(pitch: Pitch) {
 }
 
 export function getStepsBetweenPitches(pitchA: Pitch, pitchB: Pitch) {
-    const [pitchANote, pitchAAccidentals, pitchAOctave] = getMidiPitchParts(pitchA);
-    const [pitchBNote, pitchBAccidentals, pitchBOctave] = getMidiPitchParts(pitchB);
+    const [pitchANote,, pitchAOctave] = getMidiPitchParts(pitchA);
+    const [pitchBNote,, pitchBOctave] = getMidiPitchParts(pitchB);
     const octaveOffset = (pitchBOctave - pitchAOctave) * 7;
     return octaveOffset + LETTERS.indexOf(pitchBNote) - LETTERS.indexOf(pitchANote);
 }

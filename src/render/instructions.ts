@@ -1,7 +1,8 @@
 export enum InstructionType {
     path = 1,
     text,
-    circle
+    circle,
+    curve
 }
 
 export interface InstructionBase {

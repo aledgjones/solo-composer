@@ -1,6 +1,5 @@
 import Big from 'big.js';
 import { useMemo } from 'react';
-import { defaultEngravingConfig } from '../services/engraving';
 
 export type ConverterGenerator = (space: number) => Converter;
 

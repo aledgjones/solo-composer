@@ -3,7 +3,7 @@ import { Entry } from "../entries";
 import { Tone } from "../entries/tone";
 import { getStepsBetweenPitches } from "../playback/utils";
 
-interface Shunts {
+export interface Shunts {
     [toneKey: string]: boolean;
 }
 

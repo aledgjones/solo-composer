@@ -18,12 +18,11 @@ export function noteheadWidthFromDuration(baseLength?: NotationBaseDuration): nu
         case NotationBaseDuration.minim:
             return 1.15;
         case NotationBaseDuration.semibreve:
-            return 1.15;
+            return 1.6;
         default:
             return 0;
     }
 }
-
 
 function glyphFromDuration(baseLength?: NotationBaseDuration) {
     switch (baseLength) {
@@ -55,12 +54,12 @@ export function drawNotehead(x: number, y: number, pitchOffset: number, duration
     const shuntOffset = isShunted ? (stemDirection === StemDirection.up ? glyphWidth : -glyphWidth) : 0;
 
     const styles: TextStyles = { color: '#000000', justify: Justify.start, align: Align.middle, size: 4, font: `Music` };
-    instructions.push(buildText(`${key}-head`, styles, x + shuntOffset, y + pitchOffset, glyph));
+    instructions.push(buildText(`${key}-head`, styles, x + shuntOffset, y + (pitchOffset / 2), glyph));
 
     if (dotted) {
         const styles: CircleStyles = { color: '#000000' };
-        const shift = (pitchOffset * 2) % 2 === 0 ? -.5 : 0;
-        instructions.push(buildCircle(`${key}-dot`, styles, x + glyphWidth + (hasShunts ? glyphWidth : 0) + .5, y + pitchOffset + shift, .2));
+        const shift = (pitchOffset) % 2 === 0 ? -.5 : 0;
+        instructions.push(buildCircle(`${key}-dot`, styles, x + glyphWidth + (hasShunts ? glyphWidth : 0) + .5, y + (pitchOffset / 2) + shift, .2));
     }
 
     return instructions;

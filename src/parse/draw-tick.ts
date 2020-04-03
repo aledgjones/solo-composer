@@ -2,7 +2,7 @@ import { drawClef } from "../entries/clef";
 import { Clef } from "../entries/clef-defs";
 import { drawKeySignature, KeySignature } from "../entries/key-signature";
 import { drawTimeSignature, TimeSignature } from "../entries/time-signature";
-import { EntryType } from "../entries";
+import { EntryType, Entry } from "../entries";
 import { Stave } from "../services/stave";
 import { VerticalMeasurements } from "./measure-vertical-layout";
 import { EntriesByTick, entriesByTick } from "../services/track";
@@ -19,6 +19,14 @@ import { getStemDirection, stepsFromTop } from "./get-stem-direction";
 import { drawNoteStem } from "./draw-note-stem";
 import { getIsRest } from "./is-rest";
 import { getShuntedNoteheads } from "./get-shunted-noteheads";
+import { drawLedgerLines } from "./draw-ledger-lines";
+import { Tone } from "../entries/tone";
+
+export interface ToneDetails {
+    tone: Entry<Tone>;
+    offset: number;
+    isShunt: boolean;
+}
 
 export function drawTick(tick: number, isFirstBeat: boolean, x: number, y: number, widths: number[], verticalMeasurements: VerticalMeasurements, flowEntries: EntriesByTick, staves: Stave[], notationTracks: NotationTracks, config: EngravingConfig) {
     const output = [];
@@ -88,18 +96,25 @@ export function drawTick(tick: number, isFirstBeat: boolean, x: number, y: numbe
                 } else {
 
                     const stemDirection = getStemDirection(entry.tones, clef);
+                    const [hasShunts, shuntedNoteheads] = getShuntedNoteheads(entry.tones, stemDirection);
+                    const details: ToneDetails[] = entry.tones.map(tone => {
+                        return {
+                            tone,
+                            offset: stepsFromTop(tone, clef),
+                            isShunt: shuntedNoteheads[tone._key]
+                        }
+                    });
 
                     // only draw stems if the note is less tahn a semi-breve in length
                     if (duration && duration < NotationBaseDuration.semibreve) {
-                        output.push(drawNoteStem(x + widthUpTo(widths, WidthOf.noteSpacing), top, entry.tones, clef, stemDirection, `${trackKey}-${tick}-stem`));
+                        output.push(drawNoteStem(x + widthUpTo(widths, WidthOf.noteSpacing), top, details, stemDirection, `${trackKey}-${tick}-stem`));
                     }
-
-                    const [hasShunts, shuntedNoteheads] = getShuntedNoteheads(entry.tones, stemDirection);
-
-                    entry.tones.forEach(tone => {
-                        const offset = stepsFromTop(tone, clef) / 2;
-                        output.push(...drawNotehead(x + widthUpTo(widths, WidthOf.noteSpacing), top, offset, duration, isDotted, stemDirection, hasShunts, shuntedNoteheads[tone._key], `${tone._key}-${tick}-note`));
+                    
+                    details.forEach(detail => {
+                        output.push(...drawNotehead(x + widthUpTo(widths, WidthOf.noteSpacing), top, detail.offset, duration, isDotted, stemDirection, hasShunts, shuntedNoteheads[detail.tone._key], `${detail.tone._key}-${tick}-notehead`));
                     });
+
+                    output.push(...drawLedgerLines(x + widthUpTo(widths, WidthOf.noteSpacing), top, details, duration, stemDirection, `${trackKey}-${tick}-ledger-line`));
 
                 }
             }

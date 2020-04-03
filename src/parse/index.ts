@@ -27,12 +27,13 @@ import { getWrittenDurations } from "./get-written-durations";
 import { createBarline } from "../entries/barline";
 import { getConvertedConfig } from "./get-converted-config";
 import { getInstruments, getCounts } from "../services/instrument-utils";
+import { buildCurve } from "../render/curve";
 
 export function parse(score: Score, flowKey: FlowKey, mm: number): RenderInstructions {
 
     const flow = score.flows.byKey[flowKey];
 
-    const converter = getConverter(mm, score.engraving[LayoutType.score].space || defaultEngravingConfig.space);
+    const converter = getConverter(mm, score.engraving[LayoutType.score].space || defaultEngravingConfig.space, 2);
     const config = getConvertedConfig({ ...defaultEngravingConfig, ...score.engraving[LayoutType.score] }, converter);
 
     const instruments = getInstruments(score.players, score.instruments, flow);
