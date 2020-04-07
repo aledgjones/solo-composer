@@ -56,27 +56,36 @@ export function parse(score: Score, flowKey: FlowKey, mm: number): RenderInstruc
 
     const drawInstructions: Instruction<any>[] = [];
 
-    let notationWidth = 0;
+    const horizontalMeasurements: number[][] = [];
     for (let tick = 0; tick < flow.length; tick++) {
-        const widths = measureTick(tick, firstBeats[tick], flowEntriesByTick, staves, notationTracks, config);
-        const width = widths.reduce<number>((sum, width) => sum + width, 0);
-        drawInstructions.push(...drawTick(tick, firstBeats[tick], x + config.systemStartPadding + notationWidth, y, widths, verticalMeasurements, flowEntriesByTick, staves, notationTracks, config));
-        notationWidth += width;
+        horizontalMeasurements.push(measureTick(tick, firstBeats[tick], flowEntriesByTick, staves, notationTracks, config));
     }
+
+    for (let tick = 0; tick < flow.length; tick++) {
+        drawInstructions.push(...drawTick(tick, firstBeats[tick], x + config.systemStartPadding, y, horizontalMeasurements, verticalMeasurements, flowEntriesByTick, staves, notationTracks, config));
+    }
+
+    const totalWidth = horizontalMeasurements.reduce((out, tickWidths) => {
+        out = out + tickWidths.reduce((out, width) => {
+            out = out + width;
+            return out;
+        }, 0);
+        return out;
+    }, 0);
 
     drawInstructions.push(
         ...drawNames(config.framePadding.left, y, namesWidth, instruments, names, verticalMeasurements, config),
         ...drawBraces(x, y, verticalMeasurements),
         ...drawBrackets(x, y, verticalMeasurements, config),
         ...drawSubBrackets(x, y, verticalMeasurements),
-        ...drawStaves(x, y, notationWidth + finalBarline._bounds.width, staves, verticalMeasurements),
-        ...drawFinalBarline(x + notationWidth, y, staves, verticalMeasurements, finalBarline)
+        ...drawStaves(x, y, totalWidth + finalBarline._bounds.width, staves, verticalMeasurements),
+        ...drawFinalBarline(x + totalWidth, y, staves, verticalMeasurements, finalBarline)
     );
 
     return {
         space: converter.spaces.toPX(1),
         height: config.framePadding.top + verticalMeasurements.systemHeight + config.framePadding.bottom,
-        width: x + notationWidth + config.framePadding.right,
+        width: x + totalWidth + config.framePadding.right,
         entries: drawInstructions
     };
 

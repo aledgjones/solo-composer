@@ -55,7 +55,7 @@ export const RenderWriteMode: FC<Props> = (({ score }) => {
                         case InstructionType.curve: {
                             const curve = instruction as CurveInstruction;
                             const def: string[] = [];
-                            
+
                             const points = getControlPoints(curve.points[0], curve.points[1], curve.points[2]);
                             const [P0, P1, P2, P3, P4, P5] = points;
 
@@ -68,13 +68,13 @@ export const RenderWriteMode: FC<Props> = (({ score }) => {
 
                             // DEBUG
                             // return <>
-                            // <path key={curve.key} fill={curve.styles.color} d={def.join(" ")} />
-                            // {curve.points.map(point => {
-                            //     return <circle style={{zIndex: 1000}} cx={point.x * space} cy={point.y * space} r={0.25 * space} fill="green" />
-                            // })}
-                            // {points.map(point => {
-                            //     return <circle style={{zIndex: 1000}} cx={point.x * space} cy={point.y * space} r={0.25 * space} fill="red" />
-                            // })}
+                            //     <path key={curve.key} fill={curve.styles.color} d={def.join(" ")} />
+                            //     {curve.points.map(point => {
+                            //         return <circle style={{ zIndex: 1000 }} cx={point.x * space} cy={point.y * space} r={0.25 * space} fill="green" />
+                            //     })}
+                            //     {points.map(point => {
+                            //         return <circle style={{ zIndex: 1000 }} cx={point.x * space} cy={point.y * space} r={0.25 * space} fill="red" />
+                            //     })}
                             // </>
                         }
                         default:

@@ -9,32 +9,13 @@ import { getEntriesAtTick } from "./get-entry-at-tick";
 import { Barline, createBarline, BarlineType } from "../entries/barline";
 import { NotationTracks } from "./notation-track";
 import { getStepsBetweenPitches } from "../playback/utils";
-import { getStemDirection, StemDirection } from "./get-stem-direction";
+import { getStemDirection, Direction } from "./get-stem-direction";
 import { getIsRest } from "./is-rest";
-
-export enum WidthOf {
-    endRepeat,
-    clef,
-    barline,
-    key,
-    time,
-    startRepeat,
-    accidentals,
-    preNoteSlot,
-    noteSpacing
-}
-
-export function widthUpTo(widths: number[], upTo: WidthOf) {
-    let sum = 0;
-    for (let i = 0; i < upTo; i++) {
-        sum += widths[i];
-    }
-    return sum;
-}
+import { WidthOf } from "./sum-width-up-to";
 
 export function measureTick(tick: number, isFirstBeat: boolean, flowEntries: EntriesByTick, staves: Stave[], notationTracks: NotationTracks, config: EngravingConfig) {
 
-    const measurements: number[] = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.75];
+    const measurements: number[] = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.6];
 
     // barlines are sometimes implied by a change of key etc.
     // these facilitate measureing what is actually needed
@@ -73,7 +54,7 @@ export function measureTick(tick: number, isFirstBeat: boolean, flowEntries: Ent
         const entries = entriesByTick(stave.master.entries.order, stave.master.entries.byKey);
         const clef = getEntriesAtTick<Clef>(tick, entries, EntryType.clef).entries[0];
 
-        if (clef && clef._bounds.width > measurements[1]) {
+        if (clef && clef._bounds.width > measurements[WidthOf.clef]) {
             measurements[WidthOf.clef] = clef._bounds.width;
         }
 
@@ -86,7 +67,7 @@ export function measureTick(tick: number, isFirstBeat: boolean, flowEntries: Ent
                 if (!getIsRest(entry)) {
                     const stemDirection = getStemDirection(entry.tones, clef);
                     // we can only have a preNoteSlot if the stem direction is down
-                    if (stemDirection === StemDirection.down) {
+                    if (stemDirection === Direction.down) {
                         for (let i = 0; i < entry.tones.length; i++) {
                             const curr = entry.tones[i];
                             const next = entry.tones[i + 1];
