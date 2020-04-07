@@ -1,0 +1,79 @@
+.markdown-content {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+}
+
+.markdown-content h1, .markdown-content h2, .markdown-content h3, .markdown-content h4 {
+    margin-bottom: 20px;
+}
+
+.markdown-content p {
+    text-align: justify;
+    margin-bottom: 20px;
+    font-size: 14px;
+    padding: 0 20px;
+    margin-top: 20px;
+}
+
+.markdown-content p:last-child {
+    margin-bottom: 0;
+}
+
+.markdown-content h2 {
+    font-size: 14px;
+    font-weight: bold;
+    background-color: rgb(200,200,200);
+    padding: 20px;
+}
+
+.markdown-content h3 {
+    font-size: 14px;
+    font-weight: bold;
+    padding: 0 20px;
+}
+
+.markdown-content code {
+    padding: 1px 2px;
+    background-color: rgba(0,0,0,.1) !important;
+}
+
+.markdown-content pre code {
+    display: block;
+    padding: 20px;
+    border-left: 4px solid #ffffff;
+    background-color: rgba(0,0,0,.1) !important;
+    margin-bottom: 20px;
+}
+
+.markdown-content pre, .markdown-content pre * {
+    user-select: text;
+    cursor: text;
+}
+
+.markdown-content blockquote {
+    position: relative;
+    display: block;
+    padding: 20px;
+    margin: 0 0 20px 0;
+    line-height: 1.4em;
+}
+
+.markdown-content a:hover {
+    text-decoration: underline;
+}
+
+.markdown-content img {
+    width: 100%;
+}
+
+.markdown-content ul {
+    list-style: none;
+    margin: 0;
+    margin-bottom: 20px;
+    padding: 0 20px;
+}
+
+.markdown-content ol {
+    color: rgb(0,0,0,.7);
+    list-style: upper-roman;
+}

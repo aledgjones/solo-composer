@@ -14,6 +14,8 @@ import { Play } from '../play';
 
 import { Transport } from './transport';
 
+import { Changelog } from '../shared/changelog';
+
 import './shell.css';
 
 export const MainShell: FC = () => {
@@ -49,5 +51,7 @@ export const MainShell: FC = () => {
         {tab === TabState.setup && <Setup />}
         {tab === TabState.write && <Write settings={settings} onSettingsClose={closeSettings} />}
         {tab === TabState.play && <Play settings={settings} onSettingsClose={closeSettings} />}
+
+        <Changelog />
     </>;
 }

@@ -1,0 +1,24 @@
+.changelog__card {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    height: calc(100vh - 80px);
+}
+
+.changelog__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 48px;
+    padding: 0 20px;
+    border-bottom: 1px solid rgb(200,200,200);
+}
+
+.changelog__h2 {
+    font-size: 18px;
+}
+
+.changelog__content {
+    height: calc(100% - 48px);
+    overflow: auto;
+}
