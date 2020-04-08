@@ -14,23 +14,12 @@
     width: 250px;
     overflow: auto;
     padding: 8px;
-    border-right: 1px solid rgb(175, 175, 175);
 }
 
 .generic-settings__right-panel {
     position: relative;
     width: calc(100% - 250px);
     overflow: auto;
-}
-
-.generic-settings__header {
-    display: flex;
-    align-items: center;
-    padding: 0 20px;
-    height: 40px;
-    position: sticky;
-    top: 0;
-    z-index: 10;
 }
 
 .generic-settings__section {

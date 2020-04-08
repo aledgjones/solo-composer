@@ -1,11 +1,11 @@
-import React, { useCallback, CSSProperties, FC, useMemo, MouseEvent } from 'react';
-import Color from 'color';
+import React, { FC, useCallback, CSSProperties } from 'react';
 import { mdiCheck } from '@mdi/js';
 
-import { Icon } from './icon';
-import { merge } from '../utils/merge';
+import { merge } from '../../utils/merge';
+import { useForeground } from '../../utils/foreground';
+import { Icon } from '../icon';
 
-import './checkbox.css';
+import './styles.css';
 
 interface Props {
     id?: string;
@@ -16,18 +16,13 @@ interface Props {
     color: string;
     margin?: boolean;
     disabled?: boolean;
-
     onChange: (value: boolean) => void;
 }
 
 export const Checkbox: FC<Props> = ({ id, className, style, children, value, color, onChange, disabled, margin }) => {
 
-    const _onChange = useCallback((e: MouseEvent<HTMLDivElement>) => {
-        e.stopPropagation();
-        onChange(!value);
-    }, [value, onChange]);
-    
-    const iconColor = useMemo(() => Color(color).isDark() ? '#ffffff' : '#000000', [color]);
+    const onCheckboxChange = useCallback(() => onChange(!value), [value, onChange]);
+    const fg = useForeground(color);
 
     return <div
         id={id}
@@ -41,7 +36,7 @@ export const Checkbox: FC<Props> = ({ id, className, style, children, value, col
             className
         )}
         style={style}
-        onClick={_onChange}
+        onClick={onCheckboxChange}
     >
         <div
             className="ui-checkbox__inner"
@@ -50,7 +45,7 @@ export const Checkbox: FC<Props> = ({ id, className, style, children, value, col
                 borderColor: value ? color : undefined,
                 backgroundColor: value ? color : undefined
             }}>
-            {value && <Icon size={16} color={iconColor} className="ui-checkbox__icon" path={mdiCheck} />}
+            {value && <Icon size={16} color={fg} className="ui-checkbox__icon" path={mdiCheck} />}
         </div>
         {children && <div className="ui-checkbox__label">{children}</div>}
     </div>;

@@ -26,6 +26,14 @@
     visibility: visible;
 }
 
+.ui-icon__touch-target {
+    position: absolute;
+    height: 48px;
+    width: 48px;
+    top: calc(50% - 24px);
+    left: calc(50% - 24px);
+}
+
 .ui-icon--disabled {
     opacity: .4;
     pointer-events: none;

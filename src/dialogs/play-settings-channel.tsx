@@ -33,7 +33,7 @@ export const PlaySettingsChannel: FC<Props> = ({ i, channel, instruments, counts
 
     return <div className="play-settings__row">
         <div className={merge("play-settings__cell play-settings__channel", { 'play-settings__cell--unassigned': !channel.patchGroupName })}>
-            {channel.state === SamplerCurrentState.loading && <Spinner className="play-settings__spinner" size={18} color={THEME.primary[500].bg} max={1} value={channel.progress} />}
+            {channel.state === SamplerCurrentState.loading && <Spinner className="play-settings__spinner" size={18} color={THEME.primary[500].bg} percent={(channel.progress / 1) * 100} />}
             {channel.state === SamplerCurrentState.ready && i + 1}
         </div>
         <div className={merge("play-settings__cell play-settings__map", { 'play-settings__cell--unassigned': !channel.patchGroupName })}>{channel.patchGroupName || 'Unassigned'}</div>

@@ -5,7 +5,7 @@ import { mdiPlus } from '@mdi/js';
 import { Icon } from '../../ui';
 import { Flow, FlowKey } from '../../services/flow';
 import { FlowItem } from './flow-item';
-import { Selection, SelectionType } from '.';
+import { Selection } from '.';
 
 import './flow-list.css';
 
@@ -13,7 +13,7 @@ interface Props {
     flows: Flow[];
     selection: Selection;
 
-    onSelectFlow: (flowKey: FlowKey, type: SelectionType) => void;
+    onSelectFlow: (selection: Selection) => void;
     onCreateFlow: () => void;
     onRemoveFlow: (flowKey: FlowKey) => void;
     onAssignPlayer: (flowKey: FlowKey) => void;

@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useMemo, MouseEvent } from 'react';
+import React, { useCallback, useMemo, MouseEvent } from 'react';
 import { SortableElement } from 'react-sortable-hoc';
 import { mdiChevronDown, mdiPlus, mdiDeleteOutline, mdiChevronUp } from '@mdi/js';
 
@@ -9,7 +9,7 @@ import { InstrumentCounts } from '../../services/instrument-utils';
 import { THEME } from '../../const';
 import { InstrumentItem } from './instrument-item';
 import { Handle } from './handle';
-import { SelectionType } from '.';
+import { SelectionType, Selection } from '.';
 import { Text } from '../shared/text';
 
 import './player-item.css';
@@ -19,23 +19,24 @@ interface Props {
     instruments: Instruments;
     counts: InstrumentCounts;
     selected: boolean;
+    expanded: boolean;
 
-    onSelectPlayer: (playerKey: PlayerKey, type: SelectionType) => void;
+    onSelectPlayer: (selection: Selection) => void;
+    onToggleExpandPlayer: (playerKey: PlayerKey) => void;
     onAddInstrument: (playerKey: PlayerKey) => void;
     onRemovePlayer: (playerKey: PlayerKey) => void;
 }
 
 export const PlayerItem = SortableElement<Props>((props: Props) => {
 
-    const { player, instruments, counts, selected, onSelectPlayer, onAddInstrument, onRemovePlayer } = props;
+    const { player, instruments, counts, selected, expanded, onSelectPlayer, onToggleExpandPlayer, onAddInstrument, onRemovePlayer } = props;
 
-    const [expanded, setExpanded] = useState<boolean>(false);
     const onExpand = useCallback((e: MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
-        setExpanded(value => !value);
-    }, []);
+        onToggleExpandPlayer(player.key);
+    }, [onToggleExpandPlayer, player.key]);
 
-    const onSelect = useCallback(() => onSelectPlayer(player.key, SelectionType.player), [player.key, onSelectPlayer]);
+    const onSelect = useCallback(() => onSelectPlayer({key: player.key, type: SelectionType.player}), [player.key, onSelectPlayer]);
 
     const onRemove = useCallback((e: MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();

@@ -6,5 +6,5 @@ interface Props {
 }
 
 export const Option: FC<Props> = ({ children }) => {
-    return <>{children ? children : null}</>;
+    return <>{children}</>;
 }

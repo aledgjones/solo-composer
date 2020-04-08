@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useCallback } from 'react';
 import { mdiChevronDown } from '@mdi/js';
 
 import { Player, usePlayerName, usePlayerIcon } from '../../services/player';
@@ -25,11 +25,13 @@ export const PlayerControls: FC<Props> = ({ player, expanded, instruments, count
     const name = usePlayerName(player, instruments, counts);
     const icon = usePlayerIcon(player);
 
+    const toggle = useCallback(() => onToggleExpand(player.key), [onToggleExpand, player.key]);
+
     return <div className="player-controls">
         <div className="player-controls__header">
             <Icon style={{ marginRight: 16 }} size={24} color="#ffffff" path={icon} />
-            <Text style={{whiteSpace: 'pre'}} className="player-controls__name">{name}</Text>
-            <Icon style={{ marginLeft: 12, transform: `rotateZ(${expanded ? '180deg' : '0'})` }} size={24} color="#ffffff" path={mdiChevronDown} onClick={() => onToggleExpand(player.key)} />
+            <Text style={{ whiteSpace: 'pre' }} className="player-controls__name">{name}</Text>
+            <Icon style={{ marginLeft: 12, transform: `rotateZ(${expanded ? '180deg' : '0'})` }} size={24} color="#ffffff" path={mdiChevronDown} onClick={toggle} />
         </div>
         {expanded && <div className="player-controls__instruments">
             {player.instruments.map(instrumentKey => {

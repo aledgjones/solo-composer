@@ -2,6 +2,7 @@
   background-color: #232c32;
   margin-bottom: 8px;
   color: white;
+  border-radius: 3px;
 }
 
 .player-item__header {

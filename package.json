@@ -5,7 +5,7 @@
   "dependencies": {
     "@mdi/js": "4.8.95",
     "@types/big.js": "4.0.5",
-    "@types/color": "3.0.1",
+    "@types/color": "^3.0.1",
     "@types/jest": "24.9.1",
     "@types/lodash": "4.14.149",
     "@types/node": "13.5.0",
@@ -19,7 +19,8 @@
     "array-move": "2.2.1",
     "base64-arraybuffer": "0.2.0",
     "big.js": "5.2.2",
-    "color": "3.1.2",
+    "color": "^3.1.2",
+    "isemail": "^3.2.0",
     "lodash": "4.17.15",
     "pullstate": "1.9.0",
     "react": "16.12.0",

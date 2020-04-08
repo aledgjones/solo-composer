@@ -110,8 +110,8 @@ export const InstrumentTrack: FC<Props> = ({ color, instrument, staves, tracks, 
             window.removeEventListener('pointerup', end);
         }
 
-        window.addEventListener('pointermove', move);
-        window.addEventListener('pointerup', end);
+        window.addEventListener('pointermove', move, { passive: true });
+        window.addEventListener('pointerup', end, { passive: true });
 
     }, [ticks, flowKey, highestPitch, instrument.staves, slotHeight, staves, actions.score.instruments]);
 

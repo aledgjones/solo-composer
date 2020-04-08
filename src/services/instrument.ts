@@ -3,10 +3,8 @@ import { Store } from 'pullstate';
 import shortid from 'shortid';
 
 import { InstrumentDef } from './instrument-defs';
-import { PlayerState } from './player';
 import { StaveKey } from './stave';
 import { FlowKey } from './flow';
-import { ConfigState } from './config';
 import { TrackKey } from './track';
 import { ToneDef, createTone } from '../entries/tone';
 import { useAppState, State } from './state';
@@ -66,7 +64,7 @@ export const createInstrument = (def: InstrumentDef, staves: StaveKey[]): Instru
 }
 
 export function useCounts(): InstrumentCounts {
-    const { players, instruments, config } = useAppState<{ players: PlayerState, instruments: Instruments, config: ConfigState }>(s => ({
+    const { players, instruments, config } = useAppState(s => ({
         players: s.score.players,
         instruments: s.score.instruments,
         config: s.score.config

@@ -5,12 +5,11 @@ import { KeySignatureMode } from '../entries/key-signature';
 import { NotationBaseDuration } from '../parse/notation-track';
 import { getDefaultGroupings } from '../parse/get-default-groupings';
 import { useAppActions, useAppState } from './state';
-import { Score } from './score';
 
 export function useAutoSetup() {
 
     const actions = useAppActions();
-    const score = useAppState<Score>(s => s.score);
+    const score = useAppState(s => s.score);
 
     const flowKey = useMemo(() => {
         return score.flows.order[0];
@@ -18,7 +17,7 @@ export function useAutoSetup() {
 
     useEffect(() => {
         
-        actions.score.flows.setLength(flowKey, 4 * 12 * 4);
+        actions.score.flows.setLength(flowKey, 4 * 12 * 8);
 
         const def = instrumentDefs['strings.viola'];
         const instrumentKey = actions.score.instruments.create(def);
@@ -29,7 +28,7 @@ export function useAutoSetup() {
         actions.playback.sampler.load(channel, def);
         actions.playback.sampler.assignInstrument(instrumentKey, channel);
 
-        actions.score.flows.createTimeSignature({ beats: 2, beatType: 4, subdivisions: 12, groupings: getDefaultGroupings(4) }, 0, flowKey);
+        actions.score.flows.createTimeSignature({ beats: 4, beatType: 4, subdivisions: 12, groupings: getDefaultGroupings(4) }, 0, flowKey);
         actions.score.flows.createKeySignature({ mode: KeySignatureMode.minor, offset: 2 }, 0, flowKey);
         actions.score.flows.createAbsoluteTempo({ text: 'Allegro', beat: NotationBaseDuration.crotchet, dotted: 0, beatPerMinute: 120, textVisible: true, beatPerMinuteVisible: true, parenthesis: true }, 0, flowKey);
 

@@ -4,10 +4,12 @@
 }
 
 .ui-checkbox__inner {
+    box-sizing: border-box;
     position: relative;
     width: 20px;
     height: 20px;
     min-width: 20px;
+    border-radius: 3px;
     border: 2px solid;
     border-color: rgb(100, 100, 100);
     cursor: pointer;

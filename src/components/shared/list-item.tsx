@@ -11,7 +11,7 @@ interface Props {
 
 export const ListItem: FC<Props> = ({ selected, onClick, children }) => {
 
-    const { fg, bg } = useMemo(() => selected ? THEME.primary[500] : { bg: '#ffffff', fg: '#000000' }, [selected]);
+    const { fg, bg } = useMemo(() => selected ? THEME.primary[500] : { bg: undefined, fg: '#000000' }, [selected]);
 
     return <div className="list-item" style={{ backgroundColor: bg, color: fg }} onClick={onClick}>
         {children}

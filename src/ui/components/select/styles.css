@@ -4,23 +4,22 @@
     position: relative;
 }
 
-.ui-select--margin {
-    margin-bottom: 20px;
-}
-
-.ui-select__display {
-    flex-grow: 1;
-    padding-right: 12px;
-}
-
 .ui-select__input {
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     width: 100%;
     border: 1px solid rgb(175, 175, 175);
-    min-height: 36px;
-    padding: 0 12px;
+    border-radius: 3px;
+    min-height: 38px;
+    padding-right: 12px;
     cursor: pointer;
+}
+
+.ui-select__display {
+    margin: 0;
+    flex-grow: 1;
+    padding: 0 12px;
 }
 
 .ui-select__card {
@@ -34,7 +33,6 @@
     overflow: auto;
     padding: 8px 0;
     touch-action: pan-y;
-    z-index: 100000;
 }
 
 .ui-select__card * {
@@ -42,26 +40,23 @@
 }
 
 .ui-select__item {
-    cursor: pointer;
+    user-select: none;
     padding: 8px 12px;
+    cursor: pointer;
 }
 
 .ui-select__item:hover {
     background-color: rgba(0, 0, 0, .1);
 }
 
-.ui-select--disabled .ui-select__input {
-    color: rgb(84, 84, 84) !important;
-    border: 1px dashed rgb(175, 175, 175);
-    background-color: transparent !important;
-    cursor: default;
+.ui-select--margin {
+    margin-bottom: 20px;
+}
+
+.ui-select--disabled {
     pointer-events: none;
 }
 
-.ui-select--dark .ui-select__display {
-    color: white;
-}
-
-.ui-select--dark .ui-select__input {
-    border: 1px solid white !important;
+.ui-select--disabled .ui-select__input {
+    border: 1px dashed rgb(175,175,175);
 }

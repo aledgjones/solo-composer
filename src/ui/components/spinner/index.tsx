@@ -1,8 +1,9 @@
 import React, { CSSProperties, FC, useMemo } from 'react';
 import Big from 'big.js';
-import { merge } from '../utils/merge';
 
-import './spinner.css';
+import { merge } from '../../utils/merge';
+
+import './styles.css';
 
 interface Props {
     id?: string;
@@ -11,23 +12,22 @@ interface Props {
 
     size: number;
     color: string;
-    max?: number;
-    value?: number;
+    percent?: number;
 }
 
-export const Spinner: FC<Props> = ({ id, className, style, size, color, max, value }) => {
+export const Spinner: FC<Props> = ({ id, className, style, size, color, percent }) => {
 
     const [dashoffset, dasharray] = useMemo(() => {
-        if (max !== undefined && value !== undefined && max > 0) {
+        if (percent !== undefined) {
             const c = new Big(125.66); // circumference @ r=20;
-            const _value = new Big(value).div(max).times(c);
+            const _value = new Big(percent).div(100).times(c);
             return [c.minus(_value).toFixed(2), c.toFixed(2)];
         } else {
             return [undefined, undefined];
         }
-    }, [value, max]);
+    }, [percent]);
 
-    const animate = max === undefined && value === undefined;
+    const animate = percent === undefined;
 
     return <svg
         id={id}

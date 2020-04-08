@@ -20,11 +20,10 @@ import './shell.css';
 
 export const MainShell: FC = () => {
 
-    // useLogger();
     useAutoSetup();
 
     const actions = useAppActions();
-    const tab = useAppState<TabState>(s => s.ui.tab);
+    const tab = useAppState(s => s.ui.tab);
     const [settings, setSettings] = useState(false);
 
     const openSettings = useCallback(() => setSettings(true), []);

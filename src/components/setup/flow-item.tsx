@@ -16,7 +16,7 @@ interface Props {
     flow: Flow;
     selection: Selection;
 
-    onSelectFlow: (flowKey: FlowKey, type: SelectionType) => void;
+    onSelectFlow: (selection: Selection) => void;
     onRemoveFlow: (flowKey: FlowKey) => void;
     onAssignPlayer: (flowKey: FlowKey) => void;
     onRemovePlayer: (flowKey: FlowKey) => void;
@@ -34,7 +34,7 @@ export const FlowItem = SortableElement<Props>((props: Props) => {
         return !!selection && selection.type === SelectionType.player && flow.players.includes(selection.key);
     }, [selection, flow.players]);
 
-    const onSelect = useCallback(() => onSelectFlow(flow.key, SelectionType.flow), [flow.key, onSelectFlow]);
+    const onSelect = useCallback(() => onSelectFlow({ key: flow.key, type: SelectionType.flow }), [flow.key, onSelectFlow]);
     const onCheckboxChange = useCallback((value: boolean) => {
         if (value) {
             onAssignPlayer(flow.key);
@@ -48,7 +48,7 @@ export const FlowItem = SortableElement<Props>((props: Props) => {
         onRemoveFlow(flow.key);
     }, [onRemoveFlow, flow.key]);
 
-    const {bg, fg} = useMemo(() => {
+    const { bg, fg } = useMemo(() => {
         if (selected) {
             return THEME.primary[500];
         } else if (active) {

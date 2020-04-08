@@ -1,7 +1,9 @@
-import React, { MouseEvent, useCallback, FC, CSSProperties, useMemo } from 'react';
-import Color from 'color';
-import { merge } from '../utils/merge';
-import './icon.css';
+import React, { MouseEvent, FC, CSSProperties } from 'react';
+
+import { useAlpha } from '../../utils/set-alpha';
+import { merge } from '../../utils/merge';
+
+import './styles.css';
 
 interface Props {
     id?: string;
@@ -17,14 +19,14 @@ interface Props {
 }
 
 export const Icon: FC<Props> = ({ id, className, style, path, size, color, disabled, onClick }) => {
-    const _onClick = useCallback((e) => onClick && onClick(e), [onClick]);
-    const bg = useMemo(() => Color(color).alpha(.1).string(), [color]);
+
+    const bg = useAlpha(color, .1);
 
     return <div
         id={id}
         className={merge('ui-icon', { 'ui-icon--disabled': disabled, 'ui-icon--hover': !!onClick }, className)}
         style={{ width: size, height: size, ...style }}
-        onClick={_onClick}
+        onClick={onClick}
     >
         <div className="ui-icon__touch-target" />
         <svg className="ui-icon__svg" viewBox="0 0 24 24" style={{ width: size, height: size }}>

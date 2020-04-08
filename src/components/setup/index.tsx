@@ -1,5 +1,7 @@
 import React, { FC, useState, useMemo, useCallback } from 'react';
 
+import { useAppState, useAppActions } from '../../services/state';
+import { TabState } from '../../services/ui';
 import { PlayerType, PlayerKey } from '../../services/player';
 import { FlowKey } from '../../services/flow';
 import { InstrumentDef } from '../../services/instrument-defs';
@@ -12,8 +14,6 @@ import { RenderRegion } from '../shared/render-region';
 import { RenderWriteMode } from '../shared/render-write-mode';
 
 import './setup.css';
-import { useAppState, useAppActions } from '../../services/state';
-import { Score } from '../../services/score';
 
 export enum SelectionType {
     player = 1,
@@ -23,19 +23,20 @@ export enum SelectionType {
 
 export type Selection = { key: string, type: SelectionType } | null;
 
-interface Props {}
+interface Props { }
 
 export const Setup: FC<Props> = () => {
 
     const actions = useAppActions();
-    const score = useAppState<Score>(s => s.score);
+    const {score, expanded} = useAppState(s => {
+        return {
+            score: s.score,
+            expanded: s.ui.expanded[TabState.setup]
+        }
+    });
 
     const [selection, setSelection] = useState<Selection>(null);
     const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-
-    const onSelect = useCallback((key: string, type: SelectionType) => {
-        setSelection({ key, type });
-    }, []);
 
     // PLAYERS
 
@@ -76,10 +77,6 @@ export const Setup: FC<Props> = () => {
         setDialogOpen(false);
     }, []);
 
-    const onSortPlayers = useCallback((instruction) => {
-        actions.score.players.reorder(instruction);
-    }, [actions.score.players]);
-
     const counts = useCounts();
 
     // FLOWS
@@ -114,10 +111,6 @@ export const Setup: FC<Props> = () => {
         }
     }, [selection, actions.score.flows]);
 
-    const onSortFlows = useCallback((instruction) => {
-        actions.score.flows.reorder(instruction);
-    }, [actions.score.flows]);
-
     return <>
         <div className="setup">
             <PlayerList
@@ -125,17 +118,19 @@ export const Setup: FC<Props> = () => {
                 instruments={score.instruments}
                 counts={counts}
                 selection={selection}
+                expanded={expanded}
 
                 distance={5}
                 lockAxis="y"
                 useDragHandle
                 transitionDuration={200}
 
-                onSelectPlayer={onSelect}
+                onSelectPlayer={setSelection}
+                onToggleExpandPlayer={actions.ui.expanded.setup.toggle}
                 onCreatePlayer={onCreatePlayer}
                 onAddInstrument={onAddInstrument}
                 onRemovePlayer={onRemovePlayer}
-                onSortEnd={onSortPlayers}
+                onSortEnd={actions.score.players.reorder}
             />
             <div className="setup__middle">
                 <RenderRegion className="setup__view">
@@ -151,12 +146,12 @@ export const Setup: FC<Props> = () => {
                     useDragHandle
                     transitionDuration={200}
 
-                    onSelectFlow={onSelect}
+                    onSelectFlow={setSelection}
                     onCreateFlow={onCreateFlow}
                     onRemoveFlow={onRemoveFlow}
                     onAssignPlayer={onAssignPlayerToFlow}
                     onRemovePlayer={onRemovePlayerFromFlow}
-                    onSortEnd={onSortFlows}
+                    onSortEnd={actions.score.flows.reorder}
                 />
             </div>
         </div>

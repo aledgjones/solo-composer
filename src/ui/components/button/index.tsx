@@ -2,9 +2,9 @@ import React, { MouseEvent, CSSProperties, FC, useMemo } from 'react';
 
 import { merge } from '../../utils/merge';
 import { Spinner } from '../spinner';
+import { useForeground } from '../../utils/foreground';
 
 import './styles.css';
-import { useForeground } from '../../utils/foreground';
 
 interface Props {
     id?: string;
