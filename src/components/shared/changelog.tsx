@@ -8,7 +8,7 @@ import './changelog.css';
 
 export const Changelog = () => {
 
-    const [show, setShow] = useState(process.env.NODE_ENV === 'production');
+    const [show, setShow] = useState(true || process.env.NODE_ENV === 'production');
     const [md, setMd] = useState('');
 
     useEffect(() => {

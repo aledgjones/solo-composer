@@ -88,7 +88,7 @@ export function drawNote(x: number, y: number, isChord: boolean, tone: ToneDetai
     if (tone.tie !== Direction.none) {
 
         const startX = x + glyphWidth + (isChord ? .25 : 0);
-        const endX = x + tieWidth - (isChord ? .25 : 0);
+        const endX = x + tieWidth - (isChord ? .25 : 0) - (hasShunts ? glyphWidth : 0);
         const midX = startX + ((endX - startX) / 2);
 
         const startY = y + (tone.offset / 2) + tieYOffset(tone, isChord);

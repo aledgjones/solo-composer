@@ -17,7 +17,7 @@ export function useAutoSetup() {
 
     useEffect(() => {
         
-        actions.score.flows.setLength(flowKey, 4 * 12 * 8);
+        actions.score.flows.setLength(flowKey, 3 * 12 * 4);
 
         const def = instrumentDefs['strings.viola'];
         const instrumentKey = actions.score.instruments.create(def);

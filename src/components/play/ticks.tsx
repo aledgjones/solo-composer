@@ -7,9 +7,10 @@ import { getTicksPerBeat } from "../../parse/get-ticks-per-beat";
 import { EntriesByTick } from "../../services/track";
 import { merge } from '../../ui/utils/merge';
 import { getEntriesAtTick } from '../../parse/get-entry-at-tick';
+import { getBeatGroupingBoundries } from '../../parse/get-beat-group-boundries';
+import { getDefaultGroupings } from '../../parse/get-default-groupings';
 
 import './ticks.css';
-
 
 interface Props {
     ticks: Tick[];
@@ -17,9 +18,24 @@ interface Props {
 }
 
 export const Ticks: FC<Props> = ({ ticks, className }) => {
+
+    // we can merge ticks that arent beats to reduce the number of element created.
+    const merged = useMemo(() => {
+        return ticks.reduce<Tick[]>((out, tick) => {
+            if (!tick.isBeat) {
+                out[out.length - 1].width = out[out.length - 1].width + tick.width;
+            } else {
+                // make a copy else reference kept to original.
+                out.push({ ...tick });
+            }
+
+            return out;
+        }, []);
+    }, [ticks]);
+
     return <div className={merge("ticks", className)}>
-        {ticks.map((tick, i) => {
-            return <div key={i} style={{ width: tick.width }} className={merge('tick', { 'tick--first-beat': tick.isFirstBeat, 'tick--beat': tick.isBeat, 'tick--half-beat': tick.isHalfBeat })} />;
+        {merged.map((tick, i) => {
+            return <div key={i} style={{ width: tick.width }} className={merge('tick', { 'tick--first-beat': tick.isFirstBeat, 'tick--boundry': tick.isGroupingBoundry })} />;
         })}
     </div>;
 }
@@ -28,35 +44,45 @@ export interface Tick {
     x: number;
     width: number;
     isBeat: boolean;
-    isHalfBeat: boolean;
     isFirstBeat: boolean;
+    isGroupingBoundry: boolean;
 }
 
 export function useTicks(length: number, flowEntriesByTick: EntriesByTick, zoom: number): Tick[] {
     return useMemo(() => {
-        let timeSigResult;
+        
+        const CROTCHET_WIDTH = 72;
+
         const ticks = [];
+
+        let timeSigResult;
         let x = 0;
         for (let tick = 0; tick < length + 1; tick++) {
             const result = getEntriesAtTick<TimeSignature>(tick, flowEntriesByTick, EntryType.timeSignature);
             if (result.entries[0]) {
                 timeSigResult = result;
             }
-            const timeSigAt = timeSigResult?.at;
+            const timeSigAt = timeSigResult?.at || 0;
             const timeSig = timeSigResult?.entries[0];
 
             const ticksPerBeat = getTicksPerBeat(timeSig?.subdivisions, timeSig?.beatType);
-            const ticksPerQuaver = getTicksPerBeat(timeSig?.subdivisions, 8);
+            const ticksPerCrotchet = getTicksPerBeat(timeSig?.subdivisions, 4);
 
-            const width = Math.ceil((36 / ticksPerQuaver) * zoom);
+            const width = Math.ceil((CROTCHET_WIDTH / ticksPerCrotchet) * zoom);
+
             const isBeat = getIsBeat(tick, ticksPerBeat, timeSigAt);
-            const isHalfBeat = getIsBeat(tick, ticksPerQuaver, timeSigAt);
-            const isFirstBeat = getDistanceFromBarline(tick, ticksPerBeat, timeSigAt, timeSig?.beats) === 0;
+            const distanceFromBarline = getDistanceFromBarline(tick, ticksPerBeat, timeSigAt, timeSig?.beats);
+            const beatGroupingBoundries = getBeatGroupingBoundries(timeSigAt, ticksPerBeat, timeSig?.groupings || getDefaultGroupings(4));
 
-            ticks.push({ x, width, isBeat, isHalfBeat, isFirstBeat });
+            const isFirstBeat = distanceFromBarline === 0;
+            const isGroupingBoundry = beatGroupingBoundries.includes(tick);
+
+            ticks.push({ x, width, isBeat, isFirstBeat, isGroupingBoundry });
 
             x += width;
         }
+
         return ticks;
+
     }, [length, flowEntriesByTick, zoom]);
 }

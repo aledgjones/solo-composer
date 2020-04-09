@@ -32,7 +32,7 @@ export const Play: FC<Props> = ({ settings, onSettingsClose }) => {
     });
     const actions = useAppActions();
 
-    const [zoom] = useState<number>(1.5);
+    const [zoom] = useState<number>(1);
     const [flowKey, setFlowKey] = useState(score.flows.order[0]);
     const colors = useRainbow(score.players.order.length);
 

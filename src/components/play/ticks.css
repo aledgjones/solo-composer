@@ -9,7 +9,7 @@
     height: 100%;
 }
 
-.tick--half-beat:before {
+.tick:before {
     content: '';
     width: 2px;
     height: 25%;
@@ -19,10 +19,24 @@
     background-color: #464d52;
 }
 
-.tick--beat:before {
+.tick--boundry:before {
     height: 50%;
+}
+
+.tick:after {
+    content: '';
+    width: 2px;
+    height: 10%;
+    position: absolute;
+    left: calc(50% - 1px);
+    top: 0;
+    background-color: #464d52;
 }
 
 .tick:last-child:before, .tick--first-beat:before {
     height: 100%;
+}
+
+.tick:last-child:after {
+    display: none;
 }
