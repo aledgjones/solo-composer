@@ -68,7 +68,7 @@ export const InstrumentTrack: FC<Props> = ({ color, instrument, staves, tracks, 
         return `1px solid ${c}`;
     }, [color]);
 
-    const snap = 3;
+    const snap = 3; // this need to be generated based on the subdevisions (3/12 === semi-quaver)
     const slotHeight = 224 / 24;
     const highestPitch = toMidiPitchNumber('E5');
 
@@ -86,25 +86,19 @@ export const InstrumentTrack: FC<Props> = ({ color, instrument, staves, tracks, 
         const move = (e: any) => {
             const x = e.clientX - box.left;
             const duration = getTickFromXPosition(x, ticks, snap, false) - start;
-            if (duration >= snap) {
-                setNewbie(pre => {
-                    if (pre) {
-                        return { ...pre, duration }
-                    } else {
-                        return undefined;
-                    }
-                });
-            }
+            setNewbie(pre => {
+                if (pre) {
+                    return { ...pre, duration: duration >= snap ? duration : snap };
+                }
+            });
         }
 
         const end = (e: any) => {
             const x = e.clientX - box.left;
             const duration = getTickFromXPosition(x, ticks, snap, false) - start;
-            if (duration >= snap) {
-                const staveKey = instrument.staves[0];
-                const trackKey = staves[staveKey].tracks[0];
-                actions.score.instruments.createTone(flowKey, trackKey, { pitch, duration }, start);
-            }
+            const staveKey = instrument.staves[0];
+            const trackKey = staves[staveKey].tracks[0];
+            actions.score.instruments.createTone(flowKey, trackKey, { pitch, duration: duration >= snap ? duration : snap }, start);
             setNewbie(undefined);
             window.removeEventListener('pointermove', move);
             window.removeEventListener('pointerup', end);

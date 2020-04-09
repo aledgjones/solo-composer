@@ -35,6 +35,7 @@ function glyphFromDuration(baseLength?: NotationBaseDuration) {
 }
 
 function tieYOffset(tone: ToneDetails, isChord: boolean) {
+
     const isInsideStave = tone.offset >= 0 && tone.offset <= 8;
     const isOnLine = tone.offset % 2 === 0;
 
