@@ -8,15 +8,14 @@ import { useAutoSetup } from '../../services/auto-setup';
 
 import { Tabs, Tab, Icon } from '../../ui';
 
-import { Setup } from '../setup';
-import { Write } from '../write';
-import { Play } from '../play';
-
 import { Transport } from './transport';
-
 import { Changelog } from '../shared/changelog';
 
 import './shell.css';
+
+const Setup = React.lazy(() => import('../setup'));
+const Write = React.lazy(() => import('../write'));
+const Play = React.lazy(() => import('../play'));
 
 export const MainShell: FC = () => {
 

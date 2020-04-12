@@ -5,6 +5,7 @@ import { KeySignatureMode } from '../entries/key-signature';
 import { NotationBaseDuration } from '../parse/notation-track';
 import { getDefaultGroupings } from '../parse/get-default-groupings';
 import { useAppActions, useAppState } from './state';
+import { TabState } from './ui';
 
 export function useAutoSetup() {
 
@@ -17,6 +18,8 @@ export function useAutoSetup() {
 
     useEffect(() => {
         
+        actions.ui.tab.set(TabState.play);
+
         actions.score.flows.setLength(flowKey, 4 * 12 * 4);
 
         const def = instrumentDefs['strings.viola'];
@@ -33,4 +36,5 @@ export function useAutoSetup() {
         actions.score.flows.createAbsoluteTempo({ text: 'Allegro', beat: NotationBaseDuration.crotchet, dotted: 0, beatPerMinute: 120, textVisible: true, beatPerMinuteVisible: true, parenthesis: true }, 0, flowKey);
 
     }, [actions.score.instruments, actions.score.players, actions.score.flows, actions.playback.sampler, flowKey]);
+
 }

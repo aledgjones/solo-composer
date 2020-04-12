@@ -8,7 +8,7 @@ import { Flow, FlowKey } from '../../services/flow';
 
 import { Icon, Checkbox } from '../../ui';
 import { Handle } from './handle';
-import { SelectionType, Selection } from '.';
+import { SelectionType, Selection } from "./selection";
 
 import './flow-item.css';
 

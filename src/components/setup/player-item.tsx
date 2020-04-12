@@ -9,7 +9,7 @@ import { InstrumentCounts } from '../../services/instrument-utils';
 import { THEME } from '../../const';
 import { InstrumentItem } from './instrument-item';
 import { Handle } from './handle';
-import { SelectionType, Selection } from '.';
+import { SelectionType, Selection } from "./selection";
 import { Text } from '../shared/text';
 
 import './player-item.css';
@@ -36,14 +36,14 @@ export const PlayerItem = SortableElement<Props>((props: Props) => {
         onToggleExpandPlayer(player.key);
     }, [onToggleExpandPlayer, player.key]);
 
-    const onSelect = useCallback(() => onSelectPlayer({key: player.key, type: SelectionType.player}), [player.key, onSelectPlayer]);
+    const onSelect = useCallback(() => onSelectPlayer({ key: player.key, type: SelectionType.player }), [player.key, onSelectPlayer]);
 
     const onRemove = useCallback((e: MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
         onRemovePlayer(player.key);
     }, [onRemovePlayer, player.key]);
 
-    const {fg, bg} = useMemo(() => {
+    const { fg, bg } = useMemo(() => {
         if (selected) {
             return THEME.primary[500];
         } else {

@@ -7,7 +7,7 @@ import { Player, PlayerKey } from '../../services/player';
 import { Instruments } from '../../services/instrument';
 import { InstrumentCounts } from '../../services/instrument-utils';
 import { PlayerItem } from './player-item';
-import { Selection } from '.';
+import { Selection } from  "./selection";
 
 import './player-list.css';
 

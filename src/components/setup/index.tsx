@@ -7,6 +7,8 @@ import { FlowKey } from '../../services/flow';
 import { InstrumentDef } from '../../services/instrument-defs';
 import { useCounts } from '../../services/instrument';
 
+import { Selection, SelectionType } from './selection';
+
 import { PlayerList } from './player-list';
 import { FlowList } from './flow-list';
 import { InstrumentPicker } from './instrument-picker';
@@ -15,17 +17,9 @@ import { RenderWriteMode } from '../shared/render-write-mode';
 
 import './setup.css';
 
-export enum SelectionType {
-    player = 1,
-    flow,
-    layout
-}
-
-export type Selection = { key: string, type: SelectionType } | null;
-
 interface Props { }
 
-export const Setup: FC<Props> = () => {
+const Setup: FC<Props> = () => {
 
     const actions = useAppActions();
     const {score, expanded} = useAppState(s => {
@@ -158,3 +152,5 @@ export const Setup: FC<Props> = () => {
         {dialogOpen && <InstrumentPicker onSelect={onSelectInstrument} onCancel={onCancelInstrument} />}
     </>;
 }
+
+export default Setup;

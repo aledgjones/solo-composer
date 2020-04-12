@@ -5,7 +5,7 @@ import { mdiPlus } from '@mdi/js';
 import { Icon } from '../../ui';
 import { Flow, FlowKey } from '../../services/flow';
 import { FlowItem } from './flow-item';
-import { Selection } from '.';
+import { Selection } from "./selection";
 
 import './flow-list.css';
 

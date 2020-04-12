@@ -18,7 +18,7 @@ export interface UiState {
 
 export const uiEmptyState = (): UiState => {
     return {
-        tab: TabState.write,
+        tab: TabState.setup,
         expanded: {
             [TabState.setup]: {},
             [TabState.play]: {}

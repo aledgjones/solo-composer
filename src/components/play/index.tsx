@@ -1,18 +1,21 @@
 import React, { FC, useState, useMemo } from 'react';
 import ScrollContainer from 'react-indiana-drag-scroll';
 
+import { THEME } from '../../const';
+
+import Select from '@ui/components/select';
+import Option from '@ui/components/option';
+import useRainbow from '@ui/hooks/use-rainbow';
+
 import { useAppState, useAppActions } from '../../services/state';
 import { TabState } from '../../services/ui';
-
-import { Select, Option } from '../../ui';
-import { THEME } from '../../const';
-import { useRainbow } from '../../ui/utils/rainbow';
-
 import { useCounts } from '../../services/instrument';
-import { PlayerControls } from './player-contols';
-import { useTicks, Ticks } from './ticks';
-import { PlayerTrack } from './player-track';
 import { entriesByTick } from '../../services/track';
+
+import { useTicks, Ticks } from './ticks';
+import { PlayerControls } from './player-contols';
+import { PlayerTrack } from './player-track';
+
 import { PlaySettings } from '../../dialogs/play-settings';
 
 import './play.css';
@@ -22,7 +25,7 @@ interface Props {
     onSettingsClose: () => void;
 }
 
-export const Play: FC<Props> = ({ settings, onSettingsClose }) => {
+const Play: FC<Props> = ({ settings, onSettingsClose }) => {
 
     const { score, expanded } = useAppState(s => {
         return {
@@ -86,3 +89,5 @@ export const Play: FC<Props> = ({ settings, onSettingsClose }) => {
         {settings && <PlaySettings onClose={() => onSettingsClose()} />}
     </>;
 }
+
+export default Play;

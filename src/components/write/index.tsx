@@ -12,7 +12,7 @@ interface Props {
     onSettingsClose: () => void;
 }
 
-export const Write: FC<Props> = ({ settings, onSettingsClose }) => {
+const Write: FC<Props> = ({ settings, onSettingsClose }) => {
 
     const actions = useAppActions();
     const score = useAppState(s => s.score);
@@ -27,3 +27,5 @@ export const Write: FC<Props> = ({ settings, onSettingsClose }) => {
         {settings && <EngravingSettings config={score.engraving} onClose={() => onSettingsClose()} onUpdate={(layout, instruction) => actions.score.engraving.set(layout, instruction)} />}
     </>;
 }
+
+export default Write;
