@@ -1,8 +1,9 @@
 import React, { FC, useMemo } from 'react';
 import ScrollContainer from 'react-indiana-drag-scroll';
 
+import { merge } from 'solo-ui';
+
 import { THEME } from '../../const';
-import { merge } from '../../ui/utils/merge';
 
 import './render-region.css';
 

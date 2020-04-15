@@ -1,12 +1,12 @@
 import React, { useCallback, useMemo, MouseEvent } from 'react';
 import { SortableElement } from 'react-sortable-hoc';
-import { mdiDeleteOutline, mdiFileDocumentBoxOutline } from '@mdi/js';
+import { mdiDeleteOutline, mdiFileDocumentOutline } from '@mdi/js';
 
 import { THEME } from '../../const';
 
 import { Flow, FlowKey } from '../../services/flow';
 
-import { Icon, Checkbox } from '../../ui';
+import { Icon, Checkbox } from 'solo-ui';
 import { Handle } from './handle';
 import { SelectionType, Selection } from "./selection";
 
@@ -61,7 +61,7 @@ export const FlowItem = SortableElement<Props>((props: Props) => {
     return <div className="flow-item" style={{ backgroundColor: bg, color: fg }} onClick={onSelect}>
         <div className="flow-item__header">
             <Handle>
-                <Icon style={{ marginRight: 16 }} path={mdiFileDocumentBoxOutline} size={24} color={fg} />
+                <Icon style={{ marginRight: 16 }} path={mdiFileDocumentOutline} size={24} color={fg} />
             </Handle>
             <span className="flow-item__name">{flow.title}</span>
             {selected && <>

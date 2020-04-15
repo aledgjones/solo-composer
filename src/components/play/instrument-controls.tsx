@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
 import { mdiPiano } from '@mdi/js';
 
+import { Icon } from 'solo-ui';
+
 import { useInstrumentName, Instrument } from '../../services/instrument';
-import { Icon } from '../../ui';
 import { Keyboard } from './keyboard';
 import { Text } from '../shared/text';
 

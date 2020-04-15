@@ -2,7 +2,8 @@ import React from 'react';
 import { SortableContainer } from 'react-sortable-hoc';
 import { mdiPlus } from '@mdi/js';
 
-import { Icon } from '../../ui';
+import { Icon } from 'solo-ui';
+
 import { Player, PlayerKey } from '../../services/player';
 import { Instruments } from '../../services/instrument';
 import { InstrumentCounts } from '../../services/instrument-utils';

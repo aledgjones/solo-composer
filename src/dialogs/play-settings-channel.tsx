@@ -1,16 +1,16 @@
 import React, { FC } from 'react';
 import { mdiChevronRight } from '@mdi/js';
 
+import { Spinner, Icon, merge } from 'solo-ui';
+
+import { THEME } from '../const';
 import { Channel } from '../services/sampler';
 import { useInstrumentName, Instruments } from '../services/instrument';
-import { merge } from '../ui/utils/merge';
-import { Spinner, Icon } from '../ui';
-import { THEME } from '../const';
+import { useAppActions } from '../services/state';
+import { InstrumentCounts } from '../services/instrument-utils';
 import { SamplerCurrentState } from '../playback/sampler';
 import { Expressions } from '../playback/expressions';
 import { Text } from '../components/shared/text';
-import { useAppActions } from '../services/state';
-import { InstrumentCounts } from '../services/instrument-utils';
 
 interface Props {
     i: number;

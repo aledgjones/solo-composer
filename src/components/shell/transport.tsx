@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { mdiPlay, mdiStop, mdiMetronome, mdiFastForward, mdiRewind, mdiSkipPrevious } from '@mdi/js';
 
-import { Icon } from '../../ui';
+import { Icon } from 'solo-ui';
 
 import './transport.css';
 

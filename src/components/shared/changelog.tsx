@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Backdrop, Card, Icon } from '../../ui';
-import { MarkdownContent } from '../../ui/widgets/markdown-content';
-import { THEME } from '../../const';
 import { mdiClose } from '@mdi/js';
+
+import { Backdrop, Card, Icon, MarkdownContent } from 'solo-ui';
+
+import { THEME } from '../../const';
 
 import './changelog.css';
 
@@ -20,7 +21,7 @@ export const Changelog = () => {
     }, []);
 
     if (show) {
-        return <Backdrop visible={true}>
+        return <Backdrop open={true}>
             <Card className="changelog__card">
                 <div className="changelog__head">
                     <h2 className="changelog__h2">About</h2>

@@ -1,21 +1,16 @@
 import React, { FC, useState, useMemo } from 'react';
 import ScrollContainer from 'react-indiana-drag-scroll';
 
+import { Select, Option, useRainbow } from 'solo-ui';
+
 import { THEME } from '../../const';
-
-import Select from '@ui/components/select';
-import Option from '@ui/components/option';
-import useRainbow from '@ui/hooks/use-rainbow';
-
 import { useAppState, useAppActions } from '../../services/state';
 import { TabState } from '../../services/ui';
 import { useCounts } from '../../services/instrument';
 import { entriesByTick } from '../../services/track';
-
 import { useTicks, Ticks } from './ticks';
 import { PlayerControls } from './player-contols';
 import { PlayerTrack } from './player-track';
-
 import { PlaySettings } from '../../dialogs/play-settings';
 
 import './play.css';
@@ -86,7 +81,7 @@ const Play: FC<Props> = ({ settings, onSettingsClose }) => {
 
         </ScrollContainer>
 
-        {settings && <PlaySettings onClose={() => onSettingsClose()} />}
+        <PlaySettings open={settings} onClose={() => onSettingsClose()} />
     </>;
 }
 

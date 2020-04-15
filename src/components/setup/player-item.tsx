@@ -2,7 +2,8 @@ import React, { useCallback, useMemo, MouseEvent } from 'react';
 import { SortableElement } from 'react-sortable-hoc';
 import { mdiChevronDown, mdiPlus, mdiDeleteOutline, mdiChevronUp } from '@mdi/js';
 
-import { Icon } from '../../ui';
+import { Icon } from 'solo-ui';
+
 import { Player, PlayerType, usePlayerName, usePlayerIcon, PlayerKey } from '../../services/player';
 import { Instruments } from '../../services/instrument';
 import { InstrumentCounts } from '../../services/instrument-utils';

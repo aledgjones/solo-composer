@@ -1,9 +1,10 @@
 import React, { FC, useMemo } from 'react';
 import { mdiChevronRight } from '@mdi/js';
 
+import { Icon } from 'solo-ui';
+
 import { THEME } from '../../const';
 import { Instrument, useInstrumentName } from '../../services/instrument';
-import { Icon } from '../../ui';
 import { Text } from '../shared/text';
 
 import './instrument-item.css';

@@ -10,7 +10,8 @@ Version numbers are for reference only for now and will follow Semver when more 
 - <label type="changed"></label> Updated tick markings to more clearly show beat groupings.
 
 ### UI
-- <label type="changed"></label> Updated the style to be rounder in design borrowing components from another project
+- <label type="changed"></label> Pulled UI elements into seperate project.
+- <label type="changed"></label> Updated the style to be rounder in design.
 
 ### Parsing
 - <label type="changed"></label> Implemented more rules for ties (multiple adjacent pitches are still broken)

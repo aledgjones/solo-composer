@@ -1,12 +1,12 @@
-import React, { FC, useState, useEffect, useCallback } from 'react';
-import { THEME } from '../../const';
-import { mdiSettingsOutline } from '@mdi/js';
+import React, { FC, useState, useEffect, useCallback, Suspense } from 'react';
+import { mdiCogOutline } from '@mdi/js';
 
+import { Tabs, Tab, Icon } from 'solo-ui';
+
+import { THEME } from '../../const';
 import { useAppActions, useAppState } from '../../services/state';
 import { TabState } from '../../services/ui';
 import { useAutoSetup } from '../../services/auto-setup';
-
-import { Tabs, Tab, Icon } from '../../ui';
 
 import { Transport } from './transport';
 import { Changelog } from '../shared/changelog';
@@ -43,12 +43,14 @@ export const MainShell: FC = () => {
             </Tabs>
             <Transport />
             <div className="main-shell__topbar-right">
-                <Icon path={mdiSettingsOutline} size={24} color="#ffffff" onClick={openSettings} />
+                <Icon path={mdiCogOutline} size={24} color="#ffffff" onClick={openSettings} />
             </div>
         </div>
-        {tab === TabState.setup && <Setup />}
-        {tab === TabState.write && <Write settings={settings} onSettingsClose={closeSettings} />}
-        {tab === TabState.play && <Play settings={settings} onSettingsClose={closeSettings} />}
+        <Suspense fallback={null}>
+            {tab === TabState.setup && <Setup />}
+            {tab === TabState.write && <Write settings={settings} onSettingsClose={closeSettings} />}
+            {tab === TabState.play && <Play settings={settings} onSettingsClose={closeSettings} />}
+        </Suspense>
 
         <Changelog />
     </>;

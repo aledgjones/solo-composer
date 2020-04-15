@@ -2,7 +2,8 @@ import React from 'react';
 import { SortableContainer } from 'react-sortable-hoc';
 import { mdiPlus } from '@mdi/js';
 
-import { Icon } from '../../ui';
+import { Icon } from 'solo-ui';
+
 import { Flow, FlowKey } from '../../services/flow';
 import { FlowItem } from './flow-item';
 import { Selection } from "./selection";

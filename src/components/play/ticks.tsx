@@ -1,11 +1,13 @@
 import React, { FC, useMemo } from 'react';
+
+import { merge } from 'solo-ui';
+
 import { EntryType } from "../../entries";
 import { TimeSignature } from "../../entries/time-signature";
 import { getDistanceFromBarline } from "../../parse/get-distance-from-barline";
 import { getIsBeat } from "../../parse/get-is-beat";
 import { getTicksPerBeat } from "../../parse/get-ticks-per-beat";
 import { EntriesByTick } from "../../services/track";
-import { merge } from '../../ui/utils/merge';
 import { getEntriesAtTick } from '../../parse/get-entry-at-tick';
 import { getBeatGroupingBoundries } from '../../parse/get-beat-group-boundries';
 import { getDefaultGroupings } from '../../parse/get-default-groupings';

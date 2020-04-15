@@ -1,4 +1,5 @@
-import { isString } from 'lodash';
+import isString from 'lodash.isstring';
+
 export type Pitch = string | number;
 
 const REGEX = /^([a-gA-G])(#{1,}|b{1,}|x{1,}|)(-?\d*)\s*(.*)\s*$/;

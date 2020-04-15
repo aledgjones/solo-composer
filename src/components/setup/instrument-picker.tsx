@@ -1,10 +1,10 @@
 import React, { FC, useState } from 'react';
 import { mdiChevronRight } from '@mdi/js';
 
-import { InstrumentDef, useInstrumentList, getFirstInstrumentDefFromPartialPath } from '../../services/instrument-defs';
-import { THEME } from '../../const';
+import { Card, Backdrop, Icon, Button } from 'solo-ui';
 
-import { Card, Backdrop, Icon, Button } from '../../ui';
+import { THEME } from '../../const';
+import { InstrumentDef, useInstrumentList, getFirstInstrumentDefFromPartialPath } from '../../services/instrument-defs';
 import { ListItem } from '../shared/list-item';
 
 import './instrument-picker.css';
@@ -21,7 +21,7 @@ export const InstrumentPicker: FC<Props> = ({ onSelect, onCancel }) => {
 
   const { bg, fg } = THEME.primary[500];
 
-  return <Backdrop visible={true}>
+  return <Backdrop open={true}>
     <Card animate className="instrument-picker">
       <div className="instrument-picker__sections">
         {lists.map((list, i) => {

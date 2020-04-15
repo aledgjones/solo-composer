@@ -24,7 +24,7 @@ const Write: FC<Props> = ({ settings, onSettingsClose }) => {
             </RenderRegion>
         </div>
 
-        {settings && <EngravingSettings config={score.engraving} onClose={() => onSettingsClose()} onUpdate={(layout, instruction) => actions.score.engraving.set(layout, instruction)} />}
+        <EngravingSettings open={settings} config={score.engraving} onClose={() => onSettingsClose()} onUpdate={(layout, instruction) => actions.score.engraving.set(layout, instruction)} />
     </>;
 }
 

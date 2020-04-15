@@ -1,4 +1,5 @@
 import React, { FC, useCallback, PointerEvent, useState, useMemo } from 'react';
+import Color from 'color';
 
 import { Instrument } from '../../services/instrument';
 import { background } from './track-background';
@@ -10,7 +11,6 @@ import { toMidiPitchNumber, Pitch, toMidiPitchString } from '../../playback/util
 import { Tracks } from '../../services/track';
 import { useAppActions } from '../../services/state';
 import { FlowKey } from '../../services/flow';
-import Color from 'color';
 
 import './instrument-track.css';
 

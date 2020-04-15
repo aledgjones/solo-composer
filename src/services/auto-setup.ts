@@ -35,6 +35,6 @@ export function useAutoSetup() {
         actions.score.flows.createKeySignature({ mode: KeySignatureMode.minor, offset: 2 }, 0, flowKey);
         actions.score.flows.createAbsoluteTempo({ text: 'Allegro', beat: NotationBaseDuration.crotchet, dotted: 0, beatPerMinute: 120, textVisible: true, beatPerMinuteVisible: true, parenthesis: true }, 0, flowKey);
 
-    }, [actions.score.instruments, actions.score.players, actions.score.flows, actions.playback.sampler, flowKey]);
+    }, [actions.score.instruments, actions.score.players, actions.score.flows, actions.playback.sampler, actions.ui.tab, flowKey]);
 
 }

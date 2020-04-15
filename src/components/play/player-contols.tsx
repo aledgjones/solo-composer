@@ -1,12 +1,13 @@
 import React, { FC, useCallback } from 'react';
 import { mdiChevronDown } from '@mdi/js';
 
+import { Icon } from 'solo-ui';
+
 import { Player, usePlayerName, usePlayerIcon } from '../../services/player';
 import { InstrumentCounts } from '../../services/instrument-utils';
 import { Instruments } from '../../services/instrument';
 import { InstrumentControls } from './instrument-controls';
 import { Text } from '../shared/text';
-import { Icon } from '../../ui';
 
 import './player-controls.css';
 

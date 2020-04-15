@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { MainShell } from './components/shell';
 import * as serviceWorker from './serviceWorker';
-import 'app-reset/app-reset.css';
-import './ui/index.css';
+
 import './assets/fonts.css';
+import 'solo-ui/dist/solo-ui.cjs.development.css';
 
 ReactDOM.render(<MainShell />, document.getElementById('root'));
 
