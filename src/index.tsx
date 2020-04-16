@@ -4,7 +4,6 @@ import { MainShell } from './components/shell';
 import * as serviceWorker from './serviceWorker';
 
 import './assets/fonts.css';
-import 'solo-ui/dist/solo-ui.cjs.development.css';
 
 ReactDOM.render(<MainShell />, document.getElementById('root'));
 

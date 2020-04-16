@@ -16,13 +16,14 @@ import { RenderRegion } from '../shared/render-region';
 import { RenderWriteMode } from '../shared/render-write-mode';
 
 import './setup.css';
+import { Dialog } from 'solo-ui';
 
 interface Props { }
 
 const Setup: FC<Props> = () => {
 
     const actions = useAppActions();
-    const {score, expanded} = useAppState(s => {
+    const { score, expanded } = useAppState(s => {
         return {
             score: s.score,
             expanded: s.ui.expanded[TabState.setup]
@@ -149,7 +150,11 @@ const Setup: FC<Props> = () => {
                 />
             </div>
         </div>
-        {dialogOpen && <InstrumentPicker onSelect={onSelectInstrument} onCancel={onCancelInstrument} />}
+        <Dialog width={900} open={dialogOpen}>
+            {
+                () => <InstrumentPicker onSelect={onSelectInstrument} onCancel={onCancelInstrument} />
+            }
+        </Dialog>
     </>;
 }
 

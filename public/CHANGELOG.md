@@ -4,7 +4,7 @@ This is very much an early stage work in progress. Most features are not yet imp
 
 Version numbers are for reference only for now and will follow Semver when more things are implemented. Changelog entries start with the different section of the application (tabs) for overarching UI / feature changes. This is followed by implementation details (playback, parsing etc...)
 
-## [0.2.0] - 2020-04-08
+## [0.2.0] - 2020-04-16
 ### Play
 - <label type="changed"></label> Updated tick markings for better performance.
 - <label type="changed"></label> Updated tick markings to more clearly show beat groupings.

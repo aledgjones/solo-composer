@@ -1,53 +1,53 @@
 .play {
-  position: relative;
-  height: calc(100vh - 48px);
-  overflow: auto;
+    position: relative;
+    height: calc(100vh - 48px);
+    overflow: auto;
 }
 
 .play__x-fixed {
-  position: sticky;
-  left: 0;
-  width: 342px;
-  z-index: 2;
+    position: sticky;
+    left: 0;
+    width: 342px;
+    z-index: 2;
 }
 
 .play__header-select {
-  position: sticky;
-  top: 0;
-  height: 48px;
-  width: 100%;
-  background-color: #13191e;
-  z-index: 10;
+    position: sticky;
+    top: 0;
+    height: 48px;
+    width: 100%;
+    background-color: #13191e;
+    z-index: 10;
 }
 
-.play__select .ui-select__input {
-  height: 48px;
-  padding: 0 16px 0 12px;
-  border: none !important;
-  color: white;
+.play__select .ui-select__container {
+    padding: 0 4px 0 12px;
+    height: 48px;
+    border: none !important;
+    color: white;
 }
 
 .play__scrollable {
-  position: absolute;
-  top: 0;
-  padding-left: 342px;
-  min-width: 100vw;
-  min-height: 100%;
-  z-index: 1;
+    position: absolute;
+    top: 0;
+    padding-left: 342px;
+    min-width: 100vw;
+    min-height: 100%;
+    z-index: 1;
 }
 
 .play__ticks {
-  position: sticky;
-  top: 0;
-  background-color: #13191e;
-  z-index: 1;
+    position: sticky;
+    top: 0;
+    background-color: #13191e;
+    z-index: 1;
 }
 
 .play__track-area {
-  padding-top: 8px;
+    padding-top: 8px;
 }
 
 .play__player-controls {
-  background-color: #182127;
-  padding: 8px 0 0 8px;
+    background-color: #182127;
+    padding: 8px 0 0 8px;
 }

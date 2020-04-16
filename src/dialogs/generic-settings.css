@@ -7,7 +7,7 @@
 
 .generic-settings__content {
     display: flex;
-    height: calc(100% - 56px);
+    height: calc(100vh - 186px);
 }
 
 .generic-settings__left-panel {
@@ -39,8 +39,16 @@
     flex-grow: 1;
 }
 
+.generic-settings__input-with-img {
+    display: flex;
+    align-items: flex-start;
+}
+
+.generic-settings__input-with-img .ui-input {
+    flex-grow: 1;
+}
+
 .generic-settings__example {
-    float: left;
     margin-right: 20px;
     border: 1px solid rgb(175, 175, 175);
 }

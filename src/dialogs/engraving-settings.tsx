@@ -52,12 +52,12 @@ export const EngravingSettings: FC<Props> = ({ open, config, onUpdate, onClose }
 
                             <div className="generic-settings__section">
                                 <Subheader>Approach</Subheader>
-                                <Select className="ui-select--margin" color={bg} label="Ensemble type" value={engraving.bracketing} onChange={(val: BracketingType) => onUpdate(key, { bracketing: val })}>
+                                <Select margin className="ui-select--margin" color={bg} label="Ensemble type" value={engraving.bracketing} onChange={(val: BracketingType) => onUpdate(key, { bracketing: val })}>
                                     <Option value={BracketingType.none} displayAs="None">None</Option>
                                     <Option value={BracketingType.orchestral} displayAs="Orchestral">Orchestral</Option>
                                     <Option value={BracketingType.smallEnsemble} displayAs="Small ensemble">Small ensemble</Option>
                                 </Select>
-                                <Select className="ui-select--margin" color={bg} label="Bracket groups with only one instrument" value={engraving.bracketSingleStaves} onChange={(val: boolean) => onUpdate(key, { bracketSingleStaves: val })}>
+                                <Select margin className="ui-select--margin" color={bg} label="Bracket groups with only one instrument" value={engraving.bracketSingleStaves} onChange={(val: boolean) => onUpdate(key, { bracketSingleStaves: val })}>
                                     <Option value={true} displayAs="Use bracket">Use bracket</Option>
                                     <Option value={false} displayAs="No bracket">No bracket</Option>
                                 </Select>
@@ -82,8 +82,10 @@ export const EngravingSettings: FC<Props> = ({ open, config, onUpdate, onClose }
 
                             <div className="generic-settings__section">
                                 <Subheader>Space Size</Subheader>
-                                <img alt="Stave spacing" src={staveSpace} className="generic-settings__example" />
-                                <Input type="number" label="Space size" value={engraving.space} precision={2} step={.01} units="mm" color={bg} errorColor={THEME.error[500].bg} onChange={(val: number) => onUpdate(key, { space: val })} />
+                                <div className="generic-settings__input-with-img">
+                                    <img alt="Stave spacing" src={staveSpace} className="generic-settings__example" />
+                                    <Input required type="number" label="Space size" value={engraving.space} precision={2} step={.01} units="mm" color={bg} onChange={(val: number) => onUpdate(key, { space: val })} />
+                                </div>
                             </div>
 
                         </>}

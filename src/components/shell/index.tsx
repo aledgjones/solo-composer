@@ -8,8 +8,9 @@ import { useAppActions, useAppState } from '../../services/state';
 import { TabState } from '../../services/ui';
 import { useAutoSetup } from '../../services/auto-setup';
 
-import { Transport } from './transport';
 import { Changelog } from '../shared/changelog';
+
+import piano from '../../assets/piano.svg';
 
 import './shell.css';
 
@@ -41,11 +42,12 @@ export const MainShell: FC = () => {
                 <Tab value={TabState.play}>Play</Tab>
                 <Tab value={TabState.print}>Print</Tab>
             </Tabs>
-            <Transport />
+            {/* <Transport /> */}
             <div className="main-shell__topbar-right">
                 <Icon path={mdiCogOutline} size={24} color="#ffffff" onClick={openSettings} />
             </div>
         </div>
+
         <Suspense fallback={null}>
             {tab === TabState.setup && <Setup />}
             {tab === TabState.write && <Write settings={settings} onSettingsClose={closeSettings} />}
@@ -53,5 +55,6 @@ export const MainShell: FC = () => {
         </Suspense>
 
         <Changelog />
+        <link rel="prefetch" href={piano} />
     </>;
 }
