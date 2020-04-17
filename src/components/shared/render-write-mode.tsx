@@ -11,6 +11,7 @@ import { CurveInstruction, getControlPoints } from '../../render/curve';
 import { Text } from './text';
 
 import './render-write-mode.css';
+import { useForeground } from 'solo-ui';
 
 interface Props {
     score: Score;
@@ -18,7 +19,8 @@ interface Props {
 
 export const RenderWriteMode: FC<Props> = (({ score }) => {
 
-    const { fg, bg } = THEME.primary[500];
+    const bg = THEME.primary[500];
+    const fg = useForeground(bg);
 
     const [flowKey] = useState(score.flows.order[0]);
     const instructions = useParseWorker(score, flowKey);

@@ -14,8 +14,8 @@ interface Props {
 export const RenderRegion: FC<Props> = (({ children, className }) => {
 
   const bg = useMemo(() => {
-    const start = THEME.primary[400].bg;
-    const stop = THEME.primary[700].bg;
+    const start = THEME.primary[400];
+    const stop = THEME.primary[700];
     return `linear-gradient(${start}, ${stop})`;
   }, []);
 

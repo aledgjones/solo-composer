@@ -6,7 +6,7 @@ import { THEME } from '../../const';
 
 import { Flow, FlowKey } from '../../services/flow';
 
-import { Icon, Checkbox } from 'solo-ui';
+import { Icon, Checkbox, useForeground } from 'solo-ui';
 import { Handle } from './handle';
 import { SelectionType, Selection } from "./selection";
 
@@ -48,7 +48,7 @@ export const FlowItem = SortableElement<Props>((props: Props) => {
         onRemoveFlow(flow.key);
     }, [onRemoveFlow, flow.key]);
 
-    const { bg, fg } = useMemo(() => {
+    const bg = useMemo(() => {
         if (selected) {
             return THEME.primary[500];
         } else if (active) {
@@ -57,6 +57,7 @@ export const FlowItem = SortableElement<Props>((props: Props) => {
             return THEME.grey[600];
         }
     }, [selected, active]);
+    const fg = useForeground(bg);
 
     return <div className="flow-item" style={{ backgroundColor: bg, color: fg }} onClick={onSelect}>
         <div className="flow-item__header">
@@ -67,7 +68,9 @@ export const FlowItem = SortableElement<Props>((props: Props) => {
             {selected && <>
                 <Icon style={{ marginLeft: 12 }} size={24} color={fg} path={mdiDeleteOutline} onClick={onRemove} />
             </>}
-            {!!selection && selection.type !== SelectionType.flow && <Checkbox color="white" value={active} onChange={onCheckboxChange} />}
+            {!!selection && selection.type !== SelectionType.flow && <div onClick={e => e.stopPropagation()}>
+                <Checkbox color="white" value={active} onChange={onCheckboxChange} />
+            </div>}
         </div>
     </div>;
 });

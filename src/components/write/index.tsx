@@ -6,6 +6,7 @@ import { RenderWriteMode } from '../shared/render-write-mode';
 import { EngravingSettings } from '../../dialogs/engraving-settings';
 
 import './write.css';
+import { Dialog } from 'solo-ui';
 
 interface Props {
     settings: boolean;
@@ -23,8 +24,9 @@ const Write: FC<Props> = ({ settings, onSettingsClose }) => {
                 <RenderWriteMode score={score} />
             </RenderRegion>
         </div>
-
-        <EngravingSettings open={settings} config={score.engraving} onClose={() => onSettingsClose()} onUpdate={(layout, instruction) => actions.score.engraving.set(layout, instruction)} />
+        <Dialog open={settings} width={900}>
+            {() => <EngravingSettings config={score.engraving} onClose={() => onSettingsClose()} onUpdate={(layout, instruction) => actions.score.engraving.set(layout, instruction)} />}
+        </Dialog>
     </>;
 }
 

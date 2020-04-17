@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { mdiChevronRight } from '@mdi/js';
 
-import { Icon, Button } from 'solo-ui';
+import { Icon, Button, useForeground } from 'solo-ui';
 
 import { THEME } from '../../const';
 import { InstrumentDef, useInstrumentList, getFirstInstrumentDefFromPartialPath } from '../../services/instrument-defs';
@@ -19,7 +19,8 @@ export const InstrumentPicker: FC<Props> = ({ onSelect, onCancel }) => {
     const [selection, setSelection] = useState<InstrumentDef>(getFirstInstrumentDefFromPartialPath([]));
     const lists = useInstrumentList(selection);
 
-    const { bg, fg } = THEME.primary[500];
+    const bg = THEME.primary[500];
+    const fg = useForeground(bg);
 
     return <div className="instrument-picker">
         <div className="instrument-picker__sections">
@@ -50,5 +51,5 @@ export const InstrumentPicker: FC<Props> = ({ onSelect, onCancel }) => {
             <Button compact outline style={{ marginRight: 8 }} color={bg} onClick={onCancel}>Cancel</Button>
             <Button compact color={bg} onClick={() => onSelect(selection)}>Add</Button>
         </div>
-    </div>;
+    </div>
 }

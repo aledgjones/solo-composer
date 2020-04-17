@@ -1,5 +1,7 @@
 import React, { FC, useState, useMemo, useCallback } from 'react';
 
+import { Dialog } from 'solo-ui';
+
 import { useAppState, useAppActions } from '../../services/state';
 import { TabState } from '../../services/ui';
 import { PlayerType, PlayerKey } from '../../services/player';
@@ -16,7 +18,7 @@ import { RenderRegion } from '../shared/render-region';
 import { RenderWriteMode } from '../shared/render-write-mode';
 
 import './setup.css';
-import { Dialog } from 'solo-ui';
+import { THEME } from '../../const';
 
 interface Props { }
 
@@ -107,7 +109,7 @@ const Setup: FC<Props> = () => {
     }, [selection, actions.score.flows]);
 
     return <>
-        <div className="setup">
+        <div className="setup" style={{backgroundColor: THEME.grey[500]}}>
             <PlayerList
                 players={players}
                 instruments={score.instruments}
@@ -127,7 +129,7 @@ const Setup: FC<Props> = () => {
                 onRemovePlayer={onRemovePlayer}
                 onSortEnd={actions.score.players.reorder}
             />
-            <div className="setup__middle">
+            <div className="setup__middle" style={{borderRight: `solid 4px ${THEME.grey[400]}`, borderLeft: `solid 4px ${THEME.grey[400]}`}}>
                 <RenderRegion className="setup__view">
                     <RenderWriteMode score={score} />
                 </RenderRegion>
@@ -150,10 +152,9 @@ const Setup: FC<Props> = () => {
                 />
             </div>
         </div>
+
         <Dialog width={900} open={dialogOpen}>
-            {
-                () => <InstrumentPicker onSelect={onSelectInstrument} onCancel={onCancelInstrument} />
-            }
+            {() => <InstrumentPicker onSelect={onSelectInstrument} onCancel={onCancelInstrument} />}
         </Dialog>
     </>;
 }

@@ -1,6 +1,7 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC } from 'react';
 
 import { THEME } from '../../const';
+import { useForeground } from 'solo-ui';
 
 import './list-item.css';
 
@@ -11,9 +12,10 @@ interface Props {
 
 export const ListItem: FC<Props> = ({ selected, onClick, children }) => {
 
-    const { fg, bg } = useMemo(() => selected ? THEME.primary[500] : { bg: undefined, fg: '#000000' }, [selected]);
+    const bg = selected ? THEME.primary[500] : undefined;
+    const fg = useForeground(bg || '#ffffff');
 
-    return <div className="list-item" style={{ backgroundColor: bg, color: fg }} onClick={onClick}>
+    return <div className="list-item" style={{ backgroundColor: bg, color: selected ? fg : undefined }} onClick={onClick}>
         {children}
     </div>;
 }

@@ -10,6 +10,7 @@ import { InstrumentControls } from './instrument-controls';
 import { Text } from '../shared/text';
 
 import './player-controls.css';
+import { THEME } from '../../const';
 
 interface Props {
     player: Player;
@@ -28,7 +29,7 @@ export const PlayerControls: FC<Props> = ({ player, expanded, instruments, count
 
     const toggle = useCallback(() => onToggleExpand(player.key), [onToggleExpand, player.key]);
 
-    return <div className="player-controls">
+    return <div className="player-controls" style={{backgroundColor: THEME.grey[600]}}>
         <div className="player-controls__header">
             <Icon style={{ marginRight: 16 }} size={24} color="#ffffff" path={icon} />
             <Text style={{ whiteSpace: 'pre' }} className="player-controls__name">{name}</Text>

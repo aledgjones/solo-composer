@@ -1,26 +1,24 @@
 .player-list {
-  height: 100%;
-  width: 350px;
-  background-color: #182127;
+    height: 100%;
+    width: 350px;
 }
 
 .player-list__header {
-  display: flex;
-  align-items: center;
-  height: 48px;
-  color: white;
-  padding: 0px 24px;
-  flex-shrink: 0;
-  background-color: #13191e;
+    display: flex;
+    align-items: center;
+    height: 48px;
+    color: white;
+    padding: 0px 24px;
+    flex-shrink: 0;
 }
 
 .player-list__label {
-  flex-grow: 1;
+    flex-grow: 1;
 }
 
 .player-list__content {
-  height: calc(100% - 48px);
-  padding: 8px 8px 0 8px;
-  overflow: auto;
-  white-space: nowrap;
+    height: calc(100% - 48px);
+    padding: 8px 8px 0 8px;
+    overflow: auto;
+    white-space: nowrap;
 }

@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, MouseEvent } from 'react';
 import { SortableElement } from 'react-sortable-hoc';
 import { mdiChevronDown, mdiPlus, mdiDeleteOutline, mdiChevronUp } from '@mdi/js';
 
-import { Icon } from 'solo-ui';
+import { Icon, useForeground } from 'solo-ui';
 
 import { Player, PlayerType, usePlayerName, usePlayerIcon, PlayerKey } from '../../services/player';
 import { Instruments } from '../../services/instrument';
@@ -44,13 +44,15 @@ export const PlayerItem = SortableElement<Props>((props: Props) => {
         onRemovePlayer(player.key);
     }, [onRemovePlayer, player.key]);
 
-    const { fg, bg } = useMemo(() => {
+    const bg = useMemo(() => {
         if (selected) {
             return THEME.primary[500];
         } else {
             return THEME.grey[600];
         }
     }, [selected]);
+
+    const fg = useForeground(bg);
 
     const name = usePlayerName(player, instruments, counts);
     const icon = usePlayerIcon(player);

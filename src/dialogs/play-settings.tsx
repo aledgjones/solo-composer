@@ -1,7 +1,7 @@
 import React, { FC, useState, useMemo } from 'react';
 import { mdiMidiPort } from '@mdi/js';
 
-import { Button, Icon, Subheader, Dialog } from 'solo-ui';
+import { Button, Icon, Subheader } from 'solo-ui';
 
 import { THEME } from '../const';
 import { useCounts } from '../services/instrument';
@@ -18,11 +18,10 @@ enum Page {
 }
 
 interface Props {
-    open: boolean;
     onClose: () => void;
 }
 
-export const PlaySettings: FC<Props> = ({ open, onClose }) => {
+export const PlaySettings: FC<Props> = ({ onClose }) => {
 
     const { midi, channelState, instruments } = useAppState(s => ({
         midi: s.playback.midi,
@@ -41,65 +40,61 @@ export const PlaySettings: FC<Props> = ({ open, onClose }) => {
 
     const [page, setPage] = useState<Page>(Page.internal);
 
-    return <Dialog open={open} width={900}>
-        {() => {
-            return <>
-                <div className="generic-settings__content">
-                    <div className="generic-settings__left-panel">
-                        <ListItem selected={page === Page.internal} onClick={() => setPage(Page.internal)}>Internal Sampler</ListItem>
-                        <ListItem selected={page === Page.midi} onClick={() => setPage(Page.midi)}>External MIDI Devices</ListItem>
+    return <div className="generic-settings">
+        <div className="generic-settings__content">
+            <div className="generic-settings__left-panel">
+                <ListItem selected={page === Page.internal} onClick={() => setPage(Page.internal)}>Internal Sampler</ListItem>
+                <ListItem selected={page === Page.midi} onClick={() => setPage(Page.midi)}>External MIDI Devices</ListItem>
+            </div>
+            <div className="generic-settings__right-panel">
+
+                {page === Page.internal && <>
+                    <div className="play-settings__header">
+                        <div className="play-settings__cell play-settings__channel" />
+                        <div className="play-settings__cell play-settings__map">Patch Map</div>
+                        <div className="play-settings__cell play-settings__assigned">Assigned To</div>
                     </div>
-                    <div className="generic-settings__right-panel">
+                    {channels.map((channel, i) => {
+                        return <PlaySettingsChannel key={channel.key} i={i} channel={channel} instruments={instruments} counts={counts} />
+                    })}
+                </>}
 
-                        {page === Page.internal && <>
-                            <div className="play-settings__header">
-                                <div className="play-settings__cell play-settings__channel" />
-                                <div className="play-settings__cell play-settings__map">Patch Map</div>
-                                <div className="play-settings__cell play-settings__assigned">Assigned</div>
+                {page === Page.midi && <>
+
+                    <div className="generic-settings__section">
+                        <Subheader>Midi Inputs</Subheader>
+                        {midi.inputs.map(input => {
+                            return <div key={input.id} className="play-settings__port">
+                                <Icon style={{ marginRight: 20 }} path={mdiMidiPort} size={24} color="#000000" />
+                                <div className="play-settings__port-description">
+                                    <p className="play-settings__port-name">{input.name}</p>
+                                    <p className="play-settings__port-manufacturer">{input.manufacturer || 'Unknown Manufacturer'}</p>
+                                </div>
                             </div>
-                            {channels.map((channel, i) => {
-                                return <PlaySettingsChannel key={channel.key} i={i} channel={channel} instruments={instruments} counts={counts} />
-                            })}
-                        </>}
-
-                        {page === Page.midi && <>
-
-                            <div className="generic-settings__section">
-                                <Subheader>Midi Inputs</Subheader>
-                                {midi.inputs.map(input => {
-                                    return <div key={input.id} className="play-settings__port">
-                                        <Icon style={{ marginRight: 20 }} path={mdiMidiPort} size={24} color="#000000" />
-                                        <div className="play-settings__port-description">
-                                            <p className="play-settings__port-name">{input.name}</p>
-                                            <p className="play-settings__port-manufacturer">{input.manufacturer || 'Unknown Manufacturer'}</p>
-                                        </div>
-                                    </div>
-                                })}
-                            </div>
-
-                            <div className="generic-settings__section">
-                                <Subheader>Midi Outputs</Subheader>
-                                {midi.outputs.map(output => {
-                                    return <div key={output.id} className="play-settings__port">
-                                        <Icon style={{ marginRight: 20 }} path={mdiMidiPort} size={24} color="#000000" />
-                                        <div className="play-settings__port-description">
-                                            <p className="play-settings__port-name">{output.name}</p>
-                                            <p className="play-settings__port-manufacturer">{output.manufacturer || 'Unknown Manufacturer'}</p>
-                                        </div>
-                                        <Button onClick={() => actions.playback.midi.test(output.id)} compact={true} outline={true} color={THEME.primary[500].bg}>Test</Button>
-                                    </div>
-                                })}
-                            </div>
-
-                        </>}
-
+                        })}
                     </div>
-                </div>
-                <div className="generic-settings__buttons">
-                    <div className="generic-settings__spacer" />
-                    <Button compact color={THEME.primary[500].bg} onClick={onClose}>Close</Button>
-                </div>
-            </>
-        }}
-    </Dialog>
+
+                    <div className="generic-settings__section">
+                        <Subheader>Midi Outputs</Subheader>
+                        {midi.outputs.map(output => {
+                            return <div key={output.id} className="play-settings__port">
+                                <Icon style={{ marginRight: 20 }} path={mdiMidiPort} size={24} color="#000000" />
+                                <div className="play-settings__port-description">
+                                    <p className="play-settings__port-name">{output.name}</p>
+                                    <p className="play-settings__port-manufacturer">{output.manufacturer || 'Unknown Manufacturer'}</p>
+                                </div>
+                                <Button onClick={() => actions.playback.midi.test(output.id)} compact={true} outline={true} color={THEME.primary[500]}>Test</Button>
+                            </div>
+                        })}
+                    </div>
+
+                </>}
+
+            </div>
+        </div>
+        <div className="generic-settings__buttons">
+            <div className="generic-settings__spacer" />
+            <Button compact color={THEME.primary[500]} onClick={onClose}>Close</Button>
+        </div>
+    </div>
 }

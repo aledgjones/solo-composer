@@ -18,7 +18,7 @@ export function useAutoSetup() {
 
     useEffect(() => {
         
-        actions.ui.tab.set(TabState.play);
+        actions.ui.tab.set(TabState.setup);
 
         actions.score.flows.setLength(flowKey, 4 * 12 * 4);
 

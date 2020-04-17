@@ -5,22 +5,23 @@ export const APP_VERSION = '0.2.0';
 
 export const THEME = {
     grey: {
-        300: { bg: '#0d1216', fg: '#ffffff' },
-        400: { bg: '#13191e', fg: '#ffffff' },
-        500: { bg: '#182127', fg: '#ffffff' },
-        600: { bg: '#232c32', fg: '#ffffff' },
-        700: { bg: '#2e373c', fg: '#ffffff' }
+        200: '#0c0c0c',
+        300: '#101010',
+        400: '#161616',
+        500: '#1f1f1f',
+        600: '#282828',
+        700: '#2E2E2E'
     },
     primary: {
-        400: { bg: '#00508e', fg: '#ffffff' },
-        500: { bg: "#0064b1", fg: '#ffffff' },
-        600: { bg: '#0082e6', fg: '#ffffff' },
-        700: { bg: '#1c9cff', fg: '#000000' }
+        400: '#00508e',
+        500: "#0064b1",
+        600: '#0082e6',
+        700: '#1c9cff'
     },
     highlight: {
-        500: { bg: "#ffaa50", fg: '#ffffff' }
+        500: "#ffaa50"
     },
     error: {
-        500: { bg: "#ff6347", fg: '#ffffff' }
+        500: "#ff6347"
     }
 }

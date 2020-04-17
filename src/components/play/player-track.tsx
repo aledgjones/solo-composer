@@ -9,6 +9,7 @@ import { Tracks } from '../../services/track';
 import { FlowKey } from '../../services/flow';
 
 import './player-track.css';
+import { THEME } from '../../const';
 
 interface Props {
     flowKey: FlowKey;
@@ -24,7 +25,7 @@ interface Props {
 export const PlayerTrack: FC<Props> = ({ color, expanded, player, instruments, staves, tracks, ticks, flowKey }) => {
 
     return <div className="player-track">
-        <Ticks ticks={ticks} />
+        <Ticks ticks={ticks} style={{backgroundColor: THEME.grey[700]}} />
         {expanded && <div className="player-track__instruments">
             {player.instruments.map(instrumentKey => {
                 const instrument = instruments[instrumentKey];

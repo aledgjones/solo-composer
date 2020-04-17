@@ -1,19 +1,17 @@
 .setup {
-  display: flex;
-  position: relative;
-  height: calc(100vh - 48px);
+    display: flex;
+    position: relative;
+    height: calc(100vh - 48px);
 }
 
 .setup__middle {
-  display: flex;
-  flex-direction: column;
-  width: calc(100% - 700px);
-  border-left: solid 4px #13191e;
-  border-right: solid 4px #13191e;
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 700px);
 }
 
 .setup__view {
-  flex-grow: 1;
-  max-height: calc(100vh - 208px);
-  position: relative;
+    flex-grow: 1;
+    max-height: calc(100vh - 208px);
+    position: relative;
 }

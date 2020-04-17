@@ -1,13 +1,11 @@
 .generic-settings {
-    height: 100%;
-    width: 100%;
-    max-width: 900px;
+    height: calc(100vh - 80px);
     max-height: 500px;
 }
 
 .generic-settings__content {
     display: flex;
-    height: calc(100vh - 186px);
+    height: calc(100% - 56px);
 }
 
 .generic-settings__left-panel {

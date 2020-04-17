@@ -50,9 +50,13 @@
 }
 
 .changelog__content label[type=feature] {
-    background-color: green;
+    background-color: #0F9D58;
 }
 
 .changelog__content label[type=changed] {
-    background-color: blueviolet;
+    background-color: #F4B400;
+}
+
+.changelog__content label[type=fixed] {
+    background-color: #4285F4;
 }

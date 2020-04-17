@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from 'react';
 import { mdiChevronRight } from '@mdi/js';
 
-import { Icon } from 'solo-ui';
+import { Icon, useForeground } from 'solo-ui';
 
 import { THEME } from '../../const';
 import { Instrument, useInstrumentName } from '../../services/instrument';
@@ -17,13 +17,14 @@ interface Props {
 
 export const InstrumentItem: FC<Props> = ({ selected, instrument, count }) => {
 
-  const { bg, fg } = useMemo(() => {
+  const bg = useMemo(() => {
     if (selected) {
       return THEME.primary[600];
     } else {
       return THEME.grey[700];
     }
   }, [selected]);
+  const fg = useForeground(bg);
 
   const name = useInstrumentName(instrument, count);
 

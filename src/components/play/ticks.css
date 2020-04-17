@@ -15,7 +15,7 @@
     position: absolute;
     left: -1px;
     top: 0;
-    background-color: #464d52;
+    background-color: rgba(255, 255, 255, .2);
 }
 
 .tick--boundry:before {
@@ -29,10 +29,11 @@
     position: absolute;
     left: calc(50% - 1px);
     top: 0;
-    background-color: #464d52;
+    background-color: rgba(255, 255, 255, .2);
 }
 
-.tick:last-child:before, .tick--first-beat:before {
+.tick:last-child:before,
+.tick--first-beat:before {
     height: 100%;
 }
 

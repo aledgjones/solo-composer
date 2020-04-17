@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC, useMemo, CSSProperties } from 'react';
 
 import { merge } from 'solo-ui';
 
@@ -17,9 +17,10 @@ import './ticks.css';
 interface Props {
     ticks: Tick[];
     className?: string;
+    style?: CSSProperties;
 }
 
-export const Ticks: FC<Props> = ({ ticks, className }) => {
+export const Ticks: FC<Props> = ({ ticks, className, style }) => {
 
     // we can merge ticks that arent beats to reduce the number of element created.
     const merged = useMemo(() => {
@@ -35,7 +36,7 @@ export const Ticks: FC<Props> = ({ ticks, className }) => {
         }, []);
     }, [ticks]);
 
-    return <div className={merge("ticks", className)}>
+    return <div className={merge("ticks", className)} style={style}>
         {merged.map((tick, i) => {
             return <div key={i} style={{ width: tick.width }} className={merge('tick', { 'tick--first-beat': tick.isFirstBeat, 'tick--boundry': tick.isGroupingBoundry })} />;
         })}

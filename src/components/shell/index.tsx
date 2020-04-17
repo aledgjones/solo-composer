@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect, useCallback, Suspense } from 'react';
 import { mdiCogOutline } from '@mdi/js';
 
-import { Tabs, Tab, Icon } from 'solo-ui';
+import { Tabs, Tab, Icon, useForeground, useTheme } from 'solo-ui';
 
 import { THEME } from '../../const';
 import { useAppActions, useAppState } from '../../services/state';
@@ -33,9 +33,13 @@ export const MainShell: FC = () => {
         actions.playback.midi.init();
     }, [actions]);
 
+    const bg = THEME.grey[200];
+    const fg = useForeground(bg);
+    useTheme(bg);
+
     return <>
-        <div className="main-shell__topbar">
-            <Tabs className="main-shell__tabs" value={tab} onChange={actions.ui.tab.set} background="#0d1216" highlight={THEME.primary[500].bg}>
+        <div className="main-shell__topbar" style={{backgroundColor: bg}}>
+            <Tabs className="main-shell__tabs" value={tab} onChange={actions.ui.tab.set} color={fg} highlight={THEME.primary[500]}>
                 <Tab value={TabState.setup}>Setup</Tab>
                 <Tab value={TabState.write}>Write</Tab>
                 <Tab value={TabState.engrave}>Engrave</Tab>
@@ -44,7 +48,7 @@ export const MainShell: FC = () => {
             </Tabs>
             {/* <Transport /> */}
             <div className="main-shell__topbar-right">
-                <Icon path={mdiCogOutline} size={24} color="#ffffff" onClick={openSettings} />
+                <Icon path={mdiCogOutline} size={24} color={fg} onClick={openSettings} />
             </div>
         </div>
 
