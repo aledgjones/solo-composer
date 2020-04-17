@@ -5,7 +5,6 @@ export const APP_VERSION = '0.2.0';
 
 export const THEME = {
     grey: {
-        200: '#0c0c0c',
         300: '#101010',
         400: '#161616',
         500: '#1f1f1f',

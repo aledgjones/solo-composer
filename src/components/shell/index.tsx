@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect, useCallback, Suspense } from 'react';
 import { mdiCogOutline } from '@mdi/js';
 
-import { Tabs, Tab, Icon, useForeground, useTheme } from 'solo-ui';
+import { Tabs, Tab, Icon, useForeground, useTheme, useStyles } from 'solo-ui';
 
 import { THEME } from '../../const';
 import { useAppActions, useAppState } from '../../services/state';
@@ -33,13 +33,14 @@ export const MainShell: FC = () => {
         actions.playback.midi.init();
     }, [actions]);
 
-    const bg = THEME.grey[200];
+    useStyles(`body { background-color: ${THEME.grey[500]} }`);
+    const bg = THEME.grey[300];
     const fg = useForeground(bg);
     useTheme(bg);
 
     return <>
         <div className="main-shell__topbar" style={{backgroundColor: bg}}>
-            <Tabs className="main-shell__tabs" value={tab} onChange={actions.ui.tab.set} color={fg} highlight={THEME.primary[500]}>
+            <Tabs className="main-shell__tabs" value={tab} onChange={actions.ui.tab.set} color={fg} highlight={THEME.grey[600]}>
                 <Tab value={TabState.setup}>Setup</Tab>
                 <Tab value={TabState.write}>Write</Tab>
                 <Tab value={TabState.engrave}>Engrave</Tab>

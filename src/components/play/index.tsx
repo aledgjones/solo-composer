@@ -1,12 +1,12 @@
 import React, { FC, useState, useMemo } from 'react';
-import {  mdiPencil, mdiEraser, mdiCursorDefaultOutline } from '@mdi/js';
+import { mdiCursorDefaultOutline, mdiHandRight, mdiPencilOutline } from '@mdi/js';
 import ScrollContainer from 'react-indiana-drag-scroll';
 
 import { Select, Option, useRainbow, Dialog, Icon, useForeground } from 'solo-ui';
 
 import { THEME } from '../../const';
 import { useAppState, useAppActions } from '../../services/state';
-import { TabState } from '../../services/ui';
+import { TabState, Tool } from '../../services/ui';
 import { useCounts } from '../../services/instrument';
 import { entriesByTick } from '../../services/track';
 import { useTicks, Ticks } from './ticks';
@@ -16,12 +16,6 @@ import { PlaySettings } from '../../dialogs/play-settings';
 
 import './play.css';
 
-enum Tool {
-    cursor = 1,
-    pencil,
-    eraser
-}
-
 interface Props {
     settings: boolean;
     onSettingsClose: () => void;
@@ -29,27 +23,26 @@ interface Props {
 
 const Play: FC<Props> = ({ settings, onSettingsClose }) => {
 
-    const { score, expanded } = useAppState(s => {
+    const { score, expanded, tool } = useAppState(s => {
         return {
             score: s.score,
-            expanded: s.ui.expanded[TabState.play]
+            expanded: s.ui.expanded[TabState.play],
+            tool: s.ui.tool[TabState.play]
         }
     });
     const actions = useAppActions();
 
     const [zoom] = useState<number>(1);
-    const [flowKey, setFlowKey] = useState(score.flows.order[0]);
-    const colors = useRainbow(score.players.order.length);
 
+    const [flowKey, setFlowKey] = useState(score.flows.order[0]);
     const flow = score.flows.byKey[flowKey];
     const flowEntriesByTick = useMemo(() => entriesByTick(flow.master.entries.order, flow.master.entries.byKey), [flow.master.entries]);
 
     const counts = useCounts();
     const ticks = useTicks(flow.length, flowEntriesByTick, zoom);
 
-    const [tool, setTool] = useState<Tool>(Tool.cursor);
-
-    const fg400 = useForeground(THEME.grey[400]);
+    const colors = useRainbow(score.players.order.length);
+    const fg = useForeground(THEME.grey[400]);
 
     return <>
 
@@ -57,10 +50,10 @@ const Play: FC<Props> = ({ settings, onSettingsClose }) => {
 
             <div className="play__x-fixed play__left-panel no-scroll">
 
-                <div className="play__tools" style={{ backgroundColor: THEME.grey[300] }}>
-                    <Icon className="play__tool" toggle={tool === Tool.cursor} onClick={() => setTool(Tool.cursor)} path={mdiCursorDefaultOutline} size={24} color={fg400} highlight={THEME.primary[500]}></Icon>
-                    <Icon className="play__tool" toggle={tool === Tool.pencil} onClick={() => setTool(Tool.pencil)} path={mdiPencil} size={24} color={fg400} highlight={THEME.primary[500]}></Icon>
-                    <Icon className="play__tool" toggle={tool === Tool.eraser} onClick={() => setTool(Tool.eraser)} path={mdiEraser} size={24} color={fg400} highlight={THEME.primary[500]}></Icon>
+                <div className="play__tools" style={{ backgroundColor: THEME.grey[500], borderRight: `4px solid ${THEME.grey[400]}` }}>
+                    <Icon className="play__tool" toggle={tool === Tool.hand} onClick={() => actions.ui.tool.play.set(Tool.hand)} path={mdiHandRight} size={24} color={fg} highlight={THEME.primary[500]}></Icon>
+                    <Icon className="play__tool" toggle={tool === Tool.select} onClick={() => actions.ui.tool.play.set(Tool.select)} path={mdiCursorDefaultOutline} size={24} color={fg} highlight={THEME.primary[500]}></Icon>
+                    <Icon className="play__tool" toggle={tool === Tool.pencil} onClick={() => actions.ui.tool.play.set(Tool.pencil)} path={mdiPencilOutline} size={24} color={fg} highlight={THEME.primary[500]}></Icon>
                 </div>
 
                 <div className="play__controls" style={{ backgroundColor: THEME.grey[500] }}>

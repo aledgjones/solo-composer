@@ -1,6 +1,13 @@
 import { Store } from "pullstate";
 import { State } from "./state";
 
+export enum Tool {
+    hand = 1,
+    select,
+    pencil,
+    eraser
+}
+
 export enum TabState {
     setup = 'setup',
     write = 'write',
@@ -14,6 +21,9 @@ export interface UiState {
     expanded: {
         [view: string]: { [key: string]: boolean };
     };
+    tool: {
+        [view: string]: Tool;
+    }
 }
 
 export const uiEmptyState = (): UiState => {
@@ -22,6 +32,9 @@ export const uiEmptyState = (): UiState => {
         expanded: {
             [TabState.setup]: {},
             [TabState.play]: {}
+        },
+        tool: {
+            [TabState.play]: Tool.hand
         }
     }
 }
@@ -49,6 +62,15 @@ export const uiActions = (store: Store<State>) => {
         expanded: {
             setup: { toggle: (key: string) => toggleExpanded(key, TabState.setup) },
             play: { toggle: (key: string) => toggleExpanded(key, TabState.play) }
+        },
+        tool: {
+            play: {
+                set: (tool: Tool) => {
+                    store.update(s => {
+                        s.ui.tool[TabState.play] = tool;
+                    });
+                }
+            }
         }
     }
 }
