@@ -2,17 +2,18 @@ import React, { FC, useMemo, CSSProperties } from 'react';
 
 import { merge } from 'solo-ui';
 
-import { EntryType } from "../../entries";
-import { TimeSignature } from "../../entries/time-signature";
-import { getDistanceFromBarline } from "../../parse/get-distance-from-barline";
-import { getIsBeat } from "../../parse/get-is-beat";
-import { getTicksPerBeat } from "../../parse/get-ticks-per-beat";
-import { EntriesByTick } from "../../services/track";
-import { getEntriesAtTick } from '../../parse/get-entry-at-tick';
-import { getBeatGroupingBoundries } from '../../parse/get-beat-group-boundries';
-import { getDefaultGroupings } from '../../parse/get-default-groupings';
+import { EntryType } from "../../../entries";
+import { TimeSignature } from "../../../entries/time-signature";
+import { getDistanceFromBarline } from "../../../parse/get-distance-from-barline";
+import { getIsBeat } from "../../../parse/get-is-beat";
+import { getTicksPerBeat } from "../../../parse/get-ticks-per-beat";
+import { EntriesByTick } from "../../../services/track";
+import { getEntriesAtTick } from '../../../parse/get-entry-at-tick';
+import { getBeatGroupingBoundries } from '../../../parse/get-beat-group-boundries';
+import { getDefaultGroupings } from '../../../parse/get-default-groupings';
+import { Tick } from './defs';
 
-import './ticks.css';
+import './styles.css';
 
 interface Props {
     ticks: Tick[];
@@ -41,14 +42,6 @@ export const Ticks: FC<Props> = ({ ticks, className, style }) => {
             return <div key={i} style={{ width: tick.width }} className={merge('tick', { 'tick--first-beat': tick.isFirstBeat, 'tick--boundry': tick.isGroupingBoundry })} />;
         })}
     </div>;
-}
-
-export interface Tick {
-    x: number;
-    width: number;
-    isBeat: boolean;
-    isFirstBeat: boolean;
-    isGroupingBoundry: boolean;
 }
 
 export function useTicks(length: number, flowEntriesByTick: EntriesByTick, zoom: number): Tick[] {

@@ -1,15 +1,16 @@
 import React, { FC } from 'react';
 
+import { THEME } from '../../const';
+import { FlowKey } from '../../services/flow';
 import { Player } from '../../services/player';
 import { Instruments } from '../../services/instrument';
-import { InstrumentTrack } from './instrument-track';
-import { Ticks, Tick } from './ticks';
 import { Staves } from '../../services/stave';
 import { Tracks } from '../../services/track';
-import { FlowKey } from '../../services/flow';
+import { InstrumentTrack } from './instrument-track';
+import { Ticks } from './ticks';
+import { Tick } from './ticks/defs';
 
 import './player-track.css';
-import { THEME } from '../../const';
 
 interface Props {
     flowKey: FlowKey;

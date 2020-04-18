@@ -3,22 +3,22 @@ import Color from 'color';
 
 import { merge } from 'solo-ui';
 
-import { THEME } from '../../const';
-import { TabState, Tool } from '../../services/ui';
-import { Instrument } from '../../services/instrument';
-import { background } from './track-background';
-import { Tick } from './ticks';
-import { Staves } from '../../services/stave';
-import { EntryType, Entry } from '../../entries';
-import { Tone } from '../../entries/tone';
-import { toMidiPitchNumber, Pitch, toMidiPitchString } from '../../playback/utils';
-import { Tracks } from '../../services/track';
-import { useAppActions, useAppState } from '../../services/state';
-import { FlowKey } from '../../services/flow';
+import { TabState, Tool } from '../../../services/ui';
+import { useAppState, useAppActions } from '../../../services/state';
+import { FlowKey } from '../../../services/flow';
+import { Instrument } from '../../../services/instrument';
+import { Staves } from '../../../services/stave';
+import { Tracks } from '../../../services/track';
+import { getToneDimensions, SLOT_HEIGHT } from './get-tone-dimension';
+import { toMidiPitchString, toMidiPitchNumber } from '../../../playback/utils';
+import { THEME } from '../../../const';
+import { EntryType, Entry } from '../../../entries';
+import { Tone } from '../../../entries/tone';
+import { trackBackground } from './track-background';
+import { Tick } from '../ticks/defs';
 
-import './instrument-track.css';
+import './styles.css';
 
-const SLOT_HEIGHT = 224 / 24;
 
 interface Props {
     flowKey: FlowKey;
@@ -40,6 +40,7 @@ function getTickFromXPosition(x: number, ticks: Tick[], snap: number, forceFloor
         const tick = ticks[i];
         if (tick.x > x) {
 
+            // when we first create a tone we want the X position to always be on the low edge of the snap
             const roundDown = tick.x / tick.width <= .5 || forceFloor;
             if (roundDown) {
                 return Math.floor((i - 1) / snap) * snap;
@@ -50,19 +51,6 @@ function getTickFromXPosition(x: number, ticks: Tick[], snap: number, forceFloor
         }
     }
     return 0;
-}
-
-function getTop(pitch: Pitch, highestPitch: number, slotHeight: number) {
-    const value = toMidiPitchNumber(pitch);
-    return (highestPitch - value) * slotHeight;
-}
-
-function getWidth(start: number, duration: number, ticks: Tick[]) {
-    let width = 0;
-    for (let i = start; i < start + duration; i++) {
-        width += ticks[i].width;
-    }
-    return width;
 }
 
 export const InstrumentTrack: FC<Props> = ({ color, instrument, staves, tracks, ticks, flowKey }) => {
@@ -80,35 +68,6 @@ export const InstrumentTrack: FC<Props> = ({ color, instrument, staves, tracks, 
 
     const [selection, setSelection] = useState<string>();
 
-    /**
-     * Global key commands
-     */
-    useEffect(() => {
-
-        const listener = (e: KeyboardEvent) => {
-            if (selection) {
-
-                const staveKey = instrument.staves[0];
-                const trackKey = staves[staveKey].tracks[0];
-
-                switch (e.key) {
-                    case 'Delete':
-                        actions.score.instruments.removeTone(flowKey, trackKey, selection);
-                        setSelection(undefined);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-
-        window.addEventListener('keypress', listener);
-        return () => {
-            window.removeEventListener('keypress', listener);
-        }
-
-    }, [actions.score.instruments, flowKey, instrument.staves, staves, selection]);
-
     const startWrite = useCallback((e: PointerEvent<HTMLDivElement>) => {
 
         if (tool === Tool.select) {
@@ -119,13 +78,14 @@ export const InstrumentTrack: FC<Props> = ({ color, instrument, staves, tracks, 
 
             setSelection(undefined);
 
+            const staveKey = instrument.staves[0];
+            const trackKey = staves[staveKey].tracks[0];
+
             const box = e.currentTarget.getBoundingClientRect();
             const x = e.clientX - box.left;
             const y = e.clientY - box.top;
             const pitch = getPitchFromYPosition(y, highestPitch, SLOT_HEIGHT);
             const start = getTickFromXPosition(x, ticks, snap, true);
-            const staveKey = instrument.staves[0];
-            const trackKey = staves[staveKey].tracks[0];
             const toneKey = actions.score.instruments.createTone(flowKey, trackKey, { pitch, duration: snap }, start);
 
             setSelection(toneKey);
@@ -148,7 +108,7 @@ export const InstrumentTrack: FC<Props> = ({ color, instrument, staves, tracks, 
 
     }, [ticks, flowKey, highestPitch, instrument.staves, staves, tool, actions.score.instruments]);
 
-    return <div className={merge("instrument-track", { 'no-scroll': tool !== Tool.hand })} onPointerDown={startWrite} style={{ backgroundImage: background }}>
+    return <div className={merge("instrument-track", { 'no-scroll': tool !== Tool.hand })} onPointerDown={startWrite} style={{ backgroundImage: trackBackground }}>
         {instrument.staves.map(staveKey => {
             const stave = staves[staveKey];
             return stave.tracks.map(trackKey => {
@@ -157,10 +117,8 @@ export const InstrumentTrack: FC<Props> = ({ color, instrument, staves, tracks, 
                     if (track.entries.byKey[entryKey]._type === EntryType.tone) {
 
                         const entry = track.entries.byKey[entryKey] as Entry<Tone>;
-                        const left = ticks[entry._tick].x;
-                        const top = getTop(entry.pitch, highestPitch, SLOT_HEIGHT);
-                        const width = getWidth(entry._tick, entry.duration, ticks);
                         const selected = entry._key === selection;
+                        const [top, left, width] = getToneDimensions(highestPitch, entry, ticks);
 
                         return <div
                             key={entry._key}
