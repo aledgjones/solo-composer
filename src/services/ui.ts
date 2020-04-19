@@ -20,6 +20,9 @@ export interface UiState {
     expanded: {
         [view: string]: { [key: string]: boolean };
     };
+    selected: {
+        [view: string]: string | undefined;
+    };
     tool: {
         [view: string]: Tool;
     }
@@ -32,6 +35,7 @@ export const uiEmptyState = (): UiState => {
             [TabState.setup]: {},
             [TabState.play]: {}
         },
+        selected: {},
         tool: {
             [TabState.play]: Tool.select
         }
@@ -59,11 +63,20 @@ export const uiActions = (store: Store<State>) => {
             }
         },
         expanded: {
-            setup: { toggle: (key: string) => toggleExpanded(key, TabState.setup) },
-            play: { toggle: (key: string) => toggleExpanded(key, TabState.play) }
+            [TabState.setup]: { toggle: (key: string) => toggleExpanded(key, TabState.setup) },
+            [TabState.play]: { toggle: (key: string) => toggleExpanded(key, TabState.play) }
+        },
+        selected: {
+            [TabState.play]: {
+                set: (key?: string) => {
+                    store.update(s => {
+                        s.ui.selected[TabState.play] = key;
+                    });
+                }
+            }
         },
         tool: {
-            play: {
+            [TabState.play]: {
                 set: (tool: Tool) => {
                     store.update(s => {
                         s.ui.tool[TabState.play] = tool;

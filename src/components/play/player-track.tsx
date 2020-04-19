@@ -25,8 +25,8 @@ interface Props {
 
 export const PlayerTrack: FC<Props> = ({ color, expanded, player, instruments, staves, tracks, ticks, flowKey }) => {
 
-    return <div className="player-track">
-        <Ticks ticks={ticks} style={{backgroundColor: THEME.grey[700]}} />
+    return <div className="player-track" style={{backgroundColor: THEME.grey[700]}}>
+        <Ticks className="player-track__ticks" ticks={ticks} />
         {expanded && <div className="player-track__instruments">
             {player.instruments.map(instrumentKey => {
                 const instrument = instruments[instrumentKey];

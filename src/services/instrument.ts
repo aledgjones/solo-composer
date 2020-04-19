@@ -37,7 +37,7 @@ export const instrumentActions = (store: Store<State>) => {
             store.update(s => {
                 s.score.instruments[instrument.key] = instrument;
             });
-            return instrument.key;
+            return instrument;
         },
         remove: (instrumentKey: InstrumentKey) => {
             // remove from score.instruments
@@ -50,7 +50,7 @@ export const instrumentActions = (store: Store<State>) => {
                 track.entries.byKey[tone._key] = tone;
                 track.entries.order.push(tone._key);
             });
-            return tone._key;
+            return tone;
         },
         updateTone: (flowKey: FlowKey, trackKey: TrackKey, toneKey: string, def: Partial<ToneDef>, tick?: number) => {
             store.update(s => {

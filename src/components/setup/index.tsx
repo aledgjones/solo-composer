@@ -61,10 +61,10 @@ const Setup: FC<Props> = () => {
     const onSelectInstrument = useCallback((def: InstrumentDef) => {
         if (selection) {
             const channel = actions.playback.sampler.createChannel();
-            const instrumentKey = actions.score.instruments.create(def);
+            const instrument = actions.score.instruments.create(def);
 
-            actions.score.players.assignInstrument(selection.key, instrumentKey);
-            actions.playback.sampler.assignInstrument(instrumentKey, channel);
+            actions.score.players.assignInstrument(selection.key, instrument.key);
+            actions.playback.sampler.assignInstrument(instrument.key, channel);
             actions.playback.sampler.load(channel, def);
         }
         setDialogOpen(false);
@@ -123,7 +123,7 @@ const Setup: FC<Props> = () => {
                 transitionDuration={200}
 
                 onSelectPlayer={setSelection}
-                onToggleExpandPlayer={actions.ui.expanded.setup.toggle}
+                onToggleExpandPlayer={actions.ui.expanded[TabState.setup].toggle}
                 onCreatePlayer={onCreatePlayer}
                 onAddInstrument={onAddInstrument}
                 onRemovePlayer={onRemovePlayer}

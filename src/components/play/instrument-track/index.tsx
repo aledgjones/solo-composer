@@ -16,6 +16,9 @@ import { trackBackground } from './track-background';
 import { Tick } from '../ticks/defs';
 import { ToneElement } from '../tone';
 
+import pencil from '../../../assets/pencil.svg';
+import eraser from '../../../assets/eraser.svg';
+
 import './styles.css';
 
 
@@ -54,32 +57,35 @@ function getTickFromXPosition(x: number, ticks: Tick[], snap: number, forceFloor
 
 export const InstrumentTrack: FC<Props> = ({ color, instrument, staves, tracks, ticks, flowKey }) => {
 
-    const tool = useAppState(s => s.ui.tool[TabState.play]);
+    const { tool, selected } = useAppState(s => {
+        return {
+            tool: s.ui.tool[TabState.play],
+            selected: s.ui.selected[TabState.play]
+        }
+    });
     const actions = useAppActions();
 
     const snap = 3; // this need to be generated based on the subdevisions (3/12 === semi-quaver)
     const highestPitch = toMidiPitchNumber('E5');
 
-    const [selection, setSelection] = useState<string>();
-
     // clear selection when any .intrument-track is clicked
     useEffect(() => {
         const callback = (e: any) => {
             const target = e.target as HTMLElement;
-            if(tool === Tool.select && target.classList.contains('instrument-track')) {
-                setSelection(undefined);
+            if (tool === Tool.select && target.classList.contains('instrument-track')) {
+                actions.ui.selected[TabState.play].set(undefined);
             }
         }
         window.addEventListener('pointerdown', callback);
         return () => {
             window.removeEventListener('pointerdown', callback);
         }
-    }, [tool])
+    }, [tool, actions.ui.selected[TabState.play]]);
 
     const startWrite = useCallback((e: PointerEvent<HTMLDivElement>) => {
         if (tool === Tool.pencil) {
 
-            setSelection(undefined);
+            actions.ui.selected[TabState.play].set(undefined);
 
             const staveKey = instrument.staves[0];
             const trackKey = staves[staveKey].tracks[0];
@@ -89,14 +95,14 @@ export const InstrumentTrack: FC<Props> = ({ color, instrument, staves, tracks, 
             const y = e.clientY - box.top;
             const pitch = getPitchFromYPosition(y, highestPitch, SLOT_HEIGHT);
             const start = getTickFromXPosition(x, ticks, snap, true);
-            const toneKey = actions.score.instruments.createTone(flowKey, trackKey, { pitch, duration: snap }, start);
+            const tone = actions.score.instruments.createTone(flowKey, trackKey, { pitch, duration: snap }, start);
 
-            setSelection(toneKey);
+            actions.ui.selected[TabState.play].set(tone._key);
 
             const move = (e: any) => {
                 const x = e.clientX - box.left;
                 const duration = getTickFromXPosition(x, ticks, snap, false) - start;
-                actions.score.instruments.updateTone(flowKey, trackKey, toneKey, { duration: duration >= snap ? duration : snap });
+                actions.score.instruments.updateTone(flowKey, trackKey, tone._key, { duration: duration >= snap ? duration : snap });
             }
 
             const end = (e: any) => {
@@ -109,7 +115,7 @@ export const InstrumentTrack: FC<Props> = ({ color, instrument, staves, tracks, 
 
         }
 
-    }, [ticks, flowKey, highestPitch, instrument.staves, staves, tool, actions.score.instruments]);
+    }, [ticks, flowKey, highestPitch, instrument.staves, staves, tool, actions.score.instruments, actions.ui.selected[TabState.play]]);
 
     const tones = useMemo(() => {
         const output: Array<{ toneKey: string, trackKey: string, top: number, left: number, width: number }> = [];
@@ -129,9 +135,20 @@ export const InstrumentTrack: FC<Props> = ({ color, instrument, staves, tracks, 
         return output;
     }, [highestPitch, instrument.staves, staves, ticks, tracks]);
 
-    return <div className={merge("instrument-track", {"no-scroll": tool === Tool.pencil })} onPointerDown={startWrite} style={{ backgroundImage: trackBackground }}>
+    const cursor = useMemo(() => {
+        switch (tool) {
+            case Tool.pencil:
+                return `url(${pencil}) 4 20, default`;
+            case Tool.eraser:
+                return `url(${eraser}) 4 20, default`;
+            default:
+                return 'default'
+        }
+    }, [tool]);
+
+    return <div className={merge("instrument-track", { "no-scroll": tool === Tool.pencil })} onPointerDown={startWrite} style={{ backgroundImage: trackBackground, cursor }}>
         {tones.map(({ toneKey, trackKey, top, left, width }) => {
-            return <ToneElement key={toneKey} toneKey={toneKey} color={color} tool={tool} selected={toneKey === selection} top={top} left={left} width={width} onSelect={key => setSelection(key)} onErase={key => actions.score.instruments.removeTone(flowKey, trackKey, key)} />
+            return <ToneElement key={toneKey} toneKey={toneKey} color={color} tool={tool} selected={toneKey === selected} top={top} left={left} width={width} onSelect={key => actions.ui.selected[TabState.play].set(key)} onErase={key => actions.score.instruments.removeTone(flowKey, trackKey, key)} />
         })}
     </div >;
 }

@@ -1,5 +1,5 @@
 import React, { FC, useState, useMemo } from 'react';
-import { mdiCursorDefault, mdiEraser, mdiPencil } from '@mdi/js';
+import { mdiCursorDefault, mdiEraser, mdiPencilOutline } from '@mdi/js';
 import ScrollContainer from 'react-indiana-drag-scroll';
 
 import { Select, Option, useRainbow, Dialog, Icon, useForeground } from 'solo-ui';
@@ -51,9 +51,9 @@ const Play: FC<Props> = ({ settings, onSettingsClose }) => {
             <div className="play__x-fixed play__left-panel no-scroll">
 
                 <div className="play__tools" style={{ backgroundColor: THEME.grey[500], borderRight: `4px solid ${THEME.grey[400]}` }}>
-                    <Icon className="play__tool" toggle={tool === Tool.select} onClick={() => actions.ui.tool.play.set(Tool.select)} path={mdiCursorDefault} size={24} color={fg} highlight={THEME.primary[500]}></Icon>
-                    <Icon className="play__tool" toggle={tool === Tool.pencil} onClick={() => actions.ui.tool.play.set(Tool.pencil)} path={mdiPencil} size={24} color={fg} highlight={THEME.primary[500]}></Icon>
-                    <Icon className="play__tool" toggle={tool === Tool.eraser} onClick={() => actions.ui.tool.play.set(Tool.eraser)} path={mdiEraser} size={24} color={fg} highlight={THEME.primary[500]}></Icon>
+                    <Icon className="play__tool" toggle={tool === Tool.select} onClick={() => actions.ui.tool[TabState.play].set(Tool.select)} path={mdiCursorDefault} size={24} color={fg} highlight={THEME.primary[500]}></Icon>
+                    <Icon className="play__tool" toggle={tool === Tool.pencil} onClick={() => actions.ui.tool[TabState.play].set(Tool.pencil)} path={mdiPencilOutline} size={24} color={fg} highlight={THEME.primary[500]}></Icon>
+                    <Icon className="play__tool" toggle={tool === Tool.eraser} onClick={() => actions.ui.tool[TabState.play].set(Tool.eraser)} path={mdiEraser} size={24} color={fg} highlight={THEME.primary[500]}></Icon>
                 </div>
 
                 <div className="play__controls" style={{ backgroundColor: THEME.grey[500] }}>
@@ -69,7 +69,7 @@ const Play: FC<Props> = ({ settings, onSettingsClose }) => {
                         {score.players.order.map((playerKey, i) => {
                             if (flow.players.includes(playerKey)) {
                                 const player = score.players.byKey[playerKey];
-                                return <PlayerControls key={playerKey} color={colors[i]} expanded={expanded[playerKey]} player={player} instruments={score.instruments} counts={counts} onToggleExpand={actions.ui.expanded.play.toggle} />
+                                return <PlayerControls key={playerKey} color={colors[i]} expanded={expanded[playerKey]} player={player} instruments={score.instruments} counts={counts} onToggleExpand={actions.ui.expanded[TabState.play].toggle} />
                             } else {
                                 return null;
                             }

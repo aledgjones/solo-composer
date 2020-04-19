@@ -7,7 +7,6 @@
     top: -4px;
     height: calc(100% + 8px);
     width: 8px;
-    background-color: rgba(255,0,0,.5);
 }
 
 .tone__handle--e {
