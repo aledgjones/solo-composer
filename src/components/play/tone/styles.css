@@ -1,0 +1,21 @@
+.tone {
+    position: absolute;
+}
+
+.tone__handle {
+    position: absolute;
+    top: -4px;
+    height: calc(100% + 8px);
+    width: 8px;
+    background-color: rgba(255,0,0,.5);
+}
+
+.tone__handle--e {
+    right: -4px;
+    cursor: e-resize;
+}
+
+.tone__handle--w {
+    left: -4px;
+    cursor: w-resize;
+}

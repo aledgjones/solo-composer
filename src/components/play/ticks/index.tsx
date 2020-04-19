@@ -46,13 +46,15 @@ export const Ticks: FC<Props> = ({ ticks, className, style }) => {
 
 export function useTicks(length: number, flowEntriesByTick: EntriesByTick, zoom: number): Tick[] {
     return useMemo(() => {
-        
+
         const CROTCHET_WIDTH = 72;
 
         const ticks = [];
 
         let timeSigResult;
+        let beatGroupingBoundries: number[] = [];
         let x = 0;
+        
         for (let tick = 0; tick < length + 1; tick++) {
             const result = getEntriesAtTick<TimeSignature>(tick, flowEntriesByTick, EntryType.timeSignature);
             if (result.entries[0]) {
@@ -68,9 +70,12 @@ export function useTicks(length: number, flowEntriesByTick: EntriesByTick, zoom:
 
             const isBeat = getIsBeat(tick, ticksPerBeat, timeSigAt);
             const distanceFromBarline = getDistanceFromBarline(tick, ticksPerBeat, timeSigAt, timeSig?.beats);
-            const beatGroupingBoundries = getBeatGroupingBoundries(timeSigAt, ticksPerBeat, timeSig?.groupings || getDefaultGroupings(4));
-
             const isFirstBeat = distanceFromBarline === 0;
+
+            if (isFirstBeat) {
+                beatGroupingBoundries = getBeatGroupingBoundries(timeSigAt + tick, ticksPerBeat, timeSig?.groupings || getDefaultGroupings(4));
+            }
+
             const isGroupingBoundry = beatGroupingBoundries.includes(tick);
 
             ticks.push({ x, width, isBeat, isFirstBeat, isGroupingBoundry });

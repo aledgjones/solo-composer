@@ -18,7 +18,7 @@ export function getFirstBeats(length: number, flow: EntriesByTick) {
     let tick = 0;
     while (tick < length) {
 
-        const result = getEntriesAtTick<TimeSignature>(0, flow, EntryType.timeSignature);
+        const result = getEntriesAtTick<TimeSignature>(tick, flow, EntryType.timeSignature);
         if (result.entries[0]) {
             timeSigResult = result;
         }

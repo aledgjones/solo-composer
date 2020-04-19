@@ -11,7 +11,3 @@
 .instrument-track:last-child {
     margin-bottom: 0;
 }
-
-.instrument-track__tone {
-    position: absolute;
-}

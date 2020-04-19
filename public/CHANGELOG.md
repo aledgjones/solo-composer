@@ -6,12 +6,18 @@ Version numbers are for reference only for now and will follow Semver when more 
 
 ## [0.3.0] - 2020-04-16
 ### Play
+- <label type="feature"></label> Added tools panel for selection / editing, creation and deletion of tones.
+- <label type="changed"></label> Update the auto created score to include time signature change.
 - <label type="fixed"></label> Adding/removing players from a flow no longer selects the flow.
+- <label type="fixed"></label> Show beat groupings in all bars of tick track.
+
+### Parse
+- <label type="fixed"></label> Parse time signature changes correctly.
 
 ## [0.2.0] - 2020-04-16
 ### Play
-- <label type="changed"></label> Updated tick markings for better performance.
-- <label type="changed"></label> Updated tick markings to more clearly show beat groupings.
+- <label type="changed"></label> Updated rending of tick track for better performance.
+- <label type="changed"></label> Updated tick track to more clearly show beat groupings.
 
 ### UI
 - <label type="changed"></label> Pulled UI elements into seperate project.

@@ -2,8 +2,7 @@ import { Store } from "pullstate";
 import { State } from "./state";
 
 export enum Tool {
-    hand = 1,
-    select,
+    select = 1,
     pencil,
     eraser
 }
@@ -34,7 +33,7 @@ export const uiEmptyState = (): UiState => {
             [TabState.play]: {}
         },
         tool: {
-            [TabState.play]: Tool.hand
+            [TabState.play]: Tool.select
         }
     }
 }

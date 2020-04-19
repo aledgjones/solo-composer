@@ -1,5 +1,4 @@
-import React, { FC, useCallback, PointerEvent, useState, useEffect } from 'react';
-import Color from 'color';
+import React, { FC, useCallback, PointerEvent, useState, useMemo, useEffect } from 'react';
 
 import { merge } from 'solo-ui';
 
@@ -11,11 +10,11 @@ import { Staves } from '../../../services/stave';
 import { Tracks } from '../../../services/track';
 import { getToneDimensions, SLOT_HEIGHT } from './get-tone-dimension';
 import { toMidiPitchString, toMidiPitchNumber } from '../../../playback/utils';
-import { THEME } from '../../../const';
 import { EntryType, Entry } from '../../../entries';
 import { Tone } from '../../../entries/tone';
 import { trackBackground } from './track-background';
 import { Tick } from '../ticks/defs';
+import { ToneElement } from '../tone';
 
 import './styles.css';
 
@@ -58,22 +57,26 @@ export const InstrumentTrack: FC<Props> = ({ color, instrument, staves, tracks, 
     const tool = useAppState(s => s.ui.tool[TabState.play]);
     const actions = useAppActions();
 
-    const border = useCallback((selected: boolean) => {
-        const c = Color(selected ? THEME.highlight[500] : color).darken(.5).toString();
-        return `1px solid ${c}`;
-    }, [color]);
-
     const snap = 3; // this need to be generated based on the subdevisions (3/12 === semi-quaver)
     const highestPitch = toMidiPitchNumber('E5');
 
     const [selection, setSelection] = useState<string>();
 
-    const startWrite = useCallback((e: PointerEvent<HTMLDivElement>) => {
-
-        if (tool === Tool.select) {
-            setSelection(undefined);
+    // clear selection when any .intrument-track is clicked
+    useEffect(() => {
+        const callback = (e: any) => {
+            const target = e.target as HTMLElement;
+            if(tool === Tool.select && target.classList.contains('instrument-track')) {
+                setSelection(undefined);
+            }
         }
+        window.addEventListener('pointerdown', callback);
+        return () => {
+            window.removeEventListener('pointerdown', callback);
+        }
+    }, [tool])
 
+    const startWrite = useCallback((e: PointerEvent<HTMLDivElement>) => {
         if (tool === Tool.pencil) {
 
             setSelection(undefined);
@@ -108,41 +111,27 @@ export const InstrumentTrack: FC<Props> = ({ color, instrument, staves, tracks, 
 
     }, [ticks, flowKey, highestPitch, instrument.staves, staves, tool, actions.score.instruments]);
 
-    return <div className={merge("instrument-track", { 'no-scroll': tool !== Tool.hand })} onPointerDown={startWrite} style={{ backgroundImage: trackBackground }}>
-        {instrument.staves.map(staveKey => {
+    const tones = useMemo(() => {
+        const output: Array<{ toneKey: string, trackKey: string, top: number, left: number, width: number }> = [];
+        instrument.staves.forEach(staveKey => {
             const stave = staves[staveKey];
-            return stave.tracks.map(trackKey => {
+            stave.tracks.forEach(trackKey => {
                 const track = tracks[trackKey];
-                return track.entries.order.map(entryKey => {
+                track.entries.order.forEach(entryKey => {
                     if (track.entries.byKey[entryKey]._type === EntryType.tone) {
-
                         const entry = track.entries.byKey[entryKey] as Entry<Tone>;
-                        const selected = entry._key === selection;
                         const [top, left, width] = getToneDimensions(highestPitch, entry, ticks);
-
-                        return <div
-                            key={entry._key}
-                            className="instrument-track__tone"
-                            style={{
-                                border: border(selected),
-                                backgroundColor: selected ? THEME.highlight[500] : color,
-                                top,
-                                left,
-                                height: SLOT_HEIGHT,
-                                width
-                            }}
-                            onPointerDown={e => {
-                                if (tool === Tool.select) {
-                                    setSelection(entry._key);
-                                }
-                                e.stopPropagation();
-                            }}
-                        />;
-                    } else {
-                        return null;
+                        output.push({ toneKey: entry._key, trackKey, top, left, width });
                     }
                 });
             });
+        });
+        return output;
+    }, [highestPitch, instrument.staves, staves, ticks, tracks]);
+
+    return <div className={merge("instrument-track", {"no-scroll": tool === Tool.pencil })} onPointerDown={startWrite} style={{ backgroundImage: trackBackground }}>
+        {tones.map(({ toneKey, trackKey, top, left, width }) => {
+            return <ToneElement key={toneKey} toneKey={toneKey} color={color} tool={tool} selected={toneKey === selection} top={top} left={left} width={width} onSelect={key => setSelection(key)} onErase={key => actions.score.instruments.removeTone(flowKey, trackKey, key)} />
         })}
     </div >;
 }

@@ -67,9 +67,9 @@ export const instrumentActions = (store: Store<State>) => {
             store.update(s => {
                 const track = s.score.flows.byKey[flowKey].tracks[trackKey];
                 delete track.entries.byKey[toneKey];
-                track.entries.order.filter((tone: Entry<any>) => tone._key !== toneKey);
+                track.entries.order = track.entries.order.filter((entry: string) => entry !== toneKey);
             });
-        },
+        }
     }
 }
 

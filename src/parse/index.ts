@@ -27,7 +27,6 @@ import { getWrittenDurations } from "./get-written-durations";
 import { createBarline } from "../entries/barline";
 import { getConvertedConfig } from "./get-converted-config";
 import { getInstruments, getCounts } from "../services/instrument-utils";
-import { buildCurve } from "../render/curve";
 
 export function parse(score: Score, flowKey: FlowKey, mm: number): RenderInstructions {
 

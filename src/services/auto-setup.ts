@@ -20,7 +20,7 @@ export function useAutoSetup() {
         
         actions.ui.tab.set(TabState.setup);
 
-        actions.score.flows.setLength(flowKey, 4 * 12 * 4);
+        actions.score.flows.setLength(flowKey, (4 * 12 * 4) + (4 * 12 * 3));
 
         const def = instrumentDefs['strings.viola'];
         const instrumentKey = actions.score.instruments.create(def);
@@ -32,6 +32,7 @@ export function useAutoSetup() {
         actions.playback.sampler.assignInstrument(instrumentKey, channel);
 
         actions.score.flows.createTimeSignature({ beats: 4, beatType: 4, subdivisions: 12, groupings: getDefaultGroupings(4) }, 0, flowKey);
+        actions.score.flows.createTimeSignature({ beats: 3, beatType: 4, subdivisions: 12, groupings: getDefaultGroupings(3) }, 4 * 12 * 4, flowKey);
         actions.score.flows.createKeySignature({ mode: KeySignatureMode.minor, offset: 2 }, 0, flowKey);
         actions.score.flows.createAbsoluteTempo({ text: 'Allegro', beat: NotationBaseDuration.crotchet, dotted: 0, beatPerMinute: 120, textVisible: true, beatPerMinuteVisible: true, parenthesis: true }, 0, flowKey);
 
