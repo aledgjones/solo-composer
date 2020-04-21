@@ -34,7 +34,7 @@ export const PlayerItem = SortableElement<Props>((props: Props) => {
 
     const onExpand = useCallback((e: MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
-        onToggleExpandPlayer(player.key);
+        onToggleExpandPlayer(player.key + '-setup');
     }, [onToggleExpandPlayer, player.key]);
 
     const onSelect = useCallback(() => onSelectPlayer({ key: player.key, type: SelectionType.player }), [player.key, onSelectPlayer]);

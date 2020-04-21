@@ -86,7 +86,7 @@ const Play: FC<Props> = ({ settings, onSettingsClose }) => {
                         {score.players.order.map((playerKey, i) => {
                             if (flow.players.includes(playerKey)) {
                                 const player = score.players.byKey[playerKey];
-                                return <PlayerControls key={playerKey} color={colors[i]} expanded={expanded[playerKey]} player={player} instruments={score.instruments} counts={counts} onToggleExpand={actions.ui.expanded.toggle} />
+                                return <PlayerControls key={playerKey} color={colors[i]} expanded={expanded[playerKey + '-play']} player={player} instruments={score.instruments} counts={counts} onToggleExpand={actions.ui.expanded.toggle} />
                             } else {
                                 return null;
                             }
@@ -102,7 +102,7 @@ const Play: FC<Props> = ({ settings, onSettingsClose }) => {
                     {score.players.order.map((playerKey, i) => {
                         if (flow.players.includes(playerKey)) {
                             const player = score.players.byKey[playerKey];
-                            return <PlayerTrack key={playerKey} flowKey={flowKey} color={colors[i]} expanded={expanded[playerKey]} player={player} instruments={score.instruments} staves={flow.staves} tracks={flow.tracks} ticks={ticks} />
+                            return <PlayerTrack key={playerKey} flowKey={flowKey} color={colors[i]} expanded={expanded[playerKey + '-play']} player={player} instruments={score.instruments} staves={flow.staves} tracks={flow.tracks} ticks={ticks} />
                         } else {
                             return null;
                         }

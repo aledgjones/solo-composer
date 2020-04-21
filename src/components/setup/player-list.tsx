@@ -46,7 +46,7 @@ export const PlayerList = SortableContainer<Props>((props: Props) => {
                 counts={counts}
 
                 selected={!!(selection && player.key === selection.key)}
-                expanded={expanded[player.key]}
+                expanded={expanded[player.key + '-setup']}
 
                 onSelectPlayer={onSelectPlayer}
                 onToggleExpandPlayer={onToggleExpandPlayer}

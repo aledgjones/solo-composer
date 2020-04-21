@@ -27,7 +27,7 @@ export const PlayerControls: FC<Props> = ({ player, expanded, instruments, count
     const name = usePlayerName(player, instruments, counts);
     const icon = usePlayerIcon(player);
 
-    const toggle = useCallback(() => onToggleExpand(player.key), [onToggleExpand, player.key]);
+    const toggle = useCallback(() => onToggleExpand(player.key + '-play'), [onToggleExpand, player.key]);
 
     return <div className="player-controls" style={{backgroundColor: THEME.grey[600]}}>
         <div className="player-controls__header">

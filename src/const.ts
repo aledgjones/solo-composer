@@ -1,7 +1,7 @@
 export const APP_SHORT_NAME = 'Composer';
 export const APP_FULL_NAME = 'Solo Composer';
 export const APP_CREATOR = 'Solo Apps';
-export const APP_VERSION = '0.2.0';
+export const APP_VERSION = '0.3.0';
 
 export const THEME = {
     grey: {
