@@ -3,7 +3,6 @@ import React, { FC, useState, useMemo, useCallback } from 'react';
 import { Dialog } from 'solo-ui';
 
 import { useAppState, useAppActions } from '../../services/state';
-import { TabState } from '../../services/ui';
 import { PlayerType, PlayerKey } from '../../services/player';
 import { FlowKey } from '../../services/flow';
 import { InstrumentDef } from '../../services/instrument-defs';
@@ -28,7 +27,7 @@ const Setup: FC<Props> = () => {
     const { score, expanded } = useAppState(s => {
         return {
             score: s.score,
-            expanded: s.ui.expanded[TabState.setup]
+            expanded: s.ui.expanded
         }
     });
 
@@ -123,7 +122,7 @@ const Setup: FC<Props> = () => {
                 transitionDuration={200}
 
                 onSelectPlayer={setSelection}
-                onToggleExpandPlayer={actions.ui.expanded[TabState.setup].toggle}
+                onToggleExpandPlayer={actions.ui.expanded.toggle}
                 onCreatePlayer={onCreatePlayer}
                 onAddInstrument={onAddInstrument}
                 onRemovePlayer={onRemovePlayer}

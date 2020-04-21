@@ -73,7 +73,7 @@ export function useTicks(length: number, flowEntriesByTick: EntriesByTick, zoom:
             const isFirstBeat = distanceFromBarline === 0;
 
             if (isFirstBeat) {
-                beatGroupingBoundries = getBeatGroupingBoundries(timeSigAt + tick, ticksPerBeat, timeSig?.groupings || getDefaultGroupings(4));
+                beatGroupingBoundries = getBeatGroupingBoundries(timeSigAt + (tick - timeSigAt), ticksPerBeat, timeSig?.groupings || getDefaultGroupings(4));
             }
 
             const isGroupingBoundry = beatGroupingBoundries.includes(tick);

@@ -17,10 +17,12 @@ export function useAutoSetup() {
     }, [score.flows.order]);
 
     useEffect(() => {
-        
+        const c = 12;
+        const q = 6;
+
         actions.ui.tab.set(TabState.setup);
 
-        actions.score.flows.setLength(flowKey, (2 * 12 * 4) + (4 * 12 * 3));
+        actions.score.flows.setLength(flowKey, (4 * c * 4) + (6 * q * 4));
 
         const ids = ['strings.violin', 'strings.violin', 'strings.viola', 'strings.violoncello'];
 
@@ -35,10 +37,8 @@ export function useAutoSetup() {
             actions.playback.sampler.assignInstrument(instrument.key, channel);
         });
 
-        
-
         actions.score.flows.createTimeSignature({ beats: 4, beatType: 4, subdivisions: 12, groupings: getDefaultGroupings(4) }, 0, flowKey);
-        actions.score.flows.createTimeSignature({ beats: 3, beatType: 4, subdivisions: 12, groupings: getDefaultGroupings(3) }, 2 * 12 * 4, flowKey);
+        actions.score.flows.createTimeSignature({ beats: 6, beatType: 8, subdivisions: 12, groupings: [3, 3] }, 4 * c * 4, flowKey);
         actions.score.flows.createKeySignature({ mode: KeySignatureMode.minor, offset: -3 }, 0, flowKey);
         actions.score.flows.createAbsoluteTempo({ text: 'Allegro', beat: NotationBaseDuration.crotchet, dotted: 0, beatPerMinute: 120, textVisible: true, beatPerMinuteVisible: true, parenthesis: true }, 0, flowKey);
 

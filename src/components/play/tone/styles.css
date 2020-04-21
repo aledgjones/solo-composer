@@ -7,6 +7,7 @@
     top: -4px;
     height: calc(100% + 8px);
     width: 8px;
+    z-index: 2;
 }
 
 .tone__handle--e {
@@ -14,7 +15,20 @@
     cursor: e-resize;
 }
 
+.tone__handle--move {
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+}
+
 .tone__handle--w {
     left: -4px;
     cursor: w-resize;
+}
+
+/* // make the cursor stay by resizxing hit target during editing */
+.tone__handle:active {
+    transform: scale(10);
 }

@@ -9,9 +9,9 @@ import { TextInstruction } from '../../render/text';
 import { CircleInstruction } from '../../render/circle';
 import { CurveInstruction, getControlPoints } from '../../render/curve';
 import { Text } from './text';
+import { useForeground } from 'solo-ui';
 
 import './render-write-mode.css';
-import { useForeground } from 'solo-ui';
 
 interface Props {
     score: Score;

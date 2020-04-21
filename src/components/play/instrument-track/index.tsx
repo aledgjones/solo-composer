@@ -9,17 +9,19 @@ import { Instrument } from "../../../services/instrument";
 import { Staves } from "../../../services/stave";
 import { Tracks } from "../../../services/track";
 import { getToneDimensions, SLOT_HEIGHT } from "./get-tone-dimension";
-import { toMidiPitchString, toMidiPitchNumber } from "../../../playback/utils";
+import { toMidiPitchNumber } from "../../../playback/utils";
 import { EntryType, Entry } from "../../../entries";
 import { Tone } from "../../../entries/tone";
 import { trackBackground } from "./track-background";
 import { Tick } from "../ticks/defs";
 import { ToneElement } from "../tone";
+import { getTickFromXPosition, getPitchFromYPosition } from "./pointer-to-track-coords";
 
 import pencil from "../../../assets/pencil.svg";
 import eraser from "../../../assets/eraser.svg";
 
 import "./styles.css";
+import { Direction } from "../../../parse/get-stem-direction";
 
 interface Props {
     flowKey: FlowKey;
@@ -30,26 +32,43 @@ interface Props {
     ticks: Tick[];
 }
 
-function getPitchFromYPosition(y: number, highestPitch: number, slotHeight: number) {
-    const base = highestPitch;
-    const slot = Math.floor(y / slotHeight);
-    return toMidiPitchString(base - slot);
-}
+function getDuration(x: number, ticks: Tick[], snap: number, tone: Entry<Tone>, start: number, fixedStart: boolean, fixedDuration: boolean) {
+    if (fixedDuration) {
+        return tone.duration;
+    } else {
 
-function getTickFromXPosition(x: number, ticks: Tick[], snap: number, forceFloor: boolean) {
-    for (let i = 0; i < ticks.length; i++) {
-        const tick = ticks[i];
-        if (tick.x > x) {
-            // when we first create a tone we want the X position to always be on the low edge of the snap
-            const roundDown = tick.x / tick.width <= 0.5 || forceFloor;
-            if (roundDown) {
-                return Math.floor((i - 1) / snap) * snap;
-            } else {
-                return Math.ceil((i - 1) / snap) * snap;
-            }
+        const duration = fixedStart ? getTickFromXPosition(x, ticks, snap, Direction.none) - start : tone.duration - (start - tone._tick);
+
+        if (duration < 0) {
+            return 0;
+        } else if (start + duration > ticks.length) {
+            return ticks.length - start - 1;
+        } else {
+            return duration;
         }
     }
-    return 0;
+}
+
+function getStart(x: number, ticks: Tick[], snap: number, tone: Entry<Tone>, initX: number, fixedStart: boolean, fixedDuration: boolean) {
+    if (fixedStart) {
+        return tone._tick;
+    } else {
+        if (fixedDuration) {
+            const start = tone._tick + (getTickFromXPosition(x, ticks, snap, Direction.none) - initX);
+            if (start < 0) {
+                return 0;
+            } else if(start + tone.duration > ticks.length) {
+                // avoid overshooting the track
+                return ticks.length - 1 - tone.duration;
+            } else {
+                return start;
+            }
+        } else {
+            const max = tone._tick + tone.duration;
+            const start = tone._tick + (getTickFromXPosition(x, ticks, snap, Direction.none) - initX);
+            return start < max ? start : max;
+        }
+    }
 }
 
 export const InstrumentTrack: FC<Props> = ({ color, instrument, staves, tracks, ticks, flowKey, }) => {
@@ -57,7 +76,7 @@ export const InstrumentTrack: FC<Props> = ({ color, instrument, staves, tracks, 
     const { tool, selection } = useAppState((s) => {
         return {
             tool: s.ui.tool[TabState.play],
-            selection: s.ui.selection[TabState.play],
+            selection: s.ui.selection,
         };
     });
     const actions = useAppActions();
@@ -65,33 +84,27 @@ export const InstrumentTrack: FC<Props> = ({ color, instrument, staves, tracks, 
     const snap = 3; // this need to be generated based on the subdevisions (3/12 === semi-quaver)
     const highestPitch = toMidiPitchNumber("E5");
     const track = useRef<HTMLDivElement>(null);
+    const staveKey = instrument.staves[0];
+    const trackKey = staves[staveKey].tracks[0];
 
-    const startWrite = useCallback((e: PointerEvent<HTMLDivElement>) => {
-        if (tool === Tool.pencil) {
-
-            const staveKey = instrument.staves[0];
-            const trackKey = staves[staveKey].tracks[0];
-
-            const box = e.currentTarget.getBoundingClientRect();
-            const x = e.clientX - box.left;
-            const y = e.clientY - box.top;
-            const pitch = getPitchFromYPosition(y, highestPitch, SLOT_HEIGHT);
-            const start = getTickFromXPosition(x, ticks, snap, true);
-            const tone = actions.score.instruments.createTone(flowKey, trackKey, { pitch, duration: snap }, start);
-
-            actions.ui.selection[TabState.play].clear();
-            actions.ui.selection[TabState.play].toggle(tone._key);
+    const onEdit = useCallback((e: PointerEvent, tone: Entry<Tone>, fixedStart: boolean, fixedDuration: boolean, fixedPitch: boolean) => {
+        if (track.current) {
+            const box = track.current.getBoundingClientRect();
+            const initX = getTickFromXPosition(e.clientX - box.left, ticks, snap, Direction.none);
 
             const move = (e: any) => {
                 const x = e.clientX - box.left;
-                const duration = getTickFromXPosition(x, ticks, snap, false) - start;
-                console.log(duration);
-                actions.score.instruments.updateTone(flowKey, trackKey, tone._key, { duration, });
+                const y = e.clientY - box.top;
+                const pitch = fixedPitch ? tone.pitch : getPitchFromYPosition(y, highestPitch, SLOT_HEIGHT);
+                const start = getStart(x, ticks, snap, tone, initX, fixedStart, fixedDuration);
+                const duration = getDuration(x, ticks, snap, tone, start, fixedStart, fixedDuration);
+                actions.score.instruments.updateTone(flowKey, trackKey, tone._key, { pitch, duration }, start);
             };
 
             const end = (e: any) => {
                 const x = e.clientX - box.left;
-                const duration = getTickFromXPosition(x, ticks, snap, false) - start;
+                const start = getStart(x, ticks, snap, tone, initX, fixedStart, fixedDuration);
+                const duration = getDuration(x, ticks, snap, tone, start, fixedStart, fixedDuration);
                 if (duration <= 0) {
                     actions.score.instruments.removeTone(flowKey, trackKey, tone._key);
                 }
@@ -102,10 +115,30 @@ export const InstrumentTrack: FC<Props> = ({ color, instrument, staves, tracks, 
             window.addEventListener("pointermove", move, { passive: true });
             window.addEventListener("pointerup", end, { passive: true });
         }
-    }, [ticks, flowKey, highestPitch, instrument.staves, staves, tool, actions.score.instruments, actions.ui.selection]);
+    }, [track, trackKey, ticks, flowKey, highestPitch, actions.score.instruments]);
+
+
+    const onCreate = useCallback((e: PointerEvent) => {
+        if (track.current) {
+
+            const box = track.current.getBoundingClientRect();
+            const x = e.clientX - box.left;
+            const y = e.clientY - box.top;
+            const start = getTickFromXPosition(x, ticks, snap, Direction.down);
+            const duration = getTickFromXPosition(x, ticks, snap, Direction.none) - start;
+            const pitch = getPitchFromYPosition(y, highestPitch, SLOT_HEIGHT);
+            const tone = actions.score.instruments.createTone(flowKey, trackKey, { pitch, duration }, start);
+
+            actions.ui.selection[TabState.play].clear();
+            actions.ui.selection[TabState.play].toggle(tone._key);
+
+            onEdit(e, tone, true, false, true);
+
+        }
+    }, [onEdit, track, trackKey, ticks, flowKey, highestPitch, actions.score.instruments, actions.ui.selection]);
 
     const tones = useMemo(() => {
-        const output: Array<{ toneKey: string, trackKey: string, top: number, left: number, width: number }> = [];
+        const output: Array<{ tone: Entry<Tone>, trackKey: string, top: number, left: number, width: number }> = [];
         instrument.staves.forEach((staveKey) => {
             const stave = staves[staveKey];
             stave.tracks.forEach((trackKey) => {
@@ -114,7 +147,7 @@ export const InstrumentTrack: FC<Props> = ({ color, instrument, staves, tracks, 
                     if (track.entries.byKey[entryKey]._type === EntryType.tone) {
                         const entry = track.entries.byKey[entryKey] as Entry<Tone>;
                         const [top, left, width] = getToneDimensions(highestPitch, entry, ticks);
-                        output.push({ toneKey: entry._key, trackKey, top, left, width, });
+                        output.push({ tone: entry, trackKey, top, left, width, });
                     }
                 });
             });
@@ -137,24 +170,26 @@ export const InstrumentTrack: FC<Props> = ({ color, instrument, staves, tracks, 
         <div
             ref={track}
             className={merge("instrument-track", { "no-scroll": tool === Tool.pencil })}
-            onPointerDown={startWrite}
+            onPointerDown={tool === Tool.pencil ? onCreate : undefined}
             style={{ backgroundImage: trackBackground, cursor }}
         >
-            {tones.map(({ toneKey, trackKey, top, left, width }) => {
+            {tones.map(({ tone, trackKey, top, left, width }) => {
                 return (
                     <ToneElement
-                        key={toneKey}
-                        
+                        key={tone._key}
+
                         flowKey={flowKey}
                         trackKey={trackKey}
-                        toneKey={toneKey}
+                        tone={tone}
 
                         color={color}
                         tool={tool}
-                        selected={selection[toneKey]}
+                        selected={selection[tone._key]}
                         top={top}
                         left={left}
                         width={width}
+
+                        onEdit={onEdit}
                     />
                 );
             })}

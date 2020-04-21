@@ -4,9 +4,11 @@ This is very much an early stage work in progress. Most features are not yet imp
 
 Version numbers are for reference only for now and will follow Semver when more things are implemented. Changelog entries start with the different section of the application (tabs) for overarching UI / feature changes. This is followed by implementation details (playback, parsing etc...)
 
-## [0.3.0] - 2020-04-16
+## [0.3.0] - 2020-04-21
 ### Play
 - <label type="feature"></label> Added tools panel for selection / editing, creation and deletion of tones.
+- <label type="feature"></label> Tones can be moved and duration altered by pointer input. Constrained to track area.
+- <label type="feature"></label> Tones can be deleted by with pointer input.
 - <label type="changed"></label> Update the auto created score to include time signature change.
 - <label type="fixed"></label> Adding/removing players from a flow no longer selects the flow.
 - <label type="fixed"></label> Show beat groupings in all bars of tick track.

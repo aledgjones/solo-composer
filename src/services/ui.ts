@@ -17,12 +17,8 @@ export enum TabState {
 
 export interface UiState {
     tab: TabState;
-    expanded: {
-        [view: string]: { [key: string]: boolean };
-    };
-    selection: {
-        [view: string]: { [key: string]: boolean };
-    };
+    expanded: { [key: string]: boolean };
+    selection: { [key: string]: boolean };
     tool: {
         [view: string]: Tool;
     }
@@ -31,13 +27,8 @@ export interface UiState {
 export const uiEmptyState = (): UiState => {
     return {
         tab: TabState.setup,
-        expanded: {
-            [TabState.setup]: {},
-            [TabState.play]: {}
-        },
-        selection: {
-            [TabState.play]: {}
-        },
+        expanded: {},
+        selection: {},
         tool: {
             [TabState.play]: Tool.select
         }
@@ -45,17 +36,6 @@ export const uiEmptyState = (): UiState => {
 }
 
 export const uiActions = (store: Store<State>) => {
-
-    function toggleExpanded(key: string, view: TabState) {
-        store.update(s => {
-            if (s.ui.expanded[view][key]) {
-                delete s.ui.expanded[view][key];
-            } else {
-                s.ui.expanded[view][key] = true;
-            }
-        });
-    }
-
     return {
         tab: {
             set: (tab: TabState) => {
@@ -65,28 +45,35 @@ export const uiActions = (store: Store<State>) => {
             }
         },
         expanded: {
-            [TabState.setup]: { toggle: (key: string) => toggleExpanded(key, TabState.setup) },
-            [TabState.play]: { toggle: (key: string) => toggleExpanded(key, TabState.play) }
+            toggle: (key: string) => {
+                store.update(s => {
+                    if (s.ui.expanded[key]) {
+                        delete s.ui.expanded[key];
+                    } else {
+                        s.ui.expanded[key] = true;
+                    }
+                });
+            }
         },
         selection: {
             [TabState.play]: {
                 toggle: (key: string) => {
                     store.update(s => {
-                        if (s.ui.selection[TabState.play][key] === true) {
-                            delete s.ui.selection[TabState.play][key];
+                        if (s.ui.selection[key] === true) {
+                            delete s.ui.selection[key];
                         } else {
-                            s.ui.selection[TabState.play][key] = true;
+                            s.ui.selection[key] = true;
                         }
                     });
                 },
                 deselect: (key: string) => {
                     store.update(s => {
-                        delete s.ui.selection[TabState.play][key];
+                        delete s.ui.selection[key];
                     });
                 },
                 clear: () => {
                     store.update(s => {
-                        s.ui.selection[TabState.play] = {};
+                        s.ui.selection = {};
                     });
                 }
             }
