@@ -1,13 +1,15 @@
 import React, { FC, useMemo } from 'react';
 import Color from 'color';
 
-import { Tool } from '../../../services/ui';
+import { Tool, TabState } from '../../../services/ui';
 import { SLOT_HEIGHT } from '../instrument-track/get-tone-dimension';
+import { useAppActions } from '../../../services/state';
 
 import './styles.css';
-import { THEME } from '../../../const';
 
 interface Props {
+    flowKey: string;
+    trackKey: string;
     toneKey: string;
 
     top: number;
@@ -16,12 +18,11 @@ interface Props {
     color: string;
     selected: boolean;
     tool: Tool;
-
-    onSelect: (key: string) => void;
-    onErase: (key: string) => void;
 }
 
-export const ToneElement: FC<Props> = ({ toneKey, selected, color, top, left, width, tool, onSelect, onErase }) => {
+export const ToneElement: FC<Props> = ({ flowKey, trackKey, toneKey, selected, color, top, left, width, tool }) => {
+
+    const actions = useAppActions();
 
     const fill = useMemo(() => {
         if (selected) {
@@ -33,7 +34,7 @@ export const ToneElement: FC<Props> = ({ toneKey, selected, color, top, left, wi
 
     const border = useMemo(() => {
         if (selected) {
-            return `1px solid ${THEME.highlight[500]}`;
+            return `1px solid ${color}`;
         } else {
             const c = Color(color).darken(.5).toString();
             return `1px solid ${c}`;
@@ -53,16 +54,21 @@ export const ToneElement: FC<Props> = ({ toneKey, selected, color, top, left, wi
         }}
         onPointerDown={e => {
             if (tool === Tool.select) {
-                onSelect(toneKey);
                 // stop the delect event listener on .instrument-track from firing
                 e.stopPropagation();
+                if (!e.ctrlKey) {
+                    actions.ui.selection[TabState.play].clear();
+                }
+                actions.ui.selection[TabState.play].toggle(toneKey);
             }
+
             if (tool === Tool.eraser) {
-                onErase(toneKey);
+                actions.ui.selection[TabState.play].deselect(toneKey);
+                actions.score.instruments.removeTone(flowKey, trackKey, toneKey);
             }
         }}
     >
-        {selected && tool === Tool.select && <>
+        {tool === Tool.select && <>
             <div className="tone__handle tone__handle--w" />
             <div className="tone__handle tone__handle--e" />
         </>}

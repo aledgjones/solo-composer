@@ -1,4 +1,4 @@
-import React, { FC, useState, useMemo } from 'react';
+import React, { FC, useState, useMemo, useEffect } from 'react';
 import { mdiCursorDefault, mdiEraser, mdiPencilOutline } from '@mdi/js';
 import ScrollContainer from 'react-indiana-drag-scroll';
 
@@ -43,6 +43,23 @@ const Play: FC<Props> = ({ settings, onSettingsClose }) => {
 
     const colors = useRainbow(score.players.order.length);
     const fg = useForeground(THEME.grey[400]);
+
+    // deal with selection
+    useEffect(() => {
+
+        const callback = (e: any) => {
+            const target = e.target as HTMLElement;
+            if (tool === Tool.select && target.classList.contains('instrument-track')) {
+                actions.ui.selection[TabState.play].clear();
+            }
+        };
+        window.addEventListener("pointerdown", callback);
+
+        return () => {
+            window.removeEventListener("pointerdown", callback);
+        };
+
+    }, [tool, actions.ui.selection]);
 
     return <>
 
