@@ -1,7 +1,10 @@
 import { useMemo } from "react";
 import { ClefType, ClefDef } from "../entries/clef-defs";
 import { Expressions } from "../playback/expressions";
-import { Patches } from "../playback/sampler";
+
+export interface PatchDef {
+    [expression: string]: string;
+}
 
 export interface StaveDef {
     lines: number;
@@ -14,7 +17,7 @@ export interface InstrumentDef {
     longName: string;
     shortName: string;
     staves: StaveDef[];
-    patches: Patches;
+    patches: PatchDef;
 }
 
 export interface InstrumentDefs {
@@ -74,7 +77,7 @@ export const instrumentDefs: InstrumentDefs = {
             { lines: 5, clef: { pitch: ClefType.F, offset: 2 } }
         ],
         patches: {
-            [Expressions.natural]: '/patches/harp/legato.json'
+            [Expressions.natural]: '/patches/harp/natural.json'
         }
     },
     "percussion.timpani": {
@@ -86,7 +89,7 @@ export const instrumentDefs: InstrumentDefs = {
             { lines: 5, clef: { pitch: ClefType.F, offset: 2 } }
         ],
         patches: {
-            [Expressions.natural]: '/patches/timpani/legato.json'
+            [Expressions.natural]: '/patches/timpani/natural.json'
         }
     },
     "keyboards.piano": {
@@ -99,7 +102,7 @@ export const instrumentDefs: InstrumentDefs = {
             { lines: 5, clef: { pitch: ClefType.F, offset: 2 } }
         ],
         patches: {
-            [Expressions.natural]: '/patches/piano/legato.json'
+            [Expressions.natural]: '/patches/piano/natural.json'
         }
     },
     "strings.violin": {
@@ -111,7 +114,7 @@ export const instrumentDefs: InstrumentDefs = {
             { lines: 5, clef: { pitch: ClefType.G, offset: 6 } }
         ],
         patches: {
-            [Expressions.natural]: '/patches/violin/legato.json',
+            [Expressions.natural]: '/patches/violin/natural.json',
             [Expressions.pizzicato]: '/patches/violin/pizzicato.json',
             [Expressions.spiccato]: '/patches/violin/spiccato.json',
             [Expressions.tremolo]: '/patches/violin/tremolo.json'
@@ -126,7 +129,7 @@ export const instrumentDefs: InstrumentDefs = {
             { lines: 5, clef: { pitch: ClefType.C, offset: 4 } }
         ],
         patches: {
-            [Expressions.natural]: '/patches/viola/legato.json',
+            [Expressions.natural]: '/patches/viola/natural.json',
             [Expressions.pizzicato]: '/patches/viola/pizzicato.json',
             [Expressions.staccato]: '/patches/viola/staccato.json'
         }
@@ -140,7 +143,7 @@ export const instrumentDefs: InstrumentDefs = {
             { lines: 5, clef: { pitch: ClefType.F, offset: 2 } }
         ],
         patches: {
-            [Expressions.natural]: '/patches/violoncello/legato.json',
+            [Expressions.natural]: '/patches/violoncello/natural.json',
             [Expressions.pizzicato]: '/patches/violoncello/pizzicato.json',
             [Expressions.staccato]: '/patches/violoncello/staccato.json'
         }
@@ -154,7 +157,7 @@ export const instrumentDefs: InstrumentDefs = {
             { lines: 5, clef: { pitch: ClefType.F, offset: 2 } }
         ],
         patches: {
-            [Expressions.natural]: '/patches/contrabass/legato.json',
+            [Expressions.natural]: '/patches/contrabass/natural.json',
             [Expressions.spiccato]: '/patches/contrabass/spiccato.json',
             [Expressions.pizzicato]: '/patches/contrabass/pizzicato.json'
         }
@@ -168,7 +171,7 @@ export const instrumentDefs: InstrumentDefs = {
             { lines: 5, clef: { pitch: ClefType.F, offset: 2 } }
         ],
         patches: {
-            [Expressions.natural]: '/patches/trombone/legato.json',
+            [Expressions.natural]: '/patches/trombone/natural.json',
             [Expressions.spiccato]: '/patches/trombone/staccato.json'
         }
     },
@@ -181,7 +184,7 @@ export const instrumentDefs: InstrumentDefs = {
             { lines: 5, clef: { pitch: ClefType.G, offset: 6 } }
         ],
         patches: {
-            [Expressions.natural]: '/patches/piccolo/legato.json',
+            [Expressions.natural]: '/patches/piccolo/natural.json',
             [Expressions.staccato]: '/patches/piccolo/staccato.json'
         }
     },
@@ -194,7 +197,7 @@ export const instrumentDefs: InstrumentDefs = {
             { lines: 5, clef: { pitch: ClefType.G, offset: 6 } }
         ],
         patches: {
-            [Expressions.natural]: "/patches/flute/legato.json",
+            [Expressions.natural]: "/patches/flute/natural.json",
             [Expressions.staccato]: "/patches/flute/staccato.json"
         }
     },
@@ -207,7 +210,7 @@ export const instrumentDefs: InstrumentDefs = {
             { lines: 5, clef: { pitch: ClefType.G, offset: 6 } }
         ],
         patches: {
-            [Expressions.natural]: '/patches/oboe/legato.json',
+            [Expressions.natural]: '/patches/oboe/natural.json',
             [Expressions.staccato]: '/patches/oboe/staccato.json'
         }
     },
@@ -220,7 +223,7 @@ export const instrumentDefs: InstrumentDefs = {
             { lines: 5, clef: { pitch: ClefType.G, offset: 6 } }
         ],
         patches: {
-            [Expressions.natural]: '/patches/cor-anglais/legato.json',
+            [Expressions.natural]: '/patches/cor-anglais/natural.json',
             [Expressions.staccato]: '/patches/cor-anglais/staccato.json'
         }
     },
@@ -233,7 +236,7 @@ export const instrumentDefs: InstrumentDefs = {
             { lines: 5, clef: { pitch: ClefType.G, offset: 6 } }
         ],
         patches: {
-            [Expressions.natural]: "/patches/clarinet/legato.json",
+            [Expressions.natural]: "/patches/clarinet/natural.json",
             [Expressions.staccato]: "/patches/clarinet/staccato.json"
         }
     },
@@ -246,7 +249,7 @@ export const instrumentDefs: InstrumentDefs = {
             { lines: 5, clef: { pitch: ClefType.G, offset: 6 } }
         ],
         patches: {
-            [Expressions.natural]: "/patches/clarinet/legato.json",
+            [Expressions.natural]: "/patches/clarinet/natural.json",
             [Expressions.staccato]: "/patches/clarinet/staccato.json"
         }
     },
@@ -259,7 +262,7 @@ export const instrumentDefs: InstrumentDefs = {
             { lines: 5, clef: { pitch: ClefType.G, offset: 6 } }
         ],
         patches: {
-            [Expressions.natural]: "/patches/bass-clarinet/legato.json",
+            [Expressions.natural]: "/patches/bass-clarinet/natural.json",
             [Expressions.staccato]: "/patches/bass-clarinet/staccato.json"
         }
     },
@@ -272,7 +275,7 @@ export const instrumentDefs: InstrumentDefs = {
             { lines: 5, clef: { pitch: ClefType.F, offset: 2 } }
         ],
         patches: {
-            [Expressions.natural]: '/patches/bassoon/legato.json',
+            [Expressions.natural]: '/patches/bassoon/natural.json',
             [Expressions.staccato]: '/patches/bassoon/staccato.json'
         }
     }

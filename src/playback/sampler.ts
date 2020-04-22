@@ -1,12 +1,12 @@
 import shortid from 'shortid';
-import { Output, OutputType, ChannelKey, OutputProgressCallback } from "./output";
 import { APP_SHORT_NAME, APP_CREATOR } from '../const';
-import { InstrumentPlayer } from './instrument-player';
+import { SoloSamplerChannel, ChannelKey } from './sampler-channel';
 import { Pitch } from './utils';
+import { PatchDef } from '../services/instrument-defs';
+import { Expressions } from './expressions';
+import { Time } from 'tone/build/esm/core/type/Units';
 
-export interface Patches {
-    [patchKey: string]: string;
-}
+export type OutputProgressCallback = (progress: number) => void;
 
 export enum SamplerCurrentState {
     loading = 1,
@@ -14,24 +14,22 @@ export enum SamplerCurrentState {
     error
 }
 
-export class Sampler implements Output {
+export class SoloSampler {
 
     public id = shortid();
     public name = `${APP_SHORT_NAME} Internal Sampler`;
     public manufacturer = APP_CREATOR;
-    public type = OutputType.sampler;
 
-    private audioContext = new AudioContext();
-    private channels: { [channel: string]: InstrumentPlayer } = {};
+    private channels: { [channel: string]: SoloSamplerChannel } = {};
 
-    public load(channel: ChannelKey, patchUrls: Patches, patchName: string, progressCallback: OutputProgressCallback) {
-        this.channels[channel] = new InstrumentPlayer(this.audioContext);
+    public load(channel: ChannelKey, patchUrls: PatchDef, progressCallback: OutputProgressCallback) {
+        this.channels[channel] = new SoloSamplerChannel();
         return this.channels[channel].load(patchUrls, (val) => {
             progressCallback(val);
         });
     }
 
-    public play(channel: ChannelKey, patch: string, pitch: Pitch, velocity: number, duration: number, when?: number) {
+    public play(channel: ChannelKey, patch: Expressions, pitch: Pitch, velocity: number, duration: Time, when?: Time) {
         const playback = this.channels[channel];
         playback.play(patch, pitch, velocity, duration, when);
     }

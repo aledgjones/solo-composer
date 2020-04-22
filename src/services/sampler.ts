@@ -3,11 +3,12 @@ import shortid from "shortid";
 
 import { State } from "./state";
 import { InstrumentKey } from "./instrument";
-import { ChannelKey, PatchKey } from "../playback/output";
-import { Sampler, SamplerCurrentState, Patches } from "../playback/sampler";
-import { InstrumentDef } from "./instrument-defs";
+import { SoloSampler, SamplerCurrentState } from "../playback/sampler";
+import { InstrumentDef, PatchDef } from "./instrument-defs";
+import { ChannelKey } from "../playback/sampler-channel";
+import { Expressions } from "../playback/expressions";
 
-const sampler = new Sampler();
+const sampler = new SoloSampler();
 
 export interface Channel {
     key: ChannelKey;
@@ -15,8 +16,8 @@ export interface Channel {
     progress: number;
     patchGroupName?: string;
     patches: {
-        order: PatchKey[];
-        byKey: Patches;
+        order: Expressions[];
+        byKey: PatchDef;
     };
     assigned?: InstrumentKey;
 }
@@ -65,10 +66,10 @@ export const samplerActions = (store: Store<State>) => {
                 const channel = s.playback.sampler.channels.byKey[channelKey];
                 channel.state = SamplerCurrentState.loading;
                 channel.patchGroupName = def.id;
-                channel.patches.order = Object.keys(def.patches);
+                channel.patches.order = Object.keys(def.patches) as any[];
                 channel.patches.byKey = def.patches;
             });
-            await sampler.load(channelKey, def.patches, def.id, (progress) => {
+            await sampler.load(channelKey, def.patches, (progress) => {
                 store.update(s => {
                     const channel = s.playback.sampler.channels.byKey[channelKey];
                     channel.progress = progress;
@@ -87,16 +88,16 @@ export const samplerActions = (store: Store<State>) => {
         stopAll: () => {
             sampler.stopAll();
         },
-        test: (channel: ChannelKey, patch: PatchKey) => {
-            sampler.play(channel, patch, 'C4', 100, 250, 0);
-            sampler.play(channel, patch, 'D4', 105, 250, 250);
-            sampler.play(channel, patch, 'E4', 110, 250, 500);
-            sampler.play(channel, patch, 'F4', 115, 250, 750);
-            sampler.play(channel, patch, 'G4', 120, 250, 1000);
-            sampler.play(channel, patch, 'F4', 115, 250, 1250);
-            sampler.play(channel, patch, 'E4', 110, 250, 1500);
-            sampler.play(channel, patch, 'D4', 105, 250, 1750);
-            sampler.play(channel, patch, 'C4', 100, 1000, 2000);
+        test: (channel: ChannelKey, patch: Expressions) => {
+            sampler.play(channel, patch, 'C4', 0.80, 0.250, 0.000);
+            sampler.play(channel, patch, 'D4', 0.85, 0.250, 0.250);
+            sampler.play(channel, patch, 'E4', 0.90, 0.250, 0.500);
+            sampler.play(channel, patch, 'F4', 0.95, 0.250, 0.750);
+            sampler.play(channel, patch, 'G4', 1.00, 0.250, 1.000);
+            sampler.play(channel, patch, 'F4', 0.95, 0.250, 1.250);
+            sampler.play(channel, patch, 'E4', 0.90, 0.250, 1.500);
+            sampler.play(channel, patch, 'D4', 0.85, 0.250, 1.750);
+            sampler.play(channel, patch, 'C4', 0.80, 1.000, 2.000);
         }
     }
 }

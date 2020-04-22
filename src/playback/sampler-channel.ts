@@ -1,27 +1,20 @@
-import { PatchPlayer } from "./patch-player";
+import { SoloSamplerPatch } from "./sampler-patch";
 import { Expressions } from "./expressions";
 import { Pitch } from "./utils";
+import { Time, NormalRange } from "tone/build/esm/core/type/Units";
 
-export class InstrumentPlayer {
+export type ChannelKey = string;
 
-    private patches: { [patchName: string]: PatchPlayer } = {};
-    private gainNode: GainNode;
+export class SoloSamplerChannel {
 
-    constructor(private ac: AudioContext) {
-        this.gainNode = ac.createGain();
-        this.gainNode.connect(ac.destination);
-    }
-
-    public gain(value: number) {
-        this.gainNode.gain.value = value;
-    }
+    private patches: { [expression: string]: SoloSamplerPatch } = {};
 
     public async load(patchUrls: { [expression: string]: string }, progress?: (val: number) => void) {
         const expressions = Object.keys(patchUrls);
         const total = expressions.length;
         let completed = 0;
         const loaders = expressions.map(async expression => {
-            this.patches[expression] = new PatchPlayer(this.ac, this.gainNode);
+            this.patches[expression] = new SoloSamplerPatch();
             await this.patches[expression].loadPatch(patchUrls[expression]);
             completed++;
             if (progress) {
@@ -33,13 +26,8 @@ export class InstrumentPlayer {
 
     /**
      * Play a patch
-     *
-     * @param pitch         eg. C4
-     * @param velocity      1-127
-     * @param duration      ms
-     * @param when          ms 
      */
-    public play(patch: string, pitch: Pitch, velocity: number, duration: number, when?: number) {
+    public play(patch: string, pitch: Pitch, velocity: NormalRange, duration: Time, when?: Time) {
         const output = this.patches[patch] || this.patches[Expressions.natural];
         output.play(pitch, velocity, duration, when);
     }
