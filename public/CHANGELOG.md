@@ -1,8 +1,15 @@
 Welcome to this Solo Apps experiment!
 
-This is very much an early stage work in progress. Most features are not yet implemented and things **will** break.
+This is very much an early stage work in progress. Most features are not yet implemented and things **will** break. This project is inspired by the amazing work the people at Steinberg are doing on [Dorico](https://new.steinberg.net/dorico/). If you haven't taken a look I recommend you do. It's a serious game changer for music notation software.
 
 Version numbers are for reference only for now and will follow Semver when more things are implemented. Changelog entries start with the different section of the application (tabs) for overarching UI / feature changes. This is followed by implementation details (playback, parsing etc...)
+
+## [0.4.0] - 2020-04-21
+### Play
+- <label type="fixed"></label> Fixed regression where expanding a player on one tab expanded on another due to reorganising the data store.
+
+### Playback
+- <label type="changed"></label> Migrate to Tone.js. It includes many of the things I need: Sampler (playback of individual samples with pitch alterations built in), Transport (seekable sequence of timed events), envelopes (programatic attach, sustain, release timings).
 
 ## [0.3.0] - 2020-04-21
 ### Play
