@@ -3,10 +3,18 @@ import shortid from "shortid";
 
 import { State } from "./state";
 import { InstrumentKey } from "./instrument";
-import { SamplerCurrentState, sampler } from "../playback/sampler";
-import { InstrumentDef, PatchDef } from "./instrument-defs";
-import { ChannelKey } from "../playback/sampler-channel";
+import { InstrumentDef } from "./instrument-defs";
 import { Expressions } from "../playback/expressions";
+import { APP_CREATOR } from "../const";
+import { PatchPlayer } from '../playback/patch-player';
+
+export type ChannelKey = string;
+
+export enum SamplerCurrentState {
+    loading = 1,
+    ready,
+    error
+}
 
 export interface Channel {
     key: ChannelKey;
@@ -15,11 +23,12 @@ export interface Channel {
     patchGroupName?: string;
     patches: {
         order: Expressions[];
-        byKey: PatchDef;
+        byKey: {
+            [patchKey: string]: PatchPlayer;
+        };
     };
     assigned?: InstrumentKey;
 }
-
 
 export interface ChannelState {
     order: ChannelKey[];
@@ -37,9 +46,9 @@ export interface SamplerState {
 
 export const samplerEmptyState = (): SamplerState => {
     return {
-        name: sampler.name,
-        version: sampler.version,
-        manufacturer: sampler.manufacturer,
+        name: 'Internal Sampler',
+        version: '1.0.0',
+        manufacturer: APP_CREATOR,
         channels: {
             order: [],
             byKey: {}
@@ -70,15 +79,25 @@ export const samplerActions = (store: Store<State>) => {
                 const channel = s.playback.sampler.channels.byKey[channelKey];
                 channel.state = SamplerCurrentState.loading;
                 channel.patchGroupName = def.id;
-                channel.patches.order = Object.keys(def.patches) as any[];
-                channel.patches.byKey = def.patches;
             });
-            await sampler.load(channelKey, def.patches, (progress) => {
+
+            const expressions = Object.keys(def.patches) as Expressions[];
+            const count = expressions.length;
+            let completed = 0;
+
+            await Promise.all(expressions.map(async (expression: Expressions) => {
+                const patchUrl = def.patches[expression];
+                const player = new PatchPlayer();
+                await player.loadPatch(patchUrl);
+                completed++;
                 store.update(s => {
                     const channel = s.playback.sampler.channels.byKey[channelKey];
-                    channel.progress = progress;
+                    channel.patches.order.push(expression);
+                    channel.patches.byKey[expression] = player;
+                    channel.progress = completed / count;
                 });
-            });
+            }));
+
             store.update(s => {
                 const channel = s.playback.sampler.channels.byKey[channelKey];
                 channel.state = SamplerCurrentState.ready;
@@ -91,6 +110,9 @@ export const samplerActions = (store: Store<State>) => {
         },
         test: (channel: ChannelKey) => {
 
+            const state = store.getRawState();
+            const patch = state.playback.sampler.channels.byKey[channel].patches.byKey[Expressions.natural];
+            
             const notes: [string, number, number][] = [
                 ['C4', 0.30, 0.250],
                 ['D4', 0.40, 0.250],
@@ -106,7 +128,7 @@ export const samplerActions = (store: Store<State>) => {
             // timing is not accurate but it is fine for a test
             notes.forEach(([pitch, velocity, duration], i) => {
                 setTimeout(() => {
-                    sampler.play(channel, Expressions.natural, pitch, velocity, duration);
+                    patch.play(pitch, velocity, duration);
                 }, 250 * i);
             });
 

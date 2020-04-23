@@ -11,7 +11,7 @@ interface PatchFromFile {
     }
 }
 
-export class SoloSamplerPatch {
+export class PatchPlayer {
 
     private sampler = new Sampler().toDestination();
 

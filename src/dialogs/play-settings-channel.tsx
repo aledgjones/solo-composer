@@ -4,11 +4,10 @@ import { mdiChevronRight } from '@mdi/js';
 import { Spinner, Icon, merge } from 'solo-ui';
 
 import { THEME } from '../const';
-import { Channel } from '../services/sampler';
+import { Channel, SamplerCurrentState } from '../services/sampler';
 import { useInstrumentName, Instruments } from '../services/instrument';
 import { useAppActions } from '../services/state';
 import { InstrumentCounts } from '../services/instrument-utils';
-import { SamplerCurrentState } from '../playback/sampler';
 import { Text } from '../components/shared/text';
 
 interface Props {
