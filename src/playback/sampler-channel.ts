@@ -1,7 +1,6 @@
 import { SoloSamplerPatch } from "./sampler-patch";
 import { Expressions } from "./expressions";
 import { Pitch } from "./utils";
-import { Time, NormalRange } from "tone/build/esm/core/type/Units";
 
 export type ChannelKey = string;
 
@@ -27,9 +26,9 @@ export class SoloSamplerChannel {
     /**
      * Play a patch
      */
-    public play(patch: string, pitch: Pitch, velocity: NormalRange, duration: Time, when?: Time) {
+    public play(patch: string, pitch: Pitch, velocity: number, duration: number) {
         const output = this.patches[patch] || this.patches[Expressions.natural];
-        output.play(pitch, velocity, duration, when);
+        output.play(pitch, velocity, duration);
     }
 
     public stopAll() {

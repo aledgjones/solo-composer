@@ -20,7 +20,7 @@ export function useAutoSetup() {
         const c = 12;
         const q = 6;
 
-        actions.ui.tab.set(TabState.setup);
+        actions.ui.tab.set(TabState.play);
 
         actions.score.flows.setLength(flowKey, (4 * c * 4) + (6 * q * 4));
 

@@ -52,7 +52,7 @@ export const samplerActions = (store: Store<State>) => {
                 s.playback.sampler.channels.byKey[channelKey] = {
                     key: channelKey,
                     state: SamplerCurrentState.ready,
-                    progress: 1,
+                    progress: 0,
                     patches: {
                         order: [],
                         byKey: {}
@@ -89,15 +89,26 @@ export const samplerActions = (store: Store<State>) => {
             sampler.stopAll();
         },
         test: (channel: ChannelKey, patch: Expressions) => {
-            sampler.play(channel, patch, 'C4', 0.80, 0.250, 0.000);
-            sampler.play(channel, patch, 'D4', 0.85, 0.250, 0.250);
-            sampler.play(channel, patch, 'E4', 0.90, 0.250, 0.500);
-            sampler.play(channel, patch, 'F4', 0.95, 0.250, 0.750);
-            sampler.play(channel, patch, 'G4', 1.00, 0.250, 1.000);
-            sampler.play(channel, patch, 'F4', 0.95, 0.250, 1.250);
-            sampler.play(channel, patch, 'E4', 0.90, 0.250, 1.500);
-            sampler.play(channel, patch, 'D4', 0.85, 0.250, 1.750);
-            sampler.play(channel, patch, 'C4', 0.80, 1.000, 2.000);
+
+            const notes: [string, number, number][] = [
+                ['C4', 0.30, 0.250],
+                ['D4', 0.40, 0.250],
+                ['E4', 0.60, 0.250],
+                ['F4', 0.80, 0.250],
+                ['G4', 0.90, 0.250],
+                ['F4', 0.80, 0.250],
+                ['E4', 0.60, 0.250],
+                ['D4', 0.40, 0.250],
+                ['C4', 0.30, 1.000]
+            ];
+
+            // timing is not accurate but it is fine for a test
+            notes.forEach(([pitch, velocity, duration], i) => {
+                setTimeout(() => {
+                    sampler.play(channel, patch, pitch, velocity, duration);
+                }, 250 * i);
+            });
+
         }
     }
 }

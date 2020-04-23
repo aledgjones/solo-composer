@@ -4,7 +4,6 @@ import { SoloSamplerChannel, ChannelKey } from './sampler-channel';
 import { Pitch } from './utils';
 import { PatchDef } from '../services/instrument-defs';
 import { Expressions } from './expressions';
-import { Time } from 'tone/build/esm/core/type/Units';
 
 export type OutputProgressCallback = (progress: number) => void;
 
@@ -29,9 +28,9 @@ export class SoloSampler {
         });
     }
 
-    public play(channel: ChannelKey, patch: Expressions, pitch: Pitch, velocity: number, duration: Time, when?: Time) {
+    public play(channel: ChannelKey, patch: Expressions, pitch: Pitch, velocity: number, duration: number) {
         const playback = this.channels[channel];
-        playback.play(patch, pitch, velocity, duration, when);
+        playback.play(patch, pitch, velocity, duration);
     }
 
     public stopAll() {
@@ -39,6 +38,6 @@ export class SoloSampler {
         channels.forEach(channel => {
             const ch = parseInt(channel);
             this.channels[ch].stopAll();
-        })
+        });
     }
 }
