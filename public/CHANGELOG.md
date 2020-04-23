@@ -4,7 +4,7 @@ This is very much an early stage work in progress. Most features are not yet imp
 
 Version numbers are for reference only for now and will follow Semver when more things are implemented. Changelog entries start with the different section of the application (tabs) for overarching UI / feature changes. This is followed by implementation details (playback, parsing etc...)
 
-## [0.4.0] - 2020-04-21
+## [0.4.0] - 2020-04-23
 ### Play
 - <label type="fixed"></label> Fixed regression where expanding a player on one tab expanded on another due to reorganising the data store.
 

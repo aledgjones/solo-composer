@@ -1,6 +1,6 @@
 {
   "name": "composer",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "dependencies": {
     "@mdi/js": "^5.0.45",
@@ -13,10 +13,8 @@
     "@types/react-dom": "^16.9.6",
     "@types/roman-numerals": "^0.3.0",
     "@types/shortid": "^0.0.29",
-    "adsr-envelope": "^1.0.0",
     "app-reset": "^1.0.2",
     "array-move": "^2.2.1",
-    "base64-arraybuffer": "^0.2.0",
     "big.js": "^5.2.2",
     "color": "^3.1.2",
     "lodash.isstring": "^4.0.1",

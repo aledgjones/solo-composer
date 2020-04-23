@@ -1,5 +1,5 @@
 import shortid from 'shortid';
-import { APP_SHORT_NAME, APP_CREATOR } from '../const';
+import { APP_CREATOR } from '../const';
 import { SoloSamplerChannel, ChannelKey } from './sampler-channel';
 import { Pitch } from './utils';
 import { PatchDef } from '../services/instrument-defs';
@@ -13,10 +13,11 @@ export enum SamplerCurrentState {
     error
 }
 
-export class SoloSampler {
+class SoloSampler {
 
     public id = shortid();
-    public name = `${APP_SHORT_NAME} Internal Sampler`;
+    public version = '1.0.0';
+    public name = `Internal Sampler`;
     public manufacturer = APP_CREATOR;
 
     private channels: { [channel: string]: SoloSamplerChannel } = {};
@@ -41,3 +42,5 @@ export class SoloSampler {
         });
     }
 }
+
+export const sampler = new SoloSampler();

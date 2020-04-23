@@ -9,7 +9,6 @@ import { useInstrumentName, Instruments } from '../services/instrument';
 import { useAppActions } from '../services/state';
 import { InstrumentCounts } from '../services/instrument-utils';
 import { SamplerCurrentState } from '../playback/sampler';
-import { Expressions } from '../playback/expressions';
 import { Text } from '../components/shared/text';
 
 interface Props {
@@ -39,7 +38,7 @@ export const PlaySettingsChannel: FC<Props> = ({ i, channel, instruments, counts
         <div className={merge("play-settings__cell play-settings__map", { 'play-settings__cell--unassigned': !channel.patchGroupName })}>{channel.patchGroupName || 'Unassigned'}</div>
         <Text className={merge("play-settings__cell play-settings__assigned", { 'play-settings__cell--unassigned': !name })}>{name || 'Unassigned'}</Text>
         <div className="play-settings__cell play-settings__loader">
-            <Icon size={24} color="rgb(50,50,50)" path={mdiChevronRight} onClick={() => actions.playback.sampler.test(channel.key, Expressions.natural)} />
+            <Icon size={24} color="rgb(50,50,50)" path={mdiChevronRight} onClick={() => actions.playback.sampler.test(channel.key)} />
         </div>
     </div>
 }

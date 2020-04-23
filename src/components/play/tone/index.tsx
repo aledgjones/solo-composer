@@ -41,7 +41,7 @@ export const ToneElement: FC<Props> = ({ flowKey, trackKey, tone, selected, colo
 
     const select = useCallback((e: PointerEvent) => {
         if (tool === Tool.select) {
-            // stop the delect event listener on .instrument-track from firing
+            // stop the deselect event listener on .instrument-track from firing
             e.stopPropagation();
             // if (!e.ctrlKey) {
             actions.ui.selection[TabState.play].clear();

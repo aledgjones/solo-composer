@@ -3,12 +3,10 @@ import shortid from "shortid";
 
 import { State } from "./state";
 import { InstrumentKey } from "./instrument";
-import { SoloSampler, SamplerCurrentState } from "../playback/sampler";
+import { SamplerCurrentState, sampler } from "../playback/sampler";
 import { InstrumentDef, PatchDef } from "./instrument-defs";
 import { ChannelKey } from "../playback/sampler-channel";
 import { Expressions } from "../playback/expressions";
-
-const sampler = new SoloSampler();
 
 export interface Channel {
     key: ChannelKey;
@@ -31,11 +29,17 @@ export interface ChannelState {
 }
 
 export interface SamplerState {
+    name: string;
+    version: string;
+    manufacturer: string;
     channels: ChannelState;
 }
 
 export const samplerEmptyState = (): SamplerState => {
     return {
+        name: sampler.name,
+        version: sampler.version,
+        manufacturer: sampler.manufacturer,
         channels: {
             order: [],
             byKey: {}
@@ -85,10 +89,7 @@ export const samplerActions = (store: Store<State>) => {
                 s.playback.sampler.channels.byKey[channel].assigned = instrumentKey;
             });
         },
-        stopAll: () => {
-            sampler.stopAll();
-        },
-        test: (channel: ChannelKey, patch: Expressions) => {
+        test: (channel: ChannelKey) => {
 
             const notes: [string, number, number][] = [
                 ['C4', 0.30, 0.250],
@@ -105,7 +106,7 @@ export const samplerActions = (store: Store<State>) => {
             // timing is not accurate but it is fine for a test
             notes.forEach(([pitch, velocity, duration], i) => {
                 setTimeout(() => {
-                    sampler.play(channel, patch, pitch, velocity, duration);
+                    sampler.play(channel, Expressions.natural, pitch, velocity, duration);
                 }, 250 * i);
             });
 
