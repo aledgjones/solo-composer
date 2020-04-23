@@ -5,7 +5,7 @@ import { Icon, Button, useForeground } from 'solo-ui';
 
 import { THEME } from '../../const';
 import { InstrumentDef, useInstrumentList, getFirstInstrumentDefFromPartialPath } from '../../services/instrument-defs';
-import { ListItem } from '../shared/list-item';
+import { MenuItem } from '../shared/menu-item';
 
 import './instrument-picker.css';
 
@@ -31,7 +31,7 @@ export const InstrumentPicker: FC<Props> = ({ onSelect, onCancel }) => {
                         const selected = item === selection.path[i];
                         const final = !(selected && lists[i + 1] && lists[i + 1].length > 0);
 
-                        return <ListItem
+                        return <MenuItem
                             key={item}
                             selected={selected}
                             onClick={() => {
@@ -41,7 +41,7 @@ export const InstrumentPicker: FC<Props> = ({ onSelect, onCancel }) => {
                             }}>
                             <span>{item}</span>
                             {!final && <Icon color={selected ? fg : 'black'} size={24} path={mdiChevronRight} />}
-                        </ListItem>
+                        </MenuItem>
                     })}
                 </div>
             })}

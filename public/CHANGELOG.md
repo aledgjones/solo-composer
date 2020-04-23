@@ -6,10 +6,12 @@ Version numbers are for reference only for now and will follow Semver when more 
 
 ## [0.4.0] - 2020-04-23
 ### Play
+- <label type="feature"></label> Auditioning notes as they are created and selected.
+- <label type="changed"></label> Reorganisation of sampler code so it is clearer and simpler.
 - <label type="fixed"></label> Fixed regression where expanding a player on one tab expanded on another due to reorganising the data store.
 
 ### Playback
-- <label type="changed"></label> Migrate to Tone.js. It includes many of the things I need: Sampler (playback of individual samples with pitch alterations built in), Transport (seekable sequence of timed events), envelopes (programatic attach, sustain, release timings).
+- <label type="changed"></label> Migrate to Tone.js. It includes many of the things I need: Sampler (playback of individual samples with pitch shifting built in), Transport (seekable sequence of timed events), envelopes (programatic attach, sustain, release timings).
 
 ## [0.3.0] - 2020-04-21
 ### Play

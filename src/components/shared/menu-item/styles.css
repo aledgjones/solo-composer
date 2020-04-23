@@ -1,9 +1,13 @@
-.list-item {
+.menu-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
     min-height: 40px;
-    padding: 0 16px 0 20px;
+    padding: 0 20px;
     cursor: pointer;
     border-radius: 3px;
+}
+
+.menu-item--clickable:hover {
+    background-color: rgb(235, 235, 235);
 }

@@ -7,6 +7,7 @@ import { SLOT_HEIGHT } from '../instrument-track/get-tone-dimension';
 import { useAppActions } from '../../../services/state';
 import { Tone } from '../../../entries/tone';
 import { Entry } from '../../../entries';
+import { Pitch } from '../../../playback/utils';
 
 import './styles.css';
 
@@ -24,9 +25,10 @@ interface Props {
     tool: Tool;
 
     onEdit: (e: PointerEvent, tone: Entry<Tone>, fixedStart: boolean, fixedDuration: boolean, fixedPitch: boolean) => void;
+    onPlay: (pitch: Pitch) => void;
 }
 
-export const ToneElement: FC<Props> = ({ flowKey, trackKey, tone, selected, color, top, left, width, tool, onEdit }) => {
+export const ToneElement: FC<Props> = ({ flowKey, trackKey, tone, selected, color, top, left, width, tool, onEdit, onPlay }) => {
 
     const actions = useAppActions();
 
@@ -43,17 +45,18 @@ export const ToneElement: FC<Props> = ({ flowKey, trackKey, tone, selected, colo
         if (tool === Tool.select) {
             // stop the deselect event listener on .instrument-track from firing
             e.stopPropagation();
-            // if (!e.ctrlKey) {
             actions.ui.selection[TabState.play].clear();
-            // }
             actions.ui.selection[TabState.play].toggle(tone._key);
+            if (!selected) {
+                onPlay(tone.pitch);
+            }
         }
 
         if (tool === Tool.eraser) {
             actions.ui.selection[TabState.play].deselect(tone._key);
             actions.score.instruments.removeTone(flowKey, trackKey, tone._key);
         }
-    }, [flowKey, trackKey, tool, actions.score.instruments, actions.ui.selection, tone._key]);
+    }, [flowKey, trackKey, tool, onPlay, selected, actions.score.instruments, actions.ui.selection, tone._key, tone.pitch]);
 
     const actionWest = useCallback((e: PointerEvent) => onEdit(e, tone, false, false, true), [tone, onEdit]);
     const action = useCallback((e: PointerEvent) => onEdit(e, tone, false, true, false), [tone, onEdit]);

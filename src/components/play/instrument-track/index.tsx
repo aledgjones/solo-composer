@@ -9,19 +9,21 @@ import { Instrument } from "../../../services/instrument";
 import { Staves } from "../../../services/stave";
 import { Tracks } from "../../../services/track";
 import { getToneDimensions, SLOT_HEIGHT } from "./get-tone-dimension";
-import { toMidiPitchNumber } from "../../../playback/utils";
+import { toMidiPitchNumber, Pitch } from "../../../playback/utils";
 import { EntryType, Entry } from "../../../entries";
 import { Tone } from "../../../entries/tone";
 import { trackBackground } from "./track-background";
 import { Tick } from "../ticks/defs";
 import { ToneElement } from "../tone";
 import { getTickFromXPosition, getPitchFromYPosition } from "./pointer-to-track-coords";
+import { Direction } from "../../../parse/get-stem-direction";
+import { usePatches } from "../../../playback/use-channel";
+import { Expressions } from "../../../playback/expressions";
 
 import pencil from "../../../assets/pencil.svg";
 import eraser from "../../../assets/eraser.svg";
 
 import "./styles.css";
-import { Direction } from "../../../parse/get-stem-direction";
 
 interface Props {
     flowKey: FlowKey;
@@ -57,7 +59,7 @@ function getStart(x: number, ticks: Tick[], snap: number, tone: Entry<Tone>, ini
             const start = tone._tick + (getTickFromXPosition(x, ticks, snap, Direction.none) - initX);
             if (start < 0) {
                 return 0;
-            } else if(start + tone.duration > ticks.length) {
+            } else if (start + tone.duration > ticks.length) {
                 // avoid overshooting the track
                 return ticks.length - 1 - tone.duration;
             } else {
@@ -73,10 +75,12 @@ function getStart(x: number, ticks: Tick[], snap: number, tone: Entry<Tone>, ini
 
 export const InstrumentTrack: FC<Props> = ({ color, instrument, staves, tracks, ticks, flowKey, }) => {
 
-    const { tool, selection } = useAppState((s) => {
+    const channel = usePatches(instrument.key);
+    const { tool, selection, audition } = useAppState((s) => {
         return {
             tool: s.ui.tool[TabState.play],
             selection: s.ui.selection,
+            audition: s.playback.settings.audition
         };
     });
     const actions = useAppActions();
@@ -87,10 +91,18 @@ export const InstrumentTrack: FC<Props> = ({ color, instrument, staves, tracks, 
     const staveKey = instrument.staves[0];
     const trackKey = staves[staveKey].tracks[0];
 
+    const onPlay = useCallback((pitch: Pitch) => {
+        if (channel && audition) {
+            channel[Expressions.natural].play(pitch, .8, .5)
+        }
+    }, [channel, audition]);
+
     const onEdit = useCallback((e: PointerEvent, tone: Entry<Tone>, fixedStart: boolean, fixedDuration: boolean, fixedPitch: boolean) => {
         if (track.current) {
+
             const box = track.current.getBoundingClientRect();
             const initX = getTickFromXPosition(e.clientX - box.left, ticks, snap, Direction.none);
+            let currentPitch = tone.pitch;
 
             const move = (e: any) => {
                 const x = e.clientX - box.left;
@@ -98,6 +110,10 @@ export const InstrumentTrack: FC<Props> = ({ color, instrument, staves, tracks, 
                 const pitch = fixedPitch ? tone.pitch : getPitchFromYPosition(y, highestPitch, SLOT_HEIGHT);
                 const start = getStart(x, ticks, snap, tone, initX, fixedStart, fixedDuration);
                 const duration = getDuration(x, ticks, snap, tone, start, fixedStart, fixedDuration);
+                if(pitch !== currentPitch) {
+                    currentPitch = pitch;
+                    onPlay(pitch);
+                }
                 actions.score.instruments.updateTone(flowKey, trackKey, tone._key, { pitch, duration }, start);
             };
 
@@ -114,8 +130,9 @@ export const InstrumentTrack: FC<Props> = ({ color, instrument, staves, tracks, 
 
             window.addEventListener("pointermove", move, { passive: true });
             window.addEventListener("pointerup", end, { passive: true });
+            
         }
-    }, [track, trackKey, ticks, flowKey, highestPitch, actions.score.instruments]);
+    }, [track, trackKey, ticks, flowKey, highestPitch, onPlay, actions.score.instruments]);
 
 
     const onCreate = useCallback((e: PointerEvent) => {
@@ -133,9 +150,10 @@ export const InstrumentTrack: FC<Props> = ({ color, instrument, staves, tracks, 
             actions.ui.selection[TabState.play].toggle(tone._key);
 
             onEdit(e, tone, true, false, true);
+            onPlay(pitch);
 
         }
-    }, [onEdit, track, trackKey, ticks, flowKey, highestPitch, actions.score.instruments, actions.ui.selection]);
+    }, [onEdit, track, trackKey, ticks, flowKey, onPlay, highestPitch, actions.score.instruments, actions.ui.selection]);
 
     const tones = useMemo(() => {
         const output: Array<{ tone: Entry<Tone>, trackKey: string, top: number, left: number, width: number }> = [];
@@ -190,6 +208,7 @@ export const InstrumentTrack: FC<Props> = ({ color, instrument, staves, tracks, 
                         width={width}
 
                         onEdit={onEdit}
+                        onPlay={onPlay}
                     />
                 );
             })}

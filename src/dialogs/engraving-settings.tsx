@@ -1,15 +1,16 @@
 import React, { FC, useState } from 'react';
 import { THEME } from '../const';
 
-import { Select, Option, Input, Button, Subheader } from 'solo-ui';
+import { Select, Option, Input, Button, Subheader, Switch, ListItem } from 'solo-ui';
 
-import { ListItem } from '../components/shared/list-item';
+import { MenuItem } from '../components/shared/menu-item';
 import { EngravingState, LayoutType, PartialEngravingConfig, defaultEngravingConfig } from '../services/engraving';
 import { BracketingType, BracketEndStyle } from '../parse/draw-brackets';
 
 import staveSpace from '../assets/engraving/stave-space.svg';
 
 import './generic-settings.css';
+import { Label } from '../components/shared/label';
 
 enum Page {
     staves = 1,
@@ -39,30 +40,36 @@ export const EngravingSettings: FC<Props> = ({ config, onUpdate, onClose }) => {
         <div className="generic-settings__content">
 
             <div className="generic-settings__left-panel">
-                <ListItem selected={page === Page.bracketsAndBraces} onClick={() => setPage(Page.bracketsAndBraces)}>Brackets &amp; Braces</ListItem>
-                <ListItem selected={page === Page.staves} onClick={() => setPage(Page.staves)}>Staves</ListItem>
+                <MenuItem selected={page === Page.bracketsAndBraces} onClick={() => setPage(Page.bracketsAndBraces)}>Brackets &amp; Braces</MenuItem>
+                <MenuItem selected={page === Page.staves} onClick={() => setPage(Page.staves)}>Staves</MenuItem>
             </div>
 
             <div className="generic-settings__right-panel">
 
                 {page === Page.bracketsAndBraces && <>
 
-                    <div className="generic-settings__section">
+                    <div className="generic-settings__section" style={{paddingBottom: 20}}>
                         <Subheader>Approach</Subheader>
-                        <Select margin className="ui-select--margin" color={bg} label="Ensemble type" value={engraving.bracketing} onChange={(val: BracketingType) => onUpdate(key, { bracketing: val })}>
+                        <Select className="ui-select--margin" color={bg} label="Ensemble type" value={engraving.bracketing} onChange={(val: BracketingType) => onUpdate(key, { bracketing: val })}>
                             <Option value={BracketingType.none} displayAs="None">None</Option>
                             <Option value={BracketingType.orchestral} displayAs="Orchestral">Orchestral</Option>
                             <Option value={BracketingType.smallEnsemble} displayAs="Small ensemble">Small ensemble</Option>
                         </Select>
-                        <Select margin className="ui-select--margin" color={bg} label="Bracket groups with only one instrument" value={engraving.bracketSingleStaves} onChange={(val: boolean) => onUpdate(key, { bracketSingleStaves: val })}>
-                            <Option value={true} displayAs="Use bracket">Use bracket</Option>
-                            <Option value={false} displayAs="No bracket">No bracket</Option>
-                        </Select>
-                        <Select color={bg} label="Sub bracket instruments of the same type" value={engraving.subBracket} onChange={(val: boolean) => onUpdate(key, { subBracket: val })}>
-                            <Option value={true} displayAs="Use sub brackets">Use sub brackets</Option>
-                            <Option value={false} displayAs="No sub brackets">No sub brackets</Option>
-                        </Select>
                     </div>
+                    <ListItem onClick={() => onUpdate(key, { bracketSingleStaves: !engraving.bracketSingleStaves })}>
+                        <Label>
+                            <p>Bracket single instruments</p>
+                            <p>Use a bracket for groups with only one instrument</p>
+                        </Label>
+                        <Switch color={THEME.primary[500]} value={engraving.bracketSingleStaves} />
+                    </ListItem>
+                    <ListItem style={{marginBottom: 20}} onClick={() => onUpdate(key, { subBracket: !engraving.subBracket })}>
+                        <Label>
+                            <p>Use sub-brackets</p>
+                            <p>Bracket instruments of the same type</p>
+                        </Label>
+                        <Switch color={THEME.primary[500]} value={engraving.subBracket} />
+                    </ListItem>
 
                     <div className="generic-settings__section">
                         <Subheader>Design</Subheader>

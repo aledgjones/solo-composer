@@ -1,19 +1,21 @@
 import React, { FC, useState, useMemo } from 'react';
 import { mdiMidiPort } from '@mdi/js';
 
-import { Button, Icon, Subheader } from 'solo-ui';
+import { Button, Icon, Subheader, Switch, ListItem } from 'solo-ui';
 
 import { THEME } from '../const';
 import { useCounts } from '../services/instrument';
-import { useAppState, useAppActions } from '../services/state';
-import { ListItem } from '../components/shared/list-item';
 import { PlaySettingsChannel } from './play-settings-channel';
+import { useAppState, useAppActions } from '../services/state';
+import { MenuItem } from '../components/shared/menu-item';
+import { Label } from '../components/shared/label';
 
 import './generic-settings.css';
 import './play-settings.css';
 
 enum Page {
-    internal = 1,
+    general = 1,
+    internal,
     midi
 }
 
@@ -23,7 +25,8 @@ interface Props {
 
 export const PlaySettings: FC<Props> = ({ onClose }) => {
 
-    const { midi, sampler, instruments } = useAppState(s => ({
+    const { settings, midi, sampler, instruments } = useAppState(s => ({
+        settings: s.playback.settings,
         midi: s.playback.midi,
         sampler: s.playback.sampler,
         instruments: s.score.instruments
@@ -38,25 +41,43 @@ export const PlaySettings: FC<Props> = ({ onClose }) => {
     const actions = useAppActions();
     const counts = useCounts();
 
-    const [page, setPage] = useState<Page>(Page.internal);
+    const [page, setPage] = useState<Page>(Page.general);
 
     return <div className="generic-settings">
         <div className="generic-settings__content">
             <div className="generic-settings__left-panel">
-                <ListItem selected={page === Page.internal} onClick={() => setPage(Page.internal)}>Internal Sampler</ListItem>
-                <ListItem selected={page === Page.midi} onClick={() => setPage(Page.midi)}>External MIDI Devices</ListItem>
+                <MenuItem selected={page === Page.general} onClick={() => setPage(Page.general)}>General</MenuItem>
+                <MenuItem selected={page === Page.internal} onClick={() => setPage(Page.internal)}>Internal Sampler</MenuItem>
+                <MenuItem selected={page === Page.midi} onClick={() => setPage(Page.midi)}>MIDI Devices</MenuItem>
             </div>
             <div className="generic-settings__right-panel">
 
+                {page === Page.general && <>
+
+                    <div className="generic-settings__section" style={{paddingBottom: 0}}>
+                        <Subheader>Auditioning</Subheader>
+                    </div>
+                    <ListItem onClick={actions.playback.settings.audition.toggle}>
+                        <Label>
+                            <p>Play notes during note input and selection</p>
+                        </Label>
+                        <Switch color={THEME.primary[500]} value={settings.audition} />
+                    </ListItem>
+
+                </>}
+
                 {page === Page.internal && <>
+
                     <div className="play-settings__header">
                         <div className="play-settings__cell play-settings__channel" />
                         <div className="play-settings__cell play-settings__map">Patch Map</div>
                         <div className="play-settings__cell play-settings__assigned">Assigned To</div>
                     </div>
+
                     {channels.map((channel, i) => {
                         return <PlaySettingsChannel key={channel.key} i={i} channel={channel} instruments={instruments} counts={counts} />
                     })}
+
                 </>}
 
                 {page === Page.midi && <>
