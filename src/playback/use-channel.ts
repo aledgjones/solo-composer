@@ -7,7 +7,7 @@ export function usePatches(instrumentKey: InstrumentKey) {
         for (let i = 0; i < order.length; i++) {
             const channelKey = order[i];
             const channel = s.playback.sampler.channels.byKey[channelKey];
-            if(channel.assigned === instrumentKey) {
+            if(channel && channel.assigned === instrumentKey) {
                 return channel.patches.byKey;
             }
         }

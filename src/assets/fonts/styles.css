@@ -1,0 +1,23 @@
+@font-face {
+    font-family: 'Music';
+    font-display: swap;
+    src: url('./bravura.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Music Text';
+    font-display: swap;
+    src: url('./bravura-text.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Roboto';
+    font-display: swap;
+    src: url('./roboto.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Libre Baskerville';
+    font-display: swap;
+    src: url('./libre-baskerville.woff2') format('woff2');
+}

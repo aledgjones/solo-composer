@@ -3,14 +3,14 @@ import { THEME } from '../const';
 
 import { Select, Option, Input, Button, Subheader, Switch, ListItem } from 'solo-ui';
 
-import { MenuItem } from '../components/shared/menu-item';
+import { MenuItem } from '../components/menu-item';
 import { EngravingState, LayoutType, PartialEngravingConfig, defaultEngravingConfig } from '../services/engraving';
 import { BracketingType, BracketEndStyle } from '../parse/draw-brackets';
 
 import staveSpace from '../assets/engraving/stave-space.svg';
 
 import './generic-settings.css';
-import { Label } from '../components/shared/label';
+import { Label } from '../components/label';
 
 enum Page {
     staves = 1,
@@ -58,15 +58,15 @@ export const EngravingSettings: FC<Props> = ({ config, onUpdate, onClose }) => {
                     </div>
                     <ListItem onClick={() => onUpdate(key, { bracketSingleStaves: !engraving.bracketSingleStaves })}>
                         <Label>
-                            <p>Bracket single instruments</p>
-                            <p>Use a bracket for groups with only one instrument</p>
+                            <p>Bracket single instruments.</p>
+                            <p>Use a bracket for isolated instruments of a particular instrument family.</p>
                         </Label>
                         <Switch color={THEME.primary[500]} value={engraving.bracketSingleStaves} />
                     </ListItem>
                     <ListItem style={{marginBottom: 20}} onClick={() => onUpdate(key, { subBracket: !engraving.subBracket })}>
                         <Label>
-                            <p>Use sub-brackets</p>
-                            <p>Bracket instruments of the same type</p>
+                            <p>Use sub-brackets.</p>
+                            <p>Bracket consecutive instruments of the same type.</p>
                         </Label>
                         <Switch color={THEME.primary[500]} value={engraving.subBracket} />
                     </ListItem>

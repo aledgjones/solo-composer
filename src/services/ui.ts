@@ -1,5 +1,6 @@
 import { Store } from "pullstate";
 import { State } from "./state";
+import { InstrumentKey } from "./instrument";
 
 export enum Tool {
     select = 1,
@@ -19,9 +20,8 @@ export interface UiState {
     tab: TabState;
     expanded: { [key: string]: boolean };
     selection: { [key: string]: boolean };
-    tool: {
-        [view: string]: Tool;
-    }
+    pianoRollOffsetY: { [key: string]: number };
+    tool: { [TabState.play]: Tool; };
 }
 
 export const uiEmptyState = (): UiState => {
@@ -29,6 +29,7 @@ export const uiEmptyState = (): UiState => {
         tab: TabState.setup,
         expanded: {},
         selection: {},
+        pianoRollOffsetY: {},
         tool: {
             [TabState.play]: Tool.select
         }
@@ -66,6 +67,11 @@ export const uiActions = (store: Store<State>) => {
                         }
                     });
                 },
+                select: (key: string) => {
+                    store.update(s => {
+                        s.ui.selection[key] = true;
+                    });
+                },
                 deselect: (key: string) => {
                     store.update(s => {
                         delete s.ui.selection[key];
@@ -76,6 +82,31 @@ export const uiActions = (store: Store<State>) => {
                         s.ui.selection = {};
                     });
                 }
+            }
+        },
+        pianoRollOffsetY: {
+            set: (key: InstrumentKey, value: number) => {
+                store.update(s => {
+                    if (value >= -48 && value <= 36) {
+                        s.ui.pianoRollOffsetY[key] = value;
+                    }
+                });
+            },
+            inc: (key: InstrumentKey) => {
+                store.update(s => {
+                    const next = (s.ui.pianoRollOffsetY[key] || 0) + 1;
+                    if (next <= 36) {
+                        s.ui.pianoRollOffsetY[key] = next;
+                    }
+                });
+            },
+            dec: (key: InstrumentKey) => {
+                store.update(s => {
+                    const next = (s.ui.pianoRollOffsetY[key] || 0) - 1;
+                    if (next >= -48) {
+                        s.ui.pianoRollOffsetY[key] = next;
+                    }
+                });
             }
         },
         tool: {

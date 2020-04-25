@@ -1,4 +1,4 @@
-declare module 'adsr-envelope';
+declare module '*.md';
 
 interface Navigator {
     requestMIDIAccess: any;

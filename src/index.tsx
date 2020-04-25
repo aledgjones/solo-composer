@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { MainShell } from './components/shell';
 import * as serviceWorker from './serviceWorker';
 
-import './assets/fonts.css';
+import './assets/fonts/styles.css';
 
 ReactDOM.render(<MainShell />, document.getElementById('root'));
 

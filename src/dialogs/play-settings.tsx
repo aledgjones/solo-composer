@@ -7,8 +7,8 @@ import { THEME } from '../const';
 import { useCounts } from '../services/instrument';
 import { PlaySettingsChannel } from './play-settings-channel';
 import { useAppState, useAppActions } from '../services/state';
-import { MenuItem } from '../components/shared/menu-item';
-import { Label } from '../components/shared/label';
+import { MenuItem } from '../components/menu-item';
+import { Label } from '../components/label';
 
 import './generic-settings.css';
 import './play-settings.css';
@@ -59,6 +59,7 @@ export const PlaySettings: FC<Props> = ({ onClose }) => {
                     </div>
                     <ListItem onClick={actions.playback.settings.audition.toggle}>
                         <Label>
+                            <p>Enable auditioning</p>
                             <p>Play notes during note input and selection</p>
                         </Label>
                         <Switch color={THEME.primary[500]} value={settings.audition} />

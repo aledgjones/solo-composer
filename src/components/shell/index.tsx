@@ -8,15 +8,14 @@ import { useAppActions, useAppState } from '../../services/state';
 import { TabState } from '../../services/ui';
 import { useAutoSetup } from '../../services/auto-setup';
 
-import { Changelog } from '../shared/changelog';
-
-import piano from '../../assets/piano.svg';
+import { Changelog } from '../changelog';
+import { Transport } from '../transport';
 
 import './shell.css';
 
-const Setup = React.lazy(() => import('../setup'));
-const Write = React.lazy(() => import('../write'));
-const Play = React.lazy(() => import('../play'));
+const Setup = React.lazy(() => import('../../routes/setup'));
+const Write = React.lazy(() => import('../../routes/write'));
+const Play = React.lazy(() => import('../../routes/play'));
 
 export const MainShell: FC = () => {
 
@@ -47,7 +46,7 @@ export const MainShell: FC = () => {
                 <Tab value={TabState.play}>Play</Tab>
                 <Tab value={TabState.print}>Print</Tab>
             </Tabs>
-            {/* <Transport /> */}
+            <Transport />
             <div className="main-shell__topbar-right">
                 <Icon path={mdiCogOutline} size={24} color={fg} onClick={openSettings} />
             </div>
@@ -60,6 +59,5 @@ export const MainShell: FC = () => {
         </Suspense>
 
         <Changelog />
-        <link rel="prefetch" href={piano} />
     </>;
 }

@@ -8,7 +8,7 @@ import { Channel, SamplerCurrentState } from '../services/sampler';
 import { useInstrumentName, Instruments } from '../services/instrument';
 import { useAppActions } from '../services/state';
 import { InstrumentCounts } from '../services/instrument-utils';
-import { Text } from '../components/shared/text';
+import { Text } from '../components/text';
 
 interface Props {
     i: number;

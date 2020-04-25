@@ -1,0 +1,23 @@
+.keyboard {
+    position: relative;
+    width: 56px;
+    min-width: 56px;
+    background-color: white;
+    background-image: url('./piano.svg');
+    background-position: 0 -1px;
+    background-size: 56px 112px;
+    background-repeat: repeat-y;
+    overflow: hidden;
+}
+
+.keyboard:active {
+    cursor: grab;
+}
+
+.keyboard__name {
+    position: absolute;
+    top: 34px;
+    right: 2px;
+    color: black;
+    font-size: 10px;
+}
