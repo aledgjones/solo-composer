@@ -21,20 +21,23 @@ export function dragHandler<T>({ onDown, onMove, onEnd }: Config<T>) {
         // only one pointer at a time
         if (pointer !== undefined) return;
 
-        pointer = e.pointerId;
         const data = onDown(e);
 
         if (data !== false) {
 
-            const move = (e: PointerEvent) => {
-                if (pointer !== e.pointerId) return;
-                onMove(e, data);
+            pointer = e.pointerId;
+
+            const move = (ev: PointerEvent) => {
+                if (pointer !== ev.pointerId) return;
+
+                onMove(ev, data);
+                return false;
             }
 
-            const stop = (e: PointerEvent) => {
-                if (pointer !== e.pointerId) return;
+            const stop = (ev: PointerEvent) => {
+                if (pointer !== ev.pointerId) return;
 
-                onEnd(e, data);
+                onEnd(ev, data);
 
                 document.removeEventListener('pointermove', move);
                 document.removeEventListener('pointerup', stop);
@@ -43,10 +46,12 @@ export function dragHandler<T>({ onDown, onMove, onEnd }: Config<T>) {
                 pointer = undefined;
             };
 
-            document.addEventListener('pointermove', move, {passive: true});
-            document.addEventListener('pointerup', stop, {passive: true});
-            document.addEventListener('pointercancel', stop, {passive: true});
+            document.addEventListener('pointermove', move, { passive: true });
+            document.addEventListener('pointerup', stop, { passive: true });
+            document.addEventListener('pointercancel', stop, { passive: true });
+
         }
+
     }
 
 }

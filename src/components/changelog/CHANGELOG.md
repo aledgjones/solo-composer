@@ -11,6 +11,9 @@ Version numbers are for reference only for now and will follow Semver when more 
 - <label type="changed"></label> Reorganisation of sampler code so it is clearer and simpler.
 - <label type="fixed"></label> Fixed regression where expanding a player on one tab expanded on another due to reorganising the data store.
 
+### UI
+- <label type="changed"></label> Implimented my own drag scrolling which allows elements to cancel scroll events completely or in a specific direction. Had the side-effect of improving positioning of items in the rendered score.
+
 ### Playback
 - <label type="changed"></label> Migrate to Tone.js. It includes many of the things I need: Sampler (playback of individual samples with pitch shifting built in), Transport (seekable sequence of timed events), envelopes (programatic attach, sustain, release timings).
 

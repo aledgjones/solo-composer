@@ -1,6 +1,5 @@
 import React, { FC, useState, useMemo, useEffect } from 'react';
 import { mdiCursorDefault, mdiEraser, mdiPencilOutline } from '@mdi/js';
-import ScrollContainer from 'react-indiana-drag-scroll';
 
 import { Select, Option, useRainbow, Dialog, Icon, useForeground } from 'solo-ui';
 
@@ -13,6 +12,7 @@ import { useTicks, Ticks } from './ticks';
 import { PlayerControls } from './player-contols';
 import { PlayerTrack } from './player-track';
 import { PlaySettings } from '../../dialogs/play-settings';
+import { DragScroll } from '../../components/drag-scroll';
 
 import './play.css';
 
@@ -63,9 +63,9 @@ const Play: FC<Props> = ({ settings, onSettingsClose }) => {
 
     return <>
 
-        <ScrollContainer ignoreElements=".no-scroll" vertical={false} className="play">
+        <DragScroll className="play" x={true} y={true} ignore="no-scroll" ignoreX="no-scroll-x" ignoreY="no-scroll-y">
 
-            <div className="play__x-fixed play__left-panel no-scroll">
+            <div className="play__x-fixed play__left-panel no-scroll-x">
 
                 <div className="play__tools" style={{ backgroundColor: THEME.grey[500], borderRight: `4px solid ${THEME.grey[400]}` }}>
                     <Icon className="play__tool" toggle={tool === Tool.select} onClick={() => actions.ui.tool[TabState.play].set(Tool.select)} path={mdiCursorDefault} size={24} color={fg} highlight={THEME.primary[500]}></Icon>
@@ -110,7 +110,7 @@ const Play: FC<Props> = ({ settings, onSettingsClose }) => {
                 </div>
             </div>
 
-        </ScrollContainer>
+        </DragScroll>
 
         <Dialog open={settings} width={900}>
             {() => <PlaySettings onClose={() => onSettingsClose()} />}

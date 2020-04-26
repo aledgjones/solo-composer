@@ -1,0 +1,9 @@
+.ui-drag-scroll {
+    overflow: auto;
+    touch-action: none;
+}
+
+.ui-drag-scroll--dragging,
+.ui-drag-scroll--dragging * {
+    cursor: grab !important;
+}

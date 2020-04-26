@@ -1,9 +1,9 @@
 import React, { FC, useMemo } from 'react';
-import ScrollContainer from 'react-indiana-drag-scroll';
 
 import { merge } from 'solo-ui';
 
 import { THEME } from '../const';
+import { DragScroll } from './drag-scroll';
 
 import './render-region.css';
 
@@ -19,8 +19,8 @@ export const RenderRegion: FC<Props> = (({ children, className }) => {
     return `linear-gradient(${start}, ${stop})`;
   }, []);
 
-  return <ScrollContainer className={merge("render-region", className)} style={{ backgroundImage: bg }}>
+  return <DragScroll x={true} y={true} className={merge("render-region", className)} style={{ backgroundImage: bg }}>
     {children}
-  </ScrollContainer>;
+  </DragScroll>;
 });
 
