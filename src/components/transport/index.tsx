@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { mdiPlay, mdiStop, mdiMetronome, mdiFastForward, mdiRewind, mdiSkipPrevious } from '@mdi/js';
+import { mdiPlay, mdiMetronome, mdiFastForward, mdiRewind, mdiSkipPrevious } from '@mdi/js';
 
 import { THEME } from '../../const';
 import { Icon, useForeground } from 'solo-ui';

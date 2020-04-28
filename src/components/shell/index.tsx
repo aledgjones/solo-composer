@@ -1,7 +1,6 @@
-import React, { FC, useState, useEffect, useCallback, Suspense } from 'react';
-import { mdiCogOutline } from '@mdi/js';
+import React, { FC, useEffect, Suspense } from 'react';
 
-import { Tabs, Tab, Icon, useForeground, useTheme, useStyles } from 'solo-ui';
+import { Tabs, Tab, useForeground } from 'solo-ui';
 
 import { THEME } from '../../const';
 import { useAppActions, useAppState } from '../../services/state';
@@ -10,9 +9,10 @@ import { useAutoSetup } from '../../services/auto-setup';
 
 import { Changelog } from '../changelog';
 import { Transport } from '../transport';
+import { Fallback } from './fallback';
+import { ShellMenuBar } from '../shell-menu-bar';
 
 import './shell.css';
-import { Fallback } from './fallback';
 
 const Setup = React.lazy(() => import('../../routes/setup'));
 const Write = React.lazy(() => import('../../routes/write'));
@@ -33,6 +33,8 @@ export const MainShell: FC = () => {
     const fg = useForeground(bg);
 
     return <>
+        <ShellMenuBar />
+
         <div className="main-shell__topbar" style={{ backgroundColor: bg }}>
             <Tabs className="main-shell__tabs" value={tab} onChange={actions.ui.tab.set} color={fg} highlight={THEME.primary[500]}>
                 <Tab value={TabState.setup}>Setup</Tab>

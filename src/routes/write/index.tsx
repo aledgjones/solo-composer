@@ -2,7 +2,6 @@ import React, { FC } from 'react';
 
 import { Dialog } from 'solo-ui';
 
-import { useAppState, useAppActions } from '../../services/state';
 import { RenderRegion } from '../../components/render-region';
 import { RenderWriteMode } from '../../components/render-write-mode';
 import { EngravingSettings } from '../../dialogs/engraving-settings';

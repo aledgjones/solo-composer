@@ -1,4 +1,4 @@
-import React, { FC, useState, useMemo, useCallback } from 'react';
+import React, { FC, useState, useCallback } from 'react';
 
 import { Dialog } from 'solo-ui';
 

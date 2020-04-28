@@ -14,7 +14,6 @@ import { PlayerTrack } from './player-track';
 import { PlaySettings } from '../../dialogs/play-settings';
 import { DragScroll } from '../../components/drag-scroll';
 import { useTitle } from '../../components/use-title';
-import { ShellMenuBar } from '../../components/shell-menu-bar';
 
 import './play.css';
 
@@ -61,11 +60,6 @@ const Play: FC = () => {
     }, [tool, actions.ui.selection]);
 
     return <>
-
-        <ShellMenuBar>
-            <p>Children</p>
-        </ShellMenuBar>
-
         <DragScroll className="play" x={true} y={false} ignore="no-scroll">
 
             <div className="play__x-fixed play__left-panel no-scroll">
