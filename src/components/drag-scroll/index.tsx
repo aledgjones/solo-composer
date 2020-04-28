@@ -1,4 +1,4 @@
-import React, { FC, useRef, CSSProperties, useState, useCallback } from 'react';
+import React, { FC, CSSProperties, useState, useCallback } from 'react';
 
 import { merge } from 'solo-ui';
 import { useDragHandler } from '../drag-handler';
@@ -19,7 +19,6 @@ interface Props {
 
 export const DragScroll: FC<Props> = ({ id, className, style, x, y, ignore, ignoreX, ignoreY, children }) => {
 
-    const container = useRef<HTMLDivElement>(null);
     const [dragging, setDragging] = useState(false);
 
     const allow = useCallback((target: HTMLElement, ignore?: string) => {
@@ -36,40 +35,62 @@ export const DragScroll: FC<Props> = ({ id, className, style, x, y, ignore, igno
         }
     }, []);
 
-    const onDrag = useDragHandler<{ allowX: boolean, allowY: boolean, x: number, y: number, scrollLeft: number, scrollTop: number }>({
+    const onDrag = useDragHandler<{ target: HTMLElement, allowX: boolean, allowY: boolean, x: number, y: number, scrollLeft: number, scrollTop: number }>({
         onDown: e => {
-            if (container.current) {
 
-                if (!allow(e.target as HTMLElement, ignore)) {
-                    return false;
-                };
-
-                const allowX = allow(e.target as HTMLElement, ignoreX);
-                const allowY = allow(e.target as HTMLElement, ignoreY);
-
-                setDragging(true);
-
-                return { allowX, allowY, x: e.screenX, y: e.screenY, scrollLeft: container.current.scrollLeft, scrollTop: container.current.scrollTop };
-            } else {
+            if (!allow(e.target as HTMLElement, ignore)) {
                 return false;
-            }
+            };
+
+            const allowX = allow(e.target as HTMLElement, ignoreX);
+            const allowY = allow(e.target as HTMLElement, ignoreY);
+
+            setDragging(true);
+
+            return { target: e.currentTarget as HTMLElement, allowX, allowY, x: e.screenX, y: e.screenY, scrollLeft: e.currentTarget.scrollLeft, scrollTop: e.currentTarget.scrollTop };
+
         },
         onMove: (e, init) => {
-            if (container.current) {
-                if (x && init.allowX) {
-                    container.current.scrollLeft = init.scrollLeft - (e.screenX - init.x);
+            if (x && init.allowX) {
+                const diff = e.screenX - init.x;
+                const scrollLeft = init.scrollLeft - diff;
+                const min = 0;
+                const max = init.target.scrollWidth - init.target.offsetWidth;
+                if (scrollLeft < min) {
+                    // if you over scroll, offset the init position so we start scrolling again
+                    // straight away on direction change
+                    init.x = init.x - scrollLeft;
+                } else if (scrollLeft > max) {
+                    init.x = init.x - (scrollLeft - max);
                 }
-                if (y && init.allowY) {
-                    container.current.scrollTop = init.scrollTop - (e.screenY - init.y);
+                init.target.scrollLeft = scrollLeft; // this is always bound so just keep setting it.
+            }
+            if (y && init.allowY) {
+                const diff = e.screenY - init.y;
+                const scrollTop = init.scrollTop - diff;
+                const min = 0;
+                const max = init.target.scrollHeight - init.target.offsetHeight;
+                if (scrollTop < min) {
+                    // if you over scroll, offset the init position so we start scrolling again
+                    // straight away on direction change
+                    init.y = init.y - scrollTop;
+                } else if (scrollTop > max) {
+                    init.y = init.y - (scrollTop - max);
                 }
+                init.target.scrollTop = scrollTop;
             }
         },
         onEnd: (e, init) => {
             setDragging(false);
         }
-    }, [container, x, y, allow, ignore, ignoreX, ignoreY]);
+    }, [x, y, allow, ignore, ignoreX, ignoreY]);
 
-    return <div onPointerDown={onDrag} id={id} className={merge('ui-drag-scroll', { 'ui-drag-scroll--dragging': dragging }, className)} style={style} ref={container} >
+    return <div
+        onPointerDown={onDrag}
+        id={id}
+        className={merge('ui-drag-scroll', { 'ui-drag-scroll-x': x, 'ui-drag-scroll-y': y, 'ui-drag-scroll--dragging': dragging }, className)}
+        style={style}
+    >
         {children}
     </div>
 }

@@ -1,31 +1,27 @@
 import React, { FC } from 'react';
 
+import { Dialog } from 'solo-ui';
+
 import { useAppState, useAppActions } from '../../services/state';
 import { RenderRegion } from '../../components/render-region';
 import { RenderWriteMode } from '../../components/render-write-mode';
 import { EngravingSettings } from '../../dialogs/engraving-settings';
+import { useTitle } from '../../components/use-title';
 
 import './write.css';
-import { Dialog } from 'solo-ui';
 
-interface Props {
-    settings: boolean;
-    onSettingsClose: () => void;
-}
+const Write: FC = () => {
 
-const Write: FC<Props> = ({ settings, onSettingsClose }) => {
-
-    const actions = useAppActions();
-    const score = useAppState(s => s.score);
+    useTitle('Solo Composer | Write');
 
     return <>
         <div className="write">
             <RenderRegion>
-                <RenderWriteMode score={score} />
+                <RenderWriteMode />
             </RenderRegion>
         </div>
-        <Dialog open={settings} width={900}>
-            {() => <EngravingSettings config={score.engraving} onClose={() => onSettingsClose()} onUpdate={(layout, instruction) => actions.score.engraving.set(layout, instruction)} />}
+        <Dialog open={false} width={900}>
+            {() => <EngravingSettings onClose={() => false} />}
         </Dialog>
     </>;
 }

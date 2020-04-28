@@ -1,6 +1,8 @@
 import React, { FC, useState } from 'react';
 
-import { Score } from '../services/score';
+import { useForeground } from 'solo-ui';
+
+import { useAppState } from '../services/state';
 import { THEME } from '../const';
 import { useParseWorker } from '../parse/use-parse';
 import { Instruction, InstructionType } from '../render/instructions';
@@ -9,15 +11,12 @@ import { TextInstruction } from '../render/text';
 import { CircleInstruction } from '../render/circle';
 import { CurveInstruction, getControlPoints } from '../render/curve';
 import { Text } from './text';
-import { useForeground } from 'solo-ui';
 
 import './render-write-mode.css';
 
-interface Props {
-    score: Score;
-}
+export const RenderWriteMode: FC = (() => {
 
-export const RenderWriteMode: FC<Props> = (({ score }) => {
+    const score = useAppState(s => s.score);
 
     const bg = THEME.primary[500];
     const fg = useForeground(bg);

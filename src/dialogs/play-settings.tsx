@@ -25,6 +25,8 @@ interface Props {
 
 export const PlaySettings: FC<Props> = ({ onClose }) => {
 
+    const actions = useAppActions();
+    
     const { settings, midi, sampler, instruments } = useAppState(s => ({
         settings: s.playback.settings,
         midi: s.playback.midi,
@@ -38,7 +40,6 @@ export const PlaySettings: FC<Props> = ({ onClose }) => {
         });
     }, [sampler.channels]);
 
-    const actions = useAppActions();
     const counts = useCounts();
 
     const [page, setPage] = useState<Page>(Page.general);

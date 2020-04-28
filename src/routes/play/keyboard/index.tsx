@@ -32,7 +32,7 @@ export const Keyboard: FC<Props> = ({ instrumentKey }) => {
         onEnd: () => { }
     }, [offset, actions.ui.pianoRollOffsetY, instrumentKey]);
 
-    return <div onPointerDown={onDrag} className="keyboard no-scroll" style={{ backgroundPositionY: (offset || 0) * SLOT_HEIGHT }}>
+    return <div onPointerDown={onDrag} className="keyboard" style={{ backgroundPositionY: (offset || 0) * SLOT_HEIGHT }}>
         <div style={{ transform: `translateY(${(offset || 0) * SLOT_HEIGHT}px)` }}>
             {OCTAVES.map(octave => {
                 return <p key={octave} className="keyboard__name keyboard__name" style={{ transform: `translateY(${((SLOT_HEIGHT * -12) * (octave - 5))}px)` }}>C{octave}</p>

@@ -10,37 +10,41 @@ import { useCounts } from '../../services/instrument';
 
 import { Selection, SelectionType } from './selection';
 
+import { THEME } from '../../const';
 import { PlayerList } from './player-list';
 import { FlowList } from './flow-list';
 import { InstrumentPicker } from './instrument-picker';
 import { RenderRegion } from '../../components/render-region';
 import { RenderWriteMode } from '../../components/render-write-mode';
+import { useTitle } from '../../components/use-title';
 
 import './setup.css';
-import { THEME } from '../../const';
 
 interface Props { }
 
 const Setup: FC<Props> = () => {
 
+    useTitle('Solo Composer | Setup');
+
     const actions = useAppActions();
-    const { score, expanded } = useAppState(s => {
+    const { flows, players, instruments, expanded } = useAppState(s => {
         return {
-            score: s.score,
+            flows: s.score.flows.order.map(key => {
+                return s.score.flows.byKey[key];
+            }),
+            players: s.score.players.order.map(key => {
+                return s.score.players.byKey[key];
+            }),
+            instruments: s.score.instruments,
             expanded: s.ui.expanded
         }
     });
 
+    // local selection fine, we don't need to keep this after nav.
     const [selection, setSelection] = useState<Selection>(null);
     const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
     // PLAYERS
-
-    const players = useMemo(() => {
-        return score.players.order.map(key => {
-            return score.players.byKey[key];
-        });
-    }, [score.players]);
 
     const onCreatePlayer = useCallback(() => {
         const playerKey = actions.score.players.create(PlayerType.solo);
@@ -77,12 +81,6 @@ const Setup: FC<Props> = () => {
 
     // FLOWS
 
-    const flows = useMemo(() => {
-        return score.flows.order.map(key => {
-            return score.flows.byKey[key];
-        });
-    }, [score.flows]);
-
     const onCreateFlow = useCallback(() => {
         const key = actions.score.flows.create();
         setSelection({ key, type: SelectionType.flow });
@@ -108,10 +106,10 @@ const Setup: FC<Props> = () => {
     }, [selection, actions.score.flows]);
 
     return <>
-        <div className="setup" style={{backgroundColor: THEME.grey[500]}}>
+        <div className="setup" style={{ backgroundColor: THEME.grey[500] }}>
             <PlayerList
                 players={players}
-                instruments={score.instruments}
+                instruments={instruments}
                 counts={counts}
                 selection={selection}
                 expanded={expanded}
@@ -128,9 +126,9 @@ const Setup: FC<Props> = () => {
                 onRemovePlayer={onRemovePlayer}
                 onSortEnd={actions.score.players.reorder}
             />
-            <div className="setup__middle" style={{borderRight: `solid 4px ${THEME.grey[400]}`, borderLeft: `solid 4px ${THEME.grey[400]}`}}>
+            <div className="setup__middle" style={{ borderRight: `solid 4px ${THEME.grey[400]}`, borderLeft: `solid 4px ${THEME.grey[400]}` }}>
                 <RenderRegion className="setup__view">
-                    <RenderWriteMode score={score} />
+                    <RenderWriteMode />
                 </RenderRegion>
                 <FlowList
                     flows={flows}

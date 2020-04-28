@@ -12,6 +12,7 @@ import { Changelog } from '../changelog';
 import { Transport } from '../transport';
 
 import './shell.css';
+import { Fallback } from './fallback';
 
 const Setup = React.lazy(() => import('../../routes/setup'));
 const Write = React.lazy(() => import('../../routes/write'));
@@ -23,23 +24,17 @@ export const MainShell: FC = () => {
 
     const actions = useAppActions();
     const tab = useAppState(s => s.ui.tab);
-    const [settings, setSettings] = useState(false);
-
-    const openSettings = useCallback(() => setSettings(true), []);
-    const closeSettings = useCallback(() => setSettings(false), []);
 
     useEffect(() => {
         actions.playback.midi.init();
     }, [actions]);
 
-    useStyles(`body { background-color: ${THEME.grey[500]} }`);
     const bg = THEME.grey[300];
     const fg = useForeground(bg);
-    useTheme(bg);
 
     return <>
-        <div className="main-shell__topbar" style={{backgroundColor: bg}}>
-            <Tabs className="main-shell__tabs" value={tab} onChange={actions.ui.tab.set} color={fg} highlight={THEME.grey[600]}>
+        <div className="main-shell__topbar" style={{ backgroundColor: bg }}>
+            <Tabs className="main-shell__tabs" value={tab} onChange={actions.ui.tab.set} color={fg} highlight={THEME.primary[500]}>
                 <Tab value={TabState.setup}>Setup</Tab>
                 <Tab value={TabState.write}>Write</Tab>
                 <Tab value={TabState.engrave}>Engrave</Tab>
@@ -47,16 +42,16 @@ export const MainShell: FC = () => {
                 <Tab value={TabState.print}>Print</Tab>
             </Tabs>
             <Transport />
-            <div className="main-shell__topbar-right">
-                <Icon path={mdiCogOutline} size={24} color={fg} onClick={openSettings} />
-            </div>
         </div>
 
-        <Suspense fallback={null}>
-            {tab === TabState.setup && <Setup />}
-            {tab === TabState.write && <Write settings={settings} onSettingsClose={closeSettings} />}
-            {tab === TabState.play && <Play settings={settings} onSettingsClose={closeSettings} />}
-        </Suspense>
+        <div className="main-shell__content" style={{ backgroundColor: THEME.grey[500] }}>
+            <Suspense fallback={<Fallback type="loading" />}>
+                {(tab === TabState.engrave || tab === TabState.print) && <Fallback type="empty" />}
+                {tab === TabState.setup && <Setup />}
+                {tab === TabState.write && <Write />}
+                {tab === TabState.play && <Play />}
+            </Suspense>
+        </div>
 
         <Changelog />
     </>;

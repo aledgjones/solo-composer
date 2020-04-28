@@ -42,6 +42,7 @@ export const uiActions = (store: Store<State>) => {
             set: (tab: TabState) => {
                 store.update(s => {
                     s.ui.tab = tab;
+                    window.history.pushState(tab, `Solo Composer | ${tab}`, tab);
                 });
             }
         },

@@ -3,6 +3,18 @@
     touch-action: none;
 }
 
+.ui-drag-scroll-x {
+    touch-action: pan-y;
+}
+
+.ui-drag-scroll-y {
+    touch-action: pan-x;
+}
+
+.ui-drag-scroll-x.ui-drag-scroll-y {
+    touch-action: pan-y pan-x;
+}
+
 .ui-drag-scroll--dragging,
 .ui-drag-scroll--dragging * {
     cursor: grab !important;

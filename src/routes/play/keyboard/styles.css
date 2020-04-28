@@ -8,6 +8,7 @@
     background-size: 56px 112px;
     background-repeat: repeat-y;
     overflow: hidden;
+    touch-action: none;
 }
 
 .keyboard:active {
