@@ -1,6 +1,6 @@
 import React, { FC, useCallback, PointerEvent, useMemo, useRef } from "react";
 
-import { merge } from "solo-ui";
+import { merge, dragHandler } from "solo-ui";
 
 import { TabState, Tool } from "../../../services/ui";
 import { useAppState, useAppActions } from "../../../services/state";
@@ -19,7 +19,6 @@ import { getTickFromXPosition, getPitchFromYPosition } from "./pointer-to-track-
 import { Direction } from "../../../parse/get-stem-direction";
 import { usePatches } from "../../../playback/use-channel";
 import { Expressions } from "../../../playback/expressions";
-import { dragHandler } from "../../../components/drag-handler";
 
 import pencil from "../../../assets/cursors/pencil.svg";
 import eraser from "../../../assets/cursors/eraser.svg";

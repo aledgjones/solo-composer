@@ -1,9 +1,10 @@
 import React, { FC } from 'react';
 
+import { useDragHandler } from 'solo-ui';
+
 import { SLOT_HEIGHT } from '../instrument-track/get-tone-dimension';
 import { InstrumentKey } from '../../../services/instrument';
 import { useAppState, useAppActions } from '../../../services/state';
-import { useDragHandler } from '../../../components/drag-handler';
 
 import './styles.css';
 

@@ -8,6 +8,8 @@ import './assets/fonts/styles.css';
 import * as firebase from "firebase/app";
 import "firebase/analytics";
 
+import './styles.css';
+
 const firebaseConfig = {
     apiKey: "AIzaSyB5yDa7L9wVYHS7z24BRlsh2CkTI76b_5A",
     authDomain: "solo-composer.firebaseapp.com",

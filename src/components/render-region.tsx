@@ -1,9 +1,8 @@
 import React, { FC, useMemo } from 'react';
 
-import { merge } from 'solo-ui';
+import { merge, DragScroll } from 'solo-ui';
 
 import { THEME } from '../const';
-import { DragScroll } from './drag-scroll';
 
 import './render-region.css';
 

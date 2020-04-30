@@ -18,6 +18,7 @@ export enum TabState {
 
 export interface UiState {
     tab: TabState;
+    about: boolean;
     expanded: { [key: string]: boolean };
     selection: { [key: string]: boolean };
     pianoRollOffsetY: { [key: string]: number };
@@ -27,6 +28,7 @@ export interface UiState {
 export const uiEmptyState = (): UiState => {
     return {
         tab: TabState.setup,
+        about: false,
         expanded: {},
         selection: {},
         pianoRollOffsetY: {},
@@ -43,6 +45,23 @@ export const uiActions = (store: Store<State>) => {
                 store.update(s => {
                     s.ui.tab = tab;
                     window.history.pushState(tab, `Solo Composer | ${tab}`, tab);
+                });
+            }
+        },
+        about: {
+            toggle: () => {
+                store.update(s => {
+                    s.ui.about = !s.ui.about;
+                });
+            },
+            open: () => {
+                store.update(s => {
+                    s.ui.about = true;
+                });
+            },
+            close: () => {
+                store.update(s => {
+                    s.ui.about = false;
                 });
             }
         },

@@ -7,6 +7,11 @@ import { configEmptyState, configActions, ConfigState } from "./config";
 import { EngravingState, engravingEmptyState, engravingActions } from "./engraving";
 
 export interface Score {
+    meta: {
+        title: string;
+        composer: string;
+        created: number;
+    }
     config: ConfigState;
     engraving: EngravingState;
     players: PlayerState;
@@ -16,6 +21,11 @@ export interface Score {
 
 export const scoreEmptyState = (): Score => {
     return {
+        meta: {
+            title: 'Untitled Score',
+            composer: 'Anonymous',
+            created: Date.now()
+        },
         config: configEmptyState(),
         engraving: engravingEmptyState(),
         players: playerEmptyState(),

@@ -1,7 +1,7 @@
 import React, { FC, useState, useMemo, useEffect } from 'react';
-import { mdiCursorDefault, mdiEraser, mdiPencilOutline } from '@mdi/js';
+import { mdiCursorDefault, mdiEraser, mdiGreasePencil } from '@mdi/js';
 
-import { Select, Option, useRainbow, Dialog, Icon, useForeground } from 'solo-ui';
+import { Select, Option, useRainbow, Dialog, Icon, useForeground, DragScroll } from 'solo-ui';
 
 import { THEME } from '../../const';
 import { useAppState, useAppActions } from '../../services/state';
@@ -12,7 +12,6 @@ import { useTicks, Ticks } from './ticks';
 import { PlayerControls } from './player-contols';
 import { PlayerTrack } from './player-track';
 import { PlaySettings } from '../../dialogs/play-settings';
-import { DragScroll } from '../../components/drag-scroll';
 import { useTitle } from '../../components/use-title';
 
 import './play.css';
@@ -67,7 +66,7 @@ const Play: FC = () => {
                 <div className="play__tools-container" style={{ backgroundColor: THEME.grey[500], borderRight: `4px solid ${THEME.grey[400]}` }}>
                     <div className="play__tools">
                         <Icon className="play__tool" toggle={tool === Tool.select} onClick={() => actions.ui.tool[TabState.play].set(Tool.select)} path={mdiCursorDefault} size={24} color={fg} highlight={THEME.primary[500]}></Icon>
-                        <Icon className="play__tool" toggle={tool === Tool.pencil} onClick={() => actions.ui.tool[TabState.play].set(Tool.pencil)} path={mdiPencilOutline} size={24} color={fg} highlight={THEME.primary[500]}></Icon>
+                        <Icon className="play__tool" toggle={tool === Tool.pencil} onClick={() => actions.ui.tool[TabState.play].set(Tool.pencil)} path={mdiGreasePencil} size={24} color={fg} highlight={THEME.primary[500]}></Icon>
                         <Icon className="play__tool" toggle={tool === Tool.eraser} onClick={() => actions.ui.tool[TabState.play].set(Tool.eraser)} path={mdiEraser} size={24} color={fg} highlight={THEME.primary[500]}></Icon>
                     </div>
                 </div>

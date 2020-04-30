@@ -1,8 +1,9 @@
 import React, { FC, useState } from 'react';
 import { THEME } from '../const';
 
-import { Select, Option, Input, Button, Subheader, Switch, ListItem } from 'solo-ui';
+import { Select, Option, Input, Button, Subheader, Switch, ListItem, Label } from 'solo-ui';
 
+import { useAppActions, useAppState } from '../services/state';
 import { MenuItem } from '../components/menu-item';
 import { LayoutType, defaultEngravingConfig } from '../services/engraving';
 import { BracketingType, BracketEndStyle } from '../parse/draw-brackets';
@@ -10,8 +11,6 @@ import { BracketingType, BracketEndStyle } from '../parse/draw-brackets';
 import staveSpace from '../assets/engraving/stave-space.svg';
 
 import './generic-settings.css';
-import { Label } from '../components/label';
-import { useAppActions, useAppState } from '../services/state';
 
 enum Page {
     staves = 1,

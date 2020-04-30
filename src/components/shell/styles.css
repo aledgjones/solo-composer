@@ -3,10 +3,8 @@
     z-index: 100000;
     display: flex;
     align-items: center;
-    justify-content: space-between;
     width: 100%;
-    padding-right: 8px;
-    background-color: white;
+    padding: 0 8px 0 0;
 }
 
 .main-shell__topbar-right {
@@ -15,9 +13,17 @@
     align-items: center;
 }
 
+.main-shell__file {
+    margin: 0 20px;
+}
+
 .main-shell__tabs {
     flex-grow: 1;
     margin-left: 0;
+}
+
+.main-shell__tabs .ui-tab--selected {
+    color: white !important;
 }
 
 .main-shell__tabs .ui-tabs__bar {
@@ -25,12 +31,8 @@
     border-radius: 0;
 }
 
-.main-shell__tabs .ui-tab {
-    color: #ffffff !important;
-}
-
 .main-shell__content {
-    height: calc(100vh - 76px);
+    height: calc(100vh - 48px);
     width: 100vw;
     overflow: hidden;
 }

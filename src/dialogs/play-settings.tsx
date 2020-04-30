@@ -1,14 +1,13 @@
 import React, { FC, useState, useMemo } from 'react';
 import { mdiMidiPort } from '@mdi/js';
 
-import { Button, Icon, Subheader, Switch, ListItem } from 'solo-ui';
+import { Button, Icon, Subheader, Switch, ListItem, Label } from 'solo-ui';
 
 import { THEME } from '../const';
 import { useCounts } from '../services/instrument';
 import { PlaySettingsChannel } from './play-settings-channel';
 import { useAppState, useAppActions } from '../services/state';
 import { MenuItem } from '../components/menu-item';
-import { Label } from '../components/label';
 
 import './generic-settings.css';
 import './play-settings.css';
@@ -26,7 +25,7 @@ interface Props {
 export const PlaySettings: FC<Props> = ({ onClose }) => {
 
     const actions = useAppActions();
-    
+
     const { settings, midi, sampler, instruments } = useAppState(s => ({
         settings: s.playback.settings,
         midi: s.playback.midi,
@@ -55,7 +54,7 @@ export const PlaySettings: FC<Props> = ({ onClose }) => {
 
                 {page === Page.general && <>
 
-                    <div className="generic-settings__section" style={{paddingBottom: 0}}>
+                    <div className="generic-settings__section" style={{ paddingBottom: 0 }}>
                         <Subheader>Auditioning</Subheader>
                     </div>
                     <ListItem onClick={actions.playback.settings.audition.toggle}>

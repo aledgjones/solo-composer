@@ -1,0 +1,14 @@
+.file-menu {
+    height: 28px;
+    font-size: 14px;
+}
+
+.file-menu .ui-menu-bar-item {
+    border-radius: 0;
+}
+
+.file-menu .ui-list-item {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    color: #000000;
+}
