@@ -1,83 +1,56 @@
-import React, { FC } from 'react';
-import { MenuBar, MenuBarItem, ListItem, Divider } from 'solo-ui';
+import React, { FC, useEffect, useRef } from 'react';
+import { mdiMenu } from '@mdi/js';
 
-import { TabState } from '../../services/ui';
+import { ListItem, Divider, Card, Icon, useForeground, Content, Label, Subheader, Button, List } from 'solo-ui';
+
+import { THEME } from '../../const';
 import { useAppState, useAppActions } from '../../services/state';
-import { List } from '../list';
 
 import './styles.css';
 
 export const FileMenu: FC = () => {
-
-    const tab = useAppState(s => s.ui.tab);
+    const { open, score } = useAppState(s => {
+        return { open: s.ui.menu, score: s.score }
+    });
     const actions = useAppActions();
 
-    return <MenuBar className="file-menu">
+    const fg = useForeground(THEME.grey[300]);
 
-        <MenuBarItem label="File">
-            <List className="file-menu__list">
-                <ListItem>New</ListItem>
-                <Divider />
-                <ListItem>Open...</ListItem>
-                <ListItem>Open Recent</ListItem>
-                <Divider />
-                <ListItem>Save</ListItem>
-                <ListItem>Save As...</ListItem>
-                <Divider />
-                <ListItem>Close</ListItem>
-            </List>
-        </MenuBarItem>
+    const element = useRef<HTMLDivElement>(null);
 
-        <MenuBarItem label="Edit">
-            <List className="file-menu__list">
-                <ListItem>Undo</ListItem>
-                <ListItem>Redo</ListItem>
-                <Divider />
-                <ListItem>Cut</ListItem>
-                <ListItem>Copy</ListItem>
-                <ListItem>Paste</ListItem>
-            </List>
-        </MenuBarItem>
+    // auto close
+    useEffect(() => {
+        const cb = (e: any) => {
+            if (!element.current || !element.current.contains(e.target)) {
+                actions.ui.menu.close();
+            }
+        }
+        document.addEventListener('click', cb);
+        return () => document.removeEventListener('click', cb);
+    }, [element, actions.ui.menu]);
 
-        <MenuBarItem label="View">
-            <List className="file-menu__list">
-                <ListItem>Undo</ListItem>
-                <ListItem>Redo</ListItem>
-                <Divider />
-                <ListItem>Cut</ListItem>
-                <ListItem>Copy</ListItem>
-                <ListItem>Paste</ListItem>
-            </List>
-        </MenuBarItem>
-
-        {tab === TabState.play && <MenuBarItem label="Play">
-            <List className="file-menu__list">
-                <ListItem>Play</ListItem>
-                <Divider />
-                <ListItem>Playback</ListItem>
+    return <div ref={element}>
+        <Icon className="file-menu__icon ui-icon--hover" path={mdiMenu} color={fg} size={24} onClick={actions.ui.menu.toggle} />
+        {open && <Card className="file-menu">
+            <Content className="file-menu__current">
+                <Subheader>Current Score</Subheader>
+                <div className="file-menu__meta">
+                    <Label>
+                        <p>{score.meta.title}</p>
+                        <p>{score.meta.composer}</p>
+                    </Label>
+                </div>
+                <div className="file-menu__buttons">
+                    <Button disabled color={THEME.primary[500]} outline>My Library</Button>
+                </div>
+            </Content>
+            <List onClick={actions.ui.menu.close}>
                 <ListItem>Preferences</ListItem>
-            </List>
-        </MenuBarItem>}
-
-        <MenuBarItem label="Window">
-            <List className="file-menu__list">
-                <ListItem>Undo</ListItem>
-                <ListItem>Redo</ListItem>
                 <Divider />
-                <ListItem>Cut</ListItem>
-                <ListItem>Copy</ListItem>
-                <ListItem>Paste</ListItem>
-            </List>
-        </MenuBarItem>
-
-        <MenuBarItem label="Help">
-            <List className="file-menu__list">
-                <ListItem>Documentation</ListItem>
-                <ListItem>Send Feedback</ListItem>
-                <Divider />
+                <ListItem disabled>Help &amp; Feedback</ListItem>
                 <ListItem onClick={actions.ui.about.open}>About</ListItem>
             </List>
-        </MenuBarItem>
-
-    </MenuBar>
+        </Card >
+        }
+    </div >
 }

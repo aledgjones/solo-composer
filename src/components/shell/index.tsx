@@ -1,6 +1,6 @@
 import React, { FC, useEffect, Suspense } from 'react';
 
-import { Tabs, Tab } from 'solo-ui';
+import { Tabs, Tab, useForeground } from 'solo-ui';
 
 import { THEME } from '../../const';
 import { useAppActions, useAppState } from '../../services/state';
@@ -8,7 +8,7 @@ import { TabState } from '../../services/ui';
 import { useAutoSetup } from '../../services/auto-setup';
 
 import { FileMenu } from '../file-menu';
-import { Changelog } from '../changelog';
+import { About } from '../about';
 import { Transport } from '../transport';
 import { Fallback } from './fallback';
 
@@ -25,16 +25,17 @@ export const MainShell: FC = () => {
     const actions = useAppActions();
     const tab = useAppState(s => s.ui.tab);
 
+    const fg = useForeground(THEME.grey[300]);
+
     useEffect(() => {
         actions.playback.midi.init();
     }, [actions]);
 
     return <>
 
-        <FileMenu />
-
-        <div className="main-shell__topbar" style={{ backgroundColor: THEME.grey[300] }}>
-            <Tabs className="main-shell__tabs" value={tab} onChange={actions.ui.tab.set} color={THEME.grey[800]} highlight={THEME.grey[500]}>
+        <div className="main-shell__title-bar" style={{ backgroundColor: THEME.grey[300] }}>
+            <FileMenu />
+            <Tabs className="main-shell__tabs" value={tab} onChange={actions.ui.tab.set} color={fg} highlight={THEME.grey[500]}>
                 <Tab value={TabState.setup}>Setup</Tab>
                 <Tab value={TabState.write}>Write</Tab>
                 <Tab value={TabState.engrave}>Engrave</Tab>
@@ -53,6 +54,6 @@ export const MainShell: FC = () => {
             </Suspense>
         </div>
 
-        <Changelog />
+        <About />
     </>;
 }

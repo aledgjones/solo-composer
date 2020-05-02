@@ -17,18 +17,25 @@
 }
 
 .play__tools-container {
-    width: 52px;
+    padding: 12px 8px;
+    width: 68px;
 }
 
 .play__tools {
     position: sticky;
     top: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+}
+
+.play__settings {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 64px;
+    padding: 12px 8px;
 }
 
 .play__tool {
+    display: inline-block;
     margin: 12px;
 }
 

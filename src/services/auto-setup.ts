@@ -20,8 +20,8 @@ export function useAutoSetup() {
         const c = 12;
         const q = 6;
 
-        actions.ui.tab.set(process.env.NODE_ENV === 'production' ? TabState.setup : TabState.play);
-
+        actions.score.meta.update({ title: 'Hello World (String Quartet)', composer: 'Solo Apps' });
+        actions.ui.tab.set(process.env.NODE_ENV === 'production' ? TabState.setup : TabState.setup);
         actions.score.flows.setLength(flowKey, (4 * c * 4) + (6 * q * 4));
 
         const ids = ['strings.violin', 'strings.violin', 'strings.viola', 'strings.violoncello'];
@@ -31,7 +31,7 @@ export function useAutoSetup() {
             const instrument = actions.score.instruments.create(def);
             const playerKey = actions.score.players.create(PlayerType.solo);
             actions.score.players.assignInstrument(playerKey, instrument.key);
-    
+
             const channel = actions.playback.sampler.createChannel();
             actions.playback.sampler.load(channel, def);
             actions.playback.sampler.assignInstrument(instrument.key, channel);
@@ -42,6 +42,8 @@ export function useAutoSetup() {
         actions.score.flows.createKeySignature({ mode: KeySignatureMode.minor, offset: -3 }, 0, flowKey);
         actions.score.flows.createAbsoluteTempo({ text: 'Allegro', beat: NotationBaseDuration.crotchet, dotted: 0, beatPerMinute: 120, textVisible: true, beatPerMinuteVisible: true, parenthesis: true }, 0, flowKey);
 
-    }, [actions.score.instruments, actions.score.players, actions.score.flows, actions.playback.sampler, actions.ui.tab, flowKey]);
+        console.log('auto setup complete!');
+
+    }, [actions, flowKey]);
 
 }

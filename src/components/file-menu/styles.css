@@ -1,14 +1,28 @@
 .file-menu {
-    height: 28px;
-    font-size: 14px;
-}
-
-.file-menu .ui-menu-bar-item {
+    position: fixed;
+    top: 48px;
+    left: 0;
+    z-index: 100000;
     border-radius: 0;
+    width: 342px;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 
-.file-menu .ui-list-item {
-    padding-top: 8px;
-    padding-bottom: 8px;
-    color: #000000;
+.file-menu__icon {
+    margin: 0 20px;
+}
+
+.file-menu__current {
+    background-color: rgb(235, 235, 235);
+}
+
+.file-menu__meta {
+    display: flex;
+    align-items: center;
+}
+
+.file-menu__buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
 }

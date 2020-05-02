@@ -6,12 +6,14 @@ import { FlowState, flowEmptyState, flowActions } from "./flow";
 import { configEmptyState, configActions, ConfigState } from "./config";
 import { EngravingState, engravingEmptyState, engravingActions } from "./engraving";
 
+interface ScoreMeta {
+    title: string;
+    composer: string;
+    created: number;
+}
+
 export interface Score {
-    meta: {
-        title: string;
-        composer: string;
-        created: number;
-    }
+    meta: ScoreMeta;
     config: ConfigState;
     engraving: EngravingState;
     players: PlayerState;
@@ -36,6 +38,16 @@ export const scoreEmptyState = (): Score => {
 
 export const scoreActions = (store: Store<State>) => {
     return {
+        meta: {
+            update: (meta: Partial<ScoreMeta>) => {
+                store.update(s => {
+                    s.score.meta = {
+                        ...s.score.meta,
+                        ...meta
+                    };
+                });
+            }
+        },
         config: configActions(store),
         engraving: engravingActions(store),
         players: playerActions(store),

@@ -1,6 +1,6 @@
 import React, { FC, useState, useCallback } from 'react';
 
-import { Dialog } from 'solo-ui';
+import { Dialog, useTitle } from 'solo-ui';
 
 import { useAppState, useAppActions } from '../../services/state';
 import { PlayerType, PlayerKey } from '../../services/player';
@@ -16,7 +16,6 @@ import { FlowList } from './flow-list';
 import { InstrumentPicker } from './instrument-picker';
 import { RenderRegion } from '../../components/render-region';
 import { RenderWriteMode } from '../../components/render-write-mode';
-import { useTitle } from '../../components/use-title';
 
 import './setup.css';
 

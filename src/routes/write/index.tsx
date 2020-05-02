@@ -1,11 +1,10 @@
 import React, { FC } from 'react';
 
-import { Dialog } from 'solo-ui';
+import { Dialog, useTitle } from 'solo-ui';
 
 import { RenderRegion } from '../../components/render-region';
 import { RenderWriteMode } from '../../components/render-write-mode';
 import { EngravingSettings } from '../../dialogs/engraving-settings';
-import { useTitle } from '../../components/use-title';
 
 import './write.css';
 

@@ -1,7 +1,7 @@
 import React, { FC, useState, useMemo, useEffect } from 'react';
-import { mdiCursorDefault, mdiEraser, mdiGreasePencil } from '@mdi/js';
+import { mdiCursorDefault, mdiEraser, mdiGreasePencil, mdiCogOutline } from '@mdi/js';
 
-import { Select, Option, useRainbow, Dialog, Icon, useForeground, DragScroll } from 'solo-ui';
+import { Select, Option, useRainbow, Dialog, Icon, useForeground, DragScroll, useTitle } from 'solo-ui';
 
 import { THEME } from '../../const';
 import { useAppState, useAppActions } from '../../services/state';
@@ -12,7 +12,6 @@ import { useTicks, Ticks } from './ticks';
 import { PlayerControls } from './player-contols';
 import { PlayerTrack } from './player-track';
 import { PlaySettings } from '../../dialogs/play-settings';
-import { useTitle } from '../../components/use-title';
 
 import './play.css';
 
@@ -30,6 +29,7 @@ const Play: FC = () => {
     const actions = useAppActions();
 
     const [zoom] = useState<number>(1);
+    const [settings, setSettings] = useState(false);
 
     const [flowKey, setFlowKey] = useState(score.flows.order[0]);
     const flow = score.flows.byKey[flowKey];
@@ -65,9 +65,12 @@ const Play: FC = () => {
 
                 <div className="play__tools-container" style={{ backgroundColor: THEME.grey[500], borderRight: `4px solid ${THEME.grey[400]}` }}>
                     <div className="play__tools">
-                        <Icon className="play__tool" toggle={tool === Tool.select} onClick={() => actions.ui.tool[TabState.play].set(Tool.select)} path={mdiCursorDefault} size={24} color={fg} highlight={THEME.primary[500]}></Icon>
-                        <Icon className="play__tool" toggle={tool === Tool.pencil} onClick={() => actions.ui.tool[TabState.play].set(Tool.pencil)} path={mdiGreasePencil} size={24} color={fg} highlight={THEME.primary[500]}></Icon>
-                        <Icon className="play__tool" toggle={tool === Tool.eraser} onClick={() => actions.ui.tool[TabState.play].set(Tool.eraser)} path={mdiEraser} size={24} color={fg} highlight={THEME.primary[500]}></Icon>
+                        <Icon className="play__tool" toggle={tool === Tool.select} onClick={() => actions.ui.tool[TabState.play].set(Tool.select)} path={mdiCursorDefault} size={24} color={fg} highlight={THEME.primary[500]} />
+                        <Icon className="play__tool" toggle={tool === Tool.pencil} onClick={() => actions.ui.tool[TabState.play].set(Tool.pencil)} path={mdiGreasePencil} size={24} color={fg} highlight={THEME.primary[500]} />
+                        <Icon className="play__tool" toggle={tool === Tool.eraser} onClick={() => actions.ui.tool[TabState.play].set(Tool.eraser)} path={mdiEraser} size={24} color={fg} highlight={THEME.primary[500]} />
+                    </div>
+                    <div className="play__settings">
+                        <Icon className="play__tool" path={mdiCogOutline} size={24} color={fg} onClick={() => setSettings(true)} />
                     </div>
                 </div>
 
@@ -110,8 +113,8 @@ const Play: FC = () => {
 
         </DragScroll>
 
-        <Dialog open={false} width={900}>
-            {() => <PlaySettings onClose={() => false} />}
+        <Dialog open={settings} width={900}>
+            {() => <PlaySettings onClose={() => setSettings(false)} />}
         </Dialog>
     </>;
 }

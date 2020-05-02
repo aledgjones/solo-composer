@@ -10,6 +10,7 @@ export interface PlaybackState {
     midi: MidiState;
     sampler: SamplerState;
     settings: {
+        metronome: boolean;
         audition: boolean;
     }
 }
@@ -21,6 +22,7 @@ export const playbackEmptyState = (): PlaybackState => {
         midi: midiEmptyState(),
         sampler: samplerEmptyState(),
         settings: {
+            metronome: false,
             audition: true
         }
     };
@@ -31,6 +33,13 @@ export const playbackActions = (store: Store<State>) => {
         midi: midiActions(store),
         sampler: samplerActions(store),
         settings: {
+            metronome: {
+                toggle: () => {
+                    store.update(s => {
+                        s.playback.settings.metronome = !s.playback.settings.metronome;
+                    });
+                }
+            },
             audition: {
                 toggle: () => {
                     store.update(s => {

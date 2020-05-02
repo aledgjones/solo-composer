@@ -1,28 +1,25 @@
 .transport {
     display: flex;
     align-items: center;
-    height: 32px;
-    border-radius: 3px;
-    overflow: hidden;
+    height: 100%;
 }
 
 .transport__timestamp {
     display: flex;
     align-items: center;
     color: white;
-    padding: 0 20px 0 0;
-    height: 100%;
+    padding: 0px 20px;
+    height: 36px;
+    border-radius: 3px;
 }
 
 .transport__controls {
     display: flex;
     padding: 6px 0 6px 20px;
-    overflow: hidden;
 }
 
 .transport__metronome {
-    padding: 6px 20px;
-    overflow: hidden;
+    padding: 0 20px;
 }
 
 .transport__icon {
