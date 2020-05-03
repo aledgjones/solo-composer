@@ -1,5 +1,4 @@
-import React from 'react';
-import { SortableContainer } from 'react-sortable-hoc';
+import React, { FC } from 'react';
 import { mdiPlus } from '@mdi/js';
 
 import { Icon, useForeground } from 'solo-ui';
@@ -10,6 +9,7 @@ import { Selection } from "./selection";
 
 import './flow-list.css';
 import { THEME } from '../../const';
+import { SortableContainer } from '../../components/sortable-container';
 
 interface Props {
     flows: Flow[];
@@ -22,19 +22,18 @@ interface Props {
     onRemovePlayer: (flowKey: FlowKey) => void;
 }
 
-export const FlowList = SortableContainer<Props>((props: Props) => {
-    const { flows, selection, onSelectFlow, onCreateFlow, onRemoveFlow, onAssignPlayer, onRemovePlayer } = props;
-    const fg400 = useForeground(THEME.grey[400]);
+export const FlowList: FC<Props> = ({ flows, selection, onSelectFlow, onCreateFlow, onRemoveFlow, onAssignPlayer, onRemovePlayer }) => {
 
-    return <div className="flow-list" style={{backgroundColor: THEME.grey[500]}}>
-        <div className="flow-list__header" style={{backgroundColor: THEME.grey[400]}}>
-            <span style={{color: fg400}}>Flows</span>
-            <Icon size={24} color={fg400} path={mdiPlus} onClick={onCreateFlow} />
+    const fg = useForeground(THEME.grey[400]);
+
+    return <div className="flow-list" style={{ backgroundColor: THEME.grey[500] }}>
+        <div className="flow-list__header" style={{ backgroundColor: THEME.grey[400] }}>
+            <span style={{ color: fg }}>Flows</span>
+            <Icon size={24} color={fg} path={mdiPlus} onClick={onCreateFlow} />
         </div>
         <div className="flow-list__wrapper">
-            <div className="flow-list__content">
+            <SortableContainer x className="flow-list__content">
                 {flows.map((flow, i) => <FlowItem
-                    index={i}
                     key={flow.key}
                     flow={flow}
 
@@ -45,8 +44,8 @@ export const FlowList = SortableContainer<Props>((props: Props) => {
                     onAssignPlayer={onAssignPlayer}
                     onRemovePlayer={onRemovePlayer}
                 />)}
-            </div>
+            </SortableContainer>
         </div>
     </div>;
-});
+};
 

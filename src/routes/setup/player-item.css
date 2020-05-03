@@ -1,8 +1,12 @@
 .player-item {
-  background-color: #232c32;
+  position: relative;
   margin-bottom: 8px;
   color: white;
   border-radius: 3px;
+}
+
+.player-item.ui-sortable-item--dragging {
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 
 .player-item__header {

@@ -113,17 +113,12 @@ const Setup: FC<Props> = () => {
                 selection={selection}
                 expanded={expanded}
 
-                distance={5}
-                lockAxis="y"
-                useDragHandle
-                transitionDuration={200}
-
                 onSelectPlayer={setSelection}
                 onToggleExpandPlayer={actions.ui.expanded.toggle}
                 onCreatePlayer={onCreatePlayer}
                 onAddInstrument={onAddInstrument}
                 onRemovePlayer={onRemovePlayer}
-                onSortEnd={actions.score.players.reorder}
+            // onSortEnd={actions.score.players.reorder}
             />
             <div className="setup__middle" style={{ borderRight: `solid 4px ${THEME.grey[400]}`, borderLeft: `solid 4px ${THEME.grey[400]}` }}>
                 <RenderRegion className="setup__view">
@@ -133,18 +128,12 @@ const Setup: FC<Props> = () => {
                     flows={flows}
                     selection={selection}
 
-                    distance={5}
-                    lockAxis="x"
-                    axis="x"
-                    useDragHandle
-                    transitionDuration={200}
-
                     onSelectFlow={setSelection}
                     onCreateFlow={onCreateFlow}
                     onRemoveFlow={onRemoveFlow}
                     onAssignPlayer={onAssignPlayerToFlow}
                     onRemovePlayer={onRemovePlayerFromFlow}
-                    onSortEnd={actions.score.flows.reorder}
+                // onSortEnd={actions.score.flows.reorder}
                 />
             </div>
         </div>

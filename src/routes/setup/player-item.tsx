@@ -1,15 +1,14 @@
-import React, { useCallback, useMemo, MouseEvent } from 'react';
-import { SortableElement } from 'react-sortable-hoc';
+import React, { useCallback, useMemo, MouseEvent, FC, useRef } from 'react';
 import { mdiChevronDown, mdiPlus, mdiDeleteOutline, mdiChevronUp } from '@mdi/js';
 
 import { Icon, useForeground } from 'solo-ui';
+import { SortableItem } from '../../components/sortable-item';
 
 import { Player, PlayerType, usePlayerName, usePlayerIcon, PlayerKey } from '../../services/player';
 import { Instruments } from '../../services/instrument';
 import { InstrumentCounts } from '../../services/instrument-utils';
 import { THEME } from '../../const';
 import { InstrumentItem } from './instrument-item';
-import { Handle } from './handle';
 import { SelectionType, Selection } from "./selection";
 import { Text } from '../../components/text';
 
@@ -28,9 +27,9 @@ interface Props {
     onRemovePlayer: (playerKey: PlayerKey) => void;
 }
 
-export const PlayerItem = SortableElement<Props>((props: Props) => {
+export const PlayerItem: FC<Props> = ({ player, instruments, counts, selected, expanded, onSelectPlayer, onToggleExpandPlayer, onAddInstrument, onRemovePlayer }) => {
 
-    const { player, instruments, counts, selected, expanded, onSelectPlayer, onToggleExpandPlayer, onAddInstrument, onRemovePlayer } = props;
+    const handle = useRef<HTMLDivElement>(null);
 
     const onExpand = useCallback((e: MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
@@ -57,11 +56,12 @@ export const PlayerItem = SortableElement<Props>((props: Props) => {
     const name = usePlayerName(player, instruments, counts);
     const icon = usePlayerIcon(player);
 
-    return <div className="player-item" style={{ backgroundColor: bg, color: fg }} onClick={onSelect}>
+    return <SortableItem handle={handle} className="player-item" style={{ backgroundColor: bg, color: fg }} onClick={onSelect}>
         <div className="player-item__header">
-            <Handle>
+
+            <div onPointerDown={onSelect} ref={handle}>
                 <Icon style={{ marginRight: 16 }} path={icon} size={24} color={fg} />
-            </Handle>
+            </div>
 
             <Text style={{ whiteSpace: 'pre' }} className="player-item__name">{name}</Text>
 
@@ -76,5 +76,5 @@ export const PlayerItem = SortableElement<Props>((props: Props) => {
                 return <InstrumentItem key={key} selected={selected} instrument={instruments[key]} count={counts[key]} />
             })}
         </div>}
-    </div>;
-});
+    </SortableItem>;
+};
