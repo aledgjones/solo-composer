@@ -45,7 +45,7 @@ export const FileMenu: FC = () => {
                 </div>
             </Content>
             <List onClick={actions.ui.menu.close}>
-                <ListItem>Preferences</ListItem>
+                <ListItem disabled>Preferences</ListItem>
                 <Divider />
                 <ListItem disabled>Help &amp; Feedback</ListItem>
                 <ListItem onClick={actions.ui.about.open}>About</ListItem>

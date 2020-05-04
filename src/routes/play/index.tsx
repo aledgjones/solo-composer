@@ -13,6 +13,8 @@ import { PlayerControls } from './player-contols';
 import { PlayerTrack } from './player-track';
 import { PlaySettings } from '../../dialogs/play-settings';
 
+import piano from './keyboard/piano.svg';
+
 import './play.css';
 
 const Play: FC = () => {
@@ -112,6 +114,8 @@ const Play: FC = () => {
             </div>
 
         </DragScroll>
+
+        <link rel="prefetch" href={piano} />
 
         <Dialog open={settings} width={900}>
             {() => <PlaySettings onClose={() => setSettings(false)} />}
