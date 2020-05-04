@@ -20,6 +20,10 @@ export function useAutoSetup() {
         const c = 12;
         const q = 6;
 
+        if (process.env.NODE_ENV === 'production') {
+            actions.ui.about.open();
+        }
+
         actions.score.meta.update({ title: 'Hello World (String Quartet)', composer: 'Solo Apps' });
         actions.ui.tab.set(process.env.NODE_ENV === 'production' ? TabState.setup : TabState.setup);
         actions.score.flows.setLength(flowKey, (4 * c * 4) + (6 * q * 4));

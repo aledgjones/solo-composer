@@ -106,6 +106,14 @@ export const SortableItem: FC<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, 
         }
     }, [key, index, ref, setItems]);
 
+    // stop native touch scrolling in the config.direction
+    useEffect(() => {
+        const target = handle && handle.current ? handle.current : ref.current;
+        if (target) {
+            target.style.touchAction = `pan-${config.direction === 'x' ? 'y' : 'x'}`;
+        }
+    }, [handle, ref, config]);
+
     const onDown = useDragHandler<{ x: number, y: number, insertAt: number }>({
         onDown: e => {
             if (onPointerDown) {
@@ -189,7 +197,14 @@ export const SortableItem: FC<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, 
                 ...style
             }}
             onPointerDown={onDown}
-            className={merge('ui-sortable-item', { 'ui-sortable-item--active': item.active, 'ui-sortable-item--sorting': item.sorting }, className)}
+            className={merge(
+                'ui-sortable-item',
+                {
+                    'ui-sortable-item--active': item.active,
+                    'ui-sortable-item--sorting': item.sorting
+                },
+                className
+            )}
             {...props}
         >
             {children}

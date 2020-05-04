@@ -17,11 +17,12 @@
 }
 
 .play__tools-container {
-    padding: 12px 8px;
+    padding: 0 8px;
     width: 68px;
 }
 
 .play__tools {
+    padding: 12px 0;
     position: sticky;
     top: 0;
 }

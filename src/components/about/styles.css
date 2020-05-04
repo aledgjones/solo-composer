@@ -45,5 +45,6 @@
 }
 
 .about__paragraph {
+    text-align: justify;
     margin-bottom: 20px;
 }

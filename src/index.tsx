@@ -1,4 +1,4 @@
-import React, { StrictMode } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import { MainShell } from './components/shell';
 import * as serviceWorker from './serviceWorker';
@@ -23,7 +23,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 
-ReactDOM.render(<StrictMode><MainShell /></StrictMode>, document.getElementById('root'));
+ReactDOM.render(<MainShell />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
