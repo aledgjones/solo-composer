@@ -119,16 +119,17 @@ export const InstrumentTrack: FC<Props> = ({ flowKey, color, instrument, staves,
                 const pitch = fixedPitch ? tone.pitch : getPitchFromYPosition(y, highestNoteOnPianoRoll, SLOT_HEIGHT);
                 const start = getStart(x, ticks, snap, tone, init.x, fixedStart, fixedDuration);
                 const duration = getDuration(x, ticks, snap, tone, start, fixedStart, fixedDuration);
-                if (pitch !== init.pitch) {
-                    init.pitch = pitch;
-                    onPlay(pitch);
-                }
                 actions.score.instruments.updateTone(flowKey, trackKey, tone._key, { pitch, duration }, start);
             },
             onEnd: (ev, init) => {
                 const x = ev.clientX - init.box.left;
+                const y = ev.clientY - init.box.top;
+                const pitch = fixedPitch ? tone.pitch : getPitchFromYPosition(y, highestNoteOnPianoRoll, SLOT_HEIGHT);
                 const start = getStart(x, ticks, snap, tone, init.x, fixedStart, fixedDuration);
                 const duration = getDuration(x, ticks, snap, tone, start, fixedStart, fixedDuration);
+                if (pitch !== init.pitch) {
+                    onPlay(pitch);
+                }
                 if (duration <= 0) {
                     actions.score.instruments.removeTone(flowKey, trackKey, tone._key);
                 }

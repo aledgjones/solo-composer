@@ -1,10 +1,9 @@
 import React, { version as ReactVersion } from 'react';
 import { version as ToneJSVersion } from 'tone';
-import { mdiClose } from '@mdi/js';
 
-import { Icon, Dialog, Subheader, Content, Label } from 'solo-ui';
+import { Dialog, Subheader, Content, Label, Button } from 'solo-ui';
 
-import { APP_VERSION } from '../../const';
+import { APP_VERSION, THEME } from '../../const';
 import { useAppState, useAppActions } from '../../services/state';
 
 import logo from '../../assets/logo.png';
@@ -19,9 +18,6 @@ export const About = () => {
     return <Dialog width={400} className="about" open={show}>
         {
             () => <>
-                <div className="about__head">
-                    <Icon path={mdiClose} size={24} color="#000000" onClick={actions.ui.about.close} />
-                </div>
                 <div className="about__logo">
                     <img className="about__logo-img" alt="Solo Composer Logo" src={logo} />
                     <Label className="about__logo-text">
@@ -30,22 +26,25 @@ export const About = () => {
                     </Label>
                 </div>
                 <Content>
-                    <Subheader>About</Subheader>
-                    <p className="about__paragraph">This is an early stages work in progress. Things will break, not exist, make no sense and crash!</p>
+                    <p className="about__paragraph">Welcome to this Solo Apps experiment. This is very much a work in progress. Things <b>will</b> break, not exist, make no sense and crash! This project is inspired by the amazing work the people at Steinberg are doing on Dorico. If you haven't checked it out, I recommend you do!</p>
                     <Subheader>Versions</Subheader>
                     <p className="about__version">
                         <span className="about__grow">Application</span>
-                        <span>v{APP_VERSION}</span>
+                        <span>{APP_VERSION}</span>
                     </p>
                     <p className="about__version">
                         <span className="about__grow">Audio Engine (Tone.js)</span>
-                        <span>v{ToneJSVersion}</span>
+                        <span>{ToneJSVersion}</span>
                     </p>
                     <p className="about__version">
                         <span className="about__grow">Render Engine (React.js)</span>
-                        <span>v{ReactVersion}</span>
+                        <span>{ReactVersion}</span>
                     </p>
                 </Content>
+                <div className="about__buttons">
+                    {/* <Button style={{ marginRight: 8 }} outline color={THEME.primary[400]} onClick={actions.ui.about.close}>Changelog</Button> */}
+                    <Button color={THEME.primary[400]} onClick={actions.ui.about.close}>Close</Button>
+                </div>
             </>
         }
     </Dialog>

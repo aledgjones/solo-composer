@@ -1,13 +1,5 @@
-.about__head {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    height: 48px;
-    padding: 0 12px;
-}
-
 .about__logo {
-    padding: 20px;
+    padding: 20px 20px 0 20px;
     text-align: center;
 }
 
@@ -27,8 +19,6 @@
 }
 
 .about__version {
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 14px;
     display: flex;
 }
 
@@ -47,4 +37,15 @@
 .about__paragraph {
     text-align: justify;
     margin-bottom: 20px;
+}
+
+.about__paragraph b {
+    font-weight: bold;
+}
+
+.about__buttons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 20px 20px 20px;
 }
