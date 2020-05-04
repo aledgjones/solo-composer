@@ -1,14 +1,14 @@
-import { useMemo } from 'react';
-import { mdiAccount, mdiAccountGroup } from '@mdi/js';
-import shortid from 'shortid';
-import ArrayMove from 'array-move';
-import { InstrumentKey, Instruments } from './instrument';
-import { createStave } from './stave';
-import { instrumentDefs } from './instrument-defs';
-import { Store } from 'pullstate';
-import { State } from './state';
-import { createTrack } from './track';
-import { InstrumentCounts } from './instrument-utils';
+import { useMemo } from "react";
+import { mdiAccount, mdiAccountGroup } from "@mdi/js";
+import shortid from "shortid";
+import ArrayMove from "array-move";
+import { InstrumentKey, Instruments } from "./instrument";
+import { createStave } from "./stave";
+import { instrumentDefs } from "./instrument-defs";
+import { Store } from "pullstate";
+import { State } from "./state";
+import { createTrack } from "./track";
+import { InstrumentCounts } from "./instrument-utils";
 
 export type PlayerKey = string;
 
@@ -35,14 +35,13 @@ export const playerEmptyState = (): PlayerState => {
         order: [],
         byKey: {}
     };
-}
+};
 
 export const playerActions = (store: Store<State>) => {
     return {
         create: (type: PlayerType) => {
             const player = createPlayer(type);
             store.update(s => {
-
                 // add the player
                 s.score.players.order.push(player.key);
                 s.score.players.byKey[player.key] = player;
@@ -51,7 +50,6 @@ export const playerActions = (store: Store<State>) => {
                 s.score.flows.order.forEach(flowKey => {
                     s.score.flows.byKey[flowKey].players.push(player.key);
                 });
-
             });
             return player.key;
         },
@@ -86,7 +84,6 @@ export const playerActions = (store: Store<State>) => {
         },
         assignInstrument: (playerKey: PlayerKey, instrumentKey: InstrumentKey) => {
             store.update(s => {
-
                 // add the instrument to the player
                 s.score.players.byKey[playerKey].instruments.push(instrumentKey);
 
@@ -97,33 +94,34 @@ export const playerActions = (store: Store<State>) => {
                     if (flow.players.includes(playerKey)) {
                         s.score.instruments[instrumentKey].staves.forEach((staveKey, i) => {
                             const track = createTrack([]);
-                            flow.staves[staveKey] = createStave(def.staves[i], staveKey, [track.key]);
+                            flow.staves[staveKey] = createStave(def.staves[i], staveKey, [
+                                track.key
+                            ]);
                             flow.tracks[track.key] = track;
                         });
                     }
                 });
-
             });
         }
-    }
-}
+    };
+};
 
 const createPlayer = (type: PlayerType): Player => {
     return {
         key: shortid(),
         type,
         instruments: []
-    }
-}
+    };
+};
 
 export function usePlayerName(player: Player, instruments: Instruments, counts: InstrumentCounts) {
     return useMemo(() => {
         if (player.instruments.length === 0) {
             switch (player.type) {
                 case PlayerType.solo:
-                    return 'Empty-handed Player';
+                    return "Empty-handed Player";
                 default:
-                    return 'Empty-handed Section'
+                    return "Empty-handed Section";
             }
         } else {
             const len = player.instruments.length;
@@ -131,15 +129,15 @@ export function usePlayerName(player: Player, instruments: Instruments, counts: 
                 const isFirst = i === 0;
                 const isLast = i === len - 1;
                 const count = counts[key];
-                const name = instruments[key].longName + (count ? ` ${count}` : '');
+                const name = instruments[key].longName + (count ? ` ${count}` : "");
                 if (isFirst) {
                     return name;
                 } else if (isLast) {
-                    return output + ' & ' + name;
+                    return output + " & " + name;
                 } else {
-                    return output + ', ' + name;
+                    return output + ", " + name;
                 }
-            }, '');
+            }, "");
         }
     }, [player.type, player.instruments, instruments, counts]);
 }

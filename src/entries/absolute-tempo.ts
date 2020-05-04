@@ -1,8 +1,8 @@
-import shortid from 'shortid';
+import shortid from "shortid";
 import { Entry, EntryType } from ".";
-import { buildText, TextStyles, Align } from '../render/text';
-import { EngravingConfig } from '../services/engraving';
-import { NotationBaseDuration } from '../parse/notation-track';
+import { buildText, TextStyles, Align } from "../render/text";
+import { EngravingConfig } from "../services/engraving";
+import { NotationBaseDuration } from "../parse/notation-track";
 
 export interface AbsoluteTempoDef {
     text?: string;
@@ -15,7 +15,7 @@ export interface AbsoluteTempoDef {
     beatPerMinuteVisible: boolean;
 }
 
-export interface AbsoluteTempo extends AbsoluteTempoDef { }
+export interface AbsoluteTempo extends AbsoluteTempoDef {}
 
 export function createAbsoluteTempo(def: AbsoluteTempoDef, tick: number): Entry<AbsoluteTempo> {
     return {
@@ -27,33 +27,43 @@ export function createAbsoluteTempo(def: AbsoluteTempoDef, tick: number): Entry<
         _tick: tick,
 
         ...def
-    }
+    };
 }
 
 function glyphFromDuration(baseLength?: NotationBaseDuration) {
     switch (baseLength) {
         case NotationBaseDuration.semiquaver:
-            return '\u{1D161}';
+            return "\u{1D161}";
         case NotationBaseDuration.quaver:
-            return '\u{1D160}';
+            return "\u{1D160}";
         case NotationBaseDuration.crotchet:
-            return '\u{1D15F}';
+            return "\u{1D15F}";
         case NotationBaseDuration.minim:
-            return '\u{1D15E}';
+            return "\u{1D15E}";
         case NotationBaseDuration.semibreve:
-            return '\u{E0A2}';
+            return "\u{E0A2}";
         default:
-            return '';
+            return "";
     }
 }
 
-export function drawAbsoluteTempo(x: number, y: number, tempo: Entry<AbsoluteTempo>, config: EngravingConfig) {
-
-    const styles: TextStyles = { color: '#000000', font: config.tempo.font, size: config.tempo.size, justify: config.tempo.align, align: Align.bottom };
+export function drawAbsoluteTempo(
+    x: number,
+    y: number,
+    tempo: Entry<AbsoluteTempo>,
+    config: EngravingConfig
+) {
+    const styles: TextStyles = {
+        color: "#000000",
+        font: config.tempo.font,
+        size: config.tempo.size,
+        justify: config.tempo.align,
+        align: Align.bottom
+    };
 
     let left = x;
     let top = y - config.tempo.distanceFromStave - config.tempo.size;
-    let output = '';
+    let output = "";
 
     if (tempo.textVisible && tempo.text) {
         output += `${tempo.text} `;
@@ -62,7 +72,7 @@ export function drawAbsoluteTempo(x: number, y: number, tempo: Entry<AbsoluteTem
     if (tempo.beatPerMinuteVisible) {
         // open parens
         if (tempo.parenthesis) {
-            output += '(';
+            output += "(";
         }
 
         const glyph = glyphFromDuration(tempo.beat);
@@ -71,21 +81,20 @@ export function drawAbsoluteTempo(x: number, y: number, tempo: Entry<AbsoluteTem
         // dotted
         if (tempo.dotted > 0) {
             for (let i = 0; i < tempo.dotted; i++) {
-                output += '\u{E1E7}';
+                output += "\u{E1E7}";
             }
         }
 
-        output += '@';
+        output += "@";
 
         // equation
         output += ` = ${tempo.beatPerMinute}`;
 
         // close parens
         if (tempo.parenthesis) {
-            output += ')';
+            output += ")";
         }
     }
 
     return buildText(tempo._key, styles, left, top, output);
-
 }

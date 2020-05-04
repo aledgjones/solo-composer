@@ -23,7 +23,7 @@ export function useAppActions() {
             ui: uiActions(store),
             score: scoreActions(store),
             playback: playbackActions(store)
-        }
+        };
     }, []);
 }
 

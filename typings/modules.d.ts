@@ -1,4 +1,4 @@
-declare module '*.md';
+declare module "*.md";
 
 interface Navigator {
     requestMIDIAccess: any;

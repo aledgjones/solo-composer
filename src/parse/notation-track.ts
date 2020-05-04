@@ -2,8 +2,8 @@ import { EntryKey, Entry } from "../entries";
 import { Tone } from "../entries/tone";
 
 export enum NotationBaseDuration {
-    semiquaver = .25,
-    quaver = .5,
+    semiquaver = 0.25,
+    quaver = 0.5,
     crotchet = 1,
     minim = 2,
     semibreve = 4,
@@ -12,7 +12,7 @@ export enum NotationBaseDuration {
 
 export interface Notation {
     key: string;
-    tones: Entry<Tone>[] // these may be repeated if a tone is split up into ties notes
+    tones: Entry<Tone>[]; // these may be repeated if a tone is split up into ties notes
     duration: number;
     ties: EntryKey[];
 }
@@ -25,7 +25,10 @@ export interface NotationTracks {
     [trackKey: string]: NotationTrack;
 }
 
-export function getNotationBaseDuration(duration: number, subdivisions: number): NotationBaseDuration | undefined {
+export function getNotationBaseDuration(
+    duration: number,
+    subdivisions: number
+): NotationBaseDuration | undefined {
     const length = duration / subdivisions;
     if (NotationBaseDuration[length]) {
         return length;

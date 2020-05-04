@@ -1,7 +1,7 @@
-import shortid from 'shortid';
+import shortid from "shortid";
 import { Entry, EntryType } from ".";
-import { ClefDef, Clef, ClefType } from './clef-defs';
-import { buildText, TextStyles, Justify, Align } from '../render/text';
+import { ClefDef, Clef, ClefType } from "./clef-defs";
+import { buildText, TextStyles, Justify, Align } from "../render/text";
 
 export function createClef(def: ClefDef, tick: number): Entry<Clef> {
     return {
@@ -13,24 +13,29 @@ export function createClef(def: ClefDef, tick: number): Entry<Clef> {
         _tick: tick,
 
         ...def
-    }
+    };
 }
 
 function glyphFromType(type: ClefType) {
     switch (type) {
         case ClefType.C:
-            return '\u{E05C}';
+            return "\u{E05C}";
         case ClefType.F:
-            return '\u{E062}';
+            return "\u{E062}";
         case ClefType.G:
         default:
-            return '\u{E050}';
-
+            return "\u{E050}";
     }
 }
 
 export function drawClef(x: number, y: number, clef: Entry<Clef>) {
     const glyph = glyphFromType(clef.pitch);
-    const styles: TextStyles = { color: '#000000', justify: Justify.start, align: Align.middle, size: 4, font: `Music` };
-    return buildText(clef._key, styles, x, y + (.5 * clef.offset), glyph);
+    const styles: TextStyles = {
+        color: "#000000",
+        justify: Justify.start,
+        align: Align.middle,
+        size: 4,
+        font: `Music`
+    };
+    return buildText(clef._key, styles, x, y + 0.5 * clef.offset, glyph);
 }

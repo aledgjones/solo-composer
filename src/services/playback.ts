@@ -12,7 +12,7 @@ export interface PlaybackState {
     settings: {
         metronome: boolean;
         audition: boolean;
-    }
+    };
 }
 
 export const playbackEmptyState = (): PlaybackState => {
@@ -26,7 +26,7 @@ export const playbackEmptyState = (): PlaybackState => {
             audition: true
         }
     };
-}
+};
 
 export const playbackActions = (store: Store<State>) => {
     return {
@@ -48,5 +48,5 @@ export const playbackActions = (store: Store<State>) => {
                 }
             }
         }
-    }
-}
+    };
+};

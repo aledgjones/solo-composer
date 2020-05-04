@@ -9,5 +9,5 @@ export function getEntriesAtTick<T>(tick: number, track: EntriesByTick, type?: E
     return {
         at: tick,
         entries
-    }
+    };
 }

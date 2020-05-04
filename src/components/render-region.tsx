@@ -1,25 +1,30 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC, useMemo } from "react";
 
-import { merge, DragScroll } from 'solo-ui';
+import { merge, DragScroll } from "solo-ui";
 
-import { THEME } from '../const';
+import { THEME } from "../const";
 
-import './render-region.css';
+import "./render-region.css";
 
 interface Props {
-  className?: string;
+    className?: string;
 }
 
-export const RenderRegion: FC<Props> = (({ children, className }) => {
+export const RenderRegion: FC<Props> = ({ children, className }) => {
+    const bg = useMemo(() => {
+        const start = THEME.primary[400];
+        const stop = THEME.primary[700];
+        return `linear-gradient(${start}, ${stop})`;
+    }, []);
 
-  const bg = useMemo(() => {
-    const start = THEME.primary[400];
-    const stop = THEME.primary[700];
-    return `linear-gradient(${start}, ${stop})`;
-  }, []);
-
-  return <DragScroll x={true} y={true} className={merge("render-region", className)} style={{ backgroundImage: bg }}>
-    {children}
-  </DragScroll>;
-});
-
+    return (
+        <DragScroll
+            x
+            y
+            className={merge("render-region", className)}
+            style={{ backgroundImage: bg }}
+        >
+            {children}
+        </DragScroll>
+    );
+};

@@ -1,8 +1,8 @@
-import { toRoman } from 'roman-numerals';
+import { toRoman } from "roman-numerals";
 import { PlayerState, PlayerKey } from "./player";
 import { Instruments, InstrumentKey, Instrument } from "./instrument";
 import { ConfigState } from "./config";
-import { Flow } from './flow';
+import { Flow } from "./flow";
 
 export enum InstrumentAutoCountStyle {
     arabic = 1,
@@ -13,20 +13,19 @@ export type InstrumentCounts = { [instrumentKey: string]: string };
 
 /**
  * Counts duplicate instrument names
- *  
+ *
  * If there is more than one of the same instrument we add an auto inc count.
  * we use the length of the count array to tell if > 1 if so index + 1 = instrument number.
- * 
+ *
  * eg violin ${counts['violin'].length + 1} = Violin *1*
  */
 export function getCounts(players: PlayerState, instruments: Instruments, config: ConfigState) {
-
     const counts = players.order.reduce((output: InstrumentCountsTotals, playerKey: PlayerKey) => {
         const player = players.byKey[playerKey];
         player.instruments.forEach((instrumentKey: InstrumentKey) => {
             const instrument = instruments[instrumentKey];
             // consider solo / ensemble players as different by appending type
-            const name = instrument.longName + ':' + player.type;
+            const name = instrument.longName + ":" + player.type;
             if (!output[name]) {
                 output[name] = [];
             }
@@ -48,14 +47,17 @@ export function getCounts(players: PlayerState, instruments: Instruments, config
         });
         return out;
     }, {});
-
 }
 
 /**
  * get an array of instruments
  * optionally filter by the flow
  */
-export function getInstruments(players: PlayerState, instruments: Instruments, flow?: Flow): Instrument[] {
+export function getInstruments(
+    players: PlayerState,
+    instruments: Instruments,
+    flow?: Flow
+): Instrument[] {
     return players.order.reduce((output: Instrument[], playerKey) => {
         const player = players.byKey[playerKey];
         if (!flow || flow.players.includes(player.key)) {
@@ -68,5 +70,5 @@ export function getInstruments(players: PlayerState, instruments: Instruments, f
 }
 
 export function instrumentFamily(instrument?: Instrument) {
-    return instrument ? instrument.id.split('.')[0] : '';
+    return instrument ? instrument.id.split(".")[0] : "";
 }

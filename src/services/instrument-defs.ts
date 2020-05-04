@@ -26,7 +26,6 @@ export interface InstrumentDefs {
 
 export const useInstrumentList = (selection: InstrumentDef) => {
     return useMemo(() => {
-
         const keys = Object.keys(instrumentDefs);
         let defs = keys.map(key => instrumentDefs[key]);
 
@@ -44,9 +43,8 @@ export const useInstrumentList = (selection: InstrumentDef) => {
             defs = defs.filter(def => def.path[i] === term);
         }
         return lists;
-
     }, [selection]);
-}
+};
 
 export function getInstrumentDef(id: string): InstrumentDef {
     return instrumentDefs[id];
@@ -69,7 +67,7 @@ export function getFirstInstrumentDefFromPartialPath(path: string[]): Instrument
 export const instrumentDefs: InstrumentDefs = {
     "percussion.harp": {
         id: "percussion.harp",
-        path: ['Pitched Percussion', 'Harp'],
+        path: ["Pitched Percussion", "Harp"],
         longName: "Harp",
         shortName: "Hrp.",
         staves: [
@@ -77,24 +75,22 @@ export const instrumentDefs: InstrumentDefs = {
             { lines: 5, clef: { pitch: ClefType.F, offset: 2 } }
         ],
         patches: {
-            [Expressions.natural]: '/patches/harp/natural.json'
+            [Expressions.natural]: "/patches/harp/natural.json"
         }
     },
     "percussion.timpani": {
         id: "percussion.timpani",
-        path: ['Pitched Percussion', 'Timpani'],
+        path: ["Pitched Percussion", "Timpani"],
         longName: "Timpani",
         shortName: "Tmp.",
-        staves: [
-            { lines: 5, clef: { pitch: ClefType.F, offset: 2 } }
-        ],
+        staves: [{ lines: 5, clef: { pitch: ClefType.F, offset: 2 } }],
         patches: {
-            [Expressions.natural]: '/patches/timpani/natural.json'
+            [Expressions.natural]: "/patches/timpani/natural.json"
         }
     },
     "keyboards.piano": {
         id: "keyboards.piano",
-        path: ['Keyboards', 'Piano'],
+        path: ["Keyboards", "Piano"],
         longName: "Piano",
         shortName: "Pno.",
         staves: [
@@ -102,100 +98,86 @@ export const instrumentDefs: InstrumentDefs = {
             { lines: 5, clef: { pitch: ClefType.F, offset: 2 } }
         ],
         patches: {
-            [Expressions.natural]: '/patches/piano/natural.json'
+            [Expressions.natural]: "/patches/piano/natural.json"
         }
     },
     "strings.violin": {
         id: "strings.violin",
-        path: ['Strings', 'Violin'],
+        path: ["Strings", "Violin"],
         longName: "Violin",
         shortName: "Vln.",
-        staves: [
-            { lines: 5, clef: { pitch: ClefType.G, offset: 6 } }
-        ],
+        staves: [{ lines: 5, clef: { pitch: ClefType.G, offset: 6 } }],
         patches: {
-            [Expressions.natural]: '/patches/violin/natural.json',
-            [Expressions.pizzicato]: '/patches/violin/pizzicato.json',
-            [Expressions.spiccato]: '/patches/violin/spiccato.json',
-            [Expressions.tremolo]: '/patches/violin/tremolo.json'
+            [Expressions.natural]: "/patches/violin/natural.json",
+            [Expressions.pizzicato]: "/patches/violin/pizzicato.json",
+            [Expressions.spiccato]: "/patches/violin/spiccato.json",
+            [Expressions.tremolo]: "/patches/violin/tremolo.json"
         }
     },
     "strings.viola": {
         id: "strings.viola",
-        path: ['Strings', 'Viola'],
+        path: ["Strings", "Viola"],
         longName: "Viola",
         shortName: "Vla.",
-        staves: [
-            { lines: 5, clef: { pitch: ClefType.C, offset: 4 } }
-        ],
+        staves: [{ lines: 5, clef: { pitch: ClefType.C, offset: 4 } }],
         patches: {
-            [Expressions.natural]: '/patches/viola/natural.json',
-            [Expressions.pizzicato]: '/patches/viola/pizzicato.json',
-            [Expressions.staccato]: '/patches/viola/staccato.json'
+            [Expressions.natural]: "/patches/viola/natural.json",
+            [Expressions.pizzicato]: "/patches/viola/pizzicato.json",
+            [Expressions.staccato]: "/patches/viola/staccato.json"
         }
     },
     "strings.violoncello": {
         id: "strings.violoncello",
-        path: ['Strings', 'Violoncello'],
+        path: ["Strings", "Violoncello"],
         longName: "Violoncello",
         shortName: "Vc.",
-        staves: [
-            { lines: 5, clef: { pitch: ClefType.F, offset: 2 } }
-        ],
+        staves: [{ lines: 5, clef: { pitch: ClefType.F, offset: 2 } }],
         patches: {
-            [Expressions.natural]: '/patches/violoncello/natural.json',
-            [Expressions.pizzicato]: '/patches/violoncello/pizzicato.json',
-            [Expressions.staccato]: '/patches/violoncello/staccato.json'
+            [Expressions.natural]: "/patches/violoncello/natural.json",
+            [Expressions.pizzicato]: "/patches/violoncello/pizzicato.json",
+            [Expressions.staccato]: "/patches/violoncello/staccato.json"
         }
     },
     "strings.contrabass": {
         id: "strings.contrabass",
-        path: ['Strings', 'Contrabass'],
+        path: ["Strings", "Contrabass"],
         longName: "Contrabass",
         shortName: "Cb.",
-        staves: [
-            { lines: 5, clef: { pitch: ClefType.F, offset: 2 } }
-        ],
+        staves: [{ lines: 5, clef: { pitch: ClefType.F, offset: 2 } }],
         patches: {
-            [Expressions.natural]: '/patches/contrabass/natural.json',
-            [Expressions.spiccato]: '/patches/contrabass/spiccato.json',
-            [Expressions.pizzicato]: '/patches/contrabass/pizzicato.json'
+            [Expressions.natural]: "/patches/contrabass/natural.json",
+            [Expressions.spiccato]: "/patches/contrabass/spiccato.json",
+            [Expressions.pizzicato]: "/patches/contrabass/pizzicato.json"
         }
     },
     "brass.trombone": {
         id: "brass.trombone",
-        path: ['Brass', 'Trombone'],
+        path: ["Brass", "Trombone"],
         longName: "Trombone",
         shortName: "Tbn.",
-        staves: [
-            { lines: 5, clef: { pitch: ClefType.F, offset: 2 } }
-        ],
+        staves: [{ lines: 5, clef: { pitch: ClefType.F, offset: 2 } }],
         patches: {
-            [Expressions.natural]: '/patches/trombone/natural.json',
-            [Expressions.spiccato]: '/patches/trombone/staccato.json'
+            [Expressions.natural]: "/patches/trombone/natural.json",
+            [Expressions.spiccato]: "/patches/trombone/staccato.json"
         }
     },
     "woodwinds.piccolo": {
         id: "woodwinds.piccolo",
-        path: ['Woodwinds', 'Piccolo'],
+        path: ["Woodwinds", "Piccolo"],
         longName: "Piccolo",
         shortName: "Pc.",
-        staves: [
-            { lines: 5, clef: { pitch: ClefType.G, offset: 6 } }
-        ],
+        staves: [{ lines: 5, clef: { pitch: ClefType.G, offset: 6 } }],
         patches: {
-            [Expressions.natural]: '/patches/piccolo/natural.json',
-            [Expressions.staccato]: '/patches/piccolo/staccato.json'
+            [Expressions.natural]: "/patches/piccolo/natural.json",
+            [Expressions.staccato]: "/patches/piccolo/staccato.json"
         }
     },
     "woodwinds.flute": {
         id: "woodwinds.flute",
-        path: ['Woodwinds', 'Flute'],
+        path: ["Woodwinds", "Flute"],
         longName: "Flute",
         shortName: "Fl.",
-        staves: [
-            { lines: 5, clef: { pitch: ClefType.G, offset: 6 } }
-        ],
+        staves: [{ lines: 5, clef: { pitch: ClefType.G, offset: 6 } }],
         patches: {
             [Expressions.natural]: "/patches/flute/natural.json",
             [Expressions.staccato]: "/patches/flute/staccato.json"
@@ -203,38 +185,32 @@ export const instrumentDefs: InstrumentDefs = {
     },
     "woodwinds.oboe": {
         id: "woodwinds.oboe",
-        path: ['Woodwinds', 'Oboe'],
+        path: ["Woodwinds", "Oboe"],
         longName: "Oboe",
         shortName: "Ob.",
-        staves: [
-            { lines: 5, clef: { pitch: ClefType.G, offset: 6 } }
-        ],
+        staves: [{ lines: 5, clef: { pitch: ClefType.G, offset: 6 } }],
         patches: {
-            [Expressions.natural]: '/patches/oboe/natural.json',
-            [Expressions.staccato]: '/patches/oboe/staccato.json'
+            [Expressions.natural]: "/patches/oboe/natural.json",
+            [Expressions.staccato]: "/patches/oboe/staccato.json"
         }
     },
     "woodwinds.cor-anglais": {
         id: "woodwinds.cor-anglais",
-        path: ['Woodwinds', 'Cor Anglais'],
+        path: ["Woodwinds", "Cor Anglais"],
         longName: "Cor Anglais",
         shortName: "Cor E.",
-        staves: [
-            { lines: 5, clef: { pitch: ClefType.G, offset: 6 } }
-        ],
+        staves: [{ lines: 5, clef: { pitch: ClefType.G, offset: 6 } }],
         patches: {
-            [Expressions.natural]: '/patches/cor-anglais/natural.json',
-            [Expressions.staccato]: '/patches/cor-anglais/staccato.json'
+            [Expressions.natural]: "/patches/cor-anglais/natural.json",
+            [Expressions.staccato]: "/patches/cor-anglais/staccato.json"
         }
     },
     "woodwinds.clarinet.a": {
         id: "woodwinds.clarinet.a",
-        path: ['Woodwinds', 'Clarinet', 'A'],
+        path: ["Woodwinds", "Clarinet", "A"],
         longName: "Clarinet in A",
         shortName: "Cl.",
-        staves: [
-            { lines: 5, clef: { pitch: ClefType.G, offset: 6 } }
-        ],
+        staves: [{ lines: 5, clef: { pitch: ClefType.G, offset: 6 } }],
         patches: {
             [Expressions.natural]: "/patches/clarinet/natural.json",
             [Expressions.staccato]: "/patches/clarinet/staccato.json"
@@ -242,12 +218,10 @@ export const instrumentDefs: InstrumentDefs = {
     },
     "woodwinds.clarinet.b-flat": {
         id: "woodwinds.clarinet.b-flat",
-        path: ['Woodwinds', 'Clarinet', 'B Flat'],
+        path: ["Woodwinds", "Clarinet", "B Flat"],
         longName: "Clarinet in B@\u{E260}@",
         shortName: "Cl.",
-        staves: [
-            { lines: 5, clef: { pitch: ClefType.G, offset: 6 } }
-        ],
+        staves: [{ lines: 5, clef: { pitch: ClefType.G, offset: 6 } }],
         patches: {
             [Expressions.natural]: "/patches/clarinet/natural.json",
             [Expressions.staccato]: "/patches/clarinet/staccato.json"
@@ -255,12 +229,10 @@ export const instrumentDefs: InstrumentDefs = {
     },
     "woodwinds.bass-clarinet": {
         id: "woodwinds.bass-clarinet",
-        path: ['Woodwinds', 'Bass Clarinet'],
+        path: ["Woodwinds", "Bass Clarinet"],
         longName: "Bass Clarinet",
         shortName: "B Cl.",
-        staves: [
-            { lines: 5, clef: { pitch: ClefType.G, offset: 6 } }
-        ],
+        staves: [{ lines: 5, clef: { pitch: ClefType.G, offset: 6 } }],
         patches: {
             [Expressions.natural]: "/patches/bass-clarinet/natural.json",
             [Expressions.staccato]: "/patches/bass-clarinet/staccato.json"
@@ -268,15 +240,13 @@ export const instrumentDefs: InstrumentDefs = {
     },
     "woodwinds.bassoon": {
         id: "woodwinds.bassoon",
-        path: ['Woodwinds', 'Bassoon'],
+        path: ["Woodwinds", "Bassoon"],
         longName: "Bassoon",
         shortName: "Bn.",
-        staves: [
-            { lines: 5, clef: { pitch: ClefType.F, offset: 2 } }
-        ],
+        staves: [{ lines: 5, clef: { pitch: ClefType.F, offset: 2 } }],
         patches: {
-            [Expressions.natural]: '/patches/bassoon/natural.json',
-            [Expressions.staccato]: '/patches/bassoon/staccato.json'
+            [Expressions.natural]: "/patches/bassoon/natural.json",
+            [Expressions.staccato]: "/patches/bassoon/staccato.json"
         }
     }
-}
+};

@@ -12,7 +12,7 @@ function getTop(pitch: Pitch, highestPitch: number) {
 }
 
 function getLeft(tick: number, ticks: Tick[]) {
-    return ticks[tick].x
+    return ticks[tick].x;
 }
 
 function getWidth(start: number, duration: number, ticks: Tick[]) {
@@ -24,5 +24,9 @@ function getWidth(start: number, duration: number, ticks: Tick[]) {
 }
 
 export function getToneDimensions(highestPitch: number, entry: Entry<Tone>, ticks: Tick[]) {
-    return [getTop(entry.pitch, highestPitch), getLeft(entry._tick, ticks), getWidth(entry._tick, entry.duration, ticks)];
+    return [
+        getTop(entry.pitch, highestPitch),
+        getLeft(entry._tick, ticks),
+        getWidth(entry._tick, entry.duration, ticks)
+    ];
 }

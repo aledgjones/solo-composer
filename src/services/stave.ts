@@ -1,9 +1,9 @@
-import shortid from 'shortid';
+import shortid from "shortid";
 import { StaveDef } from "./instrument-defs";
-import { Track, createTrack, TrackKey } from './track';
-import { createClef } from '../entries/clef';
-import { Instrument } from './instrument';
-import { Flow } from './flow';
+import { Track, createTrack, TrackKey } from "./track";
+import { createClef } from "../entries/clef";
+import { Instrument } from "./instrument";
+import { Flow } from "./flow";
 
 export type StaveKey = string;
 
@@ -16,7 +16,11 @@ export interface Stave {
     tracks: TrackKey[];
 }
 
-export function createStave(staveDef: StaveDef, staveKey: StaveKey = shortid(), tracks: TrackKey[]): Stave {
+export function createStave(
+    staveDef: StaveDef,
+    staveKey: StaveKey = shortid(),
+    tracks: TrackKey[]
+): Stave {
     const clef = createClef(staveDef.clef, 0);
     const master = createTrack([clef]);
     return {
@@ -24,7 +28,7 @@ export function createStave(staveDef: StaveDef, staveKey: StaveKey = shortid(), 
         lines: staveDef.lines,
         master,
         tracks
-    }
+    };
 }
 
 export function getStaves(instruments: Instrument[], flow: Flow) {

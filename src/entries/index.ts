@@ -15,13 +15,13 @@ export interface Entries {
 }
 
 export type Entry<T> = T & {
-    _type: EntryType,
+    _type: EntryType;
     _key: EntryKey;
     _box: Box;
     _bounds: Box;
     _offset: Offset;
-    _tick: number
-}
+    _tick: number;
+};
 
 // the order is VERY important, if there is more than one entry at a certain point
 // they will be ordered by their type number

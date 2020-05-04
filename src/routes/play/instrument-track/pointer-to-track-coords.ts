@@ -21,11 +21,13 @@ export function getPitchFromYPosition(y: number, highestPitch: number, slotHeigh
 export function getTickFromXPosition(x: number, ticks: Tick[], snap: number, round: Direction) {
     for (let i = 0; i < ticks.length; i++) {
         const tick = ticks[i];
-        if (tick.x > x) { // we have overshot, it is in the previous tick
+        if (tick.x > x) {
+            // we have overshot, it is in the previous tick
             const index = i - 1;
             const lowerSnapTick = index - (index % snap);
             const higherSnapTick = lowerSnapTick + snap;
-            const middleOfSnap = ticks[lowerSnapTick].x + ((ticks[higherSnapTick].x - ticks[lowerSnapTick].x) / 2);
+            const middleOfSnap =
+                ticks[lowerSnapTick].x + (ticks[higherSnapTick].x - ticks[lowerSnapTick].x) / 2;
 
             if (round === Direction.down) {
                 return lowerSnapTick;

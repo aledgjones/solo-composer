@@ -1,35 +1,54 @@
-import React, { FC, useMemo } from 'react';
-import { mdiChevronRight } from '@mdi/js';
+import React, { FC, useMemo, useRef } from "react";
+import { mdiChevronRight } from "@mdi/js";
 
-import { Icon, useForeground } from 'solo-ui';
+import { Icon, useForeground } from "solo-ui";
 
-import { THEME } from '../../const';
-import { Instrument, useInstrumentName } from '../../services/instrument';
-import { Text } from '../../components/text';
+import { THEME } from "../../const";
+import { Instrument, useInstrumentName } from "../../services/instrument";
+import { SortableItem } from "../../components/sortable-item";
+import { Text } from "../../components/text";
 
-import './instrument-item.css';
+import "./instrument-item.css";
 
 interface Props {
-  selected: boolean;
-  instrument: Instrument;
-  count?: string;
+    index: number;
+    selected: boolean;
+    instrument: Instrument;
+    count?: string;
+
+    onSelectPlayer: () => void;
 }
 
-export const InstrumentItem: FC<Props> = ({ selected, instrument, count }) => {
+export const InstrumentItem: FC<Props> = ({
+    index,
+    selected,
+    instrument,
+    count,
+    onSelectPlayer
+}) => {
+    const handle = useRef<HTMLDivElement>(null);
+    const bg = useMemo(() => {
+        if (selected) {
+            return THEME.primary[600];
+        } else {
+            return THEME.grey[700];
+        }
+    }, [selected]);
+    const fg = useForeground(bg);
 
-  const bg = useMemo(() => {
-    if (selected) {
-      return THEME.primary[600];
-    } else {
-      return THEME.grey[700];
-    }
-  }, [selected]);
-  const fg = useForeground(bg);
+    const name = useInstrumentName(instrument, count);
 
-  const name = useInstrumentName(instrument, count);
-
-  return <div className="instrument-item" style={{ backgroundColor: bg, color: fg }}>
-    <Text className="instrument-item__name">{name}</Text>
-    <Icon style={{ marginLeft: 8 }} size={18} color={fg} path={mdiChevronRight} />
-  </div>;
-}
+    return (
+        <SortableItem
+            handle={handle}
+            index={index}
+            className="instrument-item"
+            style={{ backgroundColor: bg, color: fg }}
+        >
+            <div ref={handle} onPointerDown={onSelectPlayer}>
+                <Text className="instrument-item__name">{name}</Text>
+            </div>
+            <Icon size={18} color={fg} path={mdiChevronRight} />
+        </SortableItem>
+    );
+};

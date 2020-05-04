@@ -1,7 +1,7 @@
 .text--token {
-    padding: 0 .05em;
+    padding: 0 0.05em;
     display: inline-block;
     line-height: 1em;
     font-size: 1.5em;
-    font-family: 'Music Text';
+    font-family: "Music Text";
 }

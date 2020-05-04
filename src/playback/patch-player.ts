@@ -1,5 +1,5 @@
-import { Sampler } from 'tone';
-import { Pitch } from './utils';
+import { Sampler } from "tone";
+import { Pitch } from "./utils";
 
 interface PatchFromFile {
     envelope: {
@@ -8,15 +8,13 @@ interface PatchFromFile {
     };
     samples: {
         [note: string]: string;
-    }
+    };
 }
 
 export class PatchPlayer {
-
     private sampler = new Sampler().toDestination();
 
     public async loadPatch(url: string) {
-
         const resp = await fetch(url);
         const data: PatchFromFile = await resp.json();
 
@@ -30,7 +28,6 @@ export class PatchPlayer {
                 this.sampler.add(pitch, data.samples[pitches[i]], resolve);
             });
         }
-
     }
 
     /**
@@ -43,5 +40,4 @@ export class PatchPlayer {
     public stopAll() {
         this.sampler.releaseAll();
     }
-
 }

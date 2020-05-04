@@ -8,8 +8,13 @@ export enum BracketSpan {
     continue
 }
 
-export function isSpan(instrument: Instrument, previousInstrument: Instrument | undefined, nextInstrument: Instrument | undefined, bracketing: BracketingType, bracketSingleStaves: boolean): BracketSpan {
-
+export function isSpan(
+    instrument: Instrument,
+    previousInstrument: Instrument | undefined,
+    nextInstrument: Instrument | undefined,
+    bracketing: BracketingType,
+    bracketSingleStaves: boolean
+): BracketSpan {
     const instrumentType = instrumentFamily(instrument);
     const previousInstrumentType = instrumentFamily(previousInstrument);
     const nextInstrumentType = instrumentFamily(nextInstrument);
@@ -19,10 +24,10 @@ export function isSpan(instrument: Instrument, previousInstrument: Instrument | 
     }
 
     if (bracketing === BracketingType.smallEnsemble) {
-        if (instrumentType === 'keyboards') {
+        if (instrumentType === "keyboards") {
             return BracketSpan.none;
         }
-        if (!previousInstrument || previousInstrumentType === 'keyboards') {
+        if (!previousInstrument || previousInstrumentType === "keyboards") {
             return BracketSpan.start;
         }
         return BracketSpan.continue;
@@ -30,9 +35,9 @@ export function isSpan(instrument: Instrument, previousInstrument: Instrument | 
 
     if (bracketing === BracketingType.orchestral) {
         switch (instrumentType) {
-            case 'strings':
-            case 'woodwinds':
-            case 'brass':
+            case "strings":
+            case "woodwinds":
+            case "brass":
                 if (instrumentType === previousInstrumentType) {
                     return BracketSpan.continue;
                 } else if (nextInstrumentType === instrumentType || bracketSingleStaves) {
@@ -44,5 +49,4 @@ export function isSpan(instrument: Instrument, previousInstrument: Instrument | 
     }
 
     return BracketSpan.none;
-
 }

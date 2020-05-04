@@ -9901,12 +9901,13 @@ sockjs@0.3.19:
 
 solo-ui@aledgjones/solo-ui:
   version "1.0.0"
-  resolved "https://codeload.github.com/aledgjones/solo-ui/tar.gz/cc6b8283bc76e5edc852884a5229ad4fb62e1f1f"
+  resolved "https://codeload.github.com/aledgjones/solo-ui/tar.gz/621c8c54efc96c34245e12d54dff135864527c6f"
   dependencies:
     "@mdi/js" "^5.0.45"
     app-reset "^1.0.2"
     big.js "^5.2.2"
     color "^3.1.2"
+    components "^0.1.0"
     hooks "^0.3.2"
     lodash.isboolean "^3.0.3"
     lodash.isnumber "^3.0.3"

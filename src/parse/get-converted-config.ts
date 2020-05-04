@@ -1,7 +1,10 @@
 import { EngravingConfig } from "../services/engraving";
 import { Converter } from "./converter";
 
-export const getConvertedConfig = (config: EngravingConfig, converter: Converter): EngravingConfig => {
+export const getConvertedConfig = (
+    config: EngravingConfig,
+    converter: Converter
+): EngravingConfig => {
     const { mm } = converter;
     return {
         ...config,
@@ -13,4 +16,4 @@ export const getConvertedConfig = (config: EngravingConfig, converter: Converter
             left: mm.toSpaces(config.framePadding.left)
         }
     };
-}
+};

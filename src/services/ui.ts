@@ -9,11 +9,11 @@ export enum Tool {
 }
 
 export enum TabState {
-    setup = 'setup',
-    write = 'write',
-    engrave = 'engrave',
-    play = 'play',
-    print = 'print'
+    setup = "setup",
+    write = "write",
+    engrave = "engrave",
+    play = "play",
+    print = "print"
 }
 
 export interface UiState {
@@ -23,7 +23,7 @@ export interface UiState {
     expanded: { [key: string]: boolean };
     selection: { [key: string]: boolean };
     pianoRollOffsetY: { [key: string]: number };
-    tool: { [TabState.play]: Tool; };
+    tool: { [TabState.play]: Tool };
 }
 
 export const uiEmptyState = (): UiState => {
@@ -37,8 +37,8 @@ export const uiEmptyState = (): UiState => {
         tool: {
             [TabState.play]: Tool.select
         }
-    }
-}
+    };
+};
 
 export const uiActions = (store: Store<State>) => {
     return {
@@ -157,5 +157,5 @@ export const uiActions = (store: Store<State>) => {
                 }
             }
         }
-    }
-}
+    };
+};

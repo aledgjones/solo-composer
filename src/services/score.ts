@@ -24,8 +24,8 @@ export interface Score {
 export const scoreEmptyState = (): Score => {
     return {
         meta: {
-            title: 'Untitled Score',
-            composer: 'Anonymous',
+            title: "Untitled Score",
+            composer: "Anonymous",
             created: Date.now()
         },
         config: configEmptyState(),
@@ -34,7 +34,7 @@ export const scoreEmptyState = (): Score => {
         instruments: instrumentEmptyState(),
         flows: flowEmptyState()
     };
-}
+};
 
 export const scoreActions = (store: Store<State>) => {
     return {
@@ -53,5 +53,5 @@ export const scoreActions = (store: Store<State>) => {
         players: playerActions(store),
         instruments: instrumentActions(store),
         flows: flowActions(store)
-    }
-}
+    };
+};

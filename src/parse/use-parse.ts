@@ -1,14 +1,13 @@
-import { useMemo, useEffect, useState } from 'react';
+import { useMemo, useEffect, useState } from "react";
 
 import { FlowKey } from "../services/flow";
-import { RenderInstructions } from '../render/instructions';
-import { Score } from '../services/score';
-import { useMM } from './converter';
+import { RenderInstructions } from "../render/instructions";
+import { Score } from "../services/score";
+import { useMM } from "./converter";
 
-import myWorker from './parse.worker';
+import myWorker from "./parse.worker";
 
 export function useParseWorker(score: Score, flowKey: FlowKey) {
-
     const [instructions, setInstructions] = useState<RenderInstructions>();
 
     const worker = useMemo(() => {
@@ -24,14 +23,13 @@ export function useParseWorker(score: Score, flowKey: FlowKey) {
     useEffect(() => {
         const cb = (e: any) => {
             setInstructions(e.data);
-        }
-        worker.addEventListener('message', cb);
+        };
+        worker.addEventListener("message", cb);
         return () => {
-            worker.removeEventListener('message', cb);
+            worker.removeEventListener("message", cb);
             worker.terminate();
-        }
+        };
     }, [worker]);
 
     return instructions;
-
 }

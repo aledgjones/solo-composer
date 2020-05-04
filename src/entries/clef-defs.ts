@@ -1,7 +1,7 @@
 export enum ClefType {
-    C = 'C4',
-    F = 'F3',
-    G = 'G4'
+    C = "C4",
+    F = "F3",
+    G = "G4"
 }
 
 export interface ClefDef {
@@ -9,4 +9,4 @@ export interface ClefDef {
     offset: number;
 }
 
-export interface Clef extends ClefDef { }
+export interface Clef extends ClefDef {}

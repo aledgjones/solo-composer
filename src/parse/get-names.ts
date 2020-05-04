@@ -8,11 +8,15 @@ export enum NameType {
 
 export type Names = {
     [key: string]: string;
-}
+};
 
-export function getNames(instruments: Instrument[], counts: InstrumentCounts, type: NameType): Names {
+export function getNames(
+    instruments: Instrument[],
+    counts: InstrumentCounts,
+    type: NameType
+): Names {
     return instruments.reduce((output: { [key: string]: string }, instrument) => {
-        const count = counts[instrument.key] ? counts[instrument.key] : '';
+        const count = counts[instrument.key] ? counts[instrument.key] : "";
         const name = type === NameType.long ? instrument.longName : instrument.shortName;
         output[instrument.key] = name + count;
         return output;

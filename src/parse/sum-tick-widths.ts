@@ -4,10 +4,12 @@ export function sumTickWidths(from: number, to: number, horizontalMeasurements: 
         // its possible we have got to the end of the track so ignore any measuremenets
         // that don't exist and areturn 0
         if (horizontalMeasurements[i]) {
-            total = total + horizontalMeasurements[i].reduce((out, width) => {
-                out = out + width;
-                return out;
-            }, 0);
+            total =
+                total +
+                horizontalMeasurements[i].reduce((out, width) => {
+                    out = out + width;
+                    return out;
+                }, 0);
         }
     }
     return total;

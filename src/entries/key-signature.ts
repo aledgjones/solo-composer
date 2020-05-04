@@ -1,7 +1,7 @@
-import shortid from 'shortid';
-import { ClefType, Clef } from './clef-defs';
+import shortid from "shortid";
+import { ClefType, Clef } from "./clef-defs";
 import { Entry, EntryType } from ".";
-import { TextStyles, buildText, Justify, Align } from '../render/text';
+import { TextStyles, buildText, Justify, Align } from "../render/text";
 
 export enum KeySignatureMode {
     major = 1,
@@ -13,9 +13,7 @@ export interface KeySignatureDef {
     offset: number;
 }
 
-export interface KeySignature extends KeySignatureDef {
-
-}
+export interface KeySignature extends KeySignatureDef {}
 
 export function createKeySignature(def: KeySignatureDef, tick: number): Entry<KeySignature> {
     // convert to positive number
@@ -30,7 +28,7 @@ export function createKeySignature(def: KeySignatureDef, tick: number): Entry<Ke
         _tick: tick,
 
         ...def
-    }
+    };
 }
 
 export enum AccidentalType {
@@ -44,9 +42,9 @@ export enum AccidentalType {
 interface Patterns {
     [clefType: string]: {
         [clefOffset: number]: {
-            [accidentalType: number]: number[]
-        }
-    }
+            [accidentalType: number]: number[];
+        };
+    };
 }
 
 const patterns: Patterns = {
@@ -76,36 +74,39 @@ const patterns: Patterns = {
             [AccidentalType.sharp]: [0, 3, -1, 2, 5, 1, 4]
         }
     }
-}
+};
 
 function glyphFromType(type: AccidentalType) {
     switch (type) {
         case AccidentalType.doubleFlat:
-            return '\u{E264}';
+            return "\u{E264}";
         case AccidentalType.flat:
-            return '\u{E260}';
+            return "\u{E260}";
         case AccidentalType.sharp:
-            return '\u{E262}';
+            return "\u{E262}";
         case AccidentalType.doubleSharp:
-            return '\u{E263}';
+            return "\u{E263}";
         case AccidentalType.natural:
         default:
-            return '\u{E261}';
-
+            return "\u{E261}";
     }
 }
 
-export function drawKeySignature(x: number, y: number, clef: Entry<Clef>, key: Entry<KeySignature>) {
-
+export function drawKeySignature(
+    x: number,
+    y: number,
+    clef: Entry<Clef>,
+    key: Entry<KeySignature>
+) {
     const instructions = [];
 
     const styles: TextStyles = {
-        color: '#000000',
-        font: 'Music',
+        color: "#000000",
+        font: "Music",
         size: 4,
         justify: Justify.start,
         align: Align.middle
-    }
+    };
 
     // calc naturals here - find out rules for naturalising
 
@@ -113,7 +114,9 @@ export function drawKeySignature(x: number, y: number, clef: Entry<Clef>, key: E
         const glyph = glyphFromType(AccidentalType.flat);
         const pattern = patterns[clef.pitch][clef.offset][AccidentalType.flat];
         for (let i = 0; i > key.offset; i--) {
-            instructions.push(buildText(`${clef._key}-${i}`, styles, x + (i * -1), y + (.5 * pattern[i * -1]), glyph));
+            instructions.push(
+                buildText(`${clef._key}-${i}`, styles, x + i * -1, y + 0.5 * pattern[i * -1], glyph)
+            );
         }
     }
 
@@ -121,7 +124,9 @@ export function drawKeySignature(x: number, y: number, clef: Entry<Clef>, key: E
         const glyph = glyphFromType(AccidentalType.sharp);
         const pattern = patterns[clef.pitch][clef.offset][AccidentalType.sharp];
         for (let i = 0; i < key.offset; i++) {
-            instructions.push(buildText(`${clef._key}-${i}`, styles, x + i, y + (.5 * pattern[i]), glyph));
+            instructions.push(
+                buildText(`${clef._key}-${i}`, styles, x + i, y + 0.5 * pattern[i], glyph)
+            );
         }
     }
 

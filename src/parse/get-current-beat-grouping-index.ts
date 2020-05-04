@@ -2,7 +2,7 @@ export function getCurrentBeatGroupingIndex(tick: number, beatGroupingBoundries:
     let out = 1;
     for (let i = 1; i < beatGroupingBoundries.length; i++) {
         const boundry = beatGroupingBoundries[i];
-        if(tick < boundry) {
+        if (tick < boundry) {
             out = i - 1;
         }
     }

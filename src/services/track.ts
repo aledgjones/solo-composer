@@ -1,18 +1,18 @@
-import shortid from 'shortid';
-import { EntryKey, Entries, Entry } from '../entries';
+import shortid from "shortid";
+import { EntryKey, Entries, Entry } from "../entries";
 
 export type TrackKey = string;
 
 export interface Tracks {
     [trackKey: string]: Track;
-};
+}
 
 export interface Track {
     key: TrackKey;
     entries: {
         order: EntryKey[];
         byKey: Entries;
-    }
+    };
 }
 
 export function createTrack(events: Entry<any>[]): Track {
@@ -25,11 +25,11 @@ export function createTrack(events: Entry<any>[]): Track {
                 return out;
             }, {})
         }
-    }
+    };
 }
 
 export interface EntriesByTick {
-    [tick: number]: Entry<any>[]
+    [tick: number]: Entry<any>[];
 }
 
 export function entriesByTick(entriesOrder: EntryKey[], entriesByKey: Entries): EntriesByTick {

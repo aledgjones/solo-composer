@@ -12,7 +12,6 @@ function isWritable(duration: number, subdivisions: number) {
         default:
             return false;
     }
-
 }
 
 export function getIsWritable(duration: number, subdivisions: number) {

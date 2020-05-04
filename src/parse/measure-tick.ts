@@ -13,8 +13,14 @@ import { getStemDirection, Direction } from "./get-stem-direction";
 import { getIsRest } from "./is-rest";
 import { WidthOf } from "./sum-width-up-to";
 
-export function measureTick(tick: number, isFirstBeat: boolean, flowEntries: EntriesByTick, staves: Stave[], notationTracks: NotationTracks, config: EngravingConfig) {
-
+export function measureTick(
+    tick: number,
+    isFirstBeat: boolean,
+    flowEntries: EntriesByTick,
+    staves: Stave[],
+    notationTracks: NotationTracks,
+    config: EngravingConfig
+) {
     const measurements: number[] = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.6];
 
     // barlines are sometimes implied by a change of key etc.
@@ -22,8 +28,10 @@ export function measureTick(tick: number, isFirstBeat: boolean, flowEntries: Ent
     const normalBarline = createBarline({ type: BarlineType.normal }, 0);
     const doubleBarline = createBarline({ type: BarlineType.double }, 0);
 
-    const key = getEntriesAtTick<KeySignature>(tick, flowEntries, EntryType.keySignature).entries[0];
-    const time = getEntriesAtTick<TimeSignature>(tick, flowEntries, EntryType.timeSignature).entries[0];
+    const key = getEntriesAtTick<KeySignature>(tick, flowEntries, EntryType.keySignature)
+        .entries[0];
+    const time = getEntriesAtTick<TimeSignature>(tick, flowEntries, EntryType.timeSignature)
+        .entries[0];
     const barline = getEntriesAtTick<Barline>(tick, flowEntries, EntryType.barline).entries[0];
 
     if (time) {
@@ -84,10 +92,8 @@ export function measureTick(tick: number, isFirstBeat: boolean, flowEntries: Ent
                     }
                 }
             }
-
         });
     });
 
     return measurements;
-
 }

@@ -7,9 +7,9 @@ export enum Justify {
 }
 
 export enum Align {
-    top = 'flex-start',
-    middle = 'center',
-    bottom = 'flex-end'
+    top = "flex-start",
+    middle = "center",
+    bottom = "flex-end"
 }
 
 export interface TextStyles {
@@ -18,12 +18,18 @@ export interface TextStyles {
     size: number;
     justify: Justify;
     align: Align;
-};
+}
 
-export type Text = { styles: TextStyles, value: string, x: number, y: number };
+export type Text = { styles: TextStyles; value: string; x: number; y: number };
 export type TextInstruction = Instruction<Text>;
 
-export function buildText(key: string, styles: TextStyles, x: number, y: number, value: string): TextInstruction {
+export function buildText(
+    key: string,
+    styles: TextStyles,
+    x: number,
+    y: number,
+    value: string
+): TextInstruction {
     return {
         key,
         type: InstructionType.text,
@@ -31,5 +37,5 @@ export function buildText(key: string, styles: TextStyles, x: number, y: number,
         x,
         y,
         value
-    }
+    };
 }

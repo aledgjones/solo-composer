@@ -7,7 +7,10 @@ export interface Shunts {
     [toneKey: string]: boolean;
 }
 
-export function getShuntedNoteheads(tones: Entry<Tone>[], stemDirection: Direction): [boolean, Shunts] {
+export function getShuntedNoteheads(
+    tones: Entry<Tone>[],
+    stemDirection: Direction
+): [boolean, Shunts] {
     let hasShunts = false;
     const shuntedNoteheads: Shunts = {};
 

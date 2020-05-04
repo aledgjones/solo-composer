@@ -3,7 +3,7 @@ import { Clef } from "../entries/clef-defs";
 import { Tone } from "../entries/tone";
 import { getStepsBetweenPitches } from "../playback/utils";
 
-export enum Direction { 
+export enum Direction {
     up = -1,
     none = 0,
     down = 1
@@ -32,10 +32,7 @@ export function getStemDirection(tones: Entry<Tone>[], clef: Entry<Clef>) {
     // tones are sorted by pitch asc so we take first and last for lowest & highest pitch
     const lowest: Entry<Tone> = tones[0];
     const highest: Entry<Tone> = tones[tones.length - 1];
-    const distances = [
-        stepsFromMiddle(lowest, clef),
-        stepsFromMiddle(highest, clef)
-    ];
+    const distances = [stepsFromMiddle(lowest, clef), stepsFromMiddle(highest, clef)];
 
     // equal distance high and low BUT NOT unison or single note
     if (distances[0] !== distances[1] && Math.abs(distances[0]) === Math.abs(distances[1])) {
@@ -47,6 +44,6 @@ export function getStemDirection(tones: Entry<Tone>[], clef: Entry<Clef>) {
     if (farthest > 0) {
         return Direction.up;
     } else {
-        return Direction.down
+        return Direction.down;
     }
 }

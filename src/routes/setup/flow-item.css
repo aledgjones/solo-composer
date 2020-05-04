@@ -1,38 +1,38 @@
 .flow-item {
-  flex-grow: 1;
-  min-width: 240px;
-  color: white;
-  height: 96px;
-  margin-right: 8px;
-  border-radius: 3px;
+    flex-grow: 1;
+    min-width: 240px;
+    color: white;
+    height: 96px;
+    margin-right: 8px;
+    border-radius: 3px;
 }
 
 .flow-item--selected {
-  z-index: 100;
+    z-index: 100;
 }
 
 .flow-item.ui-sortable-item--sorting {
-  transition: transform .2s;
+    transition: transform 0.2s;
 }
 
 .flow-item.ui-sortable-item--active {
-  transition: transform 0s;
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    transition: transform 0s;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 
 .flow-item__header {
-  height: 48px;
-  display: flex;
-  align-items: center;
-  padding: 0 16px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
 }
 
 .flow-item__name {
-  flex-grow: 1;
-  line-height: 48px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  /* a cheeky offset to center */
-  padding-top: 2px;
+    flex-grow: 1;
+    line-height: 48px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* a cheeky offset to center */
+    padding-top: 2px;
 }

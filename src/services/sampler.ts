@@ -6,7 +6,7 @@ import { InstrumentKey } from "./instrument";
 import { InstrumentDef } from "./instrument-defs";
 import { Expressions } from "../playback/expressions";
 import { APP_CREATOR } from "../const";
-import { PatchPlayer } from '../playback/patch-player';
+import { PatchPlayer } from "../playback/patch-player";
 
 export type ChannelKey = string;
 
@@ -34,7 +34,7 @@ export interface ChannelState {
     order: ChannelKey[];
     byKey: {
         [channel: string]: Channel;
-    }
+    };
 }
 
 export interface SamplerState {
@@ -46,15 +46,15 @@ export interface SamplerState {
 
 export const samplerEmptyState = (): SamplerState => {
     return {
-        name: 'Internal Sampler',
-        version: '1.0.0',
+        name: "Internal Sampler",
+        version: "1.0.0",
         manufacturer: APP_CREATOR,
         channels: {
             order: [],
             byKey: {}
         }
     };
-}
+};
 
 export const samplerActions = (store: Store<State>) => {
     return {
@@ -70,7 +70,7 @@ export const samplerActions = (store: Store<State>) => {
                         order: [],
                         byKey: {}
                     }
-                }
+                };
             });
             return channelKey;
         },
@@ -85,18 +85,20 @@ export const samplerActions = (store: Store<State>) => {
             const count = expressions.length;
             let completed = 0;
 
-            await Promise.all(expressions.map(async (expression: Expressions) => {
-                const patchUrl = def.patches[expression];
-                const player = new PatchPlayer();
-                await player.loadPatch(patchUrl);
-                completed++;
-                store.update(s => {
-                    const channel = s.playback.sampler.channels.byKey[channelKey];
-                    channel.patches.order.push(expression);
-                    channel.patches.byKey[expression] = player;
-                    channel.progress = completed / count;
-                });
-            }));
+            await Promise.all(
+                expressions.map(async (expression: Expressions) => {
+                    const patchUrl = def.patches[expression];
+                    const player = new PatchPlayer();
+                    await player.loadPatch(patchUrl);
+                    completed++;
+                    store.update(s => {
+                        const channel = s.playback.sampler.channels.byKey[channelKey];
+                        channel.patches.order.push(expression);
+                        channel.patches.byKey[expression] = player;
+                        channel.progress = completed / count;
+                    });
+                })
+            );
 
             store.update(s => {
                 const channel = s.playback.sampler.channels.byKey[channelKey];
@@ -109,20 +111,20 @@ export const samplerActions = (store: Store<State>) => {
             });
         },
         test: (channel: ChannelKey) => {
-
             const state = store.getRawState();
-            const patch = state.playback.sampler.channels.byKey[channel].patches.byKey[Expressions.natural];
-            
+            const patch =
+                state.playback.sampler.channels.byKey[channel].patches.byKey[Expressions.natural];
+
             const notes: [string, number, number][] = [
-                ['C4', 0.30, 0.250],
-                ['D4', 0.40, 0.250],
-                ['E4', 0.60, 0.250],
-                ['F4', 0.80, 0.250],
-                ['G4', 0.90, 0.250],
-                ['F4', 0.80, 0.250],
-                ['E4', 0.60, 0.250],
-                ['D4', 0.40, 0.250],
-                ['C4', 0.30, 1.000]
+                ["C4", 0.3, 0.25],
+                ["D4", 0.4, 0.25],
+                ["E4", 0.6, 0.25],
+                ["F4", 0.8, 0.25],
+                ["G4", 0.9, 0.25],
+                ["F4", 0.8, 0.25],
+                ["E4", 0.6, 0.25],
+                ["D4", 0.4, 0.25],
+                ["C4", 0.3, 1.0]
             ];
 
             // timing is not accurate but it is fine for a test
@@ -131,7 +133,6 @@ export const samplerActions = (store: Store<State>) => {
                     patch.play(pitch, velocity, duration);
                 }, 250 * i);
             });
-
         }
-    }
-}
+    };
+};

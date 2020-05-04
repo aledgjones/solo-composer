@@ -2,18 +2,16 @@
 // the purely auditory representation of the notes (no individual note values)
 // they are converted into note entries for rendering
 
-import shortid from 'shortid';
+import shortid from "shortid";
 import { Entry, EntryType } from ".";
-import { Pitch } from '../playback/utils';
+import { Pitch } from "../playback/utils";
 
 export interface ToneDef {
     duration: number; // in ticks
     pitch: Pitch;
 }
 
-export interface Tone extends ToneDef {
-
-}
+export interface Tone extends ToneDef {}
 
 export function createTone(def: ToneDef, tick: number): Entry<Tone> {
     return {
@@ -25,5 +23,5 @@ export function createTone(def: ToneDef, tick: number): Entry<Tone> {
         _tick: tick,
 
         ...def
-    }
+    };
 }

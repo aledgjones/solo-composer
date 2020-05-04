@@ -1,19 +1,19 @@
-import shortid from 'shortid';
-import ArrayMove from 'array-move';
+import shortid from "shortid";
+import ArrayMove from "array-move";
 
-import { PlayerKey } from './player';
-import { Staves, createStave } from './stave';
-import { instrumentDefs } from './instrument-defs';
-import { Track, createTrack, Tracks } from './track';
-import { TimeSignatureDef, createTimeSignature } from '../entries/time-signature';
-import { EntryType } from '../entries';
-import { getTicksPerBeat } from '../parse/get-ticks-per-beat';
-import { KeySignatureDef, createKeySignature } from '../entries/key-signature';
-import { BarlineDef, createBarline } from '../entries/barline';
-import { createAbsoluteTempo, AbsoluteTempoDef } from '../entries/absolute-tempo';
-import { Store } from 'pullstate';
-import { State } from './state';
-import { assignEntryToTrack } from './utils';
+import { PlayerKey } from "./player";
+import { Staves, createStave } from "./stave";
+import { instrumentDefs } from "./instrument-defs";
+import { Track, createTrack, Tracks } from "./track";
+import { TimeSignatureDef, createTimeSignature } from "../entries/time-signature";
+import { EntryType } from "../entries";
+import { getTicksPerBeat } from "../parse/get-ticks-per-beat";
+import { KeySignatureDef, createKeySignature } from "../entries/key-signature";
+import { BarlineDef, createBarline } from "../entries/barline";
+import { createAbsoluteTempo, AbsoluteTempoDef } from "../entries/absolute-tempo";
+import { Store } from "pullstate";
+import { State } from "./state";
+import { assignEntryToTrack } from "./utils";
 
 export type FlowKey = string;
 
@@ -22,7 +22,7 @@ export type Flows = { [flowKey: string]: Flow };
 export interface Flow {
     key: FlowKey;
     title: string;
-    players: PlayerKey[] // unordered, purely for inclusion lookup
+    players: PlayerKey[]; // unordered, purely for inclusion lookup
     staves: Staves;
     tracks: Tracks;
     length: number; // number of subdevisions in all the flow
@@ -37,7 +37,7 @@ export interface FlowState {
 export const flowEmptyState = (): FlowState => {
     const flow = createFlow();
     return { order: [flow.key], byKey: { [flow.key]: flow } };
-}
+};
 
 export const flowActions = (store: Store<State>) => {
     return {
@@ -78,7 +78,7 @@ export const flowActions = (store: Store<State>) => {
             store.update(s => {
                 s.score.flows.order = s.score.flows.order.filter(key => key !== flowKey);
                 delete s.score.flows.byKey[flowKey];
-            })
+            });
         },
         assignPlayer: (flowKey: FlowKey, playerKey: PlayerKey) => {
             store.update(s => {
@@ -106,7 +106,7 @@ export const flowActions = (store: Store<State>) => {
                         flow.staves[staveKey].tracks.forEach(trackKey => {
                             delete flow.tracks[trackKey];
                         });
-                        delete flow.staves[staveKey]
+                        delete flow.staves[staveKey];
                     });
                 });
             });
@@ -117,7 +117,11 @@ export const flowActions = (store: Store<State>) => {
             });
         },
         // create new or updating an existing time sig at tick
-        createTimeSignature: (timeSignatureDef: TimeSignatureDef, tick: number, flowKey: FlowKey) => {
+        createTimeSignature: (
+            timeSignatureDef: TimeSignatureDef,
+            tick: number,
+            flowKey: FlowKey
+        ) => {
             store.update(s => {
                 const entry = createTimeSignature(timeSignatureDef, tick);
                 const flow = s.score.flows.byKey[flowKey];
@@ -147,24 +151,28 @@ export const flowActions = (store: Store<State>) => {
                 assignEntryToTrack(track, entry, EntryType.barline);
             });
         },
-        createAbsoluteTempo: (absoluteTempoDef: AbsoluteTempoDef, tick: number, flowKey: FlowKey) => {
+        createAbsoluteTempo: (
+            absoluteTempoDef: AbsoluteTempoDef,
+            tick: number,
+            flowKey: FlowKey
+        ) => {
             store.update(s => {
                 const entry = createAbsoluteTempo(absoluteTempoDef, tick);
                 const track = s.score.flows.byKey[flowKey].master;
                 assignEntryToTrack(track, entry, EntryType.absoluteTempo);
             });
         }
-    }
-}
+    };
+};
 
 const createFlow = (): Flow => {
     return {
         key: shortid(),
-        title: 'Untitled Flow',
+        title: "Untitled Flow",
         players: [],
         staves: {},
         tracks: {},
         length: 12,
         master: createTrack([])
-    }
-}
+    };
+};

@@ -29,11 +29,17 @@ import { getConvertedConfig } from "./get-converted-config";
 import { getInstruments, getCounts } from "../services/instrument-utils";
 
 export function parse(score: Score, flowKey: FlowKey, mm: number): RenderInstructions {
-
     const flow = score.flows.byKey[flowKey];
 
-    const converter = getConverter(mm, score.engraving[LayoutType.score].space || defaultEngravingConfig.space, 2);
-    const config = getConvertedConfig({ ...defaultEngravingConfig, ...score.engraving[LayoutType.score] }, converter);
+    const converter = getConverter(
+        mm,
+        score.engraving[LayoutType.score].space || defaultEngravingConfig.space,
+        2
+    );
+    const config = getConvertedConfig(
+        { ...defaultEngravingConfig, ...score.engraving[LayoutType.score] },
+        converter
+    );
 
     const instruments = getInstruments(score.players, score.instruments, flow);
     const staves = getStaves(instruments, flow);
@@ -45,35 +51,70 @@ export function parse(score: Score, flowKey: FlowKey, mm: number): RenderInstruc
 
     const verticalMeasurements = measureVerticalLayout(instruments, config);
 
-    const x = config.framePadding.left + namesWidth + config.instrumentName.gap + measureBracketAndBraces(verticalMeasurements);
+    const x =
+        config.framePadding.left +
+        namesWidth +
+        config.instrumentName.gap +
+        measureBracketAndBraces(verticalMeasurements);
     const y = config.framePadding.top;
 
     const firstBeats = getFirstBeats(flow.length, flowEntriesByTick);
     const finalBarline = createBarline({ type: config.finalBarlineType }, 0);
 
-    const notationTracks = getWrittenDurations(flow.length, flowEntriesByTick, staves, flow.tracks, firstBeats);
+    const notationTracks = getWrittenDurations(
+        flow.length,
+        flowEntriesByTick,
+        staves,
+        flow.tracks,
+        firstBeats
+    );
 
     const drawInstructions: Instruction<any>[] = [];
 
     const horizontalMeasurements: number[][] = [];
     for (let tick = 0; tick < flow.length; tick++) {
-        horizontalMeasurements.push(measureTick(tick, firstBeats[tick], flowEntriesByTick, staves, notationTracks, config));
+        horizontalMeasurements.push(
+            measureTick(tick, firstBeats[tick], flowEntriesByTick, staves, notationTracks, config)
+        );
     }
 
     for (let tick = 0; tick < flow.length; tick++) {
-        drawInstructions.push(...drawTick(tick, firstBeats[tick], x + config.systemStartPadding, y, horizontalMeasurements, verticalMeasurements, flowEntriesByTick, staves, notationTracks, config));
+        drawInstructions.push(
+            ...drawTick(
+                tick,
+                firstBeats[tick],
+                x + config.systemStartPadding,
+                y,
+                horizontalMeasurements,
+                verticalMeasurements,
+                flowEntriesByTick,
+                staves,
+                notationTracks,
+                config
+            )
+        );
     }
 
     const totalWidth = horizontalMeasurements.reduce((out, tickWidths) => {
-        out = out + tickWidths.reduce((out, width) => {
-            out = out + width;
-            return out;
-        }, 0);
+        out =
+            out +
+            tickWidths.reduce((out, width) => {
+                out = out + width;
+                return out;
+            }, 0);
         return out;
     }, 0);
 
     drawInstructions.push(
-        ...drawNames(config.framePadding.left, y, namesWidth, instruments, names, verticalMeasurements, config),
+        ...drawNames(
+            config.framePadding.left,
+            y,
+            namesWidth,
+            instruments,
+            names,
+            verticalMeasurements,
+            config
+        ),
         ...drawBraces(x, y, verticalMeasurements),
         ...drawBrackets(x, y, verticalMeasurements, config),
         ...drawSubBrackets(x, y, verticalMeasurements),
@@ -83,9 +124,11 @@ export function parse(score: Score, flowKey: FlowKey, mm: number): RenderInstruc
 
     return {
         space: converter.spaces.toPX(1),
-        height: config.framePadding.top + verticalMeasurements.systemHeight + config.framePadding.bottom,
+        height:
+            config.framePadding.top +
+            verticalMeasurements.systemHeight +
+            config.framePadding.bottom,
         width: x + totalWidth + config.framePadding.right,
         entries: drawInstructions
     };
-
 }
