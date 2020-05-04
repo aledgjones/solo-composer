@@ -1,34 +1,123 @@
-import React, { useRef, useEffect, useContext, FC, DetailedHTMLProps, HTMLAttributes, MutableRefObject, useState } from 'react';
-import { SortableContext } from '../sortable-container';
+import React, { useRef, useEffect, useContext, FC, DetailedHTMLProps, HTMLAttributes, MutableRefObject, useMemo } from 'react';
 import { merge, useDragHandler } from 'solo-ui';
+import { SortableContext, Item } from '../sortable-container/context';
+import shortid from 'shortid';
+
+function getAbsoluteHeight(element: HTMLDivElement | null) {
+    if (element) {
+        var styles = window.getComputedStyle(element);
+        var margin = parseFloat(styles['marginBottom']);
+        return Math.ceil(element.offsetHeight + margin);
+    } else {
+        return 0;
+    }
+}
+
+function getAbsoluteWidth(element: HTMLDivElement | null) {
+    if (element) {
+        var styles = window.getComputedStyle(element);
+        var margin = parseFloat(styles['marginRight']);
+        return Math.ceil(element.offsetWidth + margin);
+    } else {
+        return 0;
+    }
+}
+
+function getInsertPointY(e: PointerEvent, items: Item[], oldIndex: number) {
+    let newIndex = 0;
+    items.forEach(item => {
+        const box = item.ref.current?.getBoundingClientRect();
+        if (box) {
+            const insertCutOffPoint = box.top + (box.height / 2);
+            // don't insertAt the existing index
+            if (e.clientY > insertCutOffPoint) {
+                if (item.index > oldIndex) {
+                    if (item.index > newIndex) {
+                        newIndex = item.index;
+                    }
+                } else if (item.index < oldIndex) {
+                    if (item.index + 1 > newIndex) {
+                        newIndex = item.index + 1;
+                    }
+                }
+            }
+        }
+    });
+    return newIndex;
+}
+
+function getInsertPointX(e: PointerEvent, items: Item[], oldIndex: number) {
+    let newIndex = 0;
+    items.forEach(item => {
+        const box = item.ref.current?.getBoundingClientRect();
+        if (box) {
+            const insertCutOffPoint = box.left + (box.width / 2);
+            // don't insertAt the existing index
+            if (e.clientX > insertCutOffPoint) {
+                if (item.index > oldIndex) {
+                    if (item.index > newIndex) {
+                        newIndex = item.index;
+                    }
+                } else if (item.index < oldIndex) {
+                    if (item.index + 1 > newIndex) {
+                        newIndex = item.index + 1;
+                    }
+                }
+            }
+        }
+    });
+    return newIndex;
+}
+
+function getOffset(item: Item, insertAt: number, index: number, offsetItemsBy: number) {
+    if (item.index < index) {
+        if (insertAt <= item.index) {
+            return offsetItemsBy;
+        }
+    }
+
+    if (item.index > index) {
+        if (insertAt >= item.index) {
+            return -offsetItemsBy;
+        }
+    }
+
+    return 0;
+}
 
 interface Props {
+    index: number;
     handle?: MutableRefObject<HTMLDivElement | null>;
 }
 
-export const SortableItem: FC<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> & Props> = ({ className, style, handle, onPointerDown, children, ...props }) => {
+export const SortableItem: FC<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> & Props> = ({ index, className, style, handle, onPointerDown, children, ...props }) => {
 
-    const { config, setItems } = useContext(SortableContext);
-    const [dragging, setDragging] = useState(false);
-    const [offset, setOffset] = useState<{ x: number, y: number }>({ x: 0, y: 0 });
-
+    const key = useMemo(() => shortid(), []);
     const ref = useRef<HTMLDivElement>(null);
+    const { config, items, setItems } = useContext(SortableContext);
+
+    const item = items.find(item => item.key === key);
 
     // register the dom element ref with the container.
     useEffect(() => {
-        setItems(s => [...s, ref]);
+        setItems(s => [...s, { key, index, sorting: false, active: false, offset: { x: 0, y: 0 }, ref }]);
         return () => {
-            setItems(s => s.filter(r => r !== ref));
+            setItems(s => s.filter(item => item.key !== key));
         }
-    }, [ref, setItems]);
+    }, [key, index, ref, setItems]);
 
-    const onDown = useDragHandler<{ x: number, y: number }>({
+    const onDown = useDragHandler<{ x: number, y: number, insertAt: number }>({
         onDown: e => {
             if (onPointerDown) {
                 onPointerDown(e as any);
             }
 
-            // cancel any pointerdown events that are not inside the handle
+            // cancel if not the left mouse button
+            if (e.button === 2) {
+                return false;
+            }
+
+            // cancel any pointerdown events not inside the handle
             if (handle && handle.current) {
                 const target = e.target as HTMLDivElement;
                 if (handle.current !== e.target && !handle.current.contains(target)) {
@@ -36,28 +125,76 @@ export const SortableItem: FC<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, 
                 }
             }
 
-            setDragging(true);
+            setItems(items => {
+                return items.map(item => {
+                    return { ...item, active: item.key === key, sorting: true }
+                });
+            });
 
+            // init mouse/pointer position
             return {
                 x: e.screenX,
-                y: e.screenY
+                y: e.screenY,
+                insertAt: index
             }
 
         },
         onMove: (e, init) => {
-            setOffset({
-                x: config.x ? e.screenX - init.x : 0,
-                y: config.y ? e.screenY - init.y : 0
-            })
+
+            setItems(items => {
+
+                if (config.direction === 'x') {
+                    const offsetItemsBy = getAbsoluteWidth(ref.current);
+                    init.insertAt = getInsertPointX(e, items, index);
+                    return items.map(item => {
+                        if (item.key === key) {
+                            // if selected offset by pointer delta
+                            return { ...item, offset: { x: e.screenX - init.x, y: 0 } }
+                        } else {
+                            // else offset by selection height
+                            return { ...item, offset: { x: getOffset(item, init.insertAt, index, offsetItemsBy), y: 0 } }
+                        }
+                    });
+                } else {
+                    const offsetItemsBy = getAbsoluteHeight(ref.current);
+                    init.insertAt = getInsertPointY(e, items, index);
+                    return items.map(item => {
+                        if (item.key === key) {
+                            // if selected offset by pointer delta
+                            return { ...item, offset: { y: e.screenY - init.y, x: 0 } }
+                        } else {
+                            // else offset by selection height
+                            return { ...item, offset: { y: getOffset(item, init.insertAt, index, offsetItemsBy), x: 0 } }
+                        }
+                    });
+                }
+            });
 
         },
         onEnd: (e, init) => {
-            setDragging(false);
-            setOffset({ x: 0, y: 0 });
+            config.onEnd(index, init.insertAt);
+            setItems(items => {
+                return items.map(item => {
+                    return { ...item, sorting: false, active: false, offset: { x: 0, y: 0 } }
+                });
+            });
         }
-    }, [config, handle, onPointerDown]);
+    }, [key, config, items, index, handle, onPointerDown]);
 
-    return <div ref={ref} style={{ zIndex: dragging ? 1000000 : undefined, transform: `translate(${offset.x}px,${offset.y}px)`, ...style }} onPointerDown={onDown} className={merge('ui-sortable-item', { 'ui-sortable-item--dragging': dragging }, className)} {...props} >
-        {children}
-    </div>;
+    if (item) {
+        return <div
+            ref={ref}
+            style={{
+                transform: `translate(${item.offset.x}px,${item.offset.y}px)`,
+                ...style
+            }}
+            onPointerDown={onDown}
+            className={merge('ui-sortable-item', { 'ui-sortable-item--active': item.active, 'ui-sortable-item--sorting': item.sorting }, className)}
+            {...props}
+        >
+            {children}
+        </div>;
+    } else {
+        return null;
+    }
 }

@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, MouseEvent, FC, useRef } from 'react';
 import { mdiChevronDown, mdiPlus, mdiDeleteOutline, mdiChevronUp } from '@mdi/js';
 
-import { Icon, useForeground } from 'solo-ui';
+import { Icon, useForeground, merge } from 'solo-ui';
 import { SortableItem } from '../../components/sortable-item';
 
 import { Player, PlayerType, usePlayerName, usePlayerIcon, PlayerKey } from '../../services/player';
@@ -15,6 +15,7 @@ import { Text } from '../../components/text';
 import './player-item.css';
 
 interface Props {
+    index: number;
     player: Player;
     instruments: Instruments;
     counts: InstrumentCounts;
@@ -27,7 +28,7 @@ interface Props {
     onRemovePlayer: (playerKey: PlayerKey) => void;
 }
 
-export const PlayerItem: FC<Props> = ({ player, instruments, counts, selected, expanded, onSelectPlayer, onToggleExpandPlayer, onAddInstrument, onRemovePlayer }) => {
+export const PlayerItem: FC<Props> = ({ index, player, instruments, counts, selected, expanded, onSelectPlayer, onToggleExpandPlayer, onAddInstrument, onRemovePlayer }) => {
 
     const handle = useRef<HTMLDivElement>(null);
 
@@ -56,7 +57,7 @@ export const PlayerItem: FC<Props> = ({ player, instruments, counts, selected, e
     const name = usePlayerName(player, instruments, counts);
     const icon = usePlayerIcon(player);
 
-    return <SortableItem handle={handle} className="player-item" style={{ backgroundColor: bg, color: fg }} onClick={onSelect}>
+    return <SortableItem index={index} handle={handle} className={merge("player-item", { 'player-item--selected': selected })} style={{ backgroundColor: bg, color: fg }} onClick={onSelect}>
         <div className="player-item__header">
 
             <div onPointerDown={onSelect} ref={handle}>

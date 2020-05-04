@@ -2,11 +2,10 @@ import React, { FC, useState, useCallback } from 'react';
 
 import { Dialog, useTitle } from 'solo-ui';
 
-import { useAppState, useAppActions } from '../../services/state';
+import { useAppActions } from '../../services/state';
 import { PlayerType, PlayerKey } from '../../services/player';
 import { FlowKey } from '../../services/flow';
 import { InstrumentDef } from '../../services/instrument-defs';
-import { useCounts } from '../../services/instrument';
 
 import { Selection, SelectionType } from './selection';
 
@@ -26,18 +25,6 @@ const Setup: FC<Props> = () => {
     useTitle('Solo Composer | Setup');
 
     const actions = useAppActions();
-    const { flows, players, instruments, expanded } = useAppState(s => {
-        return {
-            flows: s.score.flows.order.map(key => {
-                return s.score.flows.byKey[key];
-            }),
-            players: s.score.players.order.map(key => {
-                return s.score.players.byKey[key];
-            }),
-            instruments: s.score.instruments,
-            expanded: s.ui.expanded
-        }
-    });
 
     // local selection fine, we don't need to keep this after nav.
     const [selection, setSelection] = useState<Selection>(null);
@@ -76,7 +63,7 @@ const Setup: FC<Props> = () => {
         setDialogOpen(false);
     }, []);
 
-    const counts = useCounts();
+
 
     // FLOWS
 
@@ -107,33 +94,23 @@ const Setup: FC<Props> = () => {
     return <>
         <div className="setup" style={{ backgroundColor: THEME.grey[500] }}>
             <PlayerList
-                players={players}
-                instruments={instruments}
-                counts={counts}
                 selection={selection}
-                expanded={expanded}
-
                 onSelectPlayer={setSelection}
-                onToggleExpandPlayer={actions.ui.expanded.toggle}
                 onCreatePlayer={onCreatePlayer}
                 onAddInstrument={onAddInstrument}
                 onRemovePlayer={onRemovePlayer}
-            // onSortEnd={actions.score.players.reorder}
             />
             <div className="setup__middle" style={{ borderRight: `solid 4px ${THEME.grey[400]}`, borderLeft: `solid 4px ${THEME.grey[400]}` }}>
                 <RenderRegion className="setup__view">
                     <RenderWriteMode />
                 </RenderRegion>
                 <FlowList
-                    flows={flows}
                     selection={selection}
-
                     onSelectFlow={setSelection}
                     onCreateFlow={onCreateFlow}
                     onRemoveFlow={onRemoveFlow}
                     onAssignPlayer={onAssignPlayerToFlow}
                     onRemovePlayer={onRemovePlayerFromFlow}
-                // onSortEnd={actions.score.flows.reorder}
                 />
             </div>
         </div>

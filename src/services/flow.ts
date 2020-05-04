@@ -69,9 +69,9 @@ export const flowActions = (store: Store<State>) => {
 
             return flow.key;
         },
-        reorder: (instruction: { oldIndex: number, newIndex: number }) => {
+        reorder: (oldIndex: number, newIndex: number) => {
             store.update(s => {
-                s.score.flows.order = ArrayMove(s.score.flows.order, instruction.oldIndex, instruction.newIndex)
+                s.score.flows.order = ArrayMove(s.score.flows.order, oldIndex, newIndex);
             });
         },
         remove: (flowKey: FlowKey) => {

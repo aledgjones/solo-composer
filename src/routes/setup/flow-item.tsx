@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, MouseEvent, FC, useRef } from 'react';
 import { mdiDeleteOutline, mdiFileDocumentOutline } from '@mdi/js';
 
-import { Icon, Checkbox, useForeground } from 'solo-ui';
+import { Icon, Checkbox, useForeground, merge } from 'solo-ui';
 import { SortableItem } from '../../components/sortable-item';
 
 import { THEME } from '../../const';
@@ -11,6 +11,7 @@ import { SelectionType, Selection } from "./selection";
 import './flow-item.css';
 
 interface Props {
+    index: number;
     flow: Flow;
     selection: Selection;
 
@@ -20,7 +21,7 @@ interface Props {
     onRemovePlayer: (flowKey: FlowKey) => void;
 }
 
-export const FlowItem: FC<Props> = ({ flow, selection, onSelectFlow, onRemoveFlow, onAssignPlayer, onRemovePlayer }) => {
+export const FlowItem: FC<Props> = ({ index, flow, selection, onSelectFlow, onRemoveFlow, onAssignPlayer, onRemovePlayer }) => {
 
     const handle = useRef<HTMLDivElement>(null);
 
@@ -57,7 +58,7 @@ export const FlowItem: FC<Props> = ({ flow, selection, onSelectFlow, onRemoveFlo
     }, [selected, active]);
     const fg = useForeground(bg);
 
-    return <SortableItem handle={handle} className="flow-item" style={{ backgroundColor: bg, color: fg }} onClick={onSelect}>
+    return <SortableItem index={index} handle={handle} className={merge("flow-item", { 'flow-item--selected': selected })} style={{ backgroundColor: bg, color: fg }} onClick={onSelect}>
         <div className="flow-item__header">
 
             <div onPointerDown={onSelect} ref={handle}>

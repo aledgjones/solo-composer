@@ -1,9 +1,10 @@
 import React, { version as ReactVersion } from 'react';
 import { version as ToneJSVersion } from 'tone';
+import { mdiClose } from '@mdi/js';
 
-import { Dialog, Subheader, Content, Label, Button } from 'solo-ui';
+import { Icon, Dialog, Subheader, Content, Label } from 'solo-ui';
 
-import { APP_VERSION, THEME } from '../../const';
+import { APP_VERSION } from '../../const';
 import { useAppState, useAppActions } from '../../services/state';
 
 import logo from '../../assets/logo.png';
@@ -18,6 +19,9 @@ export const About = () => {
     return <Dialog width={400} className="about" open={show}>
         {
             () => <>
+                <div className="about__head">
+                    <Icon path={mdiClose} size={24} color="#000000" onClick={actions.ui.about.close} />
+                </div>
                 <div className="about__logo">
                     <img className="about__logo-img" alt="Solo Composer Logo" src={logo} />
                     <Label className="about__logo-text">
@@ -42,11 +46,6 @@ export const About = () => {
                         <span>v{ReactVersion}</span>
                     </p>
                 </Content>
-                <div className="about__buttons">
-                    <div />
-                    {/* <Button color={THEME.primary[500]} outline>Changelog</Button> */}
-                    <Button color={THEME.primary[500]} onClick={actions.ui.about.close}>Close</Button>
-                </div>
             </>
         }
     </Dialog>

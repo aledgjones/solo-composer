@@ -1,31 +1,18 @@
-import React, { FC, CSSProperties, MutableRefObject, useState, SetStateAction, Dispatch } from 'react';
+import React, { FC, useState, DetailedHTMLProps, HTMLAttributes } from 'react';
 import { merge } from 'solo-ui';
 
-interface Config {
-    x?: boolean;
-    y?: boolean;
+import { SortableContext, Item } from './context';
+
+interface Props {
+    direction: 'x' | 'y',
+    onEnd: (oldIndex: number, newIndex: number) => void;
 }
 
-type Items = MutableRefObject<HTMLDivElement | null>[];
-type ItemsUpdater = Dispatch<SetStateAction<MutableRefObject<HTMLDivElement | null>[]>>;
+export const SortableContainer: FC<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> & Props> = ({ direction, onEnd, className, children, ...props }) => {
 
-interface Props extends Config {
-    id?: string;
-    className?: string;
-    style?: CSSProperties;
-}
+    const [items, setItems] = useState<Item[]>([]);
 
-export const SortableContext = React.createContext<{ config: Config, items: Items, setItems: ItemsUpdater }>({
-    config: { x: false, y: false },
-    items: [],
-    setItems: s => s
-});
-
-export const SortableContainer: FC<Props> = ({ id, className, style, x, y, children }) => {
-
-    const [items, setItems] = useState<MutableRefObject<HTMLDivElement | null>[]>([]);
-
-    return <SortableContext.Provider value={{ config: { x, y }, items, setItems }}>
-        <div id={id} className={merge('ui-sortable-container', className)} style={style}>{children}</div>
+    return <SortableContext.Provider value={{ config: { direction, onEnd }, items, setItems }}>
+        <div className={merge('ui-sortable-container', className)} {...props}>{children}</div>
     </SortableContext.Provider>;
 }

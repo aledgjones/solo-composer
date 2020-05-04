@@ -1,16 +1,20 @@
+.about__head {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 48px;
+    padding: 0 12px;
+}
+
 .about__logo {
     padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     text-align: center;
 }
 
 .about__logo-img {
     height: 64px;
     width: 64px;
-    margin-bottom: 20px;
+    margin: 0 auto 12px auto;
 }
 
 .about__logo-text {
@@ -42,10 +46,4 @@
 
 .about__paragraph {
     margin-bottom: 20px;
-}
-
-.about__buttons {
-    display: flex;
-    justify-content: space-between;
-    padding: 20px;
 }
