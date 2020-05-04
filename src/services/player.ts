@@ -55,9 +55,9 @@ export const playerActions = (store: Store<State>) => {
             });
             return player.key;
         },
-        reorder: (instruction: { oldIndex: number, newIndex: number }) => {
+        reorder: (oldIndex: number, newIndex: number) => {
             store.update(s => {
-                s.score.players.order = ArrayMove(s.score.players.order, instruction.oldIndex, instruction.newIndex)
+                s.score.players.order = ArrayMove(s.score.players.order, oldIndex, newIndex);
             });
         },
         remove: (playerKey: PlayerKey) => {

@@ -1,26 +1,20 @@
 .about__head {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     height: 48px;
-    padding: 0 20px;
-}
-
-.about__h2 {
-    font-size: 18px;
+    padding: 0 12px;
 }
 
 .about__logo {
     padding: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    text-align: center;
 }
 
 .about__logo-img {
     height: 64px;
     width: 64px;
-    margin-right: 20px;
+    margin: 0 auto 12px auto;
 }
 
 .about__logo-text {

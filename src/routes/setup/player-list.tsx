@@ -1,43 +1,48 @@
-import React from 'react';
-import { SortableContainer } from 'react-sortable-hoc';
+import React, { FC } from 'react';
 import { mdiPlus } from '@mdi/js';
 
 import { Icon, useForeground } from 'solo-ui';
+import { SortableContainer } from '../../components/sortable-container';
 
-import { Player, PlayerKey } from '../../services/player';
-import { Instruments } from '../../services/instrument';
-import { InstrumentCounts } from '../../services/instrument-utils';
+import { THEME } from '../../const';
+import { PlayerKey } from '../../services/player';
+import { useAppActions, useAppState } from '../../services/state';
 import { PlayerItem } from './player-item';
-import { Selection } from  "./selection";
+import { Selection } from "./selection";
+import { useCounts } from '../../services/instrument';
 
 import './player-list.css';
-import { THEME } from '../../const';
 
 interface Props {
-    players: Player[];
-    instruments: Instruments;
-    counts: InstrumentCounts;
     selection: Selection;
-    expanded: {[key: string]: boolean};
 
     onSelectPlayer: (selection: Selection) => void;
-    onToggleExpandPlayer: (playerKey: PlayerKey) => void;
     onAddInstrument: (playerKey: PlayerKey) => void;
     onRemovePlayer: (playerKey: PlayerKey) => void;
     onCreatePlayer: () => void;
 }
 
-export const PlayerList = SortableContainer<Props>((props: Props) => {
+export const PlayerList: FC<Props> = ({ selection, onSelectPlayer, onAddInstrument, onRemovePlayer, onCreatePlayer }) => {
 
-    const { players, instruments, counts, selection, expanded, onSelectPlayer, onToggleExpandPlayer, onAddInstrument, onRemovePlayer, onCreatePlayer } = props;
-    const fg400 = useForeground(THEME.grey[400]);
+    const actions = useAppActions();
+    const fg = useForeground(THEME.grey[400]);
+    const counts = useCounts();
+    const { players, instruments, expanded } = useAppState(s => {
+        return {
+            players: s.score.players.order.map(key => {
+                return s.score.players.byKey[key];
+            }),
+            instruments: s.score.instruments,
+            expanded: s.ui.expanded
+        }
+    });
 
-    return <div className="player-list" style={{backgroundColor: THEME.grey[500]}}>
-        <div className="player-list__header" style={{backgroundColor: THEME.grey[400]}}>
-            <span className="player-list__label" style={{color: fg400}}>Players</span>
-            <Icon size={24} color={fg400} path={mdiPlus} onClick={onCreatePlayer} />
+    return <div className="player-list" style={{ backgroundColor: THEME.grey[500] }}>
+        <div className="player-list__header" style={{ backgroundColor: THEME.grey[400] }}>
+            <span className="player-list__label" style={{ color: fg }}>Players</span>
+            <Icon size={24} color={fg} path={mdiPlus} onClick={onCreatePlayer} />
         </div>
-        <div className="player-list__content">
+        <SortableContainer direction="y" className="player-list__content" onEnd={actions.score.players.reorder}>
             {players.map((player, i) => <PlayerItem
                 index={i}
                 key={player.key}
@@ -49,11 +54,11 @@ export const PlayerList = SortableContainer<Props>((props: Props) => {
                 expanded={expanded[player.key + '-setup']}
 
                 onSelectPlayer={onSelectPlayer}
-                onToggleExpandPlayer={onToggleExpandPlayer}
+                onToggleExpandPlayer={actions.ui.expanded.toggle}
                 onAddInstrument={onAddInstrument}
                 onRemovePlayer={onRemovePlayer}
             />)}
-        </div>
+        </SortableContainer>
     </div>;
-});
+};
 

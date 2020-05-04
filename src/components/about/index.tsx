@@ -20,7 +20,6 @@ export const About = () => {
         {
             () => <>
                 <div className="about__head">
-                    <h2 className="about__h2">About</h2>
                     <Icon path={mdiClose} size={24} color="#000000" onClick={actions.ui.about.close} />
                 </div>
                 <div className="about__logo">

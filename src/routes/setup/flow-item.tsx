@@ -1,18 +1,17 @@
-import React, { useCallback, useMemo, MouseEvent } from 'react';
-import { SortableElement } from 'react-sortable-hoc';
+import React, { useCallback, useMemo, MouseEvent, FC, useRef } from 'react';
 import { mdiDeleteOutline, mdiFileDocumentOutline } from '@mdi/js';
 
+import { Icon, Checkbox, useForeground, merge } from 'solo-ui';
+import { SortableItem } from '../../components/sortable-item';
+
 import { THEME } from '../../const';
-
 import { Flow, FlowKey } from '../../services/flow';
-
-import { Icon, Checkbox, useForeground } from 'solo-ui';
-import { Handle } from './handle';
 import { SelectionType, Selection } from "./selection";
 
 import './flow-item.css';
 
 interface Props {
+    index: number;
     flow: Flow;
     selection: Selection;
 
@@ -22,9 +21,9 @@ interface Props {
     onRemovePlayer: (flowKey: FlowKey) => void;
 }
 
-export const FlowItem = SortableElement<Props>((props: Props) => {
+export const FlowItem: FC<Props> = ({ index, flow, selection, onSelectFlow, onRemoveFlow, onAssignPlayer, onRemovePlayer }) => {
 
-    const { flow, selection, onSelectFlow, onRemoveFlow, onAssignPlayer, onRemovePlayer } = props;
+    const handle = useRef<HTMLDivElement>(null);
 
     const selected: boolean = useMemo(() => {
         return !!selection && selection.key === flow.key;
@@ -59,11 +58,13 @@ export const FlowItem = SortableElement<Props>((props: Props) => {
     }, [selected, active]);
     const fg = useForeground(bg);
 
-    return <div className="flow-item" style={{ backgroundColor: bg, color: fg }} onClick={onSelect}>
+    return <SortableItem index={index} handle={handle} className={merge("flow-item", { 'flow-item--selected': selected })} style={{ backgroundColor: bg, color: fg }} onClick={onSelect}>
         <div className="flow-item__header">
-            <Handle>
+
+            <div onPointerDown={onSelect} ref={handle}>
                 <Icon style={{ marginRight: 16 }} path={mdiFileDocumentOutline} size={24} color={fg} />
-            </Handle>
+            </div>
+
             <span className="flow-item__name">{flow.title}</span>
             {selected && <>
                 <Icon style={{ marginLeft: 12 }} size={24} color={fg} path={mdiDeleteOutline} onClick={onRemove} />
@@ -72,5 +73,5 @@ export const FlowItem = SortableElement<Props>((props: Props) => {
                 <Checkbox color="white" value={active} onChange={onCheckboxChange} />
             </div>}
         </div>
-    </div>;
-});
+    </SortableItem>;
+};

@@ -1,8 +1,21 @@
 .player-item {
-  background-color: #232c32;
+  position: relative;
   margin-bottom: 8px;
   color: white;
   border-radius: 3px;
+}
+
+.player-item--selected {
+  z-index: 100;
+}
+
+.player-item.ui-sortable-item--sorting {
+  transition: transform .2s;
+}
+
+.player-item.ui-sortable-item--active {
+  transition: transform 0s;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 
 .player-item__header {
