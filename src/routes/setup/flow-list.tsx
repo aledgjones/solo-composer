@@ -1,8 +1,7 @@
 import React, { FC } from "react";
 import { mdiPlus } from "@mdi/js";
 
-import { Icon, useForeground } from "solo-ui";
-import { SortableContainer } from "../../components/sortable-container";
+import { Icon, useForeground, SortableContainer } from "solo-ui";
 
 import { THEME } from "../../const";
 import { useAppActions, useAppState } from "../../services/state";
@@ -47,11 +46,7 @@ export const FlowList: FC<Props> = ({
                 <Icon size={24} color={fg} path={mdiPlus} onClick={onCreateFlow} />
             </div>
             <div className="flow-list__wrapper">
-                <SortableContainer
-                    direction="x"
-                    className="flow-list__content"
-                    onEnd={actions.score.flows.reorder}
-                >
+                <SortableContainer direction="x" className="flow-list__content" onEnd={actions.score.flows.reorder}>
                     {flows.map((flow, i) => (
                         <FlowItem
                             index={i}

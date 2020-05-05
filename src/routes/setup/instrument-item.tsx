@@ -1,11 +1,10 @@
 import React, { FC, useMemo, useRef } from "react";
 import { mdiChevronRight } from "@mdi/js";
 
-import { Icon, useForeground } from "solo-ui";
+import { Icon, useForeground, SortableItem } from "solo-ui";
 
 import { THEME } from "../../const";
 import { Instrument, useInstrumentName } from "../../services/instrument";
-import { SortableItem } from "../../components/sortable-item";
 import { Text } from "../../components/text";
 
 import "./instrument-item.css";
@@ -19,13 +18,7 @@ interface Props {
     onSelectPlayer: () => void;
 }
 
-export const InstrumentItem: FC<Props> = ({
-    index,
-    selected,
-    instrument,
-    count,
-    onSelectPlayer
-}) => {
+export const InstrumentItem: FC<Props> = ({ index, selected, instrument, count, onSelectPlayer }) => {
     const handle = useRef<HTMLDivElement>(null);
     const bg = useMemo(() => {
         if (selected) {

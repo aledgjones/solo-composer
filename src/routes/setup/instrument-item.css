@@ -28,7 +28,3 @@
     height: 28px;
     z-index: 1;
 }
-
-.instrument-item:last-child {
-    margin-bottom: 0;
-}

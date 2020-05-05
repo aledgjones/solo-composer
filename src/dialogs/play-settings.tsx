@@ -1,7 +1,7 @@
 import React, { FC, useState, useMemo } from "react";
 import { mdiMidiPort } from "@mdi/js";
 
-import { Button, Icon, Subheader, Switch, ListItem, Label } from "solo-ui";
+import { Button, Icon, Subheader } from "solo-ui";
 
 import { THEME } from "../const";
 import { useCounts } from "../services/instrument";
@@ -40,22 +40,16 @@ export const PlaySettings: FC<Props> = ({ onClose }) => {
 
     const counts = useCounts();
 
-    const [page, setPage] = useState<Page>(Page.general);
+    const [page, setPage] = useState<Page>(Page.internal);
 
     return (
         <div className="generic-settings">
             <div className="generic-settings__content">
                 <div className="generic-settings__left-panel">
-                    <MenuItem
-                        selected={page === Page.general}
-                        onClick={() => setPage(Page.general)}
-                    >
+                    {/* <MenuItem selected={page === Page.general} onClick={() => setPage(Page.general)}>
                         General
-                    </MenuItem>
-                    <MenuItem
-                        selected={page === Page.internal}
-                        onClick={() => setPage(Page.internal)}
-                    >
+                    </MenuItem> */}
+                    <MenuItem selected={page === Page.internal} onClick={() => setPage(Page.internal)}>
                         Internal Sampler
                     </MenuItem>
                     <MenuItem selected={page === Page.midi} onClick={() => setPage(Page.midi)}>
@@ -63,7 +57,7 @@ export const PlaySettings: FC<Props> = ({ onClose }) => {
                     </MenuItem>
                 </div>
                 <div className="generic-settings__right-panel">
-                    {page === Page.general && (
+                    {/* {page === Page.general && (
                         <>
                             <div className="generic-settings__section" style={{ paddingBottom: 0 }}>
                                 <Subheader>Auditioning</Subheader>
@@ -76,18 +70,14 @@ export const PlaySettings: FC<Props> = ({ onClose }) => {
                                 <Switch color={THEME.primary[500]} value={settings.audition} />
                             </ListItem>
                         </>
-                    )}
+                    )} */}
 
                     {page === Page.internal && (
                         <>
                             <div className="play-settings__header">
                                 <div className="play-settings__cell play-settings__channel" />
-                                <div className="play-settings__cell play-settings__map">
-                                    Patch Map
-                                </div>
-                                <div className="play-settings__cell play-settings__assigned">
-                                    Assigned To
-                                </div>
+                                <div className="play-settings__cell play-settings__map">Patch Map</div>
+                                <div className="play-settings__cell play-settings__assigned">Assigned To</div>
                             </div>
 
                             {channels.map((channel, i) => {
@@ -118,9 +108,7 @@ export const PlaySettings: FC<Props> = ({ onClose }) => {
                                                 color="#000000"
                                             />
                                             <div className="play-settings__port-description">
-                                                <p className="play-settings__port-name">
-                                                    {input.name}
-                                                </p>
+                                                <p className="play-settings__port-name">{input.name}</p>
                                                 <p className="play-settings__port-manufacturer">
                                                     {input.manufacturer || "Unknown Manufacturer"}
                                                 </p>
@@ -142,17 +130,13 @@ export const PlaySettings: FC<Props> = ({ onClose }) => {
                                                 color="#000000"
                                             />
                                             <div className="play-settings__port-description">
-                                                <p className="play-settings__port-name">
-                                                    {output.name}
-                                                </p>
+                                                <p className="play-settings__port-name">{output.name}</p>
                                                 <p className="play-settings__port-manufacturer">
                                                     {output.manufacturer || "Unknown Manufacturer"}
                                                 </p>
                                             </div>
                                             <Button
-                                                onClick={() =>
-                                                    actions.playback.midi.test(output.id)
-                                                }
+                                                onClick={() => actions.playback.midi.test(output.id)}
                                                 compact={true}
                                                 outline={true}
                                                 color={THEME.primary[500]}

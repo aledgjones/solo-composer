@@ -23,7 +23,8 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 
-ReactDOM.render(<MainShell />, document.getElementById("root"));
+const root = document.getElementById("root") as HTMLElement;
+ReactDOM.createRoot(root).render(<MainShell />);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

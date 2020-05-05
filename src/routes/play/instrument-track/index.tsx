@@ -1,4 +1,4 @@
-import React, { FC, useCallback, PointerEvent, useMemo, useRef } from "react";
+import React, { FC, useCallback, PointerEvent, useMemo, useRef, memo } from "react";
 
 import { merge, dragHandler } from "solo-ui";
 
@@ -64,8 +64,7 @@ function getStart(
         return tone._tick;
     } else {
         if (fixedDuration) {
-            const start =
-                tone._tick + (getTickFromXPosition(x, ticks, snap, Direction.none) - initX);
+            const start = tone._tick + (getTickFromXPosition(x, ticks, snap, Direction.none) - initX);
             if (start < 0) {
                 return 0;
             } else if (start + tone.duration > ticks.length) {
@@ -76,8 +75,7 @@ function getStart(
             }
         } else {
             const max = tone._tick + tone.duration;
-            const start =
-                tone._tick + (getTickFromXPosition(x, ticks, snap, Direction.none) - initX);
+            const start = tone._tick + (getTickFromXPosition(x, ticks, snap, Direction.none) - initX);
             return start < max ? start : max;
         }
     }
@@ -92,14 +90,7 @@ interface Props {
     ticks: Tick[];
 }
 
-export const InstrumentTrack: FC<Props> = ({
-    flowKey,
-    color,
-    instrument,
-    staves,
-    tracks,
-    ticks
-}) => {
+export const InstrumentTrack: FC<Props> = memo(({ flowKey, color, instrument, staves, tracks, ticks }) => {
     const channel = usePatches(instrument.key);
     const { tool, selection, audition, offset } = useAppState(
         s => {
@@ -143,12 +134,7 @@ export const InstrumentTrack: FC<Props> = ({
                         const box = track.current.getBoundingClientRect();
                         return {
                             box,
-                            x: getTickFromXPosition(
-                                ev.clientX - box.left,
-                                ticks,
-                                snap,
-                                Direction.none
-                            ),
+                            x: getTickFromXPosition(ev.clientX - box.left, ticks, snap, Direction.none),
                             pitch: tone.pitch
                         };
                     } else {
@@ -162,22 +148,8 @@ export const InstrumentTrack: FC<Props> = ({
                         ? tone.pitch
                         : getPitchFromYPosition(y, highestNoteOnPianoRoll, SLOT_HEIGHT);
                     const start = getStart(x, ticks, snap, tone, init.x, fixedStart, fixedDuration);
-                    const duration = getDuration(
-                        x,
-                        ticks,
-                        snap,
-                        tone,
-                        start,
-                        fixedStart,
-                        fixedDuration
-                    );
-                    actions.score.instruments.updateTone(
-                        flowKey,
-                        trackKey,
-                        tone._key,
-                        { pitch, duration },
-                        start
-                    );
+                    const duration = getDuration(x, ticks, snap, tone, start, fixedStart, fixedDuration);
+                    actions.score.instruments.updateTone(flowKey, trackKey, tone._key, { pitch, duration }, start);
                 },
                 onEnd: (ev, init) => {
                     const x = ev.clientX - init.box.left;
@@ -186,15 +158,7 @@ export const InstrumentTrack: FC<Props> = ({
                         ? tone.pitch
                         : getPitchFromYPosition(y, highestNoteOnPianoRoll, SLOT_HEIGHT);
                     const start = getStart(x, ticks, snap, tone, init.x, fixedStart, fixedDuration);
-                    const duration = getDuration(
-                        x,
-                        ticks,
-                        snap,
-                        tone,
-                        start,
-                        fixedStart,
-                        fixedDuration
-                    );
+                    const duration = getDuration(x, ticks, snap, tone, start, fixedStart, fixedDuration);
                     if (pitch !== init.pitch) {
                         onPlay(pitch);
                     }
@@ -218,12 +182,7 @@ export const InstrumentTrack: FC<Props> = ({
                 const start = getTickFromXPosition(x, ticks, snap, Direction.down);
                 const duration = getTickFromXPosition(x, ticks, snap, Direction.none) - start;
                 const pitch = getPitchFromYPosition(y, highestNoteOnPianoRoll, SLOT_HEIGHT);
-                const tone = actions.score.instruments.createTone(
-                    flowKey,
-                    trackKey,
-                    { pitch, duration },
-                    start
-                );
+                const tone = actions.score.instruments.createTone(flowKey, trackKey, { pitch, duration }, start);
 
                 actions.ui.selection[TabState.play].clear();
                 actions.ui.selection[TabState.play].select(tone._key);
@@ -260,11 +219,7 @@ export const InstrumentTrack: FC<Props> = ({
                 track.entries.order.forEach(entryKey => {
                     if (track.entries.byKey[entryKey]._type === EntryType.tone) {
                         const entry = track.entries.byKey[entryKey] as Entry<Tone>;
-                        const [top, left, width] = getToneDimensions(
-                            highestNoteOnPianoRoll,
-                            entry,
-                            ticks
-                        );
+                        const [top, left, width] = getToneDimensions(highestNoteOnPianoRoll, entry, ticks);
                         output.push({ tone: entry, trackKey, top, left, width });
                     }
                 });
@@ -315,4 +270,4 @@ export const InstrumentTrack: FC<Props> = ({
             })}
         </div>
     );
-};
+});
