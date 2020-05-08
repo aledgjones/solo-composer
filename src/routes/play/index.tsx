@@ -1,16 +1,7 @@
 import React, { FC, useState, useMemo, useEffect } from "react";
 import { mdiCursorDefault, mdiEraser, mdiGreasePencil, mdiCogOutline } from "@mdi/js";
 
-import {
-    Select,
-    Option,
-    useRainbow,
-    Dialog,
-    Icon,
-    useForeground,
-    DragScroll,
-    useTitle
-} from "solo-ui";
+import { Select, Option, useRainbow, Icon, DragScroll, useTitle } from "solo-ui";
 
 import { THEME } from "../../const";
 import { useAppState, useAppActions } from "../../services/state";
@@ -52,7 +43,6 @@ const Play: FC = () => {
     const ticks = useTicks(flow.length, flowEntriesByTick, zoom);
 
     const colors = useRainbow(score.players.order.length);
-    const fg = useForeground(THEME.grey[400]);
 
     // deal with selection
     useEffect(() => {
@@ -73,13 +63,7 @@ const Play: FC = () => {
         <>
             <DragScroll className="play" x ignore="no-scroll">
                 <div className="play__x-fixed play__left-panel no-scroll">
-                    <div
-                        className="play__tools-container"
-                        style={{
-                            backgroundColor: THEME.grey[500],
-                            borderRight: `4px solid ${THEME.grey[400]}`
-                        }}
-                    >
+                    <div className="play__tools-container" style={{ backgroundColor: THEME.grey[350].backgroundColor }}                >
                         <div className="play__tools">
                             <Icon
                                 className="play__tool"
@@ -87,8 +71,8 @@ const Play: FC = () => {
                                 onClick={() => actions.ui.tool[TabState.play].set(Tool.select)}
                                 path={mdiCursorDefault}
                                 size={24}
-                                color={fg}
-                                highlight={THEME.primary[500]}
+                                color={THEME.grey[400].color}
+                                highlight={THEME.primary[500].backgroundColor}
                             />
                             <Icon
                                 className="play__tool"
@@ -96,8 +80,8 @@ const Play: FC = () => {
                                 onClick={() => actions.ui.tool[TabState.play].set(Tool.pencil)}
                                 path={mdiGreasePencil}
                                 size={24}
-                                color={fg}
-                                highlight={THEME.primary[500]}
+                                color={THEME.grey[400].color}
+                                highlight={THEME.primary[500].backgroundColor}
                             />
                             <Icon
                                 className="play__tool"
@@ -105,8 +89,8 @@ const Play: FC = () => {
                                 onClick={() => actions.ui.tool[TabState.play].set(Tool.eraser)}
                                 path={mdiEraser}
                                 size={24}
-                                color={fg}
-                                highlight={THEME.primary[500]}
+                                color={THEME.grey[400].color}
+                                highlight={THEME.primary[500].backgroundColor}
                             />
                         </div>
                         <div className="play__settings">
@@ -114,16 +98,16 @@ const Play: FC = () => {
                                 className="play__tool"
                                 path={mdiCogOutline}
                                 size={24}
-                                color={fg}
+                                color={THEME.grey[400].color}
                                 onClick={() => setSettings(true)}
                             />
                         </div>
                     </div>
 
-                    <div className="play__controls" style={{ backgroundColor: THEME.grey[500] }}>
+                    <div className="play__controls" style={{ backgroundColor: THEME.grey[500].backgroundColor }}>
                         <div
                             className="play__header-select"
-                            style={{ backgroundColor: THEME.grey[400] }}
+                            style={{ backgroundColor: THEME.grey[400].backgroundColor }}
                         >
                             <Select
                                 className="play__select"
@@ -165,11 +149,15 @@ const Play: FC = () => {
                     </div>
                 </div>
 
-                <div className="play__scrollable" style={{ backgroundColor: THEME.grey[500] }}>
+                <div className="play__scrollable" style={{ backgroundColor: THEME.grey[500].backgroundColor }}>
                     <Ticks
                         className="play__ticks"
+                        color={THEME.grey[800].backgroundColor}
+                        highlight={THEME.grey[800].backgroundColor}
+                        fixed={false}
                         ticks={ticks}
-                        style={{ backgroundColor: THEME.grey[400] }}
+                        height={48}
+                        style={{ backgroundColor: THEME.grey[400].backgroundColor }}
                     />
                     <div className="play__track-area">
                         {score.players.order.map((playerKey, i) => {
@@ -197,10 +185,7 @@ const Play: FC = () => {
             </DragScroll>
 
             <link rel="prefetch" href={piano} />
-
-            <Dialog open={settings} width={900}>
-                {() => <PlaySettings onClose={() => setSettings(false)} />}
-            </Dialog>
+            <PlaySettings open={settings} width={900} onClose={() => setSettings(false)} />
         </>
     );
 };

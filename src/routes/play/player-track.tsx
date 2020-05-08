@@ -8,7 +8,7 @@ import { Staves } from "../../services/stave";
 import { Tracks } from "../../services/track";
 import { InstrumentTrack } from "./instrument-track";
 import { Ticks } from "./ticks";
-import { Tick } from "./ticks/defs";
+import { TickList } from "./ticks/defs";
 
 import "./player-track.css";
 
@@ -20,7 +20,7 @@ interface Props {
     instruments: Instruments;
     staves: Staves;
     tracks: Tracks;
-    ticks: Tick[];
+    ticks: TickList;
 }
 
 export const PlayerTrack: FC<Props> = ({
@@ -34,8 +34,16 @@ export const PlayerTrack: FC<Props> = ({
     flowKey
 }) => {
     return (
-        <div className="player-track" style={{ backgroundColor: THEME.grey[700] }}>
-            <Ticks className="player-track__ticks" ticks={ticks} />
+        <div className="player-track" style={{ backgroundColor: THEME.grey[700].backgroundColor }}>
+            <Ticks
+                className="player-track__ticks"
+                fixed={false}
+                color={THEME.grey[800].backgroundColor}
+                highlight={THEME.grey[800].backgroundColor}
+                height={48}
+                ticks={ticks}
+            />
+
             {expanded && (
                 <div className="player-track__instruments">
                     {player.instruments.map(instrumentKey => {

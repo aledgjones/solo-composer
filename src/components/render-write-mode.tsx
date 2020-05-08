@@ -1,9 +1,7 @@
 import React, { FC, useState, memo } from "react";
 
-import { useForeground } from "solo-ui";
-
-import { useAppState } from "../services/state";
 import { THEME } from "../const";
+import { useAppState } from "../services/state";
 import { useParseWorker } from "../parse/use-parse";
 import { Instruction, InstructionType } from "../render/instructions";
 import { PathInstruction } from "../render/path";
@@ -17,8 +15,7 @@ import "./render-write-mode.css";
 export const RenderWriteMode: FC = memo(() => {
     const score = useAppState(s => s.score);
 
-    const bg = THEME.primary[500];
-    const fg = useForeground(bg);
+    const { backgroundColor, color } = THEME.primary[500];
 
     const [flowKey] = useState(score.flows.order[0]);
     const instructions = useParseWorker(score, flowKey);
@@ -37,7 +34,7 @@ export const RenderWriteMode: FC = memo(() => {
             >
                 <p
                     className="render-write-mode__flow-name"
-                    style={{ color: fg, backgroundColor: bg }}
+                    style={{ color: color, backgroundColor: backgroundColor }}
                 >
                     {score.flows.byKey[flowKey].title}
                 </p>
@@ -108,12 +105,12 @@ export const RenderWriteMode: FC = memo(() => {
                                 def.push(`M ${P0.x * space} ${P0.y * space}`);
                                 def.push(
                                     `Q ${P1.x * space} ${P1.y * space}, ${P2.x * space} ${P2.y *
-                                        space}`
+                                    space}`
                                 );
                                 def.push(`L ${P3.x * space} ${P3.y * space}`);
                                 def.push(
                                     `Q ${P4.x * space} ${P4.y * space}, ${P5.x * space} ${P5.y *
-                                        space}`
+                                    space}`
                                 );
 
                                 return (

@@ -39,7 +39,7 @@ export const PlayerControls: FC<Props> = ({
     ]);
 
     return (
-        <div className="player-controls" style={{ backgroundColor: THEME.grey[600] }}>
+        <div className="player-controls" style={{ backgroundColor: THEME.grey[600].backgroundColor }}>
             <div className="player-controls__header">
                 <Icon style={{ marginRight: 16 }} size={24} color="#ffffff" path={icon} />
                 <Text style={{ whiteSpace: "pre" }} className="player-controls__name">

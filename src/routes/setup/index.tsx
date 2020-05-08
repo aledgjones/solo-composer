@@ -1,6 +1,6 @@
 import React, { FC, useState, useCallback } from "react";
 
-import { Dialog, useTitle } from "solo-ui";
+import { useTitle } from "solo-ui";
 
 import { useAppActions } from "../../services/state";
 import { PlayerType, PlayerKey } from "../../services/player";
@@ -17,8 +17,9 @@ import { RenderRegion } from "../../components/render-region";
 import { RenderWriteMode } from "../../components/render-write-mode";
 
 import "./setup.css";
+import { Fallback } from "../../components/shell/fallback";
 
-interface Props {}
+interface Props { }
 
 const Setup: FC<Props> = () => {
     useTitle("Solo Composer | Setup");
@@ -105,7 +106,7 @@ const Setup: FC<Props> = () => {
 
     return (
         <>
-            <div className="setup" style={{ backgroundColor: THEME.grey[500] }}>
+            <div className="setup" style={{ backgroundColor: THEME.grey[500].backgroundColor }}>
                 <PlayerList
                     selection={selection}
                     onSelectPlayer={setSelection}
@@ -116,8 +117,8 @@ const Setup: FC<Props> = () => {
                 <div
                     className="setup__middle"
                     style={{
-                        borderRight: `solid 4px ${THEME.grey[400]}`,
-                        borderLeft: `solid 4px ${THEME.grey[400]}`
+                        borderRight: `solid 4px ${THEME.grey[400].backgroundColor}`,
+                        borderLeft: `solid 4px ${THEME.grey[400].backgroundColor}`
                     }}
                 >
                     <RenderRegion className="setup__view">
@@ -132,13 +133,11 @@ const Setup: FC<Props> = () => {
                         onRemovePlayer={onRemovePlayerFromFlow}
                     />
                 </div>
+                <Fallback style={{ width: 350 }} color={THEME.grey[500].color} type="empty" text="Layout Panel" />
             </div>
 
-            <Dialog width={900} open={dialogOpen}>
-                {() => (
-                    <InstrumentPicker onSelect={onSelectInstrument} onCancel={onCancelInstrument} />
-                )}
-            </Dialog>
+            <InstrumentPicker width={900} open={dialogOpen} onSelect={onSelectInstrument} onCancel={onCancelInstrument} />
+
         </>
     );
 };

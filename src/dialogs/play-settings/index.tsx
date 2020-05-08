@@ -1,16 +1,16 @@
-import React, { FC, useState, useMemo } from "react";
+import React, { useState } from "react";
 import { mdiMidiPort } from "@mdi/js";
 
-import { Button, Icon, Subheader } from "solo-ui";
+import { Button, Icon, Subheader, Dialog } from "solo-ui";
 
-import { THEME } from "../const";
-import { useCounts } from "../services/instrument";
+import { THEME } from "../../const";
+import { useCounts } from "../../services/instrument";
 import { PlaySettingsChannel } from "./play-settings-channel";
-import { useAppState, useAppActions } from "../services/state";
-import { MenuItem } from "../components/menu-item";
+import { useAppState, useAppActions } from "../../services/state";
+import { MenuItem } from "../../components/menu-item";
 
-import "./generic-settings.css";
-import "./play-settings.css";
+import "../generic-settings.css";
+import "./styles.css";
 
 enum Page {
     general = 1,
@@ -22,25 +22,23 @@ interface Props {
     onClose: () => void;
 }
 
-export const PlaySettings: FC<Props> = ({ onClose }) => {
+export const PlaySettings = Dialog<Props>(({ onClose }) => {
     const actions = useAppActions();
 
-    const { settings, midi, sampler, instruments } = useAppState(s => ({
-        settings: s.playback.settings,
+    const { midi, channels, instruments } = useAppState(s => ({
+        // settings: s.playback.settings,
         midi: s.playback.midi,
-        sampler: s.playback.sampler,
+        channels: s.playback.sampler.channels.order.map(key => {
+            return s.playback.sampler.channels.byKey[key];
+        }),
         instruments: s.score.instruments
     }));
-
-    const channels = useMemo(() => {
-        return sampler.channels.order.map(key => {
-            return sampler.channels.byKey[key];
-        });
-    }, [sampler.channels]);
 
     const counts = useCounts();
 
     const [page, setPage] = useState<Page>(Page.internal);
+
+    const color = THEME.primary[500].backgroundColor;
 
     return (
         <div className="generic-settings">
@@ -137,9 +135,9 @@ export const PlaySettings: FC<Props> = ({ onClose }) => {
                                             </div>
                                             <Button
                                                 onClick={() => actions.playback.midi.test(output.id)}
-                                                compact={true}
-                                                outline={true}
-                                                color={THEME.primary[500]}
+                                                compact
+                                                outline
+                                                color={color}
                                             >
                                                 Test
                                             </Button>
@@ -153,10 +151,10 @@ export const PlaySettings: FC<Props> = ({ onClose }) => {
             </div>
             <div className="generic-settings__buttons">
                 <div className="generic-settings__spacer" />
-                <Button compact color={THEME.primary[500]} onClick={onClose}>
+                <Button compact color={color} onClick={onClose}>
                     Close
                 </Button>
             </div>
         </div>
     );
-};
+});

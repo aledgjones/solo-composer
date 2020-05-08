@@ -8,10 +8,6 @@
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 
-.file-menu__icon {
-    margin: 0 20px;
-}
-
 .file-menu__current {
     background-color: rgb(235, 235, 235);
 }
@@ -25,4 +21,29 @@
     margin-top: 20px;
     display: flex;
     justify-content: flex-end;
+}
+
+.file-menu__container {
+    position: relative;
+    margin: 0 20px;
+}
+
+.file-menu__dot {
+    height: 14px;
+    width: 14px;
+    background-color: orange;
+    border-radius: 50%;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.file-menu__dot--badge {
+    position: absolute;
+    top: -2px;
+    right: -4px;
+    border: 2px solid #101010;
+}
+
+.file-menu__container:hover .file-menu__dot--badge {
+    border: 2px solid #282828;
 }

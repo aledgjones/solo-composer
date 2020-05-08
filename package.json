@@ -1,57 +1,57 @@
 {
-  "name": "composer",
-  "version": "0.5.0",
-  "private": true,
-  "dependencies": {
-    "@mdi/js": "^5.0.45",
-    "@types/big.js": "^4.0.5",
-    "@types/color": "^3.0.1",
-    "@types/jest": "^25.2.1",
-    "@types/lodash.isstring": "^4.0.6",
-    "@types/node": "^13.13.2",
-    "@types/react": "^16.9.34",
-    "@types/react-dom": "^16.9.6",
-    "@types/roman-numerals": "^0.3.0",
-    "@types/shortid": "^0.0.29",
-    "app-reset": "^1.0.2",
-    "array-move": "^2.2.1",
-    "big.js": "^5.2.2",
-    "color": "^3.1.2",
-    "firebase": "^7.14.2",
-    "lodash.isstring": "^4.0.1",
-    "pullstate": "^1.13.0",
-    "react": "^0.0.0-experimental-e5d06e34b",
-    "react-app-rewired": "^2.1.6",
-    "react-dom": "^0.0.0-experimental-e5d06e34b",
-    "react-scripts": "^3.4.1",
-    "roman-numerals": "^0.3.2",
-    "shortid": "^2.2.15",
-    "solo-ui": "aledgjones/solo-ui",
-    "tone": "^14.6.10",
-    "typescript": "^3.8.3",
-    "webmidi": "^2.5.1",
-    "worker-loader": "^2.0.0"
-  },
-  "scripts": {
-    "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
-    "test": "react-app-rewired test --env=jsdom",
-    "eject": "react-scripts eject",
-    "deploy": "react-app-rewired build && firebase deploy"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+    "name": "composer",
+    "version": "0.6.0",
+    "private": true,
+    "dependencies": {
+        "@mdi/js": "^5.0.45",
+        "@types/big.js": "^4.0.5",
+        "@types/color": "^3.0.1",
+        "@types/jest": "^25.2.1",
+        "@types/lodash.isstring": "^4.0.6",
+        "@types/node": "^13.13.2",
+        "@types/react": "^16.9.34",
+        "@types/react-dom": "^16.9.6",
+        "@types/roman-numerals": "^0.3.0",
+        "@types/shortid": "^0.0.29",
+        "app-reset": "^1.0.2",
+        "array-move": "^2.2.1",
+        "big.js": "^5.2.2",
+        "color": "^3.1.2",
+        "firebase": "^7.14.2",
+        "lodash.isstring": "^4.0.1",
+        "pullstate": "^1.13.0",
+        "react": "^0.0.0-experimental-e5d06e34b",
+        "react-app-rewired": "^2.1.6",
+        "react-dom": "^0.0.0-experimental-e5d06e34b",
+        "react-scripts": "^3.4.1",
+        "roman-numerals": "^0.3.2",
+        "shortid": "^2.2.15",
+        "solo-ui": "aledgjones/solo-ui",
+        "tone": "^14.6.10",
+        "typescript": "^3.8.3",
+        "webmidi": "^2.5.1",
+        "worker-loader": "^2.0.0"
+    },
+    "scripts": {
+        "start": "react-app-rewired start",
+        "build": "react-app-rewired build",
+        "test": "react-app-rewired test --env=jsdom",
+        "eject": "react-scripts eject",
+        "deploy": "react-app-rewired build && firebase deploy"
+    },
+    "eslintConfig": {
+        "extends": "react-app"
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    }
 }

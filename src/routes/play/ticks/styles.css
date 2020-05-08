@@ -1,44 +1,4 @@
 .ticks {
-    display: flex;
-    height: 48px;
+    display: block;
     pointer-events: none;
-}
-
-.tick {
-    position: relative;
-    height: 100%;
-    z-index: 2;
-}
-
-.tick:before {
-    content: "";
-    width: 2px;
-    height: 16px;
-    position: absolute;
-    left: -1px;
-    top: 0;
-    background-color: rgba(255, 255, 255, 0.2);
-}
-
-.tick--boundry:before {
-    height: 24px;
-}
-
-.tick:after {
-    content: "";
-    width: 2px;
-    height: 8px;
-    position: absolute;
-    left: calc(50% - 1px);
-    top: 0;
-    background-color: rgba(255, 255, 255, 0.2);
-}
-
-.tick:last-child:before,
-.tick--first-beat:before {
-    height: 100%;
-}
-
-.tick:last-child:after {
-    display: none;
 }

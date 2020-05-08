@@ -1,14 +1,9 @@
-import React, { FC, useState } from "react";
+import React, { useState } from "react";
 import { mdiChevronRight } from "@mdi/js";
-
-import { Icon, Button, useForeground } from "solo-ui";
+import { Icon, Button, Dialog } from "solo-ui";
 
 import { THEME } from "../../const";
-import {
-    InstrumentDef,
-    useInstrumentList,
-    getFirstInstrumentDefFromPartialPath
-} from "../../services/instrument-defs";
+import { InstrumentDef, useInstrumentList, getFirstInstrumentDefFromPartialPath } from "../../services/instrument-defs";
 import { MenuItem } from "../../components/menu-item";
 
 import "./instrument-picker.css";
@@ -18,14 +13,13 @@ interface Props {
     onCancel: () => void;
 }
 
-export const InstrumentPicker: FC<Props> = ({ onSelect, onCancel }) => {
+export const InstrumentPicker = Dialog<Props>(({ onSelect, onCancel }) => {
     const [selection, setSelection] = useState<InstrumentDef>(
         getFirstInstrumentDefFromPartialPath([])
     );
     const lists = useInstrumentList(selection);
 
-    const bg = THEME.primary[500];
-    const fg = useForeground(bg);
+    const { backgroundColor, color } = THEME.primary[500];
 
     return (
         <div className="instrument-picker">
@@ -54,7 +48,7 @@ export const InstrumentPicker: FC<Props> = ({ onSelect, onCancel }) => {
                                         <span>{item}</span>
                                         {!final && (
                                             <Icon
-                                                color={selected ? fg : "black"}
+                                                color={selected ? color : "black"}
                                                 size={24}
                                                 path={mdiChevronRight}
                                             />
@@ -68,13 +62,13 @@ export const InstrumentPicker: FC<Props> = ({ onSelect, onCancel }) => {
             </div>
             <div className="instrument-picker__buttons">
                 <div className="instrument-picker__spacer" />
-                <Button compact outline style={{ marginRight: 8 }} color={bg} onClick={onCancel}>
+                <Button compact outline style={{ marginRight: 8 }} color={backgroundColor} onClick={onCancel}>
                     Cancel
                 </Button>
-                <Button compact color={bg} onClick={() => onSelect(selection)}>
+                <Button compact color={backgroundColor} onClick={() => onSelect(selection)}>
                     Add
                 </Button>
             </div>
         </div>
     );
-};
+});

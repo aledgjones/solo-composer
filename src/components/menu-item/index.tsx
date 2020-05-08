@@ -1,7 +1,7 @@
 import React, { FC } from "react";
+import { merge } from "solo-ui";
 
 import { THEME } from "../../const";
-import { useForeground, merge } from "solo-ui";
 
 import "./styles.css";
 
@@ -11,13 +11,12 @@ interface Props {
 }
 
 export const MenuItem: FC<Props> = ({ selected, onClick, children }) => {
-    const bg = selected ? THEME.primary[500] : undefined;
-    const fg = useForeground(bg || "#ffffff");
+    const { backgroundColor, color } = selected ? THEME.primary[500] : { backgroundColor: undefined, color: undefined };
 
     return (
         <div
             className={merge("menu-item", { "menu-item--clickable": !!onClick })}
-            style={{ backgroundColor: bg, color: selected ? fg : undefined }}
+            style={{ backgroundColor, color }}
             onClick={onClick}
         >
             {children}

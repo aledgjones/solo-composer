@@ -51,7 +51,7 @@ export const ToneElement: FC<Props> = ({
 
     const border = useMemo(() => {
         if (selected) {
-            return `1px solid ${THEME.highlight[500]}`;
+            return `1px solid ${THEME.highlight[500].backgroundColor}`;
         } else {
             const c = Color(color)
                 .darken(0.5)
@@ -109,7 +109,7 @@ export const ToneElement: FC<Props> = ({
             className="tone no-scroll"
             style={{
                 border,
-                outline: selected ? `1px solid ${THEME.highlight[500]}` : undefined,
+                outline: selected ? `1px solid ${THEME.highlight[500].backgroundColor}` : undefined,
                 backgroundColor: color,
                 top,
                 left,

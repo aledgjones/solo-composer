@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { mdiPlus } from "@mdi/js";
 
-import { Icon, useForeground, SortableContainer } from "solo-ui";
+import { Icon, SortableContainer } from "solo-ui";
 
 import { THEME } from "../../const";
 import { useAppActions, useAppState } from "../../services/state";
@@ -30,7 +30,6 @@ export const FlowList: FC<Props> = ({
     onRemovePlayer
 }) => {
     const actions = useAppActions();
-    const fg = useForeground(THEME.grey[400]);
     const { flows } = useAppState(s => {
         return {
             flows: s.score.flows.order.map(key => {
@@ -40,10 +39,10 @@ export const FlowList: FC<Props> = ({
     });
 
     return (
-        <div className="flow-list" style={{ backgroundColor: THEME.grey[500] }}>
-            <div className="flow-list__header" style={{ backgroundColor: THEME.grey[400] }}>
-                <span style={{ color: fg }}>Flows</span>
-                <Icon size={24} color={fg} path={mdiPlus} onClick={onCreateFlow} />
+        <div className="flow-list" style={{ backgroundColor: THEME.grey[500].backgroundColor }}>
+            <div className="flow-list__header" style={{ backgroundColor: THEME.grey[400].backgroundColor }}>
+                <span style={{ color: THEME.grey[400].color }}>Flows</span>
+                <Icon size={24} color={THEME.grey[400].color} path={mdiPlus} onClick={onCreateFlow} />
             </div>
             <div className="flow-list__wrapper">
                 <SortableContainer direction="x" className="flow-list__content" onEnd={actions.score.flows.reorder}>

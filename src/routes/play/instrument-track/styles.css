@@ -1,13 +1,15 @@
 .instrument-track {
     position: relative;
     display: flex;
-    height: 224px;
     width: 100%;
     margin-bottom: 8px;
-    background-repeat: repeat;
     overflow: hidden;
 }
 
 .instrument-track:last-child {
     margin-bottom: 0;
+}
+
+.instrument-track__ticks {
+    position: absolute;
 }

@@ -1,6 +1,6 @@
 import React, { FC, useEffect, Suspense } from "react";
 
-import { Tabs, Tab, useForeground } from "solo-ui";
+import { Tabs, Tab } from "solo-ui";
 // import { useDebugger } from "../../services/debugger";
 
 import { THEME } from "../../const";
@@ -9,7 +9,6 @@ import { TabState } from "../../services/ui";
 import { useAutoSetup } from "../../services/auto-setup";
 
 import { FileMenu } from "../file-menu";
-import { About } from "../about";
 import { Transport } from "../transport";
 import { Fallback } from "./fallback";
 
@@ -26,7 +25,8 @@ export const MainShell: FC = () => {
     const actions = useAppActions();
     const tab = useAppState(s => s.ui.tab);
 
-    const fg = useForeground(THEME.grey[300]);
+    const { backgroundColor, color } = THEME.grey[300];
+    const highlight = THEME.grey[500].backgroundColor;
 
     useEffect(() => {
         actions.playback.midi.init();
@@ -34,14 +34,14 @@ export const MainShell: FC = () => {
 
     return (
         <>
-            <div className="main-shell__title-bar" style={{ backgroundColor: THEME.grey[300] }}>
+            <div className="main-shell__title-bar" style={{ backgroundColor: backgroundColor }}>
                 <FileMenu />
                 <Tabs
                     className="main-shell__tabs"
                     value={tab}
                     onChange={actions.ui.tab.set}
-                    color={fg}
-                    highlight={THEME.grey[500]}
+                    color={color}
+                    highlight={highlight}
                 >
                     <Tab value={TabState.setup}>Setup</Tab>
                     <Tab value={TabState.write}>Write</Tab>
@@ -52,18 +52,16 @@ export const MainShell: FC = () => {
                 <Transport />
             </div>
 
-            <div className="main-shell__content" style={{ backgroundColor: THEME.grey[500] }}>
-                <Suspense fallback={<Fallback type="loading" />}>
+            <div className="main-shell__content" style={{ backgroundColor: THEME.grey[500].backgroundColor }}>
+                <Suspense fallback={<Fallback color={THEME.grey[500].color} type="loading" />}>
                     {(tab === TabState.engrave || tab === TabState.print) && (
-                        <Fallback type="empty" />
+                        <Fallback color={THEME.grey[500].color} type="empty" />
                     )}
                     {tab === TabState.setup && <Setup />}
                     {tab === TabState.write && <Write />}
                     {tab === TabState.play && <Play />}
                 </Suspense>
             </div>
-
-            <About />
         </>
     );
 };

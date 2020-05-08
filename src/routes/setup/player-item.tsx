@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo, MouseEvent, FC, useRef } from "react";
 import { mdiChevronDown, mdiPlus, mdiDeleteOutline, mdiChevronUp } from "@mdi/js";
-
-import { Icon, useForeground, merge, SortableContainer, SortableItem } from "solo-ui";
+import { Icon, merge, SortableContainer, SortableItem } from "solo-ui";
 
 import { useAppActions } from "../../services/state";
 import { Player, PlayerType, usePlayerName, usePlayerIcon, PlayerKey } from "../../services/player";
@@ -62,15 +61,13 @@ export const PlayerItem: FC<Props> = ({
         [onRemovePlayer, player.key]
     );
 
-    const bg = useMemo(() => {
+    const { backgroundColor, color } = useMemo(() => {
         if (selected) {
             return THEME.primary[500];
         } else {
             return THEME.grey[600];
         }
     }, [selected]);
-
-    const fg = useForeground(bg);
 
     const name = usePlayerName(player, instruments, counts);
     const icon = usePlayerIcon(player);
@@ -82,12 +79,12 @@ export const PlayerItem: FC<Props> = ({
             className={merge("player-item", {
                 "player-item--selected": selected
             })}
-            style={{ backgroundColor: bg, color: fg }}
+            style={{ backgroundColor: backgroundColor, color: color }}
             onClick={onSelect}
         >
             <div className="player-item__header">
                 <div onPointerDown={onSelect} ref={handle}>
-                    <Icon style={{ marginRight: 16 }} path={icon} size={24} color={fg} />
+                    <Icon style={{ marginRight: 16 }} path={icon} size={24} color={color} />
                 </div>
 
                 <Text style={{ whiteSpace: "pre" }} className="player-item__name">
@@ -99,7 +96,7 @@ export const PlayerItem: FC<Props> = ({
                         <Icon
                             style={{ marginLeft: 12 }}
                             size={24}
-                            color={fg}
+                            color={color}
                             path={mdiDeleteOutline}
                             onClick={onRemove}
                         />
@@ -108,7 +105,7 @@ export const PlayerItem: FC<Props> = ({
                                 style={{ marginLeft: 12 }}
                                 path={mdiPlus}
                                 size={24}
-                                color={fg}
+                                color={color}
                                 onClick={() => onAddInstrument(player.key)}
                             />
                         )}
@@ -118,7 +115,7 @@ export const PlayerItem: FC<Props> = ({
                     style={{ marginLeft: 12 }}
                     path={expanded ? mdiChevronUp : mdiChevronDown}
                     size={24}
-                    color={fg}
+                    color={color}
                     onClick={onExpand}
                 />
             </div>

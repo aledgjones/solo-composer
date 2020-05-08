@@ -1,7 +1,7 @@
 import React, { FC, useMemo, useRef } from "react";
 import { mdiChevronRight } from "@mdi/js";
 
-import { Icon, useForeground, SortableItem } from "solo-ui";
+import { Icon, SortableItem } from "solo-ui";
 
 import { THEME } from "../../const";
 import { Instrument, useInstrumentName } from "../../services/instrument";
@@ -20,14 +20,13 @@ interface Props {
 
 export const InstrumentItem: FC<Props> = ({ index, selected, instrument, count, onSelectPlayer }) => {
     const handle = useRef<HTMLDivElement>(null);
-    const bg = useMemo(() => {
+    const { backgroundColor, color } = useMemo(() => {
         if (selected) {
             return THEME.primary[600];
         } else {
             return THEME.grey[700];
         }
     }, [selected]);
-    const fg = useForeground(bg);
 
     const name = useInstrumentName(instrument, count);
 
@@ -36,12 +35,12 @@ export const InstrumentItem: FC<Props> = ({ index, selected, instrument, count, 
             handle={handle}
             index={index}
             className="instrument-item"
-            style={{ backgroundColor: bg, color: fg }}
+            style={{ backgroundColor: backgroundColor, color: color }}
         >
             <div ref={handle} onPointerDown={onSelectPlayer}>
                 <Text className="instrument-item__name">{name}</Text>
             </div>
-            <Icon size={18} color={fg} path={mdiChevronRight} />
+            <Icon size={18} color={color} path={mdiChevronRight} />
         </SortableItem>
     );
 };

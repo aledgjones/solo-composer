@@ -1,17 +1,18 @@
 import React, { FC } from "react";
 import { mdiPlay, mdiMetronome, mdiFastForward, mdiRewind, mdiSkipPrevious } from "@mdi/js";
+import { Icon } from "solo-ui";
 
 import { THEME } from "../../const";
-import { Icon, useForeground } from "solo-ui";
+import { useAppState, useAppActions } from "../../services/state";
 
 import "./styles.css";
-import { useAppState, useAppActions } from "../../services/state";
 
 export const Transport: FC = () => {
     const metronome = useAppState(s => s.playback.settings.metronome);
     const actions = useAppActions();
 
-    const fg = useForeground(THEME.grey[300]);
+    const fg = THEME.grey[300].color;
+    const highlight = THEME.grey[500].backgroundColor;
 
     return (
         <div className="transport">
@@ -47,7 +48,7 @@ export const Transport: FC = () => {
             </div>
             <div
                 className="transport__timestamp"
-                style={{ border: `1px solid ${THEME.grey[500]}`, color: fg }}
+                style={{ border: `1px solid ${highlight}`, color: fg }}
             >
                 <span>0.0.0.000</span>
             </div>
@@ -57,7 +58,7 @@ export const Transport: FC = () => {
                     onClick={actions.playback.settings.metronome.toggle}
                     size={24}
                     color={fg}
-                    highlight={THEME.primary[500]}
+                    highlight={THEME.primary[500].backgroundColor}
                     path={mdiMetronome}
                 />
             </div>

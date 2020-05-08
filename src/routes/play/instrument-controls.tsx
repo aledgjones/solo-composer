@@ -21,7 +21,7 @@ export const InstrumentControls: FC<Props> = ({ instrument, count, color }) => {
 
     return (
         <div className="instrument-controls__wrapper" style={{ borderLeft: `4px solid ${color}` }}>
-            <div className="instrument-controls" style={{ backgroundColor: THEME.grey[700] }}>
+            <div className="instrument-controls" style={{ backgroundColor: THEME.grey[700].backgroundColor }}>
                 <div className="instrument-controls__header">
                     <Icon style={{ marginRight: 16 }} size={24} color="#ffffff" path={mdiPiano} />
                     <Text className="instrument-controls__name">{name}</Text>

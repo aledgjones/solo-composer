@@ -1,6 +1,6 @@
-import { buildText, TextStyles, Justify, Align } from "../render/text";
-import { buildCircle, CircleStyles } from "../render/circle";
-import { NotationBaseDuration } from "./notation-track";
+import {buildText, TextStyles, Justify, Align} from "../render/text";
+import {buildCircle, CircleStyles} from "../render/circle";
+import {NotationBaseDuration} from "./notation-track";
 
 export interface RestDef {
     duration: number;
@@ -63,7 +63,7 @@ export function drawRest(
     instructions.push(buildText(key, styles, x, y + offset, glyph));
 
     if (dotted) {
-        const styles: CircleStyles = { color: "#000000" };
+        const styles: CircleStyles = {color: "#000000"};
         instructions.push(buildCircle(`${key}-dot`, styles, x + 1.5, y - 0.5 + offset, 0.2));
     }
 

@@ -12,13 +12,14 @@ import { getToneDimensions, SLOT_HEIGHT, BASE_TONE } from "./get-tone-dimension"
 import { Pitch } from "../../../playback/utils";
 import { EntryType, Entry } from "../../../entries";
 import { Tone } from "../../../entries/tone";
-import { trackBackground } from "./track-background";
-import { Tick } from "../ticks/defs";
+import { Tick, TickList } from "../ticks/defs";
 import { ToneElement } from "../tone";
 import { getTickFromXPosition, getPitchFromYPosition } from "./pointer-to-track-coords";
 import { Direction } from "../../../parse/get-stem-direction";
 import { usePatches } from "../../../playback/use-channel";
 import { Expressions } from "../../../playback/expressions";
+import { useTrackBackground } from "./track-background";
+import { Ticks } from "../ticks";
 
 import pencil from "../../../assets/cursors/pencil.svg";
 import eraser from "../../../assets/cursors/eraser.svg";
@@ -87,7 +88,7 @@ interface Props {
     instrument: Instrument;
     staves: Staves;
     tracks: Tracks;
-    ticks: Tick[];
+    ticks: TickList;
 }
 
 export const InstrumentTrack: FC<Props> = memo(({ flowKey, color, instrument, staves, tracks, ticks }) => {
@@ -111,6 +112,8 @@ export const InstrumentTrack: FC<Props> = memo(({ flowKey, color, instrument, st
     const staveKey = instrument.staves[0];
     const trackKey = staves[staveKey].tracks[0];
 
+    const trackBackground = useTrackBackground();
+
     const onPlay = useCallback(
         (pitch: Pitch) => {
             if (channel && channel[Expressions.natural] && audition) {
@@ -121,20 +124,14 @@ export const InstrumentTrack: FC<Props> = memo(({ flowKey, color, instrument, st
     );
 
     const onEdit = useCallback(
-        (
-            e: PointerEvent<HTMLElement>,
-            tone: Entry<Tone>,
-            fixedStart: boolean,
-            fixedDuration: boolean,
-            fixedPitch: boolean
-        ) => {
+        (e: PointerEvent<HTMLElement>, tone: Entry<Tone>, fixedStart: boolean, fixedDuration: boolean, fixedPitch: boolean) => {
             const handler = dragHandler<{ box: DOMRect; x: number; pitch: Pitch }>({
                 onDown: ev => {
                     if (track.current) {
                         const box = track.current.getBoundingClientRect();
                         return {
                             box,
-                            x: getTickFromXPosition(ev.clientX - box.left, ticks, snap, Direction.none),
+                            x: getTickFromXPosition(ev.clientX - box.left, ticks.list, snap, Direction.none),
                             pitch: tone.pitch
                         };
                     } else {
@@ -147,8 +144,8 @@ export const InstrumentTrack: FC<Props> = memo(({ flowKey, color, instrument, st
                     const pitch = fixedPitch
                         ? tone.pitch
                         : getPitchFromYPosition(y, highestNoteOnPianoRoll, SLOT_HEIGHT);
-                    const start = getStart(x, ticks, snap, tone, init.x, fixedStart, fixedDuration);
-                    const duration = getDuration(x, ticks, snap, tone, start, fixedStart, fixedDuration);
+                    const start = getStart(x, ticks.list, snap, tone, init.x, fixedStart, fixedDuration);
+                    const duration = getDuration(x, ticks.list, snap, tone, start, fixedStart, fixedDuration);
                     actions.score.instruments.updateTone(flowKey, trackKey, tone._key, { pitch, duration }, start);
                 },
                 onEnd: (ev, init) => {
@@ -157,8 +154,8 @@ export const InstrumentTrack: FC<Props> = memo(({ flowKey, color, instrument, st
                     const pitch = fixedPitch
                         ? tone.pitch
                         : getPitchFromYPosition(y, highestNoteOnPianoRoll, SLOT_HEIGHT);
-                    const start = getStart(x, ticks, snap, tone, init.x, fixedStart, fixedDuration);
-                    const duration = getDuration(x, ticks, snap, tone, start, fixedStart, fixedDuration);
+                    const start = getStart(x, ticks.list, snap, tone, init.x, fixedStart, fixedDuration);
+                    const duration = getDuration(x, ticks.list, snap, tone, start, fixedStart, fixedDuration);
                     if (pitch !== init.pitch) {
                         onPlay(pitch);
                     }
@@ -179,8 +176,8 @@ export const InstrumentTrack: FC<Props> = memo(({ flowKey, color, instrument, st
                 const box = track.current.getBoundingClientRect();
                 const x = e.clientX - box.left;
                 const y = e.clientY - box.top;
-                const start = getTickFromXPosition(x, ticks, snap, Direction.down);
-                const duration = getTickFromXPosition(x, ticks, snap, Direction.none) - start;
+                const start = getTickFromXPosition(x, ticks.list, snap, Direction.down);
+                const duration = getTickFromXPosition(x, ticks.list, snap, Direction.none) - start;
                 const pitch = getPitchFromYPosition(y, highestNoteOnPianoRoll, SLOT_HEIGHT);
                 const tone = actions.score.instruments.createTone(flowKey, trackKey, { pitch, duration }, start);
 
@@ -219,7 +216,7 @@ export const InstrumentTrack: FC<Props> = memo(({ flowKey, color, instrument, st
                 track.entries.order.forEach(entryKey => {
                     if (track.entries.byKey[entryKey]._type === EntryType.tone) {
                         const entry = track.entries.byKey[entryKey] as Entry<Tone>;
-                        const [top, left, width] = getToneDimensions(highestNoteOnPianoRoll, entry, ticks);
+                        const [top, left, width] = getToneDimensions(highestNoteOnPianoRoll, entry, ticks.list);
                         output.push({ tone: entry, trackKey, top, left, width });
                     }
                 });
@@ -245,29 +242,41 @@ export const InstrumentTrack: FC<Props> = memo(({ flowKey, color, instrument, st
             className={merge("instrument-track", { "no-scroll": tool === Tool.pencil })}
             onPointerDown={tool === Tool.pencil ? onCreate : undefined}
             style={{
+                height: SLOT_HEIGHT * 24,
                 backgroundImage: trackBackground,
                 backgroundPositionY: offset * SLOT_HEIGHT,
                 cursor
             }}
         >
-            {tones.map(({ tone, trackKey, top, left, width }) => {
-                return (
-                    <ToneElement
-                        key={tone._key}
-                        flowKey={flowKey}
-                        trackKey={trackKey}
-                        tone={tone}
-                        color={color}
-                        tool={tool}
-                        selected={selection[tone._key]}
-                        top={top}
-                        left={left}
-                        width={width}
-                        onEdit={onEdit}
-                        onPlay={onPlay}
-                    />
-                );
-            })}
-        </div>
+            <Ticks
+                className="instrument-track__ticks"
+                fixed={true}
+                ticks={ticks}
+                color="#cccccc"
+                highlight="#aaaaaa"
+                height={SLOT_HEIGHT * 24}
+            />
+
+            {
+                tones.map(({ tone, trackKey, top, left, width }) => {
+                    return (
+                        <ToneElement
+                            key={tone._key}
+                            flowKey={flowKey}
+                            trackKey={trackKey}
+                            tone={tone}
+                            color={color}
+                            tool={tool}
+                            selected={selection[tone._key]}
+                            top={top}
+                            left={left}
+                            width={width}
+                            onEdit={onEdit}
+                            onPlay={onPlay}
+                        />
+                    );
+                })
+            }
+        </div >
     );
 });

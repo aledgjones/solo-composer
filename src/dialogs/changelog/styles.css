@@ -1,0 +1,67 @@
+.changelog__header {
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 12px 0 20px;
+}
+
+.changelog__title {
+    font-size: 18px;
+    flex-grow: 1;
+}
+
+.changelog__content {
+    height: calc(100vh - 128px);
+    overflow: auto;
+    font-size: 16px;
+}
+
+.changelog__content h2 {
+    font-weight: bold;
+    padding: 20px;
+}
+
+.changelog__content li {
+    position: relative;
+    margin-bottom: 20px;
+    padding-top: 6px;
+    padding-left: 120px;
+}
+
+.changelog__content label {
+    position: absolute;
+    padding: 8px 12px;
+    border-radius: 3px;
+    width: 100px;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: bold;
+    top: 0;
+    left: 0;
+}
+
+.changelog__content label:after {
+    content: attr(type);
+}
+
+.changelog__content label[type="feature"] {
+    color: white;
+    background-color: royalblue;
+}
+
+.changelog__content label[type="changed"] {
+    color: white;
+    background-color: darkorange;
+}
+
+.changelog__content label[type="fixed"] {
+    color: white;
+    background-color: green;
+}
+
+.changelog__content code {
+    font-size: 14px;
+    padding: 2px 4px !important;
+}

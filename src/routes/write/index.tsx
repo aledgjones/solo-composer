@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 
-import { Dialog, useTitle } from "solo-ui";
+import { useTitle } from "solo-ui";
 
 import { RenderRegion } from "../../components/render-region";
 import { RenderWriteMode } from "../../components/render-write-mode";
@@ -18,9 +18,7 @@ const Write: FC = () => {
                     <RenderWriteMode />
                 </RenderRegion>
             </div>
-            <Dialog open={false} width={900}>
-                {() => <EngravingSettings onClose={() => false} />}
-            </Dialog>
+            <EngravingSettings open={false} width={900} onClose={() => false} />
         </>
     );
 };

@@ -1,37 +1,34 @@
 export const APP_SHORT_NAME = "Composer";
 export const APP_FULL_NAME = "Solo Composer";
 export const APP_CREATOR = "Solo Apps";
-export const APP_VERSION = "0.5.0";
+export const APP_VERSION = "0.6.0";
 
-export const THEME = {
+interface Theme {
+    [key: string]: {
+        [shade: number]: {backgroundColor: string; color: string};
+    };
+}
+
+export const THEME: Theme = {
     grey: {
-        300: "#101010",
-        350: "#131313",
-        400: "#161616",
-        500: "#1f1f1f",
-        600: "#282828",
-        700: "#2E2E2E",
-        800: "#909090"
+        300: {backgroundColor: "#101010", color: "#ffffff"},
+        350: {backgroundColor: "#131313", color: "#ffffff"},
+        400: {backgroundColor: "#161616", color: "#ffffff"},
+        500: {backgroundColor: "#1f1f1f", color: "#ffffff"},
+        600: {backgroundColor: "#282828", color: "#ffffff"},
+        700: {backgroundColor: "#2E2E2E", color: "#ffffff"},
+        800: {backgroundColor: "#505050", color: "#ffffff"}
     },
-    // grey: {
-    //     300: '#ffffff',
-    //     350: '#d0d0d0',
-    //     400: '#b0b0b0',
-    //     500: '#a0a0a0',
-    //     600: '#808080',
-    //     700: '#707070',
-    //     800: '#606060'
-    // },
     primary: {
-        400: "#00508e",
-        500: "#0064b1",
-        600: "#0082e6",
-        700: "#1c9cff"
+        400: {backgroundColor: "#00508e", color: "#ffffff"},
+        500: {backgroundColor: "#0064b1", color: "#ffffff"},
+        600: {backgroundColor: "#0082e6", color: "#ffffff"},
+        700: {backgroundColor: "#1c9cff", color: "#ffffff"}
     },
     highlight: {
-        500: "#ffaa50"
+        500: {backgroundColor: "orange", color: "#ffffff"}
     },
     error: {
-        500: "#ff6347"
+        500: {backgroundColor: "#ff6347", color: "#ffffff"}
     }
 };

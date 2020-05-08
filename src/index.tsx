@@ -1,11 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { store } from './services/state';
 import { MainShell } from "./components/shell";
 import * as serviceWorker from "./serviceWorker";
 
 import "./assets/fonts/styles.css";
 
-import * as firebase from "firebase/app";
+import firebase from "firebase/app";
 import "firebase/analytics";
 
 import "./styles.css";
@@ -29,4 +30,10 @@ ReactDOM.createRoot(root).render(<MainShell />);
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.register();
+serviceWorker.register({
+    onUpdate: () => {
+        store.update(s => {
+            s.ui.update = true;
+        });
+    }
+});

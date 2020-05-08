@@ -1,5 +1,13 @@
+.about__header {
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 12px;
+}
+
 .about__logo {
-    padding: 20px 20px 0 20px;
+    padding: 0 20px 20px 20px;
     text-align: center;
 }
 
@@ -45,9 +53,6 @@
     font-weight: bold;
 }
 
-.about__buttons {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding: 0 20px 20px 20px;
+.about__paragraph a:hover {
+    text-decoration: underline;
 }

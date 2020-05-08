@@ -1,6 +1,6 @@
-import { Store } from "pullstate";
-import { State } from "./state";
-import { InstrumentKey } from "./instrument";
+import {Store} from "pullstate";
+import {State} from "./state";
+import {InstrumentKey} from "./instrument";
 
 export enum Tool {
     select = 1,
@@ -17,20 +17,18 @@ export enum TabState {
 }
 
 export interface UiState {
+    update: boolean;
     tab: TabState;
-    menu: boolean;
-    about: boolean;
-    expanded: { [key: string]: boolean };
-    selection: { [key: string]: boolean };
-    pianoRollOffsetY: { [key: string]: number };
-    tool: { [TabState.play]: Tool };
+    expanded: {[key: string]: boolean};
+    selection: {[key: string]: boolean};
+    pianoRollOffsetY: {[key: string]: number};
+    tool: {[TabState.play]: Tool};
 }
 
 export const uiEmptyState = (): UiState => {
     return {
+        update: false,
         tab: TabState.setup,
-        menu: false,
-        about: false,
         expanded: {},
         selection: {},
         pianoRollOffsetY: {},
@@ -44,49 +42,15 @@ export const uiActions = (store: Store<State>) => {
     return {
         tab: {
             set: (tab: TabState) => {
-                store.update(s => {
+                store.update((s) => {
                     s.ui.tab = tab;
                     window.history.pushState(tab, `Solo Composer | ${tab}`, tab);
                 });
             }
         },
-        menu: {
-            toggle: () => {
-                store.update(s => {
-                    s.ui.menu = !s.ui.menu;
-                });
-            },
-            open: () => {
-                store.update(s => {
-                    s.ui.menu = true;
-                });
-            },
-            close: () => {
-                store.update(s => {
-                    s.ui.menu = false;
-                });
-            }
-        },
-        about: {
-            toggle: () => {
-                store.update(s => {
-                    s.ui.about = !s.ui.about;
-                });
-            },
-            open: () => {
-                store.update(s => {
-                    s.ui.about = true;
-                });
-            },
-            close: () => {
-                store.update(s => {
-                    s.ui.about = false;
-                });
-            }
-        },
         expanded: {
             toggle: (key: string) => {
-                store.update(s => {
+                store.update((s) => {
                     if (s.ui.expanded[key]) {
                         delete s.ui.expanded[key];
                     } else {
@@ -98,7 +62,7 @@ export const uiActions = (store: Store<State>) => {
         selection: {
             [TabState.play]: {
                 toggle: (key: string) => {
-                    store.update(s => {
+                    store.update((s) => {
                         if (s.ui.selection[key] === true) {
                             delete s.ui.selection[key];
                         } else {
@@ -107,17 +71,17 @@ export const uiActions = (store: Store<State>) => {
                     });
                 },
                 select: (key: string) => {
-                    store.update(s => {
+                    store.update((s) => {
                         s.ui.selection[key] = true;
                     });
                 },
                 deselect: (key: string) => {
-                    store.update(s => {
+                    store.update((s) => {
                         delete s.ui.selection[key];
                     });
                 },
                 clear: () => {
-                    store.update(s => {
+                    store.update((s) => {
                         s.ui.selection = {};
                     });
                 }
@@ -125,14 +89,14 @@ export const uiActions = (store: Store<State>) => {
         },
         pianoRollOffsetY: {
             set: (key: InstrumentKey, value: number) => {
-                store.update(s => {
+                store.update((s) => {
                     if (value >= -48 && value <= 36) {
                         s.ui.pianoRollOffsetY[key] = value;
                     }
                 });
             },
             inc: (key: InstrumentKey) => {
-                store.update(s => {
+                store.update((s) => {
                     const next = (s.ui.pianoRollOffsetY[key] || 0) + 1;
                     if (next <= 36) {
                         s.ui.pianoRollOffsetY[key] = next;
@@ -140,7 +104,7 @@ export const uiActions = (store: Store<State>) => {
                 });
             },
             dec: (key: InstrumentKey) => {
-                store.update(s => {
+                store.update((s) => {
                     const next = (s.ui.pianoRollOffsetY[key] || 0) - 1;
                     if (next >= -48) {
                         s.ui.pianoRollOffsetY[key] = next;
@@ -151,7 +115,7 @@ export const uiActions = (store: Store<State>) => {
         tool: {
             [TabState.play]: {
                 set: (tool: Tool) => {
-                    store.update(s => {
+                    store.update((s) => {
                         s.ui.tool[TabState.play] = tool;
                     });
                 }

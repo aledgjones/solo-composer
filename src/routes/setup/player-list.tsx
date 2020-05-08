@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { mdiPlus } from "@mdi/js";
 
-import { Icon, useForeground, SortableContainer } from "solo-ui";
+import { Icon, SortableContainer } from "solo-ui";
 
 import { THEME } from "../../const";
 import { PlayerKey } from "../../services/player";
@@ -29,7 +29,6 @@ export const PlayerList: FC<Props> = ({
     onCreatePlayer
 }) => {
     const actions = useAppActions();
-    const fg = useForeground(THEME.grey[400]);
     const counts = useCounts();
     const { players, instruments, expanded } = useAppState(s => {
         return {
@@ -42,12 +41,12 @@ export const PlayerList: FC<Props> = ({
     });
 
     return (
-        <div className="player-list" style={{ backgroundColor: THEME.grey[500] }}>
-            <div className="player-list__header" style={{ backgroundColor: THEME.grey[400] }}>
-                <span className="player-list__label" style={{ color: fg }}>
+        <div className="player-list" style={{ backgroundColor: THEME.grey[500].backgroundColor }}>
+            <div className="player-list__header" style={{ backgroundColor: THEME.grey[400].backgroundColor }}>
+                <span className="player-list__label" style={{ color: THEME.grey[400].color }}>
                     Players
                 </span>
-                <Icon size={24} color={fg} path={mdiPlus} onClick={onCreatePlayer} />
+                <Icon size={24} color={THEME.grey[400].color} path={mdiPlus} onClick={onCreatePlayer} />
             </div>
             <SortableContainer direction="y" className="player-list__content" onEnd={actions.score.players.reorder}>
                 {players.map((player, i) => (

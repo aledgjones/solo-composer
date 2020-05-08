@@ -1,9 +1,9 @@
-import { useMemo } from "react";
-import { Store, useStoreState } from "pullstate";
+import {useMemo} from "react";
+import {Store, useStoreState} from "pullstate";
 
-import { uiEmptyState, uiActions, UiState } from "./ui";
-import { scoreActions, scoreEmptyState, Score } from "./score";
-import { PlaybackState, playbackEmptyState, playbackActions } from "./playback";
+import {uiEmptyState, uiActions, UiState} from "./ui";
+import {scoreActions, scoreEmptyState, Score} from "./score";
+import {PlaybackState, playbackEmptyState, playbackActions} from "./playback";
 
 export interface State {
     ui: UiState;
@@ -11,7 +11,7 @@ export interface State {
     playback: PlaybackState;
 }
 
-const store = new Store<State>({
+export const store = new Store<State>({
     ui: uiEmptyState(),
     score: scoreEmptyState(),
     playback: playbackEmptyState()

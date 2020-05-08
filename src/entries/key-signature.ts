@@ -1,7 +1,7 @@
 import shortid from "shortid";
-import { ClefType, Clef } from "./clef-defs";
-import { Entry, EntryType } from ".";
-import { TextStyles, buildText, Justify, Align } from "../render/text";
+import {ClefType, Clef} from "./clef-defs";
+import {Entry, EntryType} from ".";
+import {TextStyles, buildText, Justify, Align} from "../render/text";
 
 export enum KeySignatureMode {
     major = 1,
@@ -22,9 +22,9 @@ export function createKeySignature(def: KeySignatureDef, tick: number): Entry<Ke
     return {
         _type: EntryType.keySignature,
         _key: shortid(),
-        _box: { width, height: 4 },
-        _bounds: { width: width + padding, height: 4 },
-        _offset: { top: 0, left: 0 },
+        _box: {width, height: 4},
+        _bounds: {width: width + padding, height: 4},
+        _offset: {top: 0, left: 0},
         _tick: tick,
 
         ...def
@@ -92,12 +92,7 @@ function glyphFromType(type: AccidentalType) {
     }
 }
 
-export function drawKeySignature(
-    x: number,
-    y: number,
-    clef: Entry<Clef>,
-    key: Entry<KeySignature>
-) {
+export function drawKeySignature(x: number, y: number, clef: Entry<Clef>, key: Entry<KeySignature>, staveKey: string) {
     const instructions = [];
 
     const styles: TextStyles = {
@@ -115,7 +110,7 @@ export function drawKeySignature(
         const pattern = patterns[clef.pitch][clef.offset][AccidentalType.flat];
         for (let i = 0; i > key.offset; i--) {
             instructions.push(
-                buildText(`${clef._key}-${i}`, styles, x + i * -1, y + 0.5 * pattern[i * -1], glyph)
+                buildText(`${key._key}-${staveKey}-${i}`, styles, x + i * -1, y + 0.5 * pattern[i * -1], glyph)
             );
         }
     }
@@ -124,9 +119,7 @@ export function drawKeySignature(
         const glyph = glyphFromType(AccidentalType.sharp);
         const pattern = patterns[clef.pitch][clef.offset][AccidentalType.sharp];
         for (let i = 0; i < key.offset; i++) {
-            instructions.push(
-                buildText(`${clef._key}-${i}`, styles, x + i, y + 0.5 * pattern[i], glyph)
-            );
+            instructions.push(buildText(`${key._key}-${staveKey}-${i}`, styles, x + i, y + 0.5 * pattern[i], glyph));
         }
     }
 

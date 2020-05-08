@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, MouseEvent, FC, useRef } from "react";
 import { mdiDeleteOutline, mdiFileDocumentOutline } from "@mdi/js";
 
-import { Icon, Checkbox, useForeground, merge, SortableItem } from "solo-ui";
+import { Icon, Checkbox, merge, SortableItem } from "solo-ui";
 
 import { THEME } from "../../const";
 import { Flow, FlowKey } from "../../services/flow";
@@ -62,7 +62,7 @@ export const FlowItem: FC<Props> = ({
         [onRemoveFlow, flow.key]
     );
 
-    const bg = useMemo(() => {
+    const { backgroundColor, color } = useMemo(() => {
         if (selected) {
             return THEME.primary[500];
         } else if (active) {
@@ -71,19 +71,18 @@ export const FlowItem: FC<Props> = ({
             return THEME.grey[600];
         }
     }, [selected, active]);
-    const fg = useForeground(bg);
 
     return (
         <SortableItem
             index={index}
             handle={handle}
             className={merge("flow-item", { "flow-item--selected": selected })}
-            style={{ backgroundColor: bg, color: fg }}
+            style={{ backgroundColor: backgroundColor, color: color }}
             onClick={onSelect}
         >
             <div className="flow-item__header">
                 <div onPointerDown={onSelect} ref={handle}>
-                    <Icon style={{ marginRight: 16 }} path={mdiFileDocumentOutline} size={24} color={fg} />
+                    <Icon style={{ marginRight: 16 }} path={mdiFileDocumentOutline} size={24} color={color} />
                 </div>
 
                 <span className="flow-item__name">{flow.title}</span>
@@ -92,7 +91,7 @@ export const FlowItem: FC<Props> = ({
                         <Icon
                             style={{ marginLeft: 12 }}
                             size={24}
-                            color={fg}
+                            color={color}
                             path={mdiDeleteOutline}
                             onClick={onRemove}
                         />

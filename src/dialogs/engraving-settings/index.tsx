@@ -1,16 +1,15 @@
-import React, { FC, useState } from "react";
-import { THEME } from "../const";
+import React, { useState } from "react";
+import { Select, Option, Input, Button, Subheader, Switch, ListItem, Label, Dialog } from "solo-ui";
 
-import { Select, Option, Input, Button, Subheader, Switch, ListItem, Label } from "solo-ui";
+import { THEME } from "../../const";
+import { useAppActions, useAppState } from "../../services/state";
+import { MenuItem } from "../../components/menu-item";
+import { LayoutType, defaultEngravingConfig } from "../../services/engraving";
+import { BracketingType, BracketEndStyle } from "../../parse/draw-brackets";
 
-import { useAppActions, useAppState } from "../services/state";
-import { MenuItem } from "../components/menu-item";
-import { LayoutType, defaultEngravingConfig } from "../services/engraving";
-import { BracketingType, BracketEndStyle } from "../parse/draw-brackets";
+import staveSpace from "./examples/stave-space.svg";
 
-import staveSpace from "../assets/engraving/stave-space.svg";
-
-import "./generic-settings.css";
+import "../generic-settings.css";
 
 enum Page {
     staves = 1,
@@ -21,7 +20,7 @@ interface Props {
     onClose: () => void;
 }
 
-export const EngravingSettings: FC<Props> = ({ onClose }) => {
+export const EngravingSettings = Dialog<Props>(({ onClose }) => {
     const actions = useAppActions();
 
     const [page, setPage] = useState<Page>(Page.staves);
@@ -34,7 +33,7 @@ export const EngravingSettings: FC<Props> = ({ onClose }) => {
         ...config
     };
 
-    const bg = THEME.primary[500];
+    const bg = THEME.primary[500].backgroundColor;
 
     return (
         <div className="generic-settings">
@@ -100,7 +99,7 @@ export const EngravingSettings: FC<Props> = ({ onClose }) => {
                                     </p>
                                 </Label>
                                 <Switch
-                                    color={THEME.primary[500]}
+                                    color={bg}
                                     value={engraving.bracketSingleStaves}
                                 />
                             </ListItem>
@@ -116,7 +115,7 @@ export const EngravingSettings: FC<Props> = ({ onClose }) => {
                                     <p>Use sub-brackets.</p>
                                     <p>Bracket consecutive instruments of the same type.</p>
                                 </Label>
-                                <Switch color={THEME.primary[500]} value={engraving.subBracket} />
+                                <Switch color={bg} value={engraving.subBracket} />
                             </ListItem>
 
                             <div className="generic-settings__section">
@@ -201,4 +200,4 @@ export const EngravingSettings: FC<Props> = ({ onClose }) => {
             </div>
         </div>
     );
-};
+});

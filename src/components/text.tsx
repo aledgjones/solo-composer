@@ -12,7 +12,7 @@ export const Text: FC<Props> = ({ className, style, children }) => {
     const result = useMemo(() => {
         const regex = /(@[^\s@]*@)/g;
         const text = children ? children.toString() : "";
-        const result = text.split(regex);
+        const result = text.split(regex).filter(entry => entry);
         return result.map(str => {
             const isToken = regex.test(str);
             return {

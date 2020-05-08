@@ -9899,7 +9899,7 @@ sockjs@0.3.19:
 
 solo-ui@aledgjones/solo-ui:
   version "1.0.0"
-  resolved "https://codeload.github.com/aledgjones/solo-ui/tar.gz/48d55a1be5c8cc2541001550fce9a5dd78f6ea5a"
+  resolved "https://codeload.github.com/aledgjones/solo-ui/tar.gz/b10992d3a23d44101c181fd065f2e940f31eeaa2"
   dependencies:
     "@mdi/js" "^5.0.45"
     app-reset "^1.0.2"

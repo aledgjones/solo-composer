@@ -3,12 +3,12 @@ import { mdiChevronRight } from "@mdi/js";
 
 import { Spinner, Icon, merge } from "solo-ui";
 
-import { THEME } from "../const";
-import { Channel, SamplerCurrentState } from "../services/sampler";
-import { useInstrumentName, Instruments } from "../services/instrument";
-import { useAppActions } from "../services/state";
-import { InstrumentCounts } from "../services/instrument-utils";
-import { Text } from "../components/text";
+import { THEME } from "../../const";
+import { Channel, SamplerCurrentState } from "../../services/sampler";
+import { useInstrumentName, Instruments } from "../../services/instrument";
+import { useAppActions } from "../../services/state";
+import { InstrumentCounts } from "../../services/instrument-utils";
+import { Text } from "../../components/text";
 
 interface Props {
     i: number;
@@ -39,7 +39,7 @@ export const PlaySettingsChannel: FC<Props> = ({ i, channel, instruments, counts
                     <Spinner
                         className="play-settings__spinner"
                         size={18}
-                        color={THEME.primary[500]}
+                        color={THEME.primary[500].backgroundColor}
                         percent={channel.progress * 100}
                     />
                 )}

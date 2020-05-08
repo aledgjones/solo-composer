@@ -1,5 +1,5 @@
-import React, { FC, useState } from "react";
-import { Button, Subheader, Switch, ListItem, Label, Select, Option } from "solo-ui";
+import React, { useState } from "react";
+import { Button, Subheader, Switch, ListItem, Label, Select, Option, Dialog } from "solo-ui";
 
 import { THEME } from "../../const";
 import { useAppActions, useAppState } from "../../services/state";
@@ -16,7 +16,7 @@ interface Props {
     onClose: () => void;
 }
 
-export const Preferences: FC<Props> = ({ onClose }) => {
+export const Preferences = Dialog<Props>(({ onClose }) => {
     const actions = useAppActions();
     const { audition } = useAppState(s => {
         return {
@@ -25,7 +25,7 @@ export const Preferences: FC<Props> = ({ onClose }) => {
     });
 
     const [page, setPage] = useState<Page>(Page.general);
-    const bg = THEME.primary[500];
+    const color = THEME.primary[500].backgroundColor;
 
     return (
         <div className="generic-settings">
@@ -52,9 +52,9 @@ export const Preferences: FC<Props> = ({ onClose }) => {
                                 <Subheader>General</Subheader>
                                 <Select
                                     label="Language"
-                                    color={bg}
+                                    color={color}
                                     value="en-gb"
-                                    onChange={() => {}}
+                                    onChange={() => { }}
                                 >
                                     <Option value="en-gb" displayAs="English (UK)">
                                         English (UK)
@@ -74,7 +74,7 @@ export const Preferences: FC<Props> = ({ onClose }) => {
                                     <p>Enable auditioning</p>
                                     <p>Play notes during note input and selection</p>
                                 </Label>
-                                <Switch color={THEME.primary[500]} value={audition} />
+                                <Switch color={color} value={audition} />
                             </ListItem>
                         </>
                     )}
@@ -83,10 +83,10 @@ export const Preferences: FC<Props> = ({ onClose }) => {
 
             <div className="generic-settings__buttons">
                 <div className="generic-settings__spacer" />
-                <Button compact color={bg} onClick={onClose}>
+                <Button compact color={color} onClick={onClose}>
                     Close
                 </Button>
             </div>
         </div>
     );
-};
+});
