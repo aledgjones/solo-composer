@@ -2,11 +2,10 @@ import React, { useCallback, useMemo, MouseEvent, FC, useRef } from "react";
 import { mdiChevronDown, mdiPlus, mdiDeleteOutline, mdiChevronUp } from "@mdi/js";
 import { Icon, merge, SortableContainer, SortableItem } from "solo-ui";
 
-import { useAppActions } from "../../services/state";
+import { useAppActions, useAppState } from "../../services/state";
 import { Player, PlayerType, usePlayerName, usePlayerIcon, PlayerKey } from "../../services/player";
 import { Instruments } from "../../services/instrument";
 import { InstrumentCounts } from "../../services/instrument-utils";
-import { THEME } from "../../const";
 import { InstrumentItem } from "./instrument-item";
 import { SelectionType, Selection } from "./selection";
 import { Text } from "../../components/text";
@@ -26,19 +25,10 @@ interface Props {
     onRemovePlayer: (playerKey: PlayerKey) => void;
 }
 
-export const PlayerItem: FC<Props> = ({
-    index,
-    player,
-    instruments,
-    counts,
-    selected,
-    expanded,
-    onSelectPlayer,
-    onAddInstrument,
-    onRemovePlayer
-}) => {
+export const PlayerItem: FC<Props> = ({ index, player, instruments, counts, selected, expanded, onSelectPlayer, onAddInstrument, onRemovePlayer }) => {
     const handle = useRef<HTMLDivElement>(null);
     const actions = useAppActions();
+    const theme = useAppState(s => s.ui.theme.pallets);
 
     const onExpand = useCallback(
         (e: MouseEvent<HTMLDivElement>) => {
@@ -61,13 +51,13 @@ export const PlayerItem: FC<Props> = ({
         [onRemovePlayer, player.key]
     );
 
-    const { backgroundColor, color } = useMemo(() => {
+    const { bg, fg } = useMemo(() => {
         if (selected) {
-            return THEME.primary[500];
+            return theme.primary[500];
         } else {
-            return THEME.grey[600];
+            return theme.background[600];
         }
-    }, [selected]);
+    }, [selected, theme]);
 
     const name = usePlayerName(player, instruments, counts);
     const icon = usePlayerIcon(player);
@@ -79,12 +69,12 @@ export const PlayerItem: FC<Props> = ({
             className={merge("player-item", {
                 "player-item--selected": selected
             })}
-            style={{ backgroundColor: backgroundColor, color: color }}
+            style={{ backgroundColor: bg, color: fg }}
             onClick={onSelect}
         >
             <div className="player-item__header">
                 <div onPointerDown={onSelect} ref={handle}>
-                    <Icon style={{ marginRight: 16 }} path={icon} size={24} color={color} />
+                    <Icon style={{ marginRight: 16 }} path={icon} size={24} color={fg} />
                 </div>
 
                 <Text style={{ whiteSpace: "pre" }} className="player-item__name">
@@ -96,7 +86,7 @@ export const PlayerItem: FC<Props> = ({
                         <Icon
                             style={{ marginLeft: 12 }}
                             size={24}
-                            color={color}
+                            color={fg}
                             path={mdiDeleteOutline}
                             onClick={onRemove}
                         />
@@ -105,7 +95,7 @@ export const PlayerItem: FC<Props> = ({
                                 style={{ marginLeft: 12 }}
                                 path={mdiPlus}
                                 size={24}
-                                color={color}
+                                color={fg}
                                 onClick={() => onAddInstrument(player.key)}
                             />
                         )}
@@ -115,7 +105,7 @@ export const PlayerItem: FC<Props> = ({
                     style={{ marginLeft: 12 }}
                     path={expanded ? mdiChevronUp : mdiChevronDown}
                     size={24}
-                    color={color}
+                    color={fg}
                     onClick={onExpand}
                 />
             </div>

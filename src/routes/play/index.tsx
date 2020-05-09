@@ -3,7 +3,6 @@ import { mdiCursorDefault, mdiEraser, mdiGreasePencil, mdiCogOutline } from "@md
 
 import { Select, Option, useRainbow, Icon, DragScroll, useTitle } from "solo-ui";
 
-import { THEME } from "../../const";
 import { useAppState, useAppActions } from "../../services/state";
 import { TabState, Tool } from "../../services/ui";
 import { useCounts } from "../../services/instrument";
@@ -20,14 +19,15 @@ import "./play.css";
 const Play: FC = () => {
     useTitle("Solo Composer | Play");
 
-    const { score, expanded, tool } = useAppState(s => {
+    const actions = useAppActions();
+    const { theme, score, expanded, tool } = useAppState(s => {
         return {
+            theme: s.ui.theme.pallets,
             score: s.score,
             expanded: s.ui.expanded,
             tool: s.ui.tool[TabState.play]
         };
     });
-    const actions = useAppActions();
 
     const [zoom] = useState<number>(1);
     const [settings, setSettings] = useState(false);
@@ -63,7 +63,7 @@ const Play: FC = () => {
         <>
             <DragScroll className="play" x ignore="no-scroll">
                 <div className="play__x-fixed play__left-panel no-scroll">
-                    <div className="play__tools-container" style={{ backgroundColor: THEME.grey[350].backgroundColor }}                >
+                    <div className="play__tools-container" style={{ backgroundColor: theme.background[300].bg }}                >
                         <div className="play__tools">
                             <Icon
                                 className="play__tool"
@@ -71,8 +71,8 @@ const Play: FC = () => {
                                 onClick={() => actions.ui.tool[TabState.play].set(Tool.select)}
                                 path={mdiCursorDefault}
                                 size={24}
-                                color={THEME.grey[400].color}
-                                highlight={THEME.primary[500].backgroundColor}
+                                color={theme.background[300].fg}
+                                highlight={theme.primary[500].bg}
                             />
                             <Icon
                                 className="play__tool"
@@ -80,8 +80,8 @@ const Play: FC = () => {
                                 onClick={() => actions.ui.tool[TabState.play].set(Tool.pencil)}
                                 path={mdiGreasePencil}
                                 size={24}
-                                color={THEME.grey[400].color}
-                                highlight={THEME.primary[500].backgroundColor}
+                                color={theme.background[300].fg}
+                                highlight={theme.primary[500].bg}
                             />
                             <Icon
                                 className="play__tool"
@@ -89,8 +89,8 @@ const Play: FC = () => {
                                 onClick={() => actions.ui.tool[TabState.play].set(Tool.eraser)}
                                 path={mdiEraser}
                                 size={24}
-                                color={THEME.grey[400].color}
-                                highlight={THEME.primary[500].backgroundColor}
+                                color={theme.background[300].fg}
+                                highlight={theme.primary[500].bg}
                             />
                         </div>
                         <div className="play__settings">
@@ -98,23 +98,24 @@ const Play: FC = () => {
                                 className="play__tool"
                                 path={mdiCogOutline}
                                 size={24}
-                                color={THEME.grey[400].color}
+                                color={theme.background[300].fg}
                                 onClick={() => setSettings(true)}
                             />
                         </div>
                     </div>
 
-                    <div className="play__controls" style={{ backgroundColor: THEME.grey[500].backgroundColor }}>
+                    <div className="play__controls" style={{ backgroundColor: theme.background[500].bg }}>
                         <div
                             className="play__header-select"
-                            style={{ backgroundColor: THEME.grey[400].backgroundColor }}
+                            style={{ backgroundColor: theme.background[400].bg }}
                         >
                             <Select
                                 className="play__select"
                                 label=""
-                                color="white"
+                                color={theme.background[500].fg}
                                 value={flowKey}
                                 onChange={setFlowKey}
+                                style={{ color: theme.background[500].fg }}
                             >
                                 {score.flows.order.map(key => {
                                     const title = score.flows.byKey[key].title;
@@ -149,15 +150,15 @@ const Play: FC = () => {
                     </div>
                 </div>
 
-                <div className="play__scrollable" style={{ backgroundColor: THEME.grey[500].backgroundColor }}>
+                <div className="play__scrollable" style={{ backgroundColor: theme.background[500].bg }}>
                     <Ticks
                         className="play__ticks"
-                        color={THEME.grey[800].backgroundColor}
-                        highlight={THEME.grey[800].backgroundColor}
+                        color={theme.background[800].bg}
+                        highlight={theme.background[800].bg}
                         fixed={false}
                         ticks={ticks}
                         height={48}
-                        style={{ backgroundColor: THEME.grey[400].backgroundColor }}
+                        style={{ backgroundColor: theme.background[400].bg }}
                     />
                     <div className="play__track-area">
                         {score.players.order.map((playerKey, i) => {

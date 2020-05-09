@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Select, Option, Input, Button, Subheader, Switch, ListItem, Label, Dialog } from "solo-ui";
 
-import { THEME } from "../../const";
 import { useAppActions, useAppState } from "../../services/state";
 import { MenuItem } from "../../components/menu-item";
 import { LayoutType, defaultEngravingConfig } from "../../services/engraving";
@@ -21,31 +20,32 @@ interface Props {
 }
 
 export const EngravingSettings = Dialog<Props>(({ onClose }) => {
-    const actions = useAppActions();
+
 
     const [page, setPage] = useState<Page>(Page.staves);
     const [layoutType, setLayoutType] = useState<LayoutType>(LayoutType.score);
 
-    const config = useAppState(s => s.score.engraving[layoutType], [layoutType]);
+    const actions = useAppActions();
+    const { theme, config } = useAppState(s => {
+        return {
+            theme: s.ui.theme.pallets,
+            config: s.score.engraving[layoutType]
+        }
+    }, [layoutType]);
 
     const engraving = {
         ...defaultEngravingConfig,
         ...config
     };
 
-    const bg = THEME.primary[500].backgroundColor;
-
     return (
         <div className="generic-settings">
             <div className="generic-settings__content">
                 <div className="generic-settings__left-panel">
-                    <MenuItem
-                        selected={page === Page.bracketsAndBraces}
-                        onClick={() => setPage(Page.bracketsAndBraces)}
-                    >
+                    <MenuItem highlight={theme.primary[500]} selected={page === Page.bracketsAndBraces} onClick={() => setPage(Page.bracketsAndBraces)}>
                         Brackets &amp; Braces
                     </MenuItem>
-                    <MenuItem selected={page === Page.staves} onClick={() => setPage(Page.staves)}>
+                    <MenuItem highlight={theme.primary[500]} selected={page === Page.staves} onClick={() => setPage(Page.staves)}>
                         Staves
                     </MenuItem>
                 </div>
@@ -60,7 +60,7 @@ export const EngravingSettings = Dialog<Props>(({ onClose }) => {
                                 <Subheader>Approach</Subheader>
                                 <Select
                                     className="ui-select--margin"
-                                    color={bg}
+                                    color={theme.primary[500].bg}
                                     label="Ensemble type"
                                     value={engraving.bracketing}
                                     onChange={(val: BracketingType) =>
@@ -99,7 +99,7 @@ export const EngravingSettings = Dialog<Props>(({ onClose }) => {
                                     </p>
                                 </Label>
                                 <Switch
-                                    color={bg}
+                                    color={theme.primary[500].bg}
                                     value={engraving.bracketSingleStaves}
                                 />
                             </ListItem>
@@ -115,13 +115,13 @@ export const EngravingSettings = Dialog<Props>(({ onClose }) => {
                                     <p>Use sub-brackets.</p>
                                     <p>Bracket consecutive instruments of the same type.</p>
                                 </Label>
-                                <Switch color={bg} value={engraving.subBracket} />
+                                <Switch color={theme.primary[500].bg} value={engraving.subBracket} />
                             </ListItem>
 
                             <div className="generic-settings__section">
                                 <Subheader>Design</Subheader>
                                 <Select
-                                    color={bg}
+                                    color={theme.primary[500].bg}
                                     label="Bracket cap style"
                                     value={engraving.bracketEndStyle}
                                     onChange={(val: BracketEndStyle) =>
@@ -162,7 +162,7 @@ export const EngravingSettings = Dialog<Props>(({ onClose }) => {
                                         precision={2}
                                         step={0.01}
                                         units="mm"
-                                        color={bg}
+                                        color={theme.primary[500].bg}
                                         onChange={(val: number) =>
                                             actions.score.engraving.set(layoutType, { space: val })
                                         }
@@ -180,7 +180,7 @@ export const EngravingSettings = Dialog<Props>(({ onClose }) => {
                     style={{ width: 300, marginRight: 8 }}
                     label=""
                     value={layoutType}
-                    color={bg}
+                    color={theme.primary[500].bg}
                     onChange={setLayoutType}
                 >
                     <Option value={LayoutType.score} displayAs="Score">
@@ -190,11 +190,11 @@ export const EngravingSettings = Dialog<Props>(({ onClose }) => {
                         Part
                     </Option>
                 </Select>
-                <Button compact color={bg} outline>
+                <Button compact color={theme.primary[500].bg} outline>
                     Reset All
                 </Button>
                 <div className="generic-settings__spacer" />
-                <Button compact color={bg} onClick={onClose}>
+                <Button compact color={theme.primary[500].bg} onClick={onClose}>
                     Close
                 </Button>
             </div>

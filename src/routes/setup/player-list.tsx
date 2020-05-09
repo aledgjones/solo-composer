@@ -3,7 +3,6 @@ import { mdiPlus } from "@mdi/js";
 
 import { Icon, SortableContainer } from "solo-ui";
 
-import { THEME } from "../../const";
 import { PlayerKey } from "../../services/player";
 import { useAppActions, useAppState } from "../../services/state";
 import { PlayerItem } from "./player-item";
@@ -21,17 +20,12 @@ interface Props {
     onCreatePlayer: () => void;
 }
 
-export const PlayerList: FC<Props> = ({
-    selection,
-    onSelectPlayer,
-    onAddInstrument,
-    onRemovePlayer,
-    onCreatePlayer
-}) => {
+export const PlayerList: FC<Props> = ({ selection, onSelectPlayer, onAddInstrument, onRemovePlayer, onCreatePlayer }) => {
     const actions = useAppActions();
     const counts = useCounts();
-    const { players, instruments, expanded } = useAppState(s => {
+    const { theme, players, instruments, expanded } = useAppState(s => {
         return {
+            theme: s.ui.theme.pallets,
             players: s.score.players.order.map(key => {
                 return s.score.players.byKey[key];
             }),
@@ -41,12 +35,12 @@ export const PlayerList: FC<Props> = ({
     });
 
     return (
-        <div className="player-list" style={{ backgroundColor: THEME.grey[500].backgroundColor }}>
-            <div className="player-list__header" style={{ backgroundColor: THEME.grey[400].backgroundColor }}>
-                <span className="player-list__label" style={{ color: THEME.grey[400].color }}>
+        <div className="player-list" style={{ backgroundColor: theme.background[500].bg }}>
+            <div className="player-list__header" style={{ backgroundColor: theme.background[400].bg }}>
+                <span className="player-list__label" style={{ color: theme.background[400].fg }}>
                     Players
                 </span>
-                <Icon size={24} color={THEME.grey[400].color} path={mdiPlus} onClick={onCreatePlayer} />
+                <Icon size={24} color={theme.background[400].fg} path={mdiPlus} onClick={onCreatePlayer} />
             </div>
             <SortableContainer direction="y" className="player-list__content" onEnd={actions.score.players.reorder}>
                 {players.map((player, i) => (

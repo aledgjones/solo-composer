@@ -2,7 +2,6 @@ import React, { FC, useEffect, useRef, useState } from "react";
 import { mdiMenu } from "@mdi/js";
 import { ListItem, Divider, Card, Icon, Content, Label, Subheader, Button, List } from "solo-ui";
 
-import { THEME } from "../../const";
 import { useAppState } from "../../services/state";
 import { About } from "../../dialogs/about";
 import { Changelog } from "../../dialogs/changelog";
@@ -11,8 +10,9 @@ import { Preferences } from "../../dialogs/preferences";
 import "./styles.css";
 
 export const FileMenu: FC = () => {
-    const { meta, dot } = useAppState(s => {
+    const { theme, meta, dot } = useAppState(s => {
         return {
+            theme: s.ui.theme.pallets,
             meta: s.score.meta,
             dot: s.ui.update
         }
@@ -38,11 +38,11 @@ export const FileMenu: FC = () => {
     return (
         <>
             <div className="file-menu__container" ref={element}>
-                {!open && dot && <div style={{ backgroundColor: THEME.highlight[500].backgroundColor }} className="file-menu__dot file-menu__dot--badge" />}
+                {!open && dot && <div style={{ backgroundColor: theme.primary[500].bg }} className="file-menu__dot file-menu__dot--badge" />}
                 <Icon
                     className="file-menu__icon ui-icon--hover"
                     path={mdiMenu}
-                    color={THEME.grey[300].color}
+                    color={theme.background[200].fg}
                     size={24}
                     onClick={() => setOpen(o => !o)}
                 />
@@ -57,7 +57,7 @@ export const FileMenu: FC = () => {
                                 </Label>
                             </div>
                             <div className="file-menu__buttons">
-                                <Button disabled color={THEME.primary[500].backgroundColor} outline>
+                                <Button disabled color={theme.primary[500].bg} outline>
                                     My Library
                                 </Button>
                             </div>
@@ -71,7 +71,7 @@ export const FileMenu: FC = () => {
                                         <p>Update available</p>
                                         <p>Restart to apply update now...</p>
                                     </Label>
-                                    <div style={{ backgroundColor: THEME.highlight[500].backgroundColor }} className="file-menu__dot" />
+                                    <div style={{ backgroundColor: theme.primary[500].bg }} className="file-menu__dot" />
                                 </ListItem>
                                 <Divider />
                             </>}

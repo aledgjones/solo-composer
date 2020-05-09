@@ -19,10 +19,6 @@
     border-radius: 0;
 }
 
-.main-shell__tabs .ui-tab--selected {
-    color: white !important;
-}
-
 .main-shell__content {
     height: calc(100vh - 48px);
     width: 100vw;

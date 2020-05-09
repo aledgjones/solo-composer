@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { mdiClose } from "@mdi/js";
 import { MarkdownContent, Icon, Dialog } from "solo-ui";
 
-import { THEME } from "../../const";
+import { useAppState } from "../../services/state";
 import { Fallback } from "../../components/shell/fallback";
 import changlogFile from './CHANGELOG.md';
 
@@ -14,6 +14,7 @@ interface Props {
 
 export const Changelog = Dialog<Props>(({ onClose }) => {
 
+    const theme = useAppState(s => s.ui.theme.pallets);
     const [changes, setChanges] = useState('');
 
     useEffect(() => {
@@ -31,7 +32,7 @@ export const Changelog = Dialog<Props>(({ onClose }) => {
             <Icon path={mdiClose} color="#000000" size={24} onClick={onClose} />
         </div>
         <div className="changelog__content">
-            {changes ? <MarkdownContent className="changelog__md" markdown={changes} theme={THEME.primary[500].backgroundColor} /> : <Fallback color="#000000" type="loading" />}
+            {changes ? <MarkdownContent className="changelog__md" markdown={changes} theme={theme.primary[500].bg} /> : <Fallback color="#000000" type="loading" />}
         </div>
     </>
 });

@@ -1,22 +1,20 @@
 import React, { FC } from "react";
 import { merge } from "solo-ui";
-
-import { THEME } from "../../const";
+import { ThemeDef } from "../../services/theme";
 
 import "./styles.css";
 
 interface Props {
     selected?: boolean;
+    highlight: ThemeDef;
     onClick?: () => void;
 }
 
-export const MenuItem: FC<Props> = ({ selected, onClick, children }) => {
-    const { backgroundColor, color } = selected ? THEME.primary[500] : { backgroundColor: undefined, color: undefined };
-
+export const MenuItem: FC<Props> = ({ selected, highlight, onClick, children }) => {
     return (
         <div
             className={merge("menu-item", { "menu-item--clickable": !!onClick })}
-            style={{ backgroundColor, color }}
+            style={{ backgroundColor: selected ? highlight.bg : undefined, color: selected ? highlight.fg : undefined }}
             onClick={onClick}
         >
             {children}

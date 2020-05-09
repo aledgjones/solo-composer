@@ -3,9 +3,9 @@ import { mdiDeleteOutline, mdiFileDocumentOutline } from "@mdi/js";
 
 import { Icon, Checkbox, merge, SortableItem } from "solo-ui";
 
-import { THEME } from "../../const";
 import { Flow, FlowKey } from "../../services/flow";
 import { SelectionType, Selection } from "./selection";
+import { useAppState } from "../../services/state";
 
 import "./flow-item.css";
 
@@ -20,16 +20,9 @@ interface Props {
     onRemovePlayer: (flowKey: FlowKey) => void;
 }
 
-export const FlowItem: FC<Props> = ({
-    index,
-    flow,
-    selection,
-    onSelectFlow,
-    onRemoveFlow,
-    onAssignPlayer,
-    onRemovePlayer
-}) => {
+export const FlowItem: FC<Props> = ({ index, flow, selection, onSelectFlow, onRemoveFlow, onAssignPlayer, onRemovePlayer }) => {
     const handle = useRef<HTMLDivElement>(null);
+    const theme = useAppState(s => s.ui.theme.pallets);
 
     const selected: boolean = useMemo(() => {
         return !!selection && selection.key === flow.key;
@@ -62,27 +55,27 @@ export const FlowItem: FC<Props> = ({
         [onRemoveFlow, flow.key]
     );
 
-    const { backgroundColor, color } = useMemo(() => {
+    const { bg, fg } = useMemo(() => {
         if (selected) {
-            return THEME.primary[500];
+            return theme.primary[500];
         } else if (active) {
-            return THEME.grey[700];
+            return theme.background[700];
         } else {
-            return THEME.grey[600];
+            return theme.background[600];
         }
-    }, [selected, active]);
+    }, [selected, active, theme]);
 
     return (
         <SortableItem
             index={index}
             handle={handle}
             className={merge("flow-item", { "flow-item--selected": selected })}
-            style={{ backgroundColor: backgroundColor, color: color }}
+            style={{ backgroundColor: bg, color: fg }}
             onClick={onSelect}
         >
             <div className="flow-item__header">
                 <div onPointerDown={onSelect} ref={handle}>
-                    <Icon style={{ marginRight: 16 }} path={mdiFileDocumentOutline} size={24} color={color} />
+                    <Icon style={{ marginRight: 16 }} path={mdiFileDocumentOutline} size={24} color={fg} />
                 </div>
 
                 <span className="flow-item__name">{flow.title}</span>
@@ -91,7 +84,7 @@ export const FlowItem: FC<Props> = ({
                         <Icon
                             style={{ marginLeft: 12 }}
                             size={24}
-                            color={color}
+                            color={fg}
                             path={mdiDeleteOutline}
                             onClick={onRemove}
                         />

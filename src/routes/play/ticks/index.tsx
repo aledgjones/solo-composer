@@ -53,7 +53,7 @@ export const Ticks: FC<Props> = ({ ticks, height, fixed, color, highlight, class
                 const y = tickHeight(tick, fixed, height);
 
                 if (y > 0) {
-                    return <line x1={tick.x} y1="0" x2={tick.x} y2={y} strokeWidth="2" stroke={tick.isFirstBeat ? highlight : color} />
+                    return <line key={i} x1={tick.x} y1="0" x2={tick.x} y2={y} strokeWidth="2" stroke={tick.isFirstBeat ? highlight : color} />
                 } else {
                     return null;
                 }

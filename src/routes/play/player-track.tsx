@@ -1,6 +1,5 @@
 import React, { FC } from "react";
 
-import { THEME } from "../../const";
 import { FlowKey } from "../../services/flow";
 import { Player } from "../../services/player";
 import { Instruments } from "../../services/instrument";
@@ -11,6 +10,7 @@ import { Ticks } from "./ticks";
 import { TickList } from "./ticks/defs";
 
 import "./player-track.css";
+import { useAppState } from "../../services/state";
 
 interface Props {
     flowKey: FlowKey;
@@ -23,23 +23,17 @@ interface Props {
     ticks: TickList;
 }
 
-export const PlayerTrack: FC<Props> = ({
-    color,
-    expanded,
-    player,
-    instruments,
-    staves,
-    tracks,
-    ticks,
-    flowKey
-}) => {
+export const PlayerTrack: FC<Props> = ({ color, expanded, player, instruments, staves, tracks, ticks, flowKey }) => {
+
+    const theme = useAppState(s => s.ui.theme.pallets);
+
     return (
-        <div className="player-track" style={{ backgroundColor: THEME.grey[700].backgroundColor }}>
+        <div className="player-track" style={{ backgroundColor: theme.background[700].bg }}>
             <Ticks
                 className="player-track__ticks"
                 fixed={false}
-                color={THEME.grey[800].backgroundColor}
-                highlight={THEME.grey[800].backgroundColor}
+                color={theme.background[800].bg}
+                highlight={theme.background[800].bg}
                 height={48}
                 ticks={ticks}
             />

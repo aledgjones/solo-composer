@@ -2,6 +2,7 @@
 
 -   <label type="feature"></label> Indicate when an update is available and add actions to refresh the page to apply them.
 -   <label type="feature"></label> Whole bar rests now show as semi-breve rest and center within the bar as per the convension.
+-   <label type="feature"></label> Added the ability to apply different themes.
 -   <label type="changed"></label> Small tweak to left panel design to clarify actions.
 -   <label type="changed"></label> Tick markings in play mode now extend through the piano scroll.
 -   <label type="fixed"></label> Key signatures now have a unique key assigned over multiple staves. Fixed issue where react lost track of elements as they had the same key.

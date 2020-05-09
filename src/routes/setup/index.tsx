@@ -2,22 +2,21 @@ import React, { FC, useState, useCallback } from "react";
 
 import { useTitle } from "solo-ui";
 
-import { useAppActions } from "../../services/state";
+import { useAppActions, useAppState } from "../../services/state";
 import { PlayerType, PlayerKey } from "../../services/player";
 import { FlowKey } from "../../services/flow";
 import { InstrumentDef } from "../../services/instrument-defs";
 
 import { Selection, SelectionType } from "./selection";
 
-import { THEME } from "../../const";
 import { PlayerList } from "./player-list";
 import { FlowList } from "./flow-list";
+import { LayoutList } from "./layout-list";
 import { InstrumentPicker } from "./instrument-picker";
 import { RenderRegion } from "../../components/render-region";
 import { RenderWriteMode } from "../../components/render-write-mode";
 
 import "./setup.css";
-import { Fallback } from "../../components/shell/fallback";
 
 interface Props { }
 
@@ -25,6 +24,7 @@ const Setup: FC<Props> = () => {
     useTitle("Solo Composer | Setup");
 
     const actions = useAppActions();
+    const theme = useAppState(s => s.ui.theme.pallets);
 
     // local selection fine, we don't need to keep this after nav.
     const [selection, setSelection] = useState<Selection>(null);
@@ -106,7 +106,7 @@ const Setup: FC<Props> = () => {
 
     return (
         <>
-            <div className="setup" style={{ backgroundColor: THEME.grey[500].backgroundColor }}>
+            <div className="setup" style={{ backgroundColor: theme.background[500].bg }}>
                 <PlayerList
                     selection={selection}
                     onSelectPlayer={setSelection}
@@ -117,8 +117,8 @@ const Setup: FC<Props> = () => {
                 <div
                     className="setup__middle"
                     style={{
-                        borderRight: `solid 4px ${THEME.grey[400].backgroundColor}`,
-                        borderLeft: `solid 4px ${THEME.grey[400].backgroundColor}`
+                        borderRight: `solid 4px ${theme.background[400].bg}`,
+                        borderLeft: `solid 4px ${theme.background[400].bg}`
                     }}
                 >
                     <RenderRegion className="setup__view">
@@ -133,7 +133,7 @@ const Setup: FC<Props> = () => {
                         onRemovePlayer={onRemovePlayerFromFlow}
                     />
                 </div>
-                <Fallback style={{ width: 350 }} color={THEME.grey[500].color} type="empty" text="Layout Panel" />
+                <LayoutList />
             </div>
 
             <InstrumentPicker width={900} open={dialogOpen} onSelect={onSelectInstrument} onCancel={onCancelInstrument} />

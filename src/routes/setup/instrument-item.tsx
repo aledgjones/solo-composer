@@ -3,7 +3,7 @@ import { mdiChevronRight } from "@mdi/js";
 
 import { Icon, SortableItem } from "solo-ui";
 
-import { THEME } from "../../const";
+import { useAppState } from "../../services/state";
 import { Instrument, useInstrumentName } from "../../services/instrument";
 import { Text } from "../../components/text";
 
@@ -20,13 +20,14 @@ interface Props {
 
 export const InstrumentItem: FC<Props> = ({ index, selected, instrument, count, onSelectPlayer }) => {
     const handle = useRef<HTMLDivElement>(null);
-    const { backgroundColor, color } = useMemo(() => {
+    const theme = useAppState(s => s.ui.theme.pallets);
+    const { bg, fg } = useMemo(() => {
         if (selected) {
-            return THEME.primary[600];
+            return theme.primary[600];
         } else {
-            return THEME.grey[700];
+            return theme.background[700];
         }
-    }, [selected]);
+    }, [selected, theme]);
 
     const name = useInstrumentName(instrument, count);
 
@@ -35,12 +36,12 @@ export const InstrumentItem: FC<Props> = ({ index, selected, instrument, count, 
             handle={handle}
             index={index}
             className="instrument-item"
-            style={{ backgroundColor: backgroundColor, color: color }}
+            style={{ backgroundColor: bg, color: fg }}
         >
             <div ref={handle} onPointerDown={onSelectPlayer}>
                 <Text className="instrument-item__name">{name}</Text>
             </div>
-            <Icon size={18} color={color} path={mdiChevronRight} />
+            <Icon size={18} color={fg} path={mdiChevronRight} />
         </SortableItem>
     );
 };

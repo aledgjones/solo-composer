@@ -1,6 +1,5 @@
 import React, { FC, useState, memo } from "react";
 
-import { THEME } from "../const";
 import { useAppState } from "../services/state";
 import { useParseWorker } from "../parse/use-parse";
 import { Instruction, InstructionType } from "../render/instructions";
@@ -13,9 +12,12 @@ import { Text } from "./text";
 import "./render-write-mode.css";
 
 export const RenderWriteMode: FC = memo(() => {
-    const score = useAppState(s => s.score);
-
-    const { backgroundColor, color } = THEME.primary[500];
+    const { theme, score } = useAppState(s => {
+        return {
+            theme: s.ui.theme.pallets,
+            score: s.score
+        }
+    });
 
     const [flowKey] = useState(score.flows.order[0]);
     const instructions = useParseWorker(score, flowKey);
@@ -34,7 +36,7 @@ export const RenderWriteMode: FC = memo(() => {
             >
                 <p
                     className="render-write-mode__flow-name"
-                    style={{ color: color, backgroundColor: backgroundColor }}
+                    style={{ color: theme.primary[500].fg, backgroundColor: theme.primary[500].bg }}
                 >
                     {score.flows.byKey[flowKey].title}
                 </p>

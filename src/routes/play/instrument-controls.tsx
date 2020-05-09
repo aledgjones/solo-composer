@@ -3,12 +3,12 @@ import { mdiPiano } from "@mdi/js";
 
 import { Icon } from "solo-ui";
 
-import { THEME } from "../../const";
 import { useInstrumentName, Instrument } from "../../services/instrument";
 import { Keyboard } from "./keyboard";
 import { Text } from "../../components/text";
 
 import "./instrument-controls.css";
+import { useAppState } from "../../services/state";
 
 interface Props {
     instrument: Instrument;
@@ -17,13 +17,14 @@ interface Props {
 }
 
 export const InstrumentControls: FC<Props> = ({ instrument, count, color }) => {
+    const theme = useAppState(s => s.ui.theme.pallets);
     const name = useInstrumentName(instrument, count);
 
     return (
         <div className="instrument-controls__wrapper" style={{ borderLeft: `4px solid ${color}` }}>
-            <div className="instrument-controls" style={{ backgroundColor: THEME.grey[700].backgroundColor }}>
+            <div className="instrument-controls" style={{ backgroundColor: theme.background[700].bg, color: theme.background[700].fg }}>
                 <div className="instrument-controls__header">
-                    <Icon style={{ marginRight: 16 }} size={24} color="#ffffff" path={mdiPiano} />
+                    <Icon style={{ marginRight: 16 }} size={24} color={theme.background[700].fg} path={mdiPiano} />
                     <Text className="instrument-controls__name">{name}</Text>
                 </div>
             </div>

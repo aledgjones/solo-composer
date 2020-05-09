@@ -31,7 +31,6 @@
 .file-menu__dot {
     height: 14px;
     width: 14px;
-    background-color: orange;
     border-radius: 50%;
     z-index: 3;
     pointer-events: none;
@@ -39,11 +38,8 @@
 
 .file-menu__dot--badge {
     position: absolute;
-    top: -2px;
-    right: -4px;
-    border: 2px solid #101010;
-}
-
-.file-menu__container:hover .file-menu__dot--badge {
-    border: 2px solid #282828;
+    top: 0px;
+    right: -2px;
+    height: 12px;
+    width: 12px;
 }

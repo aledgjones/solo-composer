@@ -1,9 +1,8 @@
 import React, { FC, useEffect, Suspense } from "react";
 
-import { Tabs, Tab } from "solo-ui";
+import { Tabs, Tab, useTheme, useStyles } from "solo-ui";
 // import { useDebugger } from "../../services/debugger";
 
-import { THEME } from "../../const";
 import { useAppActions, useAppState } from "../../services/state";
 import { TabState } from "../../services/ui";
 import { useAutoSetup } from "../../services/auto-setup";
@@ -23,10 +22,15 @@ export const MainShell: FC = () => {
     // useDebugger();
 
     const actions = useAppActions();
-    const tab = useAppState(s => s.ui.tab);
+    const { theme, tab } = useAppState(s => {
+        return {
+            theme: s.ui.theme.pallets,
+            tab: s.ui.tab
+        }
+    });
 
-    const { backgroundColor, color } = THEME.grey[300];
-    const highlight = THEME.grey[500].backgroundColor;
+    useTheme(theme.background[200].bg);
+    useStyles(`.main-shell__tabs .ui-tab { color: ${theme.background[200].fg} !important }`); // slight hack on the tab element
 
     useEffect(() => {
         actions.playback.midi.init();
@@ -34,14 +38,14 @@ export const MainShell: FC = () => {
 
     return (
         <>
-            <div className="main-shell__title-bar" style={{ backgroundColor: backgroundColor }}>
+            <div className="main-shell__title-bar" style={{ backgroundColor: theme.background[200].bg }}>
                 <FileMenu />
                 <Tabs
                     className="main-shell__tabs"
                     value={tab}
                     onChange={actions.ui.tab.set}
-                    color={color}
-                    highlight={highlight}
+                    color={theme.background[200].fg}
+                    highlight={theme.background[500].bg}
                 >
                     <Tab value={TabState.setup}>Setup</Tab>
                     <Tab value={TabState.write}>Write</Tab>
@@ -52,10 +56,10 @@ export const MainShell: FC = () => {
                 <Transport />
             </div>
 
-            <div className="main-shell__content" style={{ backgroundColor: THEME.grey[500].backgroundColor }}>
-                <Suspense fallback={<Fallback color={THEME.grey[500].color} type="loading" />}>
+            <div className="main-shell__content" style={{ backgroundColor: theme.background[500].bg }}>
+                <Suspense fallback={<Fallback color={theme.background[500].fg} type="loading" />}>
                     {(tab === TabState.engrave || tab === TabState.print) && (
-                        <Fallback color={THEME.grey[500].color} type="empty" />
+                        <Fallback color={theme.background[500].fg} type="empty" />
                     )}
                     {tab === TabState.setup && <Setup />}
                     {tab === TabState.write && <Write />}

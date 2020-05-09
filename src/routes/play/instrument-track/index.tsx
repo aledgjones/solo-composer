@@ -252,7 +252,7 @@ export const InstrumentTrack: FC<Props> = memo(({ flowKey, color, instrument, st
                 className="instrument-track__ticks"
                 fixed={true}
                 ticks={ticks}
-                color="#cccccc"
+                color="#c8c8c8"
                 highlight="#aaaaaa"
                 height={SLOT_HEIGHT * 24}
             />

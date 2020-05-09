@@ -3,13 +3,12 @@ import { mdiPlus } from "@mdi/js";
 
 import { Icon, SortableContainer } from "solo-ui";
 
-import { THEME } from "../../const";
-import { useAppActions, useAppState } from "../../services/state";
-import { FlowKey } from "../../services/flow";
-import { FlowItem } from "./flow-item";
-import { Selection } from "./selection";
+import { useAppActions, useAppState } from "../../../services/state";
+import { FlowKey } from "../../../services/flow";
+import { FlowItem } from "../flow-item";
+import { Selection } from "../selection";
 
-import "./flow-list.css";
+import "./styles.css";
 
 interface Props {
     selection: Selection;
@@ -21,17 +20,12 @@ interface Props {
     onRemovePlayer: (flowKey: FlowKey) => void;
 }
 
-export const FlowList: FC<Props> = ({
-    selection,
-    onSelectFlow,
-    onCreateFlow,
-    onRemoveFlow,
-    onAssignPlayer,
-    onRemovePlayer
-}) => {
+export const FlowList: FC<Props> = ({ selection, onSelectFlow, onCreateFlow, onRemoveFlow, onAssignPlayer, onRemovePlayer }) => {
+
     const actions = useAppActions();
-    const { flows } = useAppState(s => {
+    const { theme, flows } = useAppState(s => {
         return {
+            theme: s.ui.theme.pallets,
             flows: s.score.flows.order.map(key => {
                 return s.score.flows.byKey[key];
             })
@@ -39,10 +33,10 @@ export const FlowList: FC<Props> = ({
     });
 
     return (
-        <div className="flow-list" style={{ backgroundColor: THEME.grey[500].backgroundColor }}>
-            <div className="flow-list__header" style={{ backgroundColor: THEME.grey[400].backgroundColor }}>
-                <span style={{ color: THEME.grey[400].color }}>Flows</span>
-                <Icon size={24} color={THEME.grey[400].color} path={mdiPlus} onClick={onCreateFlow} />
+        <div className="flow-list" style={{ backgroundColor: theme.background[500].bg }}>
+            <div className="flow-list__header" style={{ backgroundColor: theme.background[400].bg }}>
+                <span style={{ color: theme.background[400].fg }}>Flows</span>
+                <Icon size={24} color={theme.background[400].fg} path={mdiPlus} onClick={onCreateFlow} />
             </div>
             <div className="flow-list__wrapper">
                 <SortableContainer direction="x" className="flow-list__content" onEnd={actions.score.flows.reorder}>

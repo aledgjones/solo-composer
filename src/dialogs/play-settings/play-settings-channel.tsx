@@ -3,10 +3,9 @@ import { mdiChevronRight } from "@mdi/js";
 
 import { Spinner, Icon, merge } from "solo-ui";
 
-import { THEME } from "../../const";
 import { Channel, SamplerCurrentState } from "../../services/sampler";
 import { useInstrumentName, Instruments } from "../../services/instrument";
-import { useAppActions } from "../../services/state";
+import { useAppActions, useAppState } from "../../services/state";
 import { InstrumentCounts } from "../../services/instrument-utils";
 import { Text } from "../../components/text";
 
@@ -19,6 +18,7 @@ interface Props {
 
 export const PlaySettingsChannel: FC<Props> = ({ i, channel, instruments, counts }) => {
     const actions = useAppActions();
+    const theme = useAppState(s => s.ui.theme.pallets);
 
     let instrument, count;
     if (channel.assigned) {
@@ -39,7 +39,7 @@ export const PlaySettingsChannel: FC<Props> = ({ i, channel, instruments, counts
                     <Spinner
                         className="play-settings__spinner"
                         size={18}
-                        color={THEME.primary[500].backgroundColor}
+                        color={theme.primary[500].bg}
                         percent={channel.progress * 100}
                     />
                 )}

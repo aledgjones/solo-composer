@@ -1,10 +1,9 @@
 import React, { FC, useMemo, useCallback, PointerEvent } from "react";
 import Color from "color";
 
-import { THEME } from "../../../const";
 import { Tool, TabState } from "../../../services/ui";
 import { SLOT_HEIGHT } from "../instrument-track/get-tone-dimension";
-import { useAppActions } from "../../../services/state";
+import { useAppActions, useAppState } from "../../../services/state";
 import { Tone } from "../../../entries/tone";
 import { Entry } from "../../../entries";
 import { Pitch } from "../../../playback/utils";
@@ -34,31 +33,25 @@ interface Props {
     onPlay: (pitch: Pitch) => void;
 }
 
-export const ToneElement: FC<Props> = ({
-    flowKey,
-    trackKey,
-    tone,
-    selected,
-    color,
-    top,
-    left,
-    width,
-    tool,
-    onEdit,
-    onPlay
-}) => {
+export const ToneElement: FC<Props> = ({ flowKey, trackKey, tone, selected, color, top, left, width, tool, onEdit, onPlay }) => {
     const actions = useAppActions();
+    const theme = useAppState(s => s.ui.theme.pallets);
+
+    const fill = useMemo(() => {
+        if (selected) {
+            return theme.highlight;
+        } else {
+            return color;
+        }
+    }, [color, theme.highlight, selected]);
 
     const border = useMemo(() => {
         if (selected) {
-            return `1px solid ${THEME.highlight[500].backgroundColor}`;
+            return Color(theme.highlight).darken(0.2).toString();
         } else {
-            const c = Color(color)
-                .darken(0.5)
-                .toString();
-            return `1px solid ${c}`;
+            return Color(color).darken(0.5).toString();
         }
-    }, [color, selected]);
+    }, [color, theme.highlight, selected]);
 
     const select = useCallback(
         (e: PointerEvent) => {
@@ -77,17 +70,7 @@ export const ToneElement: FC<Props> = ({
                 actions.score.instruments.removeTone(flowKey, trackKey, tone._key);
             }
         },
-        [
-            flowKey,
-            trackKey,
-            tool,
-            onPlay,
-            selected,
-            actions.score.instruments,
-            actions.ui.selection,
-            tone._key,
-            tone.pitch
-        ]
+        [flowKey, trackKey, tool, onPlay, selected, actions.score.instruments, actions.ui.selection, tone._key, tone.pitch]
     );
 
     const actionWest = useCallback(
@@ -108,9 +91,9 @@ export const ToneElement: FC<Props> = ({
             key={tone._key}
             className="tone no-scroll"
             style={{
-                border,
-                outline: selected ? `1px solid ${THEME.highlight[500].backgroundColor}` : undefined,
-                backgroundColor: color,
+                border: `1px solid ${border}`,
+                outline: selected ? `1px solid ${border}` : undefined,
+                backgroundColor: fill,
                 top,
                 left,
                 width,

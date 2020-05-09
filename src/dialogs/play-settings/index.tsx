@@ -3,7 +3,6 @@ import { mdiMidiPort } from "@mdi/js";
 
 import { Button, Icon, Subheader, Dialog } from "solo-ui";
 
-import { THEME } from "../../const";
 import { useCounts } from "../../services/instrument";
 import { PlaySettingsChannel } from "./play-settings-channel";
 import { useAppState, useAppActions } from "../../services/state";
@@ -25,8 +24,8 @@ interface Props {
 export const PlaySettings = Dialog<Props>(({ onClose }) => {
     const actions = useAppActions();
 
-    const { midi, channels, instruments } = useAppState(s => ({
-        // settings: s.playback.settings,
+    const { theme, midi, channels, instruments } = useAppState(s => ({
+        theme: s.ui.theme.pallets,
         midi: s.playback.midi,
         channels: s.playback.sampler.channels.order.map(key => {
             return s.playback.sampler.channels.byKey[key];
@@ -38,8 +37,6 @@ export const PlaySettings = Dialog<Props>(({ onClose }) => {
 
     const [page, setPage] = useState<Page>(Page.internal);
 
-    const color = THEME.primary[500].backgroundColor;
-
     return (
         <div className="generic-settings">
             <div className="generic-settings__content">
@@ -47,10 +44,10 @@ export const PlaySettings = Dialog<Props>(({ onClose }) => {
                     {/* <MenuItem selected={page === Page.general} onClick={() => setPage(Page.general)}>
                         General
                     </MenuItem> */}
-                    <MenuItem selected={page === Page.internal} onClick={() => setPage(Page.internal)}>
+                    <MenuItem highlight={theme.primary[500]} selected={page === Page.internal} onClick={() => setPage(Page.internal)}>
                         Internal Sampler
                     </MenuItem>
-                    <MenuItem selected={page === Page.midi} onClick={() => setPage(Page.midi)}>
+                    <MenuItem highlight={theme.primary[500]} selected={page === Page.midi} onClick={() => setPage(Page.midi)}>
                         MIDI Devices
                     </MenuItem>
                 </div>
@@ -137,7 +134,7 @@ export const PlaySettings = Dialog<Props>(({ onClose }) => {
                                                 onClick={() => actions.playback.midi.test(output.id)}
                                                 compact
                                                 outline
-                                                color={color}
+                                                color={theme.primary[500].bg}
                                             >
                                                 Test
                                             </Button>
@@ -151,7 +148,7 @@ export const PlaySettings = Dialog<Props>(({ onClose }) => {
             </div>
             <div className="generic-settings__buttons">
                 <div className="generic-settings__spacer" />
-                <Button compact color={color} onClick={onClose}>
+                <Button compact color={theme.primary[500].bg} onClick={onClose}>
                     Close
                 </Button>
             </div>

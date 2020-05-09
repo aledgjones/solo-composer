@@ -61,7 +61,10 @@
     padding: 0 4px 0 12px;
     height: 48px;
     border: none !important;
-    color: white;
+}
+
+.play__select .ui-select__card {
+    color: black;
 }
 
 .play__scrollable {

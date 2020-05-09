@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { mdiChevronRight } from "@mdi/js";
 import { Icon, Button, Dialog } from "solo-ui";
 
-import { THEME } from "../../const";
+import { useAppState } from "../../services/state";
 import { InstrumentDef, useInstrumentList, getFirstInstrumentDefFromPartialPath } from "../../services/instrument-defs";
 import { MenuItem } from "../../components/menu-item";
 
@@ -14,12 +14,9 @@ interface Props {
 }
 
 export const InstrumentPicker = Dialog<Props>(({ onSelect, onCancel }) => {
-    const [selection, setSelection] = useState<InstrumentDef>(
-        getFirstInstrumentDefFromPartialPath([])
-    );
+    const theme = useAppState(s => s.ui.theme.pallets);
+    const [selection, setSelection] = useState<InstrumentDef>(getFirstInstrumentDefFromPartialPath([]));
     const lists = useInstrumentList(selection);
-
-    const { backgroundColor, color } = THEME.primary[500];
 
     return (
         <div className="instrument-picker">
@@ -38,6 +35,7 @@ export const InstrumentPicker = Dialog<Props>(({ onSelect, onCancel }) => {
                                 return (
                                     <MenuItem
                                         key={item}
+                                        highlight={theme.primary[500]}
                                         selected={selected}
                                         onClick={() => {
                                             const path = [...selection.path.slice(0, i), item];
@@ -48,7 +46,7 @@ export const InstrumentPicker = Dialog<Props>(({ onSelect, onCancel }) => {
                                         <span>{item}</span>
                                         {!final && (
                                             <Icon
-                                                color={selected ? color : "black"}
+                                                color={selected ? theme.primary[500].fg : "black"}
                                                 size={24}
                                                 path={mdiChevronRight}
                                             />
@@ -62,10 +60,10 @@ export const InstrumentPicker = Dialog<Props>(({ onSelect, onCancel }) => {
             </div>
             <div className="instrument-picker__buttons">
                 <div className="instrument-picker__spacer" />
-                <Button compact outline style={{ marginRight: 8 }} color={backgroundColor} onClick={onCancel}>
+                <Button compact outline style={{ marginRight: 8 }} color={theme.primary[500].bg} onClick={onCancel}>
                     Cancel
                 </Button>
-                <Button compact color={backgroundColor} onClick={() => onSelect(selection)}>
+                <Button compact color={theme.primary[500].bg} onClick={() => onSelect(selection)}>
                     Add
                 </Button>
             </div>

@@ -1,0 +1,16 @@
+.layout-list {
+    height: 100%;
+    width: 350px;
+}
+
+.layout-list__header {
+    display: flex;
+    align-items: center;
+    height: 48px;
+    padding: 0px 24px;
+    flex-shrink: 0;
+}
+
+.layout-list__label {
+    flex-grow: 1;
+}

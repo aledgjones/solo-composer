@@ -27,8 +27,8 @@ export const Fallback: FC<Props> = ({ style, type, color, text, subtext }) => {
             {type === "loading" && <Spinner color={color} size={24} />}
             {type === "empty" && (
                 <>
-                    <Icon path={mdiEyeOffOutline} color="#ffffff" size={48} style={{ marginBottom: 10 }} />
-                    <Label style={{ color: "#ffffff", textAlign: "center" }}>
+                    <Icon path={mdiEyeOffOutline} color={color} size={48} style={{ marginBottom: 10 }} />
+                    <Label style={{ color, textAlign: "center" }}>
                         <p>{text || 'Nothing to see here'}</p>
                         <p>{subtext || "I haven't done this bit yet... shucks!"}</p>
                     </Label>
