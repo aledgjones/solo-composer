@@ -3,7 +3,7 @@ import { mdiClose } from "@mdi/js";
 import { version as ToneJSVersion } from "tone";
 import { Subheader, Content, Label, Icon, Dialog } from "solo-ui";
 
-import { APP_VERSION } from "../../const";
+import INFO from "../../info.json";
 import { useAppState } from "../../services/state";
 
 import logo from "../../assets/logo.png";
@@ -34,7 +34,7 @@ export const About = Dialog<Props>(({ onClose }) => {
             <Subheader>Versions</Subheader>
             <p className="about__version">
                 <span className="about__grow">Application</span>
-                <span>{APP_VERSION}</span>
+                <span>{INFO.VERSION}</span>
             </p>
             <p className="about__version">
                 <span className="about__grow">Audio Engine (Tone.js)</span>

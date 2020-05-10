@@ -1,24 +1,21 @@
-const diffs = ["major", "minor", "patch"];
-const diff = diffs.indexOf(process.argv[2]);
+const diff = require("./diff.js")();
 
 if (diff === -1) {
-    console.log("Please provide a diff to increment by: 'major' | 'minor' | 'patch'");
+    console.log("Invalid diff value");
     return;
 }
 
 const fs = require("fs");
-const getNewVersion = require("./version.js");
-
-const version = getNewVersion(diff);
+const version = require("./version.js")(diff);
 
 // update the info
 const info = JSON.parse(fs.readFileSync("./src/info.json"));
 info.VERSION = version;
-fs.writeFileSync("./src/info.json", JSON.stringify(info));
+fs.writeFileSync("./src/info.json", JSON.stringify(info, undefined, 4));
 
 // update the package.json
 const pkg = JSON.parse(fs.readFileSync("./package.json"));
 pkg.version = version;
-fs.writeFileSync("./package.json", JSON.stringify(pkg));
+fs.writeFileSync("./package.json", JSON.stringify(pkg, undefined, 4));
 
 console.log("🎊🎊🎊 Bumped version to " + version + " 🎊🎊🎊");

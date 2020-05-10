@@ -3,7 +3,6 @@ const fs = require("fs");
 module.exports = (diff) => {
     const file = fs.readFileSync("./src/info.json", "utf8");
     const info = JSON.parse(file);
-    console.log(info);
 
     const old = info.VERSION.split(".").map((n) => parseInt(n));
 

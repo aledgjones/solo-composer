@@ -1,12 +1,12 @@
-import { Store } from "pullstate";
+import {Store} from "pullstate";
 import shortid from "shortid";
 
-import { State } from "./state";
-import { InstrumentKey } from "./instrument";
-import { InstrumentDef } from "./instrument-defs";
-import { Expressions } from "../playback/expressions";
-import { APP_CREATOR } from "../const";
-import { PatchPlayer } from "../playback/patch-player";
+import INFO from "../info.json";
+import {State} from "./state";
+import {InstrumentKey} from "./instrument";
+import {InstrumentDef} from "./instrument-defs";
+import {Expressions} from "../playback/expressions";
+import {PatchPlayer} from "../playback/patch-player";
 
 export type ChannelKey = string;
 
@@ -48,7 +48,7 @@ export const samplerEmptyState = (): SamplerState => {
     return {
         name: "Internal Sampler",
         version: "1.0.0",
-        manufacturer: APP_CREATOR,
+        manufacturer: INFO.CREATOR,
         channels: {
             order: [],
             byKey: {}
@@ -60,7 +60,7 @@ export const samplerActions = (store: Store<State>) => {
     return {
         createChannel: () => {
             const channelKey = shortid();
-            store.update(s => {
+            store.update((s) => {
                 s.playback.sampler.channels.order.push(channelKey);
                 s.playback.sampler.channels.byKey[channelKey] = {
                     key: channelKey,
@@ -75,7 +75,7 @@ export const samplerActions = (store: Store<State>) => {
             return channelKey;
         },
         load: async (channelKey: ChannelKey, def: InstrumentDef) => {
-            store.update(s => {
+            store.update((s) => {
                 const channel = s.playback.sampler.channels.byKey[channelKey];
                 channel.state = SamplerCurrentState.loading;
                 channel.patchGroupName = def.id;
@@ -91,7 +91,7 @@ export const samplerActions = (store: Store<State>) => {
                     const player = new PatchPlayer();
                     await player.loadPatch(patchUrl);
                     completed++;
-                    store.update(s => {
+                    store.update((s) => {
                         const channel = s.playback.sampler.channels.byKey[channelKey];
                         channel.patches.order.push(expression);
                         channel.patches.byKey[expression] = player;
@@ -100,20 +100,19 @@ export const samplerActions = (store: Store<State>) => {
                 })
             );
 
-            store.update(s => {
+            store.update((s) => {
                 const channel = s.playback.sampler.channels.byKey[channelKey];
                 channel.state = SamplerCurrentState.ready;
             });
         },
         assignInstrument: (instrumentKey: InstrumentKey, channel: ChannelKey) => {
-            store.update(s => {
+            store.update((s) => {
                 s.playback.sampler.channels.byKey[channel].assigned = instrumentKey;
             });
         },
         test: (channel: ChannelKey) => {
             const state = store.getRawState();
-            const patch =
-                state.playback.sampler.channels.byKey[channel].patches.byKey[Expressions.natural];
+            const patch = state.playback.sampler.channels.byKey[channel].patches.byKey[Expressions.natural];
 
             const notes: [string, number, number][] = [
                 ["C4", 0.3, 0.25],
