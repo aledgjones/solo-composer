@@ -19,7 +19,7 @@ export enum TabState {
 
 export interface UiState {
     theme: ThemeState;
-    update: boolean;
+    update?: () => void;
     tab: TabState;
     expanded: {[key: string]: boolean};
     selection: {[key: string]: boolean};
@@ -30,7 +30,6 @@ export interface UiState {
 export const uiEmptyState = (): UiState => {
     return {
         theme: themeEmptyState(),
-        update: true,
         tab: TabState.setup,
         expanded: {},
         selection: {},

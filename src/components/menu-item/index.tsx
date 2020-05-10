@@ -1,20 +1,22 @@
 import React, { FC } from "react";
-import { merge } from "solo-ui";
-import { ThemeDef } from "../../services/theme";
+import { merge, useForeground } from "solo-ui";
 
 import "./styles.css";
 
 interface Props {
     selected?: boolean;
-    highlight: ThemeDef;
+    color: string;
     onClick?: () => void;
 }
 
-export const MenuItem: FC<Props> = ({ selected, highlight, onClick, children }) => {
+export const MenuItem: FC<Props> = ({ selected, color, onClick, children }) => {
+
+    const fg = useForeground(color);
+
     return (
         <div
             className={merge("menu-item", { "menu-item--clickable": !!onClick })}
-            style={{ backgroundColor: selected ? highlight.bg : undefined, color: selected ? highlight.fg : undefined }}
+            style={{ backgroundColor: selected ? color : undefined, color: selected ? fg : undefined }}
             onClick={onClick}
         >
             {children}

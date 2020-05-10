@@ -19,7 +19,7 @@ export const LayoutList: FC<Props> = () => {
                 <span className="layout-list__label" style={{ color: theme.background[400].fg }}>Layouts</span>
                 <Icon disabled size={24} color={theme.background[400].fg} path={mdiPlus} onClick={() => { }} />
             </div>
-            <Fallback style={{ height: 592 }} color={theme.background[500].fg} type="empty" />
+            <Fallback style={{ height: 'calc(100% - 48px)' }} color={theme.background[500].fg} type="empty" />
         </div>
     );
 };

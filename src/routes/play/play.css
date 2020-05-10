@@ -12,7 +12,7 @@
 
 .play__left-panel {
     display: flex;
-    width: 342px;
+    width: 406px;
     min-height: 100%;
 }
 
@@ -70,7 +70,7 @@
 .play__scrollable {
     position: absolute;
     top: 0;
-    padding-left: 342px;
+    padding-left: 406px;
     min-width: 100%;
     min-height: 100%;
     z-index: 1;

@@ -1,9 +1,9 @@
-import { Entry } from "../../../entries";
-import { toMidiPitchNumber, Pitch } from "../../../playback/utils";
-import { Tone } from "../../../entries/tone";
-import { Tick } from "../ticks/defs";
+import {Entry} from "../../../entries";
+import {toMidiPitchNumber, Pitch} from "../../../playback/utils";
+import {Tone} from "../../../entries/tone";
+import {Tick} from "../ticks/defs";
 
-export const SLOT_HEIGHT = 224 / 24;
+export const SLOT_HEIGHT = 10;
 export const BASE_TONE = toMidiPitchNumber("E5");
 
 function getTop(pitch: Pitch, highestPitch: number) {

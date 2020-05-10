@@ -25,15 +25,21 @@ firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 
 const root = document.getElementById("root") as HTMLElement;
-ReactDOM.createRoot(root).render(<MainShell />);
+ReactDOM.render(<MainShell />, root);
+// ReactDOM.createRoot(root).render(<MainShell />);
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
+// register the service worker
 serviceWorker.register({
-    onUpdate: () => {
+    onUpdate: (reg) => {
         store.update(s => {
-            s.ui.update = true;
+            // force the new service worker to load and take control
+            s.ui.update = () => {
+                navigator.serviceWorker.addEventListener('controllerchange', () => window.location.reload());
+                reg.waiting?.postMessage({ type: 'SKIP_WAITING' });
+            };
         });
+
     }
 });
+
+

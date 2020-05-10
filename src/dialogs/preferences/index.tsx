@@ -31,10 +31,10 @@ export const Preferences = Dialog<Props>(({ onClose }) => {
         <div className="generic-settings">
             <div className="generic-settings__content">
                 <div className="generic-settings__left-panel">
-                    <MenuItem highlight={theme.pallets.primary[500]} selected={page === Page.general} onClick={() => setPage(Page.general)}>
+                    <MenuItem color={theme.pallets.primary[500].bg} selected={page === Page.general} onClick={() => setPage(Page.general)}>
                         General
                     </MenuItem>
-                    <MenuItem highlight={theme.pallets.primary[500]} selected={page === Page.noteInput} onClick={() => setPage(Page.noteInput)}                    >
+                    <MenuItem color={theme.pallets.primary[500].bg} selected={page === Page.noteInput} onClick={() => setPage(Page.noteInput)}                    >
                         Note Input &amp; Editing
                     </MenuItem>
                 </div>

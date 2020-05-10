@@ -42,10 +42,10 @@ export const EngravingSettings = Dialog<Props>(({ onClose }) => {
         <div className="generic-settings">
             <div className="generic-settings__content">
                 <div className="generic-settings__left-panel">
-                    <MenuItem highlight={theme.primary[500]} selected={page === Page.bracketsAndBraces} onClick={() => setPage(Page.bracketsAndBraces)}>
+                    <MenuItem color={theme.primary[500].bg} selected={page === Page.bracketsAndBraces} onClick={() => setPage(Page.bracketsAndBraces)}>
                         Brackets &amp; Braces
                     </MenuItem>
-                    <MenuItem highlight={theme.primary[500]} selected={page === Page.staves} onClick={() => setPage(Page.staves)}>
+                    <MenuItem color={theme.primary[500].bg} selected={page === Page.staves} onClick={() => setPage(Page.staves)}>
                         Staves
                     </MenuItem>
                 </div>

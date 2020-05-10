@@ -1,6 +1,6 @@
 {
     "name": "composer",
-    "version": "0.6.0",
+    "version": "0.6.3",
     "private": true,
     "dependencies": {
         "@mdi/js": "^5.0.45",
@@ -20,9 +20,9 @@
         "firebase": "^7.14.2",
         "lodash.isstring": "^4.0.1",
         "pullstate": "^1.13.0",
-        "react": "^0.0.0-experimental-e5d06e34b",
+        "react": "^16.13.1",
         "react-app-rewired": "^2.1.6",
-        "react-dom": "^0.0.0-experimental-e5d06e34b",
+        "react-dom": "^16.13.1",
         "react-scripts": "^3.4.1",
         "roman-numerals": "^0.3.2",
         "shortid": "^2.2.15",
@@ -33,7 +33,8 @@
         "worker-loader": "^2.0.0"
     },
     "scripts": {
-        "start": "react-app-rewired start",
+        "bump": "node bump $*",
+        "start": "node bump patch && react-app-rewired start",
         "build": "react-app-rewired build",
         "test": "react-app-rewired test --env=jsdom",
         "eject": "react-scripts eject",

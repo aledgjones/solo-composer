@@ -10,11 +10,11 @@ import { Preferences } from "../../dialogs/preferences";
 import "./styles.css";
 
 export const FileMenu: FC = () => {
-    const { theme, meta, dot } = useAppState(s => {
+    const { theme, meta, update } = useAppState(s => {
         return {
             theme: s.ui.theme.pallets,
             meta: s.score.meta,
-            dot: s.ui.update
+            update: s.ui.update
         }
     });
 
@@ -38,7 +38,7 @@ export const FileMenu: FC = () => {
     return (
         <>
             <div className="file-menu__container" ref={element}>
-                {!open && dot && <div style={{ backgroundColor: theme.primary[500].bg }} className="file-menu__dot file-menu__dot--badge" />}
+                {!open && update && <div style={{ backgroundColor: theme.primary[500].bg }} className="file-menu__dot file-menu__dot--badge" />}
                 <Icon
                     className="file-menu__icon ui-icon--hover"
                     path={mdiMenu}
@@ -65,8 +65,8 @@ export const FileMenu: FC = () => {
                         <List onClick={() => setOpen(false)}>
                             <ListItem onClick={() => setPreferences(true)}>Preferences</ListItem>
                             <Divider />
-                            {dot && <>
-                                <ListItem onClick={() => window.location.reload()}>
+                            {update && <>
+                                <ListItem onClick={update}>
                                     <Label>
                                         <p>Update available</p>
                                         <p>Restart to apply update now...</p>

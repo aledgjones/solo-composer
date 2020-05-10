@@ -35,7 +35,7 @@ export const InstrumentPicker = Dialog<Props>(({ onSelect, onCancel }) => {
                                 return (
                                     <MenuItem
                                         key={item}
-                                        highlight={theme.primary[500]}
+                                        color={theme.primary[500].bg}
                                         selected={selected}
                                         onClick={() => {
                                             const path = [...selection.path.slice(0, i), item];

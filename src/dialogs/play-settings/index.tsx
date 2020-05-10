@@ -41,31 +41,14 @@ export const PlaySettings = Dialog<Props>(({ onClose }) => {
         <div className="generic-settings">
             <div className="generic-settings__content">
                 <div className="generic-settings__left-panel">
-                    {/* <MenuItem selected={page === Page.general} onClick={() => setPage(Page.general)}>
-                        General
-                    </MenuItem> */}
-                    <MenuItem highlight={theme.primary[500]} selected={page === Page.internal} onClick={() => setPage(Page.internal)}>
+                    <MenuItem color={theme.primary[500].bg} selected={page === Page.internal} onClick={() => setPage(Page.internal)}>
                         Internal Sampler
                     </MenuItem>
-                    <MenuItem highlight={theme.primary[500]} selected={page === Page.midi} onClick={() => setPage(Page.midi)}>
+                    <MenuItem color={theme.primary[500].bg} selected={page === Page.midi} onClick={() => setPage(Page.midi)}>
                         MIDI Devices
                     </MenuItem>
                 </div>
                 <div className="generic-settings__right-panel">
-                    {/* {page === Page.general && (
-                        <>
-                            <div className="generic-settings__section" style={{ paddingBottom: 0 }}>
-                                <Subheader>Auditioning</Subheader>
-                            </div>
-                            <ListItem onClick={actions.playback.settings.audition.toggle}>
-                                <Label>
-                                    <p>Enable auditioning</p>
-                                    <p>Play notes during note input and selection</p>
-                                </Label>
-                                <Switch color={THEME.primary[500]} value={settings.audition} />
-                            </ListItem>
-                        </>
-                    )} */}
 
                     {page === Page.internal && (
                         <>

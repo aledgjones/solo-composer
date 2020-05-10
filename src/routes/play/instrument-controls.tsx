@@ -9,6 +9,7 @@ import { Text } from "../../components/text";
 
 import "./instrument-controls.css";
 import { useAppState } from "../../services/state";
+import { SLOT_HEIGHT } from "./instrument-track/get-tone-dimension";
 
 interface Props {
     instrument: Instrument;
@@ -22,7 +23,7 @@ export const InstrumentControls: FC<Props> = ({ instrument, count, color }) => {
 
     return (
         <div className="instrument-controls__wrapper" style={{ borderLeft: `4px solid ${color}` }}>
-            <div className="instrument-controls" style={{ backgroundColor: theme.background[700].bg, color: theme.background[700].fg }}>
+            <div className="instrument-controls" style={{ height: SLOT_HEIGHT * 24, backgroundColor: theme.background[700].bg, color: theme.background[700].fg }}>
                 <div className="instrument-controls__header">
                     <Icon style={{ marginRight: 16 }} size={24} color={theme.background[700].fg} path={mdiPiano} />
                     <Text className="instrument-controls__name">{name}</Text>

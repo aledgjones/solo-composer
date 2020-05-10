@@ -1,4 +1,4 @@
-## [0.6.0] - 05-05-2020
+## [0.6.0] - 09-05-2020
 
 -   <label type="feature"></label> Indicate when an update is available and add actions to refresh the page to apply them.
 -   <label type="feature"></label> Whole bar rests now show as semi-breve rest and center within the bar as per the convension.
