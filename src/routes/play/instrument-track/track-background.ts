@@ -18,7 +18,6 @@ export function useTrackBackground() {
                 return `${dark} ${SLOT_HEIGHT * i}px ${SLOT_HEIGHT * (i + 1)}px`;
             }
         });
-        console.log(points);
-        return `repeating-linear-gradient(${points.join(",")})`;
+        return `linear-gradient(${points.join(",")})`;
     }, []);
 }

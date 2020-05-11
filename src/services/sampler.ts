@@ -1,7 +1,7 @@
 import {Store} from "pullstate";
 import shortid from "shortid";
 
-import INFO from "../info.json";
+import app from "../app.json";
 import {State} from "./state";
 import {InstrumentKey} from "./instrument";
 import {InstrumentDef} from "./instrument-defs";
@@ -48,7 +48,7 @@ export const samplerEmptyState = (): SamplerState => {
     return {
         name: "Internal Sampler",
         version: "1.0.0",
-        manufacturer: INFO.CREATOR,
+        manufacturer: app.creator,
         channels: {
             order: [],
             byKey: {}

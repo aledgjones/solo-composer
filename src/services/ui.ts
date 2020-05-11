@@ -1,7 +1,7 @@
-import {Store} from "pullstate";
-import {State} from "./state";
-import {InstrumentKey} from "./instrument";
-import {ThemeState, themeEmptyState, themeActions} from "./theme";
+import { Store } from "pullstate";
+import { State } from "./state";
+import { InstrumentKey } from "./instrument";
+import { ThemeState, themeEmptyState, themeActions } from "./theme";
 
 export enum Tool {
     select = 1,
@@ -21,10 +21,10 @@ export interface UiState {
     theme: ThemeState;
     update?: () => void;
     tab: TabState;
-    expanded: {[key: string]: boolean};
-    selection: {[key: string]: boolean};
-    pianoRollOffsetY: {[key: string]: number};
-    tool: {[TabState.play]: Tool};
+    expanded: { [key: string]: boolean };
+    selection: { [key: string]: boolean };
+    pianoRollOffsetY: { [key: string]: number };
+    tool: { [TabState.play]: Tool };
 }
 
 export const uiEmptyState = (): UiState => {

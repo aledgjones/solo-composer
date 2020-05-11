@@ -3,11 +3,11 @@
     width: 56px;
     min-width: 56px;
     background-color: white;
-    background-image: url("./piano.svg");
-    background-size: 56px 112px;
     background-repeat: repeat-y;
     overflow: hidden;
     touch-action: none;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
 }
 
 .keyboard:active {

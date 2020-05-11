@@ -9,9 +9,9 @@ const fs = require("fs");
 const version = require("./version.js")(diff);
 
 // update the info
-const info = JSON.parse(fs.readFileSync("./src/info.json"));
-info.VERSION = version;
-fs.writeFileSync("./src/info.json", JSON.stringify(info, undefined, 4));
+const info = JSON.parse(fs.readFileSync("./src/app.json"));
+info.version = version;
+fs.writeFileSync("./src/app.json", JSON.stringify(info, undefined, 4));
 
 // update the package.json
 const pkg = JSON.parse(fs.readFileSync("./package.json"));

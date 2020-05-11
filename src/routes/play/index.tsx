@@ -12,15 +12,13 @@ import { PlayerControls } from "./player-contols";
 import { PlayerTrack } from "./player-track";
 import { PlaySettings } from "../../dialogs/play-settings";
 
-import piano from "./keyboard/piano.svg";
-
 import "./play.css";
 
 const Play: FC = () => {
     useTitle("Solo Composer | Play");
 
     const actions = useAppActions();
-    const { theme, score, expanded, tool } = useAppState(s => {
+    const { theme, score, expanded, tool } = useAppState((s) => {
         return {
             theme: s.ui.theme.pallets,
             score: s.score,
@@ -34,10 +32,9 @@ const Play: FC = () => {
 
     const [flowKey, setFlowKey] = useState(score.flows.order[0]);
     const flow = score.flows.byKey[flowKey];
-    const flowEntriesByTick = useMemo(
-        () => entriesByTick(flow.master.entries.order, flow.master.entries.byKey),
-        [flow.master.entries]
-    );
+    const flowEntriesByTick = useMemo(() => entriesByTick(flow.master.entries.order, flow.master.entries.byKey), [
+        flow.master.entries
+    ]);
 
     const counts = useCounts();
     const ticks = useTicks(flow.length, flowEntriesByTick, zoom);
@@ -63,7 +60,7 @@ const Play: FC = () => {
         <>
             <DragScroll className="play" x ignore="no-scroll">
                 <div className="play__x-fixed play__left-panel no-scroll">
-                    <div className="play__tools-container" style={{ backgroundColor: theme.background[300].bg }}                >
+                    <div className="play__tools-container" style={{ backgroundColor: theme.background[400].bg }}>
                         <div className="play__tools">
                             <Icon
                                 className="play__tool"
@@ -105,19 +102,19 @@ const Play: FC = () => {
                     </div>
 
                     <div className="play__controls" style={{ backgroundColor: theme.background[500].bg }}>
-                        <div
-                            className="play__header-select"
-                            style={{ backgroundColor: theme.background[400].bg }}
-                        >
+                        <div className="play__header-select" style={{ backgroundColor: theme.background[400].bg }}>
                             <Select
                                 className="play__select"
                                 label=""
                                 color={theme.background[500].fg}
                                 value={flowKey}
                                 onChange={setFlowKey}
-                                style={{ color: theme.background[500].fg }}
+                                style={{
+                                    color: theme.background[500].fg,
+                                    borderLeft: `1px solid ${theme.background[500].bg}`
+                                }}
                             >
-                                {score.flows.order.map(key => {
+                                {score.flows.order.map((key) => {
                                     const title = score.flows.byKey[key].title;
                                     return (
                                         <Option key={key} value={key} displayAs={title}>
@@ -185,7 +182,6 @@ const Play: FC = () => {
                 </div>
             </DragScroll>
 
-            <link rel="prefetch" href={piano} />
             <PlaySettings open={settings} width={900} onClose={() => setSettings(false)} />
         </>
     );

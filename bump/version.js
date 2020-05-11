@@ -1,10 +1,10 @@
 const fs = require("fs");
 
 module.exports = (diff) => {
-    const file = fs.readFileSync("./src/info.json", "utf8");
+    const file = fs.readFileSync("./package.json", "utf8");
     const info = JSON.parse(file);
 
-    const old = info.VERSION.split(".").map((n) => parseInt(n));
+    const old = info.version.split(".").map((n) => parseInt(n));
 
     const output = [];
     for (let i = 0; i < 3; i++) {

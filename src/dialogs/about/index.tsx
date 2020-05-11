@@ -3,7 +3,7 @@ import { mdiClose } from "@mdi/js";
 import { version as ToneJSVersion } from "tone";
 import { Subheader, Content, Label, Icon, Dialog } from "solo-ui";
 
-import INFO from "../../info.json";
+import app from "../../app.json";
 import { useAppState } from "../../services/state";
 
 import logo from "../../assets/logo.png";
@@ -25,8 +25,8 @@ export const About = Dialog<Props>(({ onClose }) => {
         <div className="about__logo">
             <img className="about__logo-img" alt="Solo Composer Logo" src={logo} />
             <Label className="about__logo-text">
-                <p>Solo Composer</p>
-                <p>Music notation for the web.</p>
+                <p>{app.name}</p>
+                <p>{app.description}</p>
             </Label>
         </div>
         <Content>
@@ -34,7 +34,7 @@ export const About = Dialog<Props>(({ onClose }) => {
             <Subheader>Versions</Subheader>
             <p className="about__version">
                 <span className="about__grow">Application</span>
-                <span>{INFO.VERSION}</span>
+                <span>{app.version}</span>
             </p>
             <p className="about__version">
                 <span className="about__grow">Audio Engine (Tone.js)</span>

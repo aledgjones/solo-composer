@@ -18,7 +18,7 @@ interface Props {
 
 export const Preferences = Dialog<Props>(({ onClose }) => {
     const actions = useAppActions();
-    const { theme, audition } = useAppState(s => {
+    const { theme, audition } = useAppState((s) => {
         return {
             theme: s.ui.theme,
             audition: s.playback.settings.audition
@@ -31,10 +31,18 @@ export const Preferences = Dialog<Props>(({ onClose }) => {
         <div className="generic-settings">
             <div className="generic-settings__content">
                 <div className="generic-settings__left-panel">
-                    <MenuItem color={theme.pallets.primary[500].bg} selected={page === Page.general} onClick={() => setPage(Page.general)}>
+                    <MenuItem
+                        color={theme.pallets.primary[500].bg}
+                        selected={page === Page.general}
+                        onClick={() => setPage(Page.general)}
+                    >
                         General
                     </MenuItem>
-                    <MenuItem color={theme.pallets.primary[500].bg} selected={page === Page.noteInput} onClick={() => setPage(Page.noteInput)}                    >
+                    <MenuItem
+                        color={theme.pallets.primary[500].bg}
+                        selected={page === Page.noteInput}
+                        onClick={() => setPage(Page.noteInput)}
+                    >
                         Note Input &amp; Editing
                     </MenuItem>
                 </div>
@@ -44,7 +52,12 @@ export const Preferences = Dialog<Props>(({ onClose }) => {
                         <>
                             <div className="generic-settings__section">
                                 <Subheader>General</Subheader>
-                                <Select label="Language" color={theme.pallets.primary[500].bg} value="en-gb" onChange={() => { }}                                >
+                                <Select
+                                    label="Language"
+                                    color={theme.pallets.primary[500].bg}
+                                    value="en-gb"
+                                    onChange={() => {}}
+                                >
                                     <Option value="en-gb" displayAs="English (UK)">
                                         English (UK)
                                     </Option>
@@ -52,7 +65,13 @@ export const Preferences = Dialog<Props>(({ onClose }) => {
                             </div>
                             <div className="generic-settings__section">
                                 <Subheader>THEME</Subheader>
-                                <Select margin label="Mode" color={theme.pallets.primary[500].bg} value={theme.mode} onChange={(mode: ThemeMode) => actions.ui.theme.mode(mode)}>
+                                <Select
+                                    margin
+                                    label="Mode"
+                                    color={theme.pallets.primary[500].bg}
+                                    value={theme.mode}
+                                    onChange={(mode: ThemeMode) => actions.ui.theme.mode(mode)}
+                                >
                                     <Option value={ThemeMode.light} displayAs="Light">
                                         Light
                                     </Option>
@@ -60,24 +79,6 @@ export const Preferences = Dialog<Props>(({ onClose }) => {
                                         Dark
                                     </Option>
                                 </Select>
-                                <Select margin label="Accent colour" color={theme.pallets.primary[500].bg} value={theme.primary} onChange={(color: ThemeColor) => actions.ui.theme.primary(color)}>
-                                    <Option value={ThemeColor.blue} displayAs="Blue">
-                                        Blue
-                                    </Option>
-                                    <Option value={ThemeColor.purple} displayAs="Purple">
-                                        Purple
-                                    </Option>
-                                    <Option value={ThemeColor.green} displayAs="Green">
-                                        Green
-                                    </Option>
-                                    <Option value={ThemeColor.brown} displayAs="Brown">
-                                        Brown
-                                    </Option>
-                                    <Option value={ThemeColor.orange} displayAs="Orange">
-                                        Orange
-                                    </Option>
-                                </Select>
-
                             </div>
                         </>
                     )}
@@ -97,7 +98,7 @@ export const Preferences = Dialog<Props>(({ onClose }) => {
                         </>
                     )}
                 </div>
-            </div >
+            </div>
 
             <div className="generic-settings__buttons">
                 <div className="generic-settings__spacer" />
@@ -105,6 +106,6 @@ export const Preferences = Dialog<Props>(({ onClose }) => {
                     Close
                 </Button>
             </div>
-        </div >
+        </div>
     );
 });

@@ -244,6 +244,7 @@ export const InstrumentTrack: FC<Props> = memo(({ flowKey, color, instrument, st
             style={{
                 height: SLOT_HEIGHT * 24,
                 backgroundImage: trackBackground,
+                backgroundSize: '100% 120px',
                 backgroundPositionY: offset * SLOT_HEIGHT,
                 cursor
             }}

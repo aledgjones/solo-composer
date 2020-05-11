@@ -5,6 +5,7 @@ import { useDragHandler } from "solo-ui";
 import { SLOT_HEIGHT } from "../instrument-track/get-tone-dimension";
 import { InstrumentKey } from "../../../services/instrument";
 import { useAppState, useAppActions } from "../../../services/state";
+import { useKeyboardBackground } from "./keyboard-background";
 
 import "./styles.css";
 
@@ -15,15 +16,16 @@ interface Props {
 }
 
 export const Keyboard: FC<Props> = ({ instrumentKey }) => {
-    const offset = useAppState(s => s.ui.pianoRollOffsetY[instrumentKey], [instrumentKey]);
+    const offset = useAppState(s => s.ui.pianoRollOffsetY[instrumentKey] || 0, [instrumentKey]);
     const actions = useAppActions();
+    const background = useKeyboardBackground();
 
     const onDrag = useDragHandler<{ y: number; offset: number }>(
         {
             onDown: e => {
                 return {
                     y: e.screenY,
-                    offset: offset || 0
+                    offset: offset
                 };
             },
             onMove: (e, init) => {
@@ -39,9 +41,13 @@ export const Keyboard: FC<Props> = ({ instrumentKey }) => {
         <div
             onPointerDown={onDrag}
             className="keyboard"
-            style={{ backgroundSize: `56px ${SLOT_HEIGHT * 12}px`, backgroundPositionY: ((offset || 0) * SLOT_HEIGHT) - 1 }}
+            style={{
+                backgroundImage: background,
+                backgroundPositionY: offset * SLOT_HEIGHT,
+                backgroundSize: '100% 120px, 60% 120px'
+            }}
         >
-            <div style={{ transform: `translateY(${(offset || 0) * SLOT_HEIGHT}px)` }}>
+            <div style={{ transform: `translateY(${offset * SLOT_HEIGHT}px)` }}>
                 {OCTAVES.map(octave => {
                     return (
                         <p
