@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Subheader, Switch, ListItem, Label, Select, Option, Dialog } from "solo-ui";
 
-import { ThemeMode, ThemeColor } from "../../services/theme";
+import { ThemeMode } from "../../services/theme";
 import { useAppActions, useAppState } from "../../services/state";
 import { MenuItem } from "../../components/menu-item";
 
@@ -77,6 +77,12 @@ export const Preferences = Dialog<Props>(({ onClose }) => {
                                     </Option>
                                     <Option value={ThemeMode.dark} displayAs="Dark">
                                         Dark
+                                    </Option>
+                                    <Option value={ThemeMode.auto} displayAs="Auto">
+                                        <Label>
+                                            <p>Auto</p>
+                                            <p>Use the system preference if available</p>
+                                        </Label>
                                     </Option>
                                 </Select>
                             </div>

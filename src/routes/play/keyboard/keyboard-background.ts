@@ -1,5 +1,5 @@
-import {useMemo} from "react";
-import {SLOT_HEIGHT} from "../instrument-track/get-tone-dimension";
+import { useMemo } from "react";
+import { SLOT_HEIGHT } from "../instrument-track/get-tone-dimension";
 
 export function useKeyboardBackground() {
     return useMemo(() => {
@@ -12,9 +12,9 @@ export function useKeyboardBackground() {
         const whiteKeys = Array(7)
             .fill("")
             .map((none, i) => {
-                return `${light} ${whiteKeyHeight * i + 1}px ${whiteKeyHeight * (i + 1) - 1}px, ${dark} ${
+                return `${light} ${whiteKeyHeight * i}px ${whiteKeyHeight * (i + 1) - 1}px, ${dark} ${
                     whiteKeyHeight * (i + 1) - 1
-                }px ${whiteKeyHeight * (i + 1) + 1}px`;
+                }px ${whiteKeyHeight * (i + 1)}px`;
             });
 
         const blackKeys = keyboardKeys.map((key, i) => {
