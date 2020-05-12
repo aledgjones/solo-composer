@@ -1,17 +1,19 @@
 import { Clef } from "../entries/clef-defs";
 import { KeySignature } from "../entries/key-signature";
 import { TimeSignature } from "../entries/time-signature";
-import { EntryType } from "../entries";
+import { EntryType, Entry } from "../entries";
 import { EngravingConfig } from "../services/engraving";
 import { Stave } from "../services/stave";
 import { EntriesByTick, entriesByTick } from "../services/track";
 import { getEntriesAtTick } from "./get-entry-at-tick";
 import { Barline, createBarline, BarlineType } from "../entries/barline";
-import { NotationTracks } from "./notation-track";
+import { NotationTracks, getNotationBaseDuration } from "./notation-track";
 import { getStepsBetweenPitches } from "../playback/utils";
 import { getStemDirection, Direction } from "./get-stem-direction";
 import { getIsRest } from "./is-rest";
 import { WidthOf } from "./sum-width-up-to";
+import { getNoteheadWidthFromDuration } from "./get-notehead-width-from-duration";
+import { getNearestEntriesToTick } from "./get-nearest-entry-to-tick";
 
 export function measureTick(
     tick: number,
@@ -28,10 +30,8 @@ export function measureTick(
     const normalBarline = createBarline({ type: BarlineType.normal }, 0);
     const doubleBarline = createBarline({ type: BarlineType.double }, 0);
 
-    const key = getEntriesAtTick<KeySignature>(tick, flowEntries, EntryType.keySignature)
-        .entries[0];
-    const time = getEntriesAtTick<TimeSignature>(tick, flowEntries, EntryType.timeSignature)
-        .entries[0];
+    const key = getEntriesAtTick<KeySignature>(tick, flowEntries, EntryType.keySignature).entries[0];
+    const time = getEntriesAtTick<TimeSignature>(tick, flowEntries, EntryType.timeSignature).entries[0];
     const barline = getEntriesAtTick<Barline>(tick, flowEntries, EntryType.barline).entries[0];
 
     if (time) {
@@ -58,7 +58,7 @@ export function measureTick(
         }
     }
 
-    staves.forEach(stave => {
+    staves.forEach((stave) => {
         const entries = entriesByTick(stave.master.entries.order, stave.master.entries.byKey);
         const clef = getEntriesAtTick<Clef>(tick, entries, EntryType.clef).entries[0];
 
@@ -66,7 +66,7 @@ export function measureTick(
             measurements[WidthOf.clef] = clef._bounds.width;
         }
 
-        stave.tracks.forEach(trackKey => {
+        stave.tracks.forEach((trackKey) => {
             const notationTrack = notationTracks[trackKey];
 
             // check to see if there are notes in the offset slot
@@ -84,7 +84,14 @@ export function measureTick(
                                 // either 2nd or unison
                                 if (offset === 0 || offset === 1) {
                                     // as soon as we've found a shunt we can break
-                                    measurements[WidthOf.preNoteSlot] = 1.15;
+                                    const time = getNearestEntriesToTick<Entry<TimeSignature>>(
+                                        tick,
+                                        flowEntries,
+                                        EntryType.timeSignature
+                                    );
+                                    const subdivisions = time.entries[0].subdivisions;
+                                    const duration = getNotationBaseDuration(entry.duration, subdivisions);
+                                    measurements[WidthOf.preNoteSlot] = getNoteheadWidthFromDuration(duration);
                                     break;
                                 }
                             }

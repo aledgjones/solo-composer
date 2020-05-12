@@ -1,23 +1,9 @@
 import { buildText, TextStyles, Justify, Align } from "../render/text";
-import { buildCircle, CircleStyles } from "../render/circle";
 import { NotationBaseDuration } from "./notation-track";
 import { Direction } from "./get-stem-direction";
 import { buildCurve } from "../render/curve";
 import { ToneDetails } from "./draw-tick";
-
-export function noteheadWidthFromDuration(baseLength?: NotationBaseDuration): number {
-    switch (baseLength) {
-        case NotationBaseDuration.semiquaver:
-        case NotationBaseDuration.quaver:
-        case NotationBaseDuration.crotchet:
-        case NotationBaseDuration.minim:
-            return 1.15;
-        case NotationBaseDuration.semibreve:
-            return 1.6;
-        default:
-            return 0;
-    }
-}
+import { getNoteheadWidthFromDuration } from "./get-notehead-width-from-duration";
 
 function glyphFromDuration(baseLength?: NotationBaseDuration) {
     switch (baseLength) {
@@ -64,14 +50,13 @@ export function drawNote(
     isChord: boolean,
     tone: ToneDetails,
     duration: NotationBaseDuration | undefined,
-    dotted: boolean,
     stemDirection: Direction,
     hasShunts: boolean,
     tieWidth: number,
     key: string
 ) {
     const glyph = glyphFromDuration(duration);
-    const glyphWidth = noteheadWidthFromDuration(duration);
+    const glyphWidth = getNoteheadWidthFromDuration(duration);
 
     if (!glyph) {
         console.error("could not render note duration", `base duration:  ${duration}`);
@@ -80,11 +65,7 @@ export function drawNote(
 
     const instructions = [];
 
-    const shuntOffset = tone.isShunt
-        ? stemDirection === Direction.up
-            ? glyphWidth
-            : -glyphWidth
-        : 0;
+    const shuntOffset = tone.isShunt ? (stemDirection === Direction.up ? glyphWidth : -glyphWidth) : 0;
 
     const styles: TextStyles = {
         color: "#000000",
@@ -93,23 +74,7 @@ export function drawNote(
         size: 4,
         font: `Music`
     };
-    instructions.push(
-        buildText(`${key}-head`, styles, x + shuntOffset, y + tone.offset / 2, glyph)
-    );
-
-    if (dotted) {
-        const styles: CircleStyles = { color: "#000000" };
-        const shift = tone.offset % 2 === 0 ? -0.5 : 0;
-        instructions.push(
-            buildCircle(
-                `${key}-dot`,
-                styles,
-                x + glyphWidth + (hasShunts ? glyphWidth : 0) + 0.5,
-                y + tone.offset / 2 + shift,
-                0.2
-            )
-        );
-    }
+    instructions.push(buildText(`${key}-head`, styles, x + shuntOffset, y + tone.offset / 2, glyph));
 
     if (tone.tie !== Direction.none) {
         const startX = x + glyphWidth + (isChord ? 0.25 : 0);

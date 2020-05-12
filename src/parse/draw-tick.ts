@@ -1,30 +1,31 @@
-import {drawClef} from "../entries/clef";
-import {Clef} from "../entries/clef-defs";
-import {drawKeySignature, KeySignature} from "../entries/key-signature";
-import {drawTimeSignature, TimeSignature} from "../entries/time-signature";
-import {EntryType, Entry} from "../entries";
-import {Stave} from "../services/stave";
-import {VerticalMeasurements} from "./measure-vertical-layout";
-import {EntriesByTick, entriesByTick} from "../services/track";
-import {getEntriesAtTick} from "./get-entry-at-tick";
-import {Barline, createBarline, BarlineType, drawBarline} from "../entries/barline";
-import {getNearestEntriesToTick} from "./get-nearest-entry-to-tick";
-import {sumWidthUpTo, WidthOf} from "./sum-width-up-to";
-import {getNotationBaseDuration, getIsDotted, NotationTracks, NotationBaseDuration} from "./notation-track";
-import {drawRest} from "./draw-rest";
-import {drawNote} from "./draw-note";
-import {drawAbsoluteTempo, AbsoluteTempo} from "../entries/absolute-tempo";
-import {EngravingConfig} from "../services/engraving";
-import {getStemDirection, stepsFromTop, Direction} from "./get-stem-direction";
-import {drawNoteStem} from "./draw-note-stem";
-import {getIsRest} from "./is-rest";
-import {getShuntedNoteheads} from "./get-shunted-noteheads";
-import {drawLedgerLines} from "./draw-ledger-lines";
-import {Tone} from "../entries/tone";
-import {getTieDirection} from "./get-tie-direction";
-import {sumTickWidths} from "./sum-tick-widths";
-import {getTicksPerBeat} from "./get-ticks-per-beat";
-import {getIsEmpty} from "./get-is-empty";
+import { drawClef } from "../entries/clef";
+import { Clef } from "../entries/clef-defs";
+import { drawKeySignature, KeySignature } from "../entries/key-signature";
+import { drawTimeSignature, TimeSignature } from "../entries/time-signature";
+import { EntryType, Entry } from "../entries";
+import { Stave } from "../services/stave";
+import { VerticalMeasurements } from "./measure-vertical-layout";
+import { EntriesByTick, entriesByTick } from "../services/track";
+import { getEntriesAtTick } from "./get-entry-at-tick";
+import { Barline, createBarline, BarlineType, drawBarline } from "../entries/barline";
+import { getNearestEntriesToTick } from "./get-nearest-entry-to-tick";
+import { sumWidthUpTo, WidthOf } from "./sum-width-up-to";
+import { getNotationBaseDuration, getIsDotted, NotationTracks, NotationBaseDuration } from "./notation-track";
+import { drawRest } from "./draw-rest";
+import { drawNote } from "./draw-note";
+import { drawAbsoluteTempo, AbsoluteTempo } from "../entries/absolute-tempo";
+import { EngravingConfig } from "../services/engraving";
+import { getStemDirection, stepsFromTop, Direction } from "./get-stem-direction";
+import { drawNoteStem } from "./draw-note-stem";
+import { getIsRest } from "./is-rest";
+import { getShuntedNoteheads } from "./get-shunted-noteheads";
+import { drawLedgerLines } from "./draw-ledger-lines";
+import { Tone } from "../entries/tone";
+import { getTieDirection } from "./get-tie-direction";
+import { sumTickWidths } from "./sum-tick-widths";
+import { getTicksPerBeat } from "./get-ticks-per-beat";
+import { getIsEmpty } from "./get-is-empty";
+import { drawDots } from "./draw-dots";
 
 export interface ToneDetails {
     tone: Entry<Tone>;
@@ -76,7 +77,7 @@ export function drawTick(
         }
     } else if (tick !== 0) {
         if ((key && keyResult.at === tick) || (time && timeResult.at === tick)) {
-            const normalBarline = createBarline({type: BarlineType.double}, 0);
+            const normalBarline = createBarline({ type: BarlineType.double }, 0);
             output.push(
                 ...drawBarline(
                     x + sumWidthUpTo(widths, WidthOf.barline),
@@ -87,7 +88,7 @@ export function drawTick(
                 )
             );
         } else if (isFirstBeat) {
-            const normalBarline = createBarline({type: BarlineType.normal}, 0);
+            const normalBarline = createBarline({ type: BarlineType.normal }, 0);
             output.push(
                 ...drawBarline(
                     x + sumWidthUpTo(widths, WidthOf.barline),
@@ -181,6 +182,20 @@ export function drawTick(
                         );
                     }
 
+                    if (isDotted) {
+                        output.push(
+                            ...drawDots(
+                                x + sumWidthUpTo(widths, WidthOf.noteSpacing),
+                                top,
+                                details,
+                                duration,
+                                stemDirection,
+                                hasShunts,
+                                `${trackKey}-${tick}-dots`
+                            )
+                        );
+                    }
+
                     details.forEach((detail) => {
                         output.push(
                             ...drawNote(
@@ -189,7 +204,6 @@ export function drawTick(
                                 entry.tones.length > 1,
                                 detail,
                                 duration,
-                                isDotted,
                                 stemDirection,
                                 hasShunts,
                                 tieWidth,

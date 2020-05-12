@@ -1,7 +1,7 @@
 import { Direction } from "./get-stem-direction";
 import { ToneDetails } from "./draw-tick";
 import { buildPath } from "../render/path";
-import { noteheadWidthFromDuration } from "./draw-note";
+import { getNoteheadWidthFromDuration } from "./get-notehead-width-from-duration";
 import { NotationBaseDuration } from "./notation-track";
 
 export function drawLedgerLines(
@@ -16,7 +16,7 @@ export function drawLedgerLines(
 
     const highLedgerLines: Array<0 | 1 | 2> = [0];
     const lowLedgerLines: Array<0 | 1 | 2> = [0, 0, 0, 0, 0];
-    const noteheadWidth = noteheadWidthFromDuration(duration);
+    const noteheadWidth = getNoteheadWidthFromDuration(duration);
 
     // low notes
     for (let i = 0; i < details.length; i++) {
@@ -38,17 +38,9 @@ export function drawLedgerLines(
                 buildPath(
                     key + i,
                     { color: "#000000", thickness: 0.1875 },
+                    [x - (width === 2 && stemDirection === Direction.down ? noteheadWidth : 0) - 0.4, y + i],
                     [
-                        x -
-                            (width === 2 && stemDirection === Direction.down ? noteheadWidth : 0) -
-                            0.4,
-                        y + i
-                    ],
-                    [
-                        x +
-                            noteheadWidth +
-                            (width === 2 && stemDirection === Direction.up ? noteheadWidth : 0) +
-                            0.4,
+                        x + noteheadWidth + (width === 2 && stemDirection === Direction.up ? noteheadWidth : 0) + 0.4,
                         y + i
                     ]
                 )
@@ -76,17 +68,9 @@ export function drawLedgerLines(
                 buildPath(
                     key + i,
                     { color: "#000000", thickness: 0.1875 },
+                    [x - (width === 2 && stemDirection === Direction.down ? noteheadWidth : 0) - 0.4, y - i],
                     [
-                        x -
-                            (width === 2 && stemDirection === Direction.down ? noteheadWidth : 0) -
-                            0.4,
-                        y - i
-                    ],
-                    [
-                        x +
-                            noteheadWidth +
-                            (width === 2 && stemDirection === Direction.up ? noteheadWidth : 0) +
-                            0.4,
+                        x + noteheadWidth + (width === 2 && stemDirection === Direction.up ? noteheadWidth : 0) + 0.4,
                         y - i
                     ]
                 )

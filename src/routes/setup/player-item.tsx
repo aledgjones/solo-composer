@@ -25,10 +25,20 @@ interface Props {
     onRemovePlayer: (playerKey: PlayerKey) => void;
 }
 
-export const PlayerItem: FC<Props> = ({ index, player, instruments, counts, selected, expanded, onSelectPlayer, onAddInstrument, onRemovePlayer }) => {
+export const PlayerItem: FC<Props> = ({
+    index,
+    player,
+    instruments,
+    counts,
+    selected,
+    expanded,
+    onSelectPlayer,
+    onAddInstrument,
+    onRemovePlayer
+}) => {
     const handle = useRef<HTMLDivElement>(null);
     const actions = useAppActions();
-    const theme = useAppState(s => s.ui.theme.pallets);
+    const theme = useAppState((s) => s.ui.theme.pallets);
 
     const onExpand = useCallback(
         (e: MouseEvent<HTMLDivElement>) => {

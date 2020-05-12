@@ -17,7 +17,11 @@ export const RenderRegion: FC<Props> = ({ children, className }) => {
             x
             y
             className={merge("render-region", className)}
-            style={{ backgroundColor: theme.primary[400].bg, backgroundImage: `url(${bg})` }}
+            style={{
+                // is it light mode (coud be auto so check with 200 color)
+                backgroundColor: theme.background[200].bg === "#ffffff" ? theme.primary[800].bg : theme.primary[400].bg,
+                backgroundImage: `url(${bg})`
+            }}
         >
             {children}
         </DragScroll>

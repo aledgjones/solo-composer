@@ -75,7 +75,7 @@ export function themeEmptyState(): ThemeState {
                 500: { bg: "#0064b1", fg: "#ffffff" },
                 600: { bg: "#0082e6", fg: "#ffffff" },
                 700: { bg: "#1c9cff", fg: "#ffffff" },
-                800: { bg: "", fg: "" }
+                800: { bg: "#49b0ff", fg: "#ffffff" }
             },
             highlight: "orange",
             error: "#ff6347"

@@ -1,3 +1,7 @@
+## [0.7.0] - 12-05-2020
+
+-   <label type="feature"></label> Dotted rhythm dots not print correctly in cluster chords. They follow the rules laid down in 'Behind Bars' by Elaine Gould.
+
 ## [0.6.0] - 09-05-2020
 
 -   <label type="feature"></label> Indicate when an update is available and add actions to refresh the page to apply them.
