@@ -3,6 +3,13 @@
     max-height: 500px;
 }
 
+.generic-settings__header {
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
 .generic-settings__content {
     display: flex;
     height: calc(100% - 56px);

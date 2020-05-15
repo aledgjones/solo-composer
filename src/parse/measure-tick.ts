@@ -30,8 +30,8 @@ export function measureTick(
     const normalBarline = createBarline({ type: BarlineType.normal }, 0);
     const doubleBarline = createBarline({ type: BarlineType.double }, 0);
 
-    const key = getEntriesAtTick<KeySignature>(tick, flowEntries, EntryType.keySignature).entries[0];
     const time = getEntriesAtTick<TimeSignature>(tick, flowEntries, EntryType.timeSignature).entries[0];
+    const key = getEntriesAtTick<KeySignature>(tick, flowEntries, EntryType.keySignature).entries[0];
     const barline = getEntriesAtTick<Barline>(tick, flowEntries, EntryType.barline).entries[0];
 
     if (time) {
@@ -67,12 +67,14 @@ export function measureTick(
         }
 
         stave.tracks.forEach((trackKey) => {
-            const notationTrack = notationTracks[trackKey];
+            const track = notationTracks[trackKey];
 
             // check to see if there are notes in the offset slot
-            if (notationTrack[tick]) {
-                const entry = notationTrack[tick];
-                if (!getIsRest(entry)) {
+            if (track[tick]) {
+                const entry = track[tick];
+                if (getIsRest(entry)) {
+                    // measure
+                } else {
                     const stemDirection = getStemDirection(entry.tones, clef);
                     // we can only have a preNoteSlot if the stem direction is down
                     if (stemDirection === Direction.down) {

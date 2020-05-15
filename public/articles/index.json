@@ -1,0 +1,50 @@
+{
+    "featured": ["changelog", "setup-overview", "create-player", "add-instrument-to-player"],
+    "sections": [
+        {
+            "label": "General",
+            "articles": ["changelog", "known-issues"]
+        },
+        {
+            "label": "Setup",
+            "articles": ["setup-overview", "create-player", "add-instrument-to-player"]
+        }
+    ],
+    "articles": {
+        "changelog": {
+            "url": "/articles/changelog.md",
+            "title": "What's New",
+            "description": "Find out about recent features, bug fixes and announcements.",
+            "search": ["bugs", "features", "update", "announcements", "fix"],
+            "related": ["known-issues"]
+        },
+        "known-issues": {
+            "url": "/articles/known-issues.md",
+            "title": "Known Issues",
+            "description": "Functionality that is known to have bugs.",
+            "search": ["bugs"],
+            "related": ["whats-new"]
+        },
+        "setup-overview": {
+            "url": "/articles/setup-overview.md",
+            "title": "Setup Overview",
+            "description": "An overview of the setup tab.",
+            "search": ["score", "setup"],
+            "related": []
+        },
+        "create-player": {
+            "url": "/articles/create-player.md",
+            "title": "Create a Player",
+            "description": "Create a player and assign an instrument to them.",
+            "search": ["setup", "player", "instrument", "add", "create"],
+            "related": ["setup-overview", "add-instrument-to-player"]
+        },
+        "add-instrument-to-player": {
+            "url": "/articles/add-instrument-to-player.md",
+            "title": "Add an instrument to a player",
+            "description": "Assign a new instrument to an exisiting player",
+            "search": ["setup", "player", "instrument", "add", "create"],
+            "related": ["setup-overview", "create-player"]
+        }
+    }
+}

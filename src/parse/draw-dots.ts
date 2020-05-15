@@ -26,7 +26,7 @@ export function drawDots(
     Object.keys(slots).map((slot) => {
         // slot is the offset of the slot we can use to draw the y position
         const styles: CircleStyles = { color: "#000000" };
-        instructions.push(buildCircle(`${key}-i`, styles, x + offsetLeft, y + parseFloat(slot) / 2, 0.25));
+        instructions.push(buildCircle(`${key}-${slot}`, styles, x + offsetLeft, y + parseFloat(slot) / 2, 0.225));
     });
 
     return instructions;

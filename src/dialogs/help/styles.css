@@ -1,0 +1,135 @@
+.feedback__header {
+    background-color: rgb(235, 235, 235);
+    padding: 0 20px 20px 20px;
+    border-bottom: 1px solid rgb(200, 200, 200);
+}
+
+.feedback__header-text {
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.feedback__title {
+    font-size: 18px;
+    flex-grow: 1;
+}
+
+.feedback__content {
+    padding: 0 0 20px 0;
+    height: calc(100vh - 205px);
+    overflow: auto;
+}
+
+.feedback .ui-label {
+    flex-grow: 1;
+    padding-left: 20px;
+}
+
+.feedback__subheader {
+    padding: 20px 20px 0 20px;
+}
+
+.feedback__subheader--close {
+    padding-top: 0;
+}
+
+.feedback__links {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 35%;
+}
+
+.feedback__no-result {
+    color: rgb(100, 100, 100);
+    font-style: italic;
+    margin-top: 20px;
+}
+
+.feedback__empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 205px);
+}
+
+.help {
+    padding: 20px;
+}
+
+.help h1 {
+    font-size: 24px;
+}
+
+.help h2 {
+    padding: 20px 0;
+    font-size: 18px;
+}
+
+.help h3 {
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 700;
+    margin: 0 0 20px;
+    color: #323232;
+}
+
+.help ol {
+    padding-left: 20px;
+}
+
+.help ol li {
+    color: black;
+    list-style-type: decimal;
+    margin-bottom: 20px;
+}
+
+.help ul {
+    padding-left: 0;
+}
+
+.help ul li {
+    position: relative;
+    margin-bottom: 20px;
+    padding-top: 6px;
+    padding-left: 120px;
+}
+
+.help label {
+    position: absolute;
+    padding: 8px 12px;
+    border-radius: 3px;
+    width: 100px;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: bold;
+    top: 0;
+    left: 0;
+}
+
+.help label:after {
+    content: attr(type);
+}
+
+.help label[type="feature"] {
+    color: white;
+    background-color: royalblue;
+}
+
+.help label[type="changed"] {
+    color: white;
+    background-color: darkorange;
+}
+
+.help label[type="fixed"] {
+    color: white;
+    background-color: green;
+}
+
+.help code {
+    font-size: 14px;
+    padding: 2px 4px !important;
+}

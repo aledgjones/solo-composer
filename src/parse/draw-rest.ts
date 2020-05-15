@@ -1,6 +1,12 @@
-import {buildText, TextStyles, Justify, Align} from "../render/text";
-import {buildCircle, CircleStyles} from "../render/circle";
-import {NotationBaseDuration} from "./notation-track";
+import { buildText, TextStyles, Justify, Align } from "../render/text";
+import { buildCircle, CircleStyles } from "../render/circle";
+import { NotationBaseDuration, getNotationBaseDuration, getIsDotted, Notation, NotationTrack } from "./notation-track";
+import { getTicksPerBeat } from "./get-ticks-per-beat";
+import { getIsEmpty } from "./get-is-empty";
+import { Entry } from "../entries";
+import { TimeSignature } from "../entries/time-signature";
+import { sumTickWidths } from "./sum-tick-widths";
+import { sumWidthUpTo } from "./sum-width-up-to";
 
 export interface RestDef {
     duration: number;
@@ -39,15 +45,20 @@ function verticalOffsetFromDuration(baseLength?: NotationBaseDuration) {
 export function drawRest(
     x: number,
     y: number,
-    length: NotationBaseDuration | undefined,
-    dotted: boolean,
+    duration: NotationBaseDuration | undefined,
+    barWidth: number,
+    preWidth: number,
+    isBarEmpty: boolean,
+    isDotted: boolean,
     key: string
 ) {
-    const glyph = glyphFromDuration(length);
-    const offset = verticalOffsetFromDuration(length);
+    const left = x + preWidth + (isBarEmpty ? (barWidth - preWidth) / 2 - 1 : 0);
+
+    const glyph = glyphFromDuration(duration);
+    const offset = verticalOffsetFromDuration(duration);
 
     if (!glyph) {
-        console.error("could not render rest duration", `base duration: ${length}`);
+        console.error("could not render rest duration", `base duration: ${duration}`);
         return [];
     }
 
@@ -60,11 +71,11 @@ export function drawRest(
         size: 4,
         font: `Music`
     };
-    instructions.push(buildText(key, styles, x, y + offset, glyph));
+    instructions.push(buildText(key, styles, left, y + offset, glyph));
 
-    if (dotted) {
-        const styles: CircleStyles = {color: "#000000"};
-        instructions.push(buildCircle(`${key}-dot`, styles, x + 1.5, y - 0.5 + offset, 0.2));
+    if (isDotted) {
+        const styles: CircleStyles = { color: "#000000" };
+        instructions.push(buildCircle(`${key}-dot`, styles, left + 1.5, y - 0.5 + offset, 0.2));
     }
 
     return instructions;

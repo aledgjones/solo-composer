@@ -1,20 +1,25 @@
 .about__header {
-    height: 48px;
+    height: 56px;
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding: 0 12px;
+    padding: 0 20px;
+    background-color: rgb(235, 235, 235);
 }
 
 .about__logo {
-    padding: 0 20px 20px 20px;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 20px 60px 20px;
+    background-color: rgb(235, 235, 235);
+    border-bottom: 1px solid rgb(200, 200, 200);
 }
 
 .about__logo-img {
-    height: 64px;
-    width: 64px;
-    margin: 0 auto 12px auto;
+    height: 52px;
+    width: 52px;
+    margin-right: 12px;
 }
 
 .about__logo-text {
@@ -24,6 +29,10 @@
 
 .about__logo-text p:nth-child(2) {
     font-size: 16px;
+}
+
+.about__content {
+    padding-bottom: 0;
 }
 
 .about__version {
@@ -42,11 +51,6 @@
     justify-content: space-between;
     height: 48px;
     padding: 0 20px;
-}
-
-.about__paragraph {
-    text-align: justify;
-    margin-bottom: 40px;
 }
 
 .about__paragraph b {

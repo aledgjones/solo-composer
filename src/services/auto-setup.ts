@@ -47,7 +47,7 @@ export function useAutoSetup() {
             flowKey
         );
         actions.score.flows.createKeySignature({ mode: KeySignatureMode.minor, offset: -3 }, 0, flowKey);
-        actions.score.flows.createKeySignature({ mode: KeySignatureMode.minor, offset: -5 }, 4 * c * 2, flowKey);
+        actions.score.flows.createKeySignature({ mode: KeySignatureMode.minor, offset: 4 }, 4 * c * 2, flowKey);
         actions.score.flows.createAbsoluteTempo(
             {
                 text: "Allegro",

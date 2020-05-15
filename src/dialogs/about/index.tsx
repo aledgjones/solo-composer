@@ -6,7 +6,7 @@ import { Subheader, Content, Label, Icon, Dialog } from "solo-ui";
 import app from "../../app.json";
 import { useAppState } from "../../services/state";
 
-import logo from "../../assets/logo.png";
+import logo from "../../assets/logo-silo-dark.svg";
 
 import "./styles.css";
 
@@ -29,8 +29,10 @@ export const About = Dialog<Props>(({ onClose }) => {
                 <p>{app.description}</p>
             </Label>
         </div>
-        <Content>
+        <Content className="about__content">
             <p className="about__paragraph">This project is very much an experimental work in progress. Things <b>will</b> break, not exist, make no sense and crash! This project is inspired by the amazing work the people at Steinberg are doing on <a style={{ color: theme.primary[500].bg }} rel="noopener noreferrer" href="https://new.steinberg.net/dorico/" target="_blank">Dorico</a>.</p>
+        </Content>
+        <Content className="about__versions">
             <Subheader>Versions</Subheader>
             <p className="about__version">
                 <span className="about__grow">Application</span>
