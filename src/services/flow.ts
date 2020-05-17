@@ -25,6 +25,7 @@ export interface Flow {
     players: PlayerKey[]; // unordered, purely for inclusion lookup
     staves: Staves;
     tracks: Tracks;
+    subdivisions: number;
     length: number; // number of subdevisions in all the flow
     master: Track;
 }
@@ -45,11 +46,11 @@ export const flowActions = (store: Store<State>) => {
             // create an empty flow
             const flow = createFlow();
 
-            store.update(s => {
+            store.update((s) => {
                 //populate flow with all players/instruments
-                s.score.players.order.forEach(playerKey => {
+                s.score.players.order.forEach((playerKey) => {
                     const player = s.score.players.byKey[playerKey];
-                    player.instruments.forEach(instrumentKey => {
+                    player.instruments.forEach((instrumentKey) => {
                         const instrument = s.score.instruments[instrumentKey];
                         const def = instrumentDefs[s.score.instruments[instrumentKey].id];
                         instrument.staves.forEach((staveKey, i) => {
@@ -70,21 +71,21 @@ export const flowActions = (store: Store<State>) => {
             return flow.key;
         },
         reorder: (oldIndex: number, newIndex: number) => {
-            store.update(s => {
+            store.update((s) => {
                 s.score.flows.order = ArrayMove(s.score.flows.order, oldIndex, newIndex);
             });
         },
         remove: (flowKey: FlowKey) => {
-            store.update(s => {
-                s.score.flows.order = s.score.flows.order.filter(key => key !== flowKey);
+            store.update((s) => {
+                s.score.flows.order = s.score.flows.order.filter((key) => key !== flowKey);
                 delete s.score.flows.byKey[flowKey];
             });
         },
         assignPlayer: (flowKey: FlowKey, playerKey: PlayerKey) => {
-            store.update(s => {
+            store.update((s) => {
                 const flow = s.score.flows.byKey[flowKey];
                 const player = s.score.players.byKey[playerKey];
-                player.instruments.forEach(instrumentKey => {
+                player.instruments.forEach((instrumentKey) => {
                     const instrument = s.score.instruments[instrumentKey];
                     const def = instrumentDefs[s.score.instruments[instrumentKey].id];
                     instrument.staves.forEach((staveKey, i) => {
@@ -98,12 +99,12 @@ export const flowActions = (store: Store<State>) => {
             });
         },
         removePlayer: (flowKey: FlowKey, playerKey: PlayerKey) => {
-            store.update(s => {
+            store.update((s) => {
                 const flow = s.score.flows.byKey[flowKey];
-                flow.players = flow.players.filter(key => key !== playerKey);
-                s.score.players.byKey[playerKey].instruments.forEach(instrumentKey => {
-                    s.score.instruments[instrumentKey].staves.forEach(staveKey => {
-                        flow.staves[staveKey].tracks.forEach(trackKey => {
+                flow.players = flow.players.filter((key) => key !== playerKey);
+                s.score.players.byKey[playerKey].instruments.forEach((instrumentKey) => {
+                    s.score.instruments[instrumentKey].staves.forEach((staveKey) => {
+                        flow.staves[staveKey].tracks.forEach((trackKey) => {
                             delete flow.tracks[trackKey];
                         });
                         delete flow.staves[staveKey];
@@ -112,22 +113,18 @@ export const flowActions = (store: Store<State>) => {
             });
         },
         setLength: (flowKey: FlowKey, length: number) => {
-            store.update(s => {
+            store.update((s) => {
                 s.score.flows.byKey[flowKey].length = length;
             });
         },
         // create new or updating an existing time sig at tick
-        createTimeSignature: (
-            timeSignatureDef: TimeSignatureDef,
-            tick: number,
-            flowKey: FlowKey
-        ) => {
-            store.update(s => {
+        createTimeSignature: (timeSignatureDef: TimeSignatureDef, tick: number, flowKey: FlowKey) => {
+            store.update((s) => {
                 const entry = createTimeSignature(timeSignatureDef, tick);
                 const flow = s.score.flows.byKey[flowKey];
 
                 // extend the length to fit the whole bar if shorter
-                const ticksPerBeat = getTicksPerBeat(entry.subdivisions, entry.beatType);
+                const ticksPerBeat = getTicksPerBeat(flow.subdivisions, entry.beatType);
                 const ticksPerBar = entry.beats * ticksPerBeat;
                 if (flow.length - entry._tick < ticksPerBar) {
                     const length = entry._tick + ticksPerBar;
@@ -138,25 +135,21 @@ export const flowActions = (store: Store<State>) => {
             });
         },
         createKeySignature: (keySignatureDef: KeySignatureDef, tick: number, flowKey: FlowKey) => {
-            store.update(s => {
+            store.update((s) => {
                 const entry = createKeySignature(keySignatureDef, tick);
                 const track = s.score.flows.byKey[flowKey].master;
                 assignEntryToTrack(track, entry, EntryType.keySignature);
             });
         },
         createBarline: (barlineDef: BarlineDef, tick: number, flowKey: FlowKey) => {
-            store.update(s => {
+            store.update((s) => {
                 const entry = createBarline(barlineDef, tick);
                 const track = s.score.flows.byKey[flowKey].master;
                 assignEntryToTrack(track, entry, EntryType.barline);
             });
         },
-        createAbsoluteTempo: (
-            absoluteTempoDef: AbsoluteTempoDef,
-            tick: number,
-            flowKey: FlowKey
-        ) => {
-            store.update(s => {
+        createAbsoluteTempo: (absoluteTempoDef: AbsoluteTempoDef, tick: number, flowKey: FlowKey) => {
+            store.update((s) => {
                 const entry = createAbsoluteTempo(absoluteTempoDef, tick);
                 const track = s.score.flows.byKey[flowKey].master;
                 assignEntryToTrack(track, entry, EntryType.absoluteTempo);
@@ -172,6 +165,7 @@ const createFlow = (): Flow => {
         players: [],
         staves: {},
         tracks: {},
+        subdivisions: 12,
         length: 12,
         master: createTrack([])
     };

@@ -31,15 +31,8 @@ import { getInstruments, getCounts } from "../services/instrument-utils";
 export function parse(score: Score, flowKey: FlowKey, mm: number): RenderInstructions {
     const flow = score.flows.byKey[flowKey];
 
-    const converter = getConverter(
-        mm,
-        score.engraving[LayoutType.score].space || defaultEngravingConfig.space,
-        2
-    );
-    const config = getConvertedConfig(
-        { ...defaultEngravingConfig, ...score.engraving[LayoutType.score] },
-        converter
-    );
+    const converter = getConverter(mm, score.engraving[LayoutType.score].space || defaultEngravingConfig.space, 2);
+    const config = getConvertedConfig({ ...defaultEngravingConfig, ...score.engraving[LayoutType.score] }, converter);
 
     const instruments = getInstruments(score.players, score.instruments, flow);
     const staves = getStaves(instruments, flow);
@@ -58,10 +51,11 @@ export function parse(score: Score, flowKey: FlowKey, mm: number): RenderInstruc
         measureBracketAndBraces(verticalMeasurements);
     const y = config.framePadding.top;
 
-    const firstBeats = getFirstBeats(flow.length, flowEntriesByTick);
+    const firstBeats = getFirstBeats(flow.subdivisions, flow.length, flowEntriesByTick);
     const finalBarline = createBarline({ type: config.finalBarlineType }, 0);
 
     const notationTracks = getWrittenDurations(
+        flow.subdivisions,
         flow.length,
         flowEntriesByTick,
         staves,
@@ -74,7 +68,7 @@ export function parse(score: Score, flowKey: FlowKey, mm: number): RenderInstruc
     const horizontalMeasurements: number[][] = [];
     for (let tick = 0; tick < flow.length; tick++) {
         horizontalMeasurements.push(
-            measureTick(tick, firstBeats[tick], flowEntriesByTick, staves, notationTracks, config)
+            measureTick(tick, flow.subdivisions, firstBeats[tick], flowEntriesByTick, staves, notationTracks, config)
         );
     }
 
@@ -82,6 +76,7 @@ export function parse(score: Score, flowKey: FlowKey, mm: number): RenderInstruc
         drawInstructions.push(
             ...drawTick(
                 tick,
+                flow.subdivisions,
                 firstBeats[tick],
                 x + config.systemStartPadding,
                 y,
@@ -106,28 +101,17 @@ export function parse(score: Score, flowKey: FlowKey, mm: number): RenderInstruc
     }, 0);
 
     drawInstructions.push(
-        ...drawNames(
-            config.framePadding.left,
-            y,
-            namesWidth,
-            instruments,
-            names,
-            verticalMeasurements,
-            config
-        ),
+        ...drawNames(config.framePadding.left, y, namesWidth, instruments, names, verticalMeasurements, config),
         ...drawBraces(x, y, verticalMeasurements),
         ...drawBrackets(x, y, verticalMeasurements, config),
         ...drawSubBrackets(x, y, verticalMeasurements),
-        ...drawStaves(x, y, totalWidth + finalBarline._bounds.width, staves, verticalMeasurements),
+        ...drawStaves(x, y, totalWidth + finalBarline._box.width, staves, verticalMeasurements),
         ...drawFinalBarline(x + totalWidth, y, staves, verticalMeasurements, finalBarline)
     );
 
     return {
         space: converter.spaces.toPX(1),
-        height:
-            config.framePadding.top +
-            verticalMeasurements.systemHeight +
-            config.framePadding.bottom,
+        height: config.framePadding.top + verticalMeasurements.systemHeight + config.framePadding.bottom,
         width: x + totalWidth + config.framePadding.right,
         entries: drawInstructions
     };

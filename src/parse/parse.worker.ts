@@ -5,19 +5,22 @@ import { FlowKey } from "../services/flow";
 
 const ctx = (self as unknown) as Worker; // eslint-disable-line
 
-let latestTaskID = shortid();
+import("solo-composer-parser").then((mod) => {
+    let latestTaskID = shortid();
 
-ctx.addEventListener("message", (e: any) => {
-    const mm: number = e.data.mm;
-    const score: Score = e.data.score;
-    const flowKey: FlowKey = e.data.flowKey;
+    ctx.addEventListener("message", async (e: any) => {
+        // greet();
+        const mm: number = e.data.mm;
+        const score: Score = e.data.score;
+        const flowKey: FlowKey = e.data.flowKey;
 
-    const taskID = shortid();
-    latestTaskID = taskID;
-    const instructions = parse(score, flowKey, mm);
-    if (taskID === latestTaskID) {
-        ctx.postMessage(instructions);
-    }
+        const taskID = shortid();
+        latestTaskID = taskID;
+        const instructions = parse(score, flowKey, mm);
+        if (taskID === latestTaskID) {
+            ctx.postMessage(instructions);
+        }
+    });
 });
 
 export default null as any;

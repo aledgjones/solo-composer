@@ -1,12 +1,6 @@
 import { buildText, TextStyles, Justify, Align } from "../render/text";
 import { buildCircle, CircleStyles } from "../render/circle";
-import { NotationBaseDuration, getNotationBaseDuration, getIsDotted, Notation, NotationTrack } from "./notation-track";
-import { getTicksPerBeat } from "./get-ticks-per-beat";
-import { getIsEmpty } from "./get-is-empty";
-import { Entry } from "../entries";
-import { TimeSignature } from "../entries/time-signature";
-import { sumTickWidths } from "./sum-tick-widths";
-import { sumWidthUpTo } from "./sum-width-up-to";
+import { NotationBaseDuration } from "./notation-track";
 
 export interface RestDef {
     duration: number;

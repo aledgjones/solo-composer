@@ -2,7 +2,7 @@ import React, { FC, useMemo, CSSProperties } from "react";
 
 import { merge } from "solo-ui";
 
-import { EntryType } from "../../../entries";
+import { EntryType, Entry } from "../../../entries";
 import { TimeSignature } from "../../../entries/time-signature";
 import { getIsBeat } from "../../../parse/get-is-beat";
 import { getTicksPerBeat } from "../../../parse/get-ticks-per-beat";
@@ -62,43 +62,40 @@ export const Ticks: FC<Props> = ({ ticks, height, fixed, color, highlight, class
     );
 };
 
-export function useTicks(length: number, flowEntriesByTick: EntriesByTick, zoom: number) {
+export function useTicks(subdivisions: number, length: number, flowEntriesByTick: EntriesByTick, zoom: number) {
     return useMemo(() => {
         const CROTCHET_WIDTH = 72;
 
         const ticks = [];
 
-        let timeSigResult;
+        let timeResult: { at: number, entries: Entry<TimeSignature>[] } = { at: 0, entries: [] };
         let beatGroupingBoundries: number[] = [];
         let x = 0;
 
         for (let tick = 0; tick < length + 1; tick++) {
-            const result = getEntriesAtTick<TimeSignature>(
-                tick,
-                flowEntriesByTick,
-                EntryType.timeSignature
-            );
+            const result = getEntriesAtTick<TimeSignature>(tick, flowEntriesByTick, EntryType.timeSignature);
             if (result.entries[0]) {
-                timeSigResult = result;
+                timeResult = result;
             }
-            const timeSigAt = timeSigResult?.at || 0;
-            const timeSig = timeSigResult?.entries[0];
 
-            const ticksPerBeat = getTicksPerBeat(timeSig?.subdivisions, timeSig?.beatType);
-            const ticksPerQuaverBeat = getTicksPerBeat(timeSig?.subdivisions, 8);
-            const ticksPerCrotchet = getTicksPerBeat(timeSig?.subdivisions, 4);
+            const timeAt = timeResult.at;
+            const time = timeResult.entries[0];
+
+            const ticksPerBeat = getTicksPerBeat(subdivisions, time?.beatType);
+            const ticksPerQuaverBeat = getTicksPerBeat(subdivisions, 8);
+            const ticksPerCrotchet = getTicksPerBeat(subdivisions, 4);
 
             const width = Math.ceil((CROTCHET_WIDTH / ticksPerCrotchet) * zoom);
 
-            const isBeat = getIsBeat(tick, ticksPerBeat, timeSigAt);
-            const isQuaverBeat = getIsBeat(tick, ticksPerQuaverBeat, timeSigAt); // smallest subs to show are quavers
-            const isFirstBeat = getIsBeat(tick, ticksPerBeat * (timeSig?.beats || 4), timeSigAt);
+            const isBeat = getIsBeat(tick, ticksPerBeat, timeAt);
+            const isQuaverBeat = getIsBeat(tick, ticksPerQuaverBeat, timeAt); // smallest subs to show are quavers
+            const isFirstBeat = getIsBeat(tick, ticksPerBeat * (time?.beats || 0), timeAt);
 
             if (isFirstBeat) {
                 beatGroupingBoundries = getBeatGroupingBoundries(
-                    timeSigAt + (tick - timeSigAt),
+                    timeAt + (tick - timeAt),
                     ticksPerBeat,
-                    timeSig?.groupings || getDefaultGroupings(4)
+                    time?.groupings || getDefaultGroupings(0)
                 );
             }
 
@@ -110,5 +107,5 @@ export function useTicks(length: number, flowEntriesByTick: EntriesByTick, zoom:
         }
 
         return { list: ticks, width: x };
-    }, [length, flowEntriesByTick, zoom]);
+    }, [subdivisions, length, flowEntriesByTick, zoom]);
 }

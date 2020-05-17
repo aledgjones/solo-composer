@@ -43,13 +43,10 @@ export function splitUnit(
 
     // if the unit is empty we stop the reccursion as there is no need for higher fidelity
     const unitIsEmpty = getIsEmpty(start, stop, track);
+
     if (unitIsEmpty) {
         const lastGroupingBoundry = groupingBoundries[groupingBoundries.length - 2];
-        if (
-            isFullBar &&
-            !getIsRest(track[start]) &&
-            !getIsWritable(track[start].duration, subdivisions)
-        ) {
+        if (isFullBar && !getIsRest(track[start]) && !getIsWritable(track[start].duration, subdivisions)) {
             track = splitNotationTrack(track, lastGroupingBoundry);
         }
     } else {
@@ -83,11 +80,7 @@ export function splitUnit(
                     getIsEmpty(secondBeat, fourthBeat, track)
                 ) {
                     // 2/4 [qcq] dont't split middle
-                } else if (
-                    track[secondBeat] &&
-                    !getIsRest(track[secondBeat]) &&
-                    getIsEmpty(secondBeat, stop, track)
-                ) {
+                } else if (track[secondBeat] && !getIsRest(track[secondBeat]) && getIsEmpty(secondBeat, stop, track)) {
                     // 2/4 [qc.] dont't split middle
                 } else if (
                     track[firstBeat] &&
@@ -136,11 +129,10 @@ export function splitUnit(
             const next = groupingBoundries[i + 1];
             if (next) {
                 const grouping = groupings[i];
-                const {
-                    groupings: nextGroupings,
-                    beats: nextBeats,
-                    beatType: nextBeatType
-                } = getNextGroupingAndBeat(grouping, beatType);
+                const { groupings: nextGroupings, beats: nextBeats, beatType: nextBeatType } = getNextGroupingAndBeat(
+                    grouping,
+                    beatType
+                );
                 track = splitUnit(
                     curr,
                     next,
@@ -160,6 +152,7 @@ export function splitUnit(
 }
 
 export function splitAsPerMeter(
+    subdivisions: number,
     length: number,
     flow: EntriesByTick,
     track: NotationTrack,
@@ -167,9 +160,9 @@ export function splitAsPerMeter(
 ) {
     // split at barlines
 
-    const barlines = Object.keys(_barlines).map(tick => parseInt(tick));
+    const barlines = Object.keys(_barlines).map((tick) => parseInt(tick));
 
-    barlines.forEach(tick => {
+    barlines.forEach((tick) => {
         track = splitNotationTrack(track, tick);
     });
 
@@ -177,26 +170,18 @@ export function splitAsPerMeter(
         const start = barline;
         const stop = barlines[i + 1] || length;
 
-        const timeSigResult = getNearestEntriesToTick<TimeSignature>(
-            start,
-            flow,
-            EntryType.timeSignature
-        );
-        const timeSig = timeSigResult.entries[0];
-        const groupings = timeSig ? timeSig.groupings : getDefaultGroupings(0);
-        const subdivisions = timeSig ? timeSig.subdivisions : 12;
-        const beats = timeSig ? timeSig.beats : 0;
-        const beatType = timeSig ? timeSig.beatType : 4;
+        const time = getNearestEntriesToTick<TimeSignature>(start, flow, EntryType.timeSignature).entries[0];
+        const groupings = time?.groupings || getDefaultGroupings(0);
 
-        const ticksPerBeat = getTicksPerBeat(subdivisions, beatType);
+        const ticksPerBeat = getTicksPerBeat(subdivisions, time?.beatType);
         const longestDottedRest = (ticksPerBeat / 2 / 2) * 3;
 
         track = splitUnit(
             start,
             stop,
             subdivisions,
-            beats,
-            beatType,
+            time?.beats || 0,
+            time?.beatType || 4,
             groupings,
             longestDottedRest,
             track,

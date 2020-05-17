@@ -6,6 +6,8 @@ import { NotationBaseDuration } from "../parse/notation-track";
 import { getDefaultGroupings } from "../parse/get-default-groupings";
 import { useAppActions, useAppState } from "./state";
 import { TabState } from "./ui";
+import { BarlineType } from "../entries/barline";
+import { LayoutType } from "./engraving";
 
 export function useAutoSetup() {
     const actions = useAppActions();
@@ -36,13 +38,16 @@ export function useAutoSetup() {
             actions.playback.sampler.assignInstrument(instrument.key, channel);
         });
 
+        actions.score.flows.createBarline({ type: BarlineType.start_repeat }, 0, flowKey);
+        actions.score.engraving.set(LayoutType.score, { finalBarlineType: BarlineType.end_repeat });
+
         actions.score.flows.createTimeSignature(
-            { beats: 4, beatType: 4, subdivisions: 12, groupings: getDefaultGroupings(4) },
+            { beats: 4, beatType: 4, groupings: getDefaultGroupings(4) },
             0,
             flowKey
         );
         actions.score.flows.createTimeSignature(
-            { beats: 3, beatType: 4, subdivisions: 12, groupings: getDefaultGroupings(3) },
+            { beats: 3, beatType: 4, groupings: getDefaultGroupings(3) },
             4 * c * 2,
             flowKey
         );

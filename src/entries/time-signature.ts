@@ -6,7 +6,6 @@ export interface TimeSignatureDef {
     beats: number; // 0 = free
     beatType: number; // if free this helps the splitting rules
     groupings: number[];
-    subdivisions: number;
     drawAs?: "c" | "splitc" | "X"; // free will not be drawn unless X is stated
 }
 
@@ -60,12 +59,7 @@ function glyphFromType(val: string) {
     }
 }
 
-export function drawTimeSignature(
-    x: number,
-    y: number,
-    time: Entry<TimeSignature>,
-    staveKey: string
-) {
+export function drawTimeSignature(x: number, y: number, time: Entry<TimeSignature>, staveKey: string) {
     const instructions = [];
     const styles: TextStyles = {
         color: "#000000",
@@ -81,9 +75,7 @@ export function drawTimeSignature(
     } else if (time.beats !== 0) {
         const countGlyph = glyphFromType(time.beats.toString());
         const beatGlyph = glyphFromType(time.beatType.toString());
-        instructions.push(
-            buildText(`${time._key}-${staveKey}-count`, styles, x, y + 1, countGlyph)
-        );
+        instructions.push(buildText(`${time._key}-${staveKey}-count`, styles, x, y + 1, countGlyph));
         instructions.push(buildText(`${time._key}-${staveKey}-beat`, styles, x, y + 3, beatGlyph));
     }
 

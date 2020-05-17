@@ -7,6 +7,8 @@ You can find the most recent updates listed here. Version numbers are for tracki
 -   <label type="feature"></label> Help and Feedback scafolding in place. I will write articles when I have more time.
 -   <label type="feature"></label> Dotted rhythm dots now print correctly in cluster chords. They follow the rules laid down in 'Behind Bars' by Elaine Gould.
 -   <label type="changed"></label> Updated icon pack with custom icons and maskable icons.
+-   <label type="changed"></label> Reorganised how subdivisions work. Going to see if a flow wide subdivision will give enough flexibility.
+-   <label type="changed"></label> Reorganised code for rendering of notes to be clearer and more modular.
 -   <label type="changed"></label> Reorganised the File menu, moved what's new into a help article.
 
 ## **0.6.0** (09-05-2020)

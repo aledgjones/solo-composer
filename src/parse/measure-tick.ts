@@ -17,6 +17,7 @@ import { getNearestEntriesToTick } from "./get-nearest-entry-to-tick";
 
 export function measureTick(
     tick: number,
+    subdivisions: number,
     isFirstBeat: boolean,
     flowEntries: EntriesByTick,
     staves: Stave[],
@@ -91,7 +92,6 @@ export function measureTick(
                                         flowEntries,
                                         EntryType.timeSignature
                                     );
-                                    const subdivisions = time.entries[0].subdivisions;
                                     const duration = getNotationBaseDuration(entry.duration, subdivisions);
                                     measurements[WidthOf.preNoteSlot] = getNoteheadWidthFromDuration(duration);
                                     break;

@@ -37,7 +37,7 @@ const Play: FC = () => {
     ]);
 
     const counts = useCounts();
-    const ticks = useTicks(flow.length, flowEntriesByTick, zoom);
+    const ticks = useTicks(flow.subdivisions, flow.length, flowEntriesByTick, zoom);
 
     const colors = useRainbow(score.players.order.length);
 

@@ -39,6 +39,7 @@ export interface ToneDetails {
 
 export function drawTick(
     tick: number,
+    subdivisions: number,
     isFirstBeat: boolean,
     systemX: number,
     y: number,
@@ -62,7 +63,7 @@ export function drawTick(
     const barline = getEntriesAtTick<Barline>(tick, flowEntries, EntryType.barline).entries[0];
     const tempo = getEntriesAtTick<AbsoluteTempo>(tick, flowEntries, EntryType.absoluteTempo).entries[0];
 
-    const ticksInBar = getTicksPerBeat(time.subdivisions, time.beatType) * time.beats;
+    const ticksInBar = getTicksPerBeat(subdivisions, time?.beatType) * (time?.beats || 0);
 
     if (barline) {
         if (barline.type === BarlineType.start_repeat) {
@@ -137,8 +138,8 @@ export function drawTick(
                     const isBarEmpty = isFirstBeat && getIsEmpty(tick, tick + ticksInBar, track);
                     const duration = isBarEmpty
                         ? NotationBaseDuration.semibreve
-                        : getNotationBaseDuration(entry.duration, time.subdivisions);
-                    const isDotted = isBarEmpty ? false : getIsDotted(entry.duration, time.subdivisions);
+                        : getNotationBaseDuration(entry.duration, subdivisions);
+                    const isDotted = isBarEmpty ? false : getIsDotted(entry.duration, subdivisions);
                     const barWidth = sumTickWidths(tick, tick + ticksInBar, horizontalMeasurements);
                     const preWidth = sumWidthUpTo(widths, WidthOf.noteSpacing);
 
@@ -155,10 +156,10 @@ export function drawTick(
                         )
                     );
                 } else {
-                    const duration = getNotationBaseDuration(entry.duration, time.subdivisions);
+                    const duration = getNotationBaseDuration(entry.duration, subdivisions);
                     const glyph = glyphFromDuration(duration);
                     const glyphWidth = getNoteheadWidthFromDuration(duration);
-                    const isDotted = getIsDotted(entry.duration, time.subdivisions);
+                    const isDotted = getIsDotted(entry.duration, subdivisions);
                     const tieWidth =
                         sumTickWidths(tick, tick + entry.duration, horizontalMeasurements) -
                         sumWidthUpTo(widths, WidthOf.preNoteSlot) +
