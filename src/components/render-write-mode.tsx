@@ -1,4 +1,4 @@
-import React, { FC, useState, memo } from "react";
+import React, { FC, useState, memo, CSSProperties } from "react";
 
 import { useAppState } from "../services/state";
 import { useParseWorker } from "../parse/use-parse";
@@ -10,8 +10,15 @@ import { CurveInstruction, getControlPoints } from "../render/curve";
 import { Text } from "./text";
 
 import "./render-write-mode.css";
+import { merge } from "solo-ui";
 
-export const RenderWriteMode: FC = memo(() => {
+interface Props {
+    id?: string;
+    className?: string;
+    style?: CSSProperties;
+}
+
+export const RenderWriteMode: FC<Props> = memo(({ id, className, style }) => {
     const { theme, score } = useAppState(s => {
         return {
             theme: s.ui.theme.pallets,
@@ -29,7 +36,7 @@ export const RenderWriteMode: FC = memo(() => {
     const { space, width, height, entries } = instructions;
 
     return (
-        <div className="render-write-mode">
+        <div id={id} style={style} className={merge("render-write-mode", className)}>
             <div
                 className="render-write-mode__container"
                 style={{ width: width * space, height: height * space }}

@@ -1,9 +1,9 @@
 import React, { FC, useMemo, useRef } from "react";
-import { mdiChevronRight } from "@mdi/js";
+import { mdiPiano, mdiDeleteOutline } from "@mdi/js";
 
 import { Icon, SortableItem } from "solo-ui";
 
-import { useAppState } from "../../services/state";
+import { useAppState, useAppActions } from "../../services/state";
 import { Instrument, useInstrumentName } from "../../services/instrument";
 import { Text } from "../../components/text";
 
@@ -20,6 +20,7 @@ interface Props {
 
 export const InstrumentItem: FC<Props> = ({ index, selected, instrument, count, onSelectPlayer }) => {
     const handle = useRef<HTMLDivElement>(null);
+    const actions = useAppActions();
     const theme = useAppState(s => s.ui.theme.pallets);
     const { bg, fg } = useMemo(() => {
         if (selected) {
@@ -39,9 +40,12 @@ export const InstrumentItem: FC<Props> = ({ index, selected, instrument, count, 
             style={{ backgroundColor: bg, color: fg }}
         >
             <div ref={handle} onPointerDown={onSelectPlayer}>
-                <Text className="instrument-item__name">{name}</Text>
+                <Icon style={{ marginRight: 16 }} path={mdiPiano} color={fg} size={24} />
             </div>
-            <Icon size={18} color={fg} path={mdiChevronRight} />
+            <Text className="instrument-item__name">{name}</Text>
+            {selected && <>
+                <Icon size={24} color={fg} path={mdiDeleteOutline} onClick={() => actions.score.instruments.remove(instrument.key)} />
+            </>}
         </SortableItem>
     );
 };

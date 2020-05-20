@@ -1,6 +1,7 @@
 import React, { FC, CSSProperties } from "react";
 import { Spinner, Label, Icon } from "solo-ui";
 import { mdiEyeOffOutline } from "@mdi/js";
+import { Panel } from "../panel";
 
 interface Props {
     style?: CSSProperties;
@@ -21,10 +22,14 @@ export const Fallback: FC<Props> = ({ style, type, color, text, subtext }) => {
                 justifyContent: "center",
                 height: "100%",
                 width: "100%",
+                paddingLeft: type === 'loading' ? 64 : 0,
                 ...style
             }}
         >
-            {type === "loading" && <Spinner color={color} size={24} />}
+            {type === "loading" && <>
+                <Panel />
+                <Spinner color={color} size={24} />
+            </>}
             {type === "empty" && (
                 <>
                     <Icon path={mdiEyeOffOutline} color={color} size={48} style={{ marginBottom: 10 }} />

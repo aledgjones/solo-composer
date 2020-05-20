@@ -13,6 +13,7 @@ import { PlayerTrack } from "./player-track";
 import { PlaySettings } from "../../dialogs/play-settings";
 
 import "./play.css";
+import { Panel } from "../../components/panel";
 
 const Play: FC = () => {
     useTitle("Solo Composer | Play");
@@ -58,48 +59,50 @@ const Play: FC = () => {
 
     return (
         <>
+
+            <Panel>
+                <div className="panel__wrapper">
+                    <Icon
+                        className="panel__tool"
+                        toggle={tool === Tool.select}
+                        onClick={() => actions.ui.tool[TabState.play].set(Tool.select)}
+                        path={mdiCursorDefault}
+                        size={24}
+                        color={theme.background[400].fg}
+                        highlight={theme.primary[500].bg}
+                    />
+                    <Icon
+                        className="panel__tool"
+                        toggle={tool === Tool.pencil}
+                        onClick={() => actions.ui.tool[TabState.play].set(Tool.pencil)}
+                        path={mdiGreasePencil}
+                        size={24}
+                        color={theme.background[400].fg}
+                        highlight={theme.primary[500].bg}
+                    />
+                    <Icon
+                        className="panel__tool"
+                        toggle={tool === Tool.eraser}
+                        onClick={() => actions.ui.tool[TabState.play].set(Tool.eraser)}
+                        path={mdiEraser}
+                        size={24}
+                        color={theme.background[400].fg}
+                        highlight={theme.primary[500].bg}
+                    />
+                </div>
+                <div className="panel__wrapper">
+                    <Icon
+                        className="panel__tool"
+                        path={mdiCogOutline}
+                        size={24}
+                        color={theme.background[400].fg}
+                        onClick={() => setSettings(true)}
+                    />
+                </div>
+            </Panel>
+
             <DragScroll className="play" x ignore="no-scroll">
                 <div className="play__x-fixed play__left-panel no-scroll">
-                    <div className="play__tools-container" style={{ backgroundColor: theme.background[400].bg }}>
-                        <div className="play__tools">
-                            <Icon
-                                className="play__tool"
-                                toggle={tool === Tool.select}
-                                onClick={() => actions.ui.tool[TabState.play].set(Tool.select)}
-                                path={mdiCursorDefault}
-                                size={24}
-                                color={theme.background[300].fg}
-                                highlight={theme.primary[500].bg}
-                            />
-                            <Icon
-                                className="play__tool"
-                                toggle={tool === Tool.pencil}
-                                onClick={() => actions.ui.tool[TabState.play].set(Tool.pencil)}
-                                path={mdiGreasePencil}
-                                size={24}
-                                color={theme.background[300].fg}
-                                highlight={theme.primary[500].bg}
-                            />
-                            <Icon
-                                className="play__tool"
-                                toggle={tool === Tool.eraser}
-                                onClick={() => actions.ui.tool[TabState.play].set(Tool.eraser)}
-                                path={mdiEraser}
-                                size={24}
-                                color={theme.background[300].fg}
-                                highlight={theme.primary[500].bg}
-                            />
-                        </div>
-                        <div className="play__settings">
-                            <Icon
-                                className="play__tool"
-                                path={mdiCogOutline}
-                                size={24}
-                                color={theme.background[300].fg}
-                                onClick={() => setSettings(true)}
-                            />
-                        </div>
-                    </div>
 
                     <div className="play__controls" style={{ backgroundColor: theme.background[500].bg }}>
                         <div className="play__header-select" style={{ backgroundColor: theme.background[400].bg }}>

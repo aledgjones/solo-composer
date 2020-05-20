@@ -49,13 +49,13 @@ export const pallets: Pallets = {
         800: { bg: "#505050", fg: "#ffffff" }
     },
     [ThemeMode.light]: {
-        200: { bg: "#ffffff", fg: "#323232" },
-        300: { bg: "#9f9f9f", fg: "#323232" },
-        400: { bg: "#aaaaaa", fg: "#323232" },
-        500: { bg: "#e8e8e8", fg: "#323232" },
-        600: { bg: "#b8b8b8", fg: "#323232" },
-        700: { bg: "#c8c8c8", fg: "#323232" },
-        800: { bg: "#eeeeee", fg: "#323232" }
+        200: { bg: "#ffffff", fg: "#323232" }, //
+        300: { bg: "#e9e9e9", fg: "#323232" }, //
+        400: { bg: "#e9e9e9", fg: "#323232" }, //
+        500: { bg: "#e0e0e0", fg: "#323232" }, //
+        600: { bg: "#d7d7d7", fg: "#323232" }, //
+        700: { bg: "#d1d1d1", fg: "#323232" }, //
+        800: { bg: "#afafaf", fg: "#323232" } //
     }
 };
 
@@ -73,9 +73,9 @@ export function themeEmptyState(): ThemeState {
                 300: { bg: "", fg: "" },
                 400: { bg: "#00508e", fg: "#ffffff" },
                 500: { bg: "#0064b1", fg: "#ffffff" },
-                600: { bg: "#0082e6", fg: "#ffffff" },
-                700: { bg: "#1c9cff", fg: "#ffffff" },
-                800: { bg: "#49b0ff", fg: "#ffffff" }
+                600: { bg: "#1a74b9", fg: "#ffffff" },
+                700: { bg: "#3383c1", fg: "#ffffff" },
+                800: { bg: "#4d93c9", fg: "#ffffff" }
             },
             highlight: "orange",
             error: "#ff6347"

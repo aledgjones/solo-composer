@@ -5,19 +5,21 @@ import { InstrumentAutoCountStyle } from "./instrument-utils";
 export type PartialConfig = Partial<ConfigState>;
 
 export interface ConfigState {
-    autoCountStyle: InstrumentAutoCountStyle;
+    autoCountStyleSolo: InstrumentAutoCountStyle;
+    autoCountStyleSection: InstrumentAutoCountStyle;
 }
 
 export const configEmptyState = (): ConfigState => {
     return {
-        autoCountStyle: InstrumentAutoCountStyle.roman
+        autoCountStyleSolo: InstrumentAutoCountStyle.roman,
+        autoCountStyleSection: InstrumentAutoCountStyle.roman
     };
 };
 
 export const configActions = (store: Store<State>) => {
     return {
         set: (config: PartialConfig) => {
-            store.update(s => {
+            store.update((s) => {
                 s.score.config = { ...s.score.config, ...config };
             });
         }

@@ -25,13 +25,6 @@
     padding: 0 16px;
 }
 
-.player-item__list {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 0 16px 12px 56px;
-}
-
 .player-item__name {
     display: flex;
     align-items: center;
@@ -39,4 +32,8 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.player-item__list {
+    padding: 12px 20px;
 }

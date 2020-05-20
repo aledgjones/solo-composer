@@ -15,6 +15,7 @@ import "./styles.css";
 
 const Setup = React.lazy(() => import("../../routes/setup"));
 const Write = React.lazy(() => import("../../routes/write"));
+const Engrave = React.lazy(() => import("../../routes/engrave"));
 const Play = React.lazy(() => import("../../routes/play"));
 
 export const MainShell: FC = () => {
@@ -58,12 +59,11 @@ export const MainShell: FC = () => {
 
             <div className="main-shell__content" style={{ backgroundColor: theme.background[500].bg }}>
                 <Suspense fallback={<Fallback color={theme.background[500].fg} type="loading" />}>
-                    {(tab === TabState.engrave || tab === TabState.print) && (
-                        <Fallback color={theme.background[500].fg} type="empty" />
-                    )}
                     {tab === TabState.setup && <Setup />}
                     {tab === TabState.write && <Write />}
+                    {tab === TabState.engrave && <Engrave />}
                     {tab === TabState.play && <Play />}
+                    {tab === TabState.print && <Fallback color={theme.background[500].fg} type="empty" />}
                 </Suspense>
             </div>
         </>

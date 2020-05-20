@@ -6,7 +6,7 @@ import { Subheader, Content, Label, Icon, Dialog } from "solo-ui";
 import app from "../../app.json";
 import { useAppState } from "../../services/state";
 
-import logo from "../../assets/logo-silo-dark.svg";
+import logo from "../../assets/logo-silo.svg";
 
 import "./styles.css";
 
@@ -20,11 +20,11 @@ export const About = Dialog<Props>(({ onClose }) => {
 
     return <>
         <div className="about__header">
-            <Icon path={mdiClose} color="#000000" size={24} onClick={onClose} />
+            <Icon path={mdiClose} color={theme.primary[500].bg} size={24} onClick={onClose} />
         </div>
         <div className="about__logo">
             <img className="about__logo-img" alt="Solo Composer Logo" src={logo} />
-            <Label className="about__logo-text">
+            <Label className="about__logo-text" style={{ color: theme.primary[500].bg }}>
                 <p>{app.name}</p>
                 <p>{app.description}</p>
             </Label>

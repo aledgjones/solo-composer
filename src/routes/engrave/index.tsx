@@ -9,31 +9,33 @@ import { Panel } from "../../components/panel";
 import { EngraveSettings } from "../../dialogs/engrave-settings";
 import { useAppState } from "../../services/state";
 
-import "./write.css";
+import "./styles.css";
 
-const Write: FC = () => {
-    useTitle("Solo Composer | Write");
+const Engrave: FC = () => {
+    useTitle("Solo Composer | Engrave");
     const theme = useAppState(s => s.ui.theme.pallets);
     const [settings, setSettings] = useState(false);
 
     return (
         <>
-            <div className="write">
+            <div className="engrave">
                 <RenderRegion>
-                    <RenderWriteMode className="write__renderer" />
+                    <RenderWriteMode className="engrave__renderer" />
                 </RenderRegion>
             </div>
 
             <Panel>
                 <div className="panel__wrapper" />
                 <div className="panel__wrapper">
-                    <Icon
-                        className="panel__tool"
-                        path={mdiCogOutline}
-                        size={24}
-                        color={theme.background[400].fg}
-                        onClick={() => setSettings(true)}
-                    />
+                    <div data-tooltip="Engrave Settings" data-tooltip-direction="up">
+                        <Icon
+                            className="panel__tool"
+                            path={mdiCogOutline}
+                            size={24}
+                            color={theme.background[400].fg}
+                            onClick={() => setSettings(true)}
+                        />
+                    </div>
                 </div>
             </Panel>
 
@@ -42,4 +44,4 @@ const Write: FC = () => {
     );
 };
 
-export default Write;
+export default Engrave;

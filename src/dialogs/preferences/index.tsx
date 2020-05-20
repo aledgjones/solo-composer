@@ -56,7 +56,7 @@ export const Preferences = Dialog<Props>(({ onClose }) => {
                                     label="Language"
                                     color={theme.pallets.primary[500].bg}
                                     value="en-gb"
-                                    onChange={() => {}}
+                                    onChange={() => { }}
                                 >
                                     <Option value="en-gb" displayAs="English (UK)">
                                         English (UK)
@@ -72,17 +72,17 @@ export const Preferences = Dialog<Props>(({ onClose }) => {
                                     value={theme.mode}
                                     onChange={(mode: ThemeMode) => actions.ui.theme.mode(mode)}
                                 >
-                                    <Option value={ThemeMode.light} displayAs="Light">
-                                        Light
-                                    </Option>
-                                    <Option value={ThemeMode.dark} displayAs="Dark">
-                                        Dark
-                                    </Option>
                                     <Option value={ThemeMode.auto} displayAs="Auto">
                                         <Label>
                                             <p>Auto</p>
                                             <p>Use the system preference if available</p>
                                         </Label>
+                                    </Option>
+                                    <Option value={ThemeMode.light} displayAs="Light">
+                                        Light
+                                    </Option>
+                                    <Option value={ThemeMode.dark} displayAs="Dark">
+                                        Dark
                                     </Option>
                                 </Select>
                             </div>

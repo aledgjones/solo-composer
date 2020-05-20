@@ -100,7 +100,7 @@ export const PlayerItem: FC<Props> = ({
                             path={mdiDeleteOutline}
                             onClick={onRemove}
                         />
-                        {player.type === PlayerType.solo && (
+                        {(player.instruments.length === 0 || player.type === PlayerType.solo) && (
                             <Icon
                                 style={{ marginLeft: 12 }}
                                 path={mdiPlus}

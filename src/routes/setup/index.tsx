@@ -1,6 +1,7 @@
 import React, { FC, useState, useCallback } from "react";
+import { mdiCogOutline } from "@mdi/js";
 
-import { useTitle } from "solo-ui";
+import { useTitle, Icon } from "solo-ui";
 
 import { useAppActions, useAppState } from "../../services/state";
 import { PlayerType, PlayerKey } from "../../services/player";
@@ -12,9 +13,12 @@ import { Selection, SelectionType } from "./selection";
 import { PlayerList } from "./player-list";
 import { FlowList } from "./flow-list";
 import { LayoutList } from "./layout-list";
-import { InstrumentPicker } from "./instrument-picker";
+import { InstrumentSelector } from "./instrument-selector";
+import { PlayerTypeSelector } from "../../dialogs/player-type-selector";
 import { RenderRegion } from "../../components/render-region";
 import { RenderWriteMode } from "../../components/render-write-mode";
+import { Panel } from "../../components/panel";
+import { SetupSettings } from "../../dialogs/setup-settings";
 
 import "./setup.css";
 
@@ -28,46 +32,41 @@ const Setup: FC<Props> = () => {
 
     // local selection fine, we don't need to keep this after nav.
     const [selection, setSelection] = useState<Selection>(null);
-    const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+    const [typeSelector, setTypeSelector] = useState<boolean>(false);
+    const [instrumentSelector, setInstrumentSelector] = useState<boolean>(false);
+    const [settings, setSettings] = useState<boolean>(false);
 
     // PLAYERS
 
-    const onCreatePlayer = useCallback(() => {
-        const playerKey = actions.score.players.create(PlayerType.solo);
-        setSelection({ key: playerKey, type: SelectionType.player });
-        setDialogOpen(true);
+    const onTypeSelected = useCallback((type?: PlayerType) => {
+        setTypeSelector(false);
+        if (type) {
+            const playerKey = actions.score.players.create(type);
+            setSelection({ key: playerKey, type: SelectionType.player });
+            setInstrumentSelector(true);
+        }
     }, [actions.score.players]);
 
     const onAddInstrument = useCallback(() => {
-        setDialogOpen(true);
+        setInstrumentSelector(true);
     }, []);
 
-    const onRemovePlayer = useCallback(
-        (playerKey: PlayerKey) => {
-            actions.score.players.remove(playerKey);
-            setSelection(null);
-        },
-        [actions.score.players]
-    );
+    const onRemovePlayer = useCallback((playerKey: PlayerKey) => {
+        actions.score.players.remove(playerKey);
+        setSelection(null);
+    }, [actions.score.players]);
 
-    const onSelectInstrument = useCallback(
-        (def: InstrumentDef) => {
-            if (selection) {
-                const channel = actions.playback.sampler.createChannel();
-                const instrument = actions.score.instruments.create(def);
+    const onSelectInstrument = useCallback((def: InstrumentDef) => {
+        if (selection) {
+            const channel = actions.playback.sampler.createChannel();
+            const instrument = actions.score.instruments.create(def);
 
-                actions.score.players.assignInstrument(selection.key, instrument.key);
-                actions.playback.sampler.assignInstrument(instrument.key, channel);
-                actions.playback.sampler.load(channel, def);
-            }
-            setDialogOpen(false);
-        },
-        [selection, actions.score.instruments, actions.score.players, actions.playback.sampler]
-    );
-
-    const onCancelInstrument = useCallback(() => {
-        setDialogOpen(false);
-    }, []);
+            actions.score.players.assignInstrument(selection.key, instrument.key);
+            actions.playback.sampler.assignInstrument(instrument.key, channel);
+            actions.playback.sampler.load(channel, def);
+        }
+        setInstrumentSelector(false);
+    }, [selection, actions.score.instruments, actions.score.players, actions.playback.sampler]);
 
     // FLOWS
 
@@ -106,11 +105,27 @@ const Setup: FC<Props> = () => {
 
     return (
         <>
+
+            <Panel>
+                <div className="panel__wrapper" />
+                <div className="panel__wrapper">
+                    <Icon
+                        data-tooltip="Engrave Settings"
+                        data-tooltip-direction="up"
+                        className="panel__tool"
+                        path={mdiCogOutline}
+                        size={24}
+                        color={theme.background[400].fg}
+                        onClick={() => setSettings(true)}
+                    />
+                </div>
+            </Panel>
+
             <div className="setup" style={{ backgroundColor: theme.background[500].bg }}>
                 <PlayerList
                     selection={selection}
                     onSelectPlayer={setSelection}
-                    onCreatePlayer={onCreatePlayer}
+                    onCreatePlayer={() => setTypeSelector(true)}
                     onAddInstrument={onAddInstrument}
                     onRemovePlayer={onRemovePlayer}
                 />
@@ -136,7 +151,9 @@ const Setup: FC<Props> = () => {
                 <LayoutList />
             </div>
 
-            <InstrumentPicker width={900} open={dialogOpen} onSelect={onSelectInstrument} onCancel={onCancelInstrument} />
+            <PlayerTypeSelector width={400} open={typeSelector} onClose={onTypeSelected} />
+            <InstrumentSelector width={900} open={instrumentSelector} onSelect={onSelectInstrument} onCancel={() => setInstrumentSelector(false)} />
+            <SetupSettings width={900} open={settings} onClose={() => setSettings(false)} />
 
         </>
     );

@@ -1,0 +1,19 @@
+.player-type-selector {
+    display: flex;
+    justify-content: space-between;
+}
+
+.player-type-selector__box {
+    border-radius: 3px;
+    padding: 20px;
+    color: white;
+    width: calc(50% - 10px);
+    text-align: center;
+    cursor: pointer;
+    background-color: rgb(235, 235, 235);
+    color: rgb(50, 50, 50);
+}
+
+.player-type-selector__box .ui-icon {
+    margin: 0 auto 8px auto;
+}

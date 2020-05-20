@@ -3,13 +3,13 @@ import { mdiPlus } from "@mdi/js";
 
 import { Icon, SortableContainer } from "solo-ui";
 
-import { PlayerKey } from "../../services/player";
-import { useAppActions, useAppState } from "../../services/state";
-import { PlayerItem } from "./player-item";
-import { Selection } from "./selection";
-import { useCounts } from "../../services/instrument";
+import { PlayerKey } from "../../../services/player";
+import { useAppActions, useAppState } from "../../../services/state";
+import { PlayerItem } from "../player-item";
+import { Selection } from "../selection";
+import { useCounts } from "../../../services/instrument";
 
-import "./player-list.css";
+import "./styles.css";
 
 interface Props {
     selection: Selection;
@@ -36,7 +36,7 @@ export const PlayerList: FC<Props> = ({ selection, onSelectPlayer, onAddInstrume
 
     return (
         <div className="player-list" style={{ backgroundColor: theme.background[500].bg }}>
-            <div className="player-list__header" style={{ backgroundColor: theme.background[400].bg }}>
+            <div className="player-list__header" style={{ backgroundColor: theme.background[400].bg, borderLeft: `1px solid ${theme.background[500].bg}` }}>
                 <span className="player-list__label" style={{ color: theme.background[400].fg }}>
                     Players
                 </span>

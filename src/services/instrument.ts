@@ -34,15 +34,15 @@ export const instrumentActions = (store: Store<State>) => {
         // this purely creates an instrumnet -- players are added to flows so flow update not needed here
         // instruments are assigned to players seperately
         create: (def: InstrumentDef) => {
-            const staveKeys = def.staves.map(staveDef => shortid());
+            const staveKeys = def.staves.map((staveDef) => shortid());
             const instrument = createInstrument(def, staveKeys);
-            store.update(s => {
+            store.update((s) => {
                 s.score.instruments[instrument.key] = instrument;
             });
             return instrument;
         },
         reorder: (playerKey: PlayerKey, oldIndex: number, newIndex: number) => {
-            store.update(s => {
+            store.update((s) => {
                 s.score.players.byKey[playerKey].instruments = arrayMove(
                     s.score.players.byKey[playerKey].instruments,
                     oldIndex,
@@ -51,26 +51,41 @@ export const instrumentActions = (store: Store<State>) => {
             });
         },
         remove: (instrumentKey: InstrumentKey) => {
-            // remove from score.instruments
-            // remove from each flow
+            store.update((s) => {
+                // remove the instrument from the player
+                s.score.players.order.forEach((playerKey) => {
+                    const player = s.score.players.byKey[playerKey];
+                    player.instruments = player.instruments.filter((key) => key !== instrumentKey);
+                });
+
+                // for each flow, we remove the instrument's staves and each of their tracks
+                const staves = s.score.instruments[instrumentKey].staves;
+                s.score.flows.order.forEach((flowKey) => {
+                    const flow = s.score.flows.byKey[flowKey];
+                    staves.forEach((staveKey) => {
+                        // delete each track
+                        flow.staves[staveKey].tracks.forEach((trackKey) => {
+                            delete flow.tracks[trackKey];
+                        });
+                        // delete the stave
+                        delete flow.staves[staveKey];
+                    });
+                });
+
+                delete s.score.instruments[instrumentKey];
+            });
         },
         createTone: (flowKey: FlowKey, trackKey: TrackKey, def: ToneDef, tick: number) => {
             const tone = createTone(def, tick);
-            store.update(s => {
+            store.update((s) => {
                 const track = s.score.flows.byKey[flowKey].tracks[trackKey];
                 track.entries.byKey[tone._key] = tone;
                 track.entries.order.push(tone._key);
             });
             return tone;
         },
-        updateTone: (
-            flowKey: FlowKey,
-            trackKey: TrackKey,
-            toneKey: string,
-            def: Partial<ToneDef>,
-            tick?: number
-        ) => {
-            store.update(s => {
+        updateTone: (flowKey: FlowKey, trackKey: TrackKey, toneKey: string, def: Partial<ToneDef>, tick?: number) => {
+            store.update((s) => {
                 const track = s.score.flows.byKey[flowKey].tracks[trackKey];
                 const tone = track.entries.byKey[toneKey] as Entry<Tone>;
                 track.entries.byKey[toneKey] = {
@@ -81,12 +96,10 @@ export const instrumentActions = (store: Store<State>) => {
             });
         },
         removeTone: (flowKey: FlowKey, trackKey: TrackKey, toneKey: string) => {
-            store.update(s => {
+            store.update((s) => {
                 const track = s.score.flows.byKey[flowKey].tracks[trackKey];
                 delete track.entries.byKey[toneKey];
-                track.entries.order = track.entries.order.filter(
-                    (entry: string) => entry !== toneKey
-                );
+                track.entries.order = track.entries.order.filter((entry: string) => entry !== toneKey);
             });
         }
     };
@@ -103,7 +116,7 @@ export const createInstrument = (def: InstrumentDef, staves: StaveKey[]): Instru
 };
 
 export function useCounts(): InstrumentCounts {
-    const { players, instruments, config } = useAppState(s => ({
+    const { players, instruments, config } = useAppState((s) => ({
         players: s.score.players,
         instruments: s.score.instruments,
         config: s.score.config

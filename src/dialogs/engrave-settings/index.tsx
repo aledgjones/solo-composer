@@ -11,16 +11,16 @@ import staveSpace from "./examples/stave-space.svg";
 import "../generic-settings.css";
 
 enum Page {
-    staves = 1,
-    bracketsAndBraces
+    barlines,
+    bracketsAndBraces,
+    staves
 }
 
 interface Props {
     onClose: () => void;
 }
 
-export const EngravingSettings = Dialog<Props>(({ onClose }) => {
-
+export const EngraveSettings = Dialog<Props>(({ onClose }) => {
 
     const [page, setPage] = useState<Page>(Page.staves);
     const [layoutType, setLayoutType] = useState<LayoutType>(LayoutType.score);
@@ -42,6 +42,9 @@ export const EngravingSettings = Dialog<Props>(({ onClose }) => {
         <div className="generic-settings">
             <div className="generic-settings__content">
                 <div className="generic-settings__left-panel">
+                    <MenuItem color={theme.primary[500].bg} selected={page === Page.barlines} onClick={() => setPage(Page.barlines)}>
+                        Barlines
+                    </MenuItem>
                     <MenuItem color={theme.primary[500].bg} selected={page === Page.bracketsAndBraces} onClick={() => setPage(Page.bracketsAndBraces)}>
                         Brackets &amp; Braces
                     </MenuItem>
@@ -51,6 +54,30 @@ export const EngravingSettings = Dialog<Props>(({ onClose }) => {
                 </div>
 
                 <div className="generic-settings__right-panel">
+
+                    {page === Page.barlines && (
+                        <>
+                            <div className="generic-settings__section">
+                                <Subheader style={{ marginBottom: 0 }}>Systemic Barlines</Subheader>
+                            </div>
+                            <ListItem
+                                style={{ marginBottom: 20 }}
+                                onClick={() =>
+                                    actions.score.engraving.set(layoutType, {
+                                        systemicBarlineSingleInstrumentSystem: !engraving.systemicBarlineSingleInstrumentSystem
+                                    })
+                                }
+                            >
+                                <Label>
+                                    <p>Use systemic barlines for single stave systems.</p>
+                                    <p>Systemic barlines will always be used with multiple instruments.</p>
+                                </Label>
+                                <Switch color={theme.primary[500].bg} value={engraving.systemicBarlineSingleInstrumentSystem} />
+                            </ListItem>
+                        </>
+                    )}
+
+
                     {page === Page.bracketsAndBraces && (
                         <>
                             <div

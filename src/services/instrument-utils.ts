@@ -1,5 +1,5 @@
 import { toRoman } from "roman-numerals";
-import { PlayerState, PlayerKey } from "./player";
+import { PlayerState, PlayerKey, PlayerType } from "./player";
 import { Instruments, InstrumentKey, Instrument } from "./instrument";
 import { ConfigState } from "./config";
 import { Flow } from "./flow";
@@ -8,7 +8,14 @@ export enum InstrumentAutoCountStyle {
     arabic = 1,
     roman
 }
-type InstrumentCountsTotals = { [name: string]: InstrumentKey[] };
+
+interface InstrumentCountsTotals {
+    [name: string]: {
+        [PlayerType.solo]: InstrumentKey[];
+        [PlayerType.section]: InstrumentKey[];
+    };
+}
+
 export type InstrumentCounts = { [instrumentKey: string]: string };
 
 /**
@@ -24,21 +31,29 @@ export function getCounts(players: PlayerState, instruments: Instruments, config
         const player = players.byKey[playerKey];
         player.instruments.forEach((instrumentKey: InstrumentKey) => {
             const instrument = instruments[instrumentKey];
-            // consider solo / ensemble players as different by appending type
-            const name = instrument.longName + ":" + player.type;
-            if (!output[name]) {
-                output[name] = [];
+            if (!output[instrument.longName]) {
+                output[instrument.longName] = { [PlayerType.solo]: [], [PlayerType.section]: [] };
             }
-            output[name].push(instrument.key);
+            output[instrument.longName][player.type].push(instrument.key);
         });
         return output;
     }, {});
 
     const names = Object.keys(counts);
     return names.reduce((out: InstrumentCounts, name: string) => {
-        counts[name].forEach((instrumentKey, i, _names) => {
+        counts[name][PlayerType.solo].forEach((instrumentKey, i, _names) => {
             if (_names.length > 1) {
-                if (config.autoCountStyle === InstrumentAutoCountStyle.arabic) {
+                if (config.autoCountStyleSolo === InstrumentAutoCountStyle.arabic) {
+                    out[instrumentKey] = ` ${i + 1}`;
+                } else {
+                    out[instrumentKey] = ` ${toRoman(i + 1)}`;
+                }
+            }
+        });
+
+        counts[name][PlayerType.section].forEach((instrumentKey, i, _names) => {
+            if (_names.length > 1) {
+                if (config.autoCountStyleSection === InstrumentAutoCountStyle.arabic) {
                     out[instrumentKey] = ` ${i + 1}`;
                 } else {
                     out[instrumentKey] = ` ${toRoman(i + 1)}`;
@@ -53,15 +68,11 @@ export function getCounts(players: PlayerState, instruments: Instruments, config
  * get an array of instruments
  * optionally filter by the flow
  */
-export function getInstruments(
-    players: PlayerState,
-    instruments: Instruments,
-    flow?: Flow
-): Instrument[] {
+export function getInstruments(players: PlayerState, instruments: Instruments, flow?: Flow): Instrument[] {
     return players.order.reduce((output: Instrument[], playerKey) => {
         const player = players.byKey[playerKey];
         if (!flow || flow.players.includes(player.key)) {
-            player.instruments.forEach(instrumentKey => {
+            player.instruments.forEach((instrumentKey) => {
                 output.push(instruments[instrumentKey]);
             });
         }

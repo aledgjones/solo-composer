@@ -17,7 +17,7 @@
 }
 
 .feedback__content {
-    padding: 0 0 20px 0;
+    padding: 0 0 20px 0 !important;
     height: calc(100vh - 205px);
     overflow: auto;
 }
@@ -49,9 +49,9 @@
 }
 
 .feedback__empty {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     height: calc(100vh - 205px);
 }
 

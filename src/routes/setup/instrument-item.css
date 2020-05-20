@@ -3,11 +3,11 @@
     display: flex;
     align-items: center;
     height: 28px;
-    font-size: 12px;
-    padding: 0 4px 0 0;
-    margin-bottom: 4px;
+    padding: 0 16px;
     line-height: 1em;
+    height: 48px;
     border-radius: 3px;
+    margin-bottom: 8px;
 }
 
 .instrument-item.ui-sortable-item--sorting {
@@ -22,9 +22,9 @@
 
 .instrument-item__name {
     position: relative;
-    padding: 0 8px;
     display: flex;
     align-items: center;
     height: 28px;
     z-index: 1;
+    flex-grow: 1;
 }

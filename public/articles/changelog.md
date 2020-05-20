@@ -1,15 +1,17 @@
 # What's New
 
-You can find the most recent updates listed here. Version numbers are for tracking purposes only at present and will be more strictly SemVer style once more features are in place.
+You can find the most recent updates listed here. Version numbers are for tracking purposes only at present and will be in a more strict SemVer style once more features are in place.
 
 ## **0.7.0** (12-05-2020)
 
+-   <label type="feature"></label> Added the ability to create both solo and section players.
+-   <label type="feature"></label> Added the ability to show different numbering styles for both solo and section players.
+-   <label type="feature"></label> Added engraving setting to hide systemic barlines when there is only one instrument.
 -   <label type="feature"></label> Help and Feedback scafolding in place. I will write articles when I have more time.
--   <label type="feature"></label> Dotted rhythm dots now print correctly in cluster chords. They follow the rules laid down in 'Behind Bars' by Elaine Gould.
 -   <label type="changed"></label> Updated icon pack with custom icons and maskable icons.
--   <label type="changed"></label> Reorganised how subdivisions work. Going to see if a flow wide subdivision will give enough flexibility.
--   <label type="changed"></label> Reorganised code for rendering of notes to be clearer and more modular.
 -   <label type="changed"></label> Reorganised the File menu, moved what's new into a help article.
+-   <label type="changed"></label> Updated light theme based on an inverted version of the dark theme.
+-   <label type="fixed"></label> Dotted rhythm dots now print correctly in cluster chords. They follow the rules laid down in 'Behind Bars' by Elaine Gould.
 
 ## **0.6.0** (09-05-2020)
 
@@ -19,6 +21,7 @@ You can find the most recent updates listed here. Version numbers are for tracki
 -   <label type="changed"></label> Small tweak to left panel design to clarify actions.
 -   <label type="changed"></label> Tick markings in play mode now extend through the piano scroll.
 -   <label type="fixed"></label> Key signatures now have a unique key assigned over multiple staves. Fixed issue where react lost track of elements as they had the same key.
+-   <label type="fixed"></label> Start / end repeats now have a unique key for dots. Fixed issue where react lost track of elements as they had the same key.
 
 ## **0.5.0** (05-05-2020)
 

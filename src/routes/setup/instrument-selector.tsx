@@ -13,7 +13,7 @@ interface Props {
     onCancel: () => void;
 }
 
-export const InstrumentPicker = Dialog<Props>(({ onSelect, onCancel }) => {
+export const InstrumentSelector = Dialog<Props>(({ onSelect, onCancel }) => {
     const theme = useAppState(s => s.ui.theme.pallets);
     const [selection, setSelection] = useState<InstrumentDef>(getFirstInstrumentDefFromPartialPath([]));
     const lists = useInstrumentList(selection);

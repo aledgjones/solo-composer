@@ -105,7 +105,14 @@ export function parse(score: Score, flowKey: FlowKey, mm: number): RenderInstruc
         ...drawBraces(x, y, verticalMeasurements),
         ...drawBrackets(x, y, verticalMeasurements, config),
         ...drawSubBrackets(x, y, verticalMeasurements),
-        ...drawStaves(x, y, totalWidth + finalBarline._box.width, staves, verticalMeasurements),
+        ...drawStaves(
+            x,
+            y,
+            totalWidth + finalBarline._box.width,
+            staves,
+            verticalMeasurements,
+            config.systemicBarlineSingleInstrumentSystem || staves.length > 1
+        ),
         ...drawFinalBarline(x + totalWidth, y, staves, verticalMeasurements, finalBarline)
     );
 

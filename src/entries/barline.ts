@@ -73,7 +73,7 @@ export function drawBarline(
 ) {
     const instructions: Instruction<any> = [];
 
-    metrics.barlines.forEach(entry => {
+    metrics.barlines.forEach((entry) => {
         const start = metrics.instruments[entry.start];
         const stop = metrics.instruments[entry.stop];
 
@@ -174,11 +174,11 @@ export function drawBarline(
         if (barline.type === BarlineType.start_repeat || barline.type === BarlineType.end_repeat) {
             const radius = 0.25;
             const left = barline.type === BarlineType.start_repeat ? x + 1.75 : x + 0.25;
-            staves.forEach(stave => {
+            staves.forEach((stave) => {
                 const top = metrics.staves[stave.key].y;
                 instructions.push(
                     buildCircle(
-                        `${barline._key}-${stave.key}-dot--top`,
+                        `${barline._key}-${entry.start}-${stave.key}-dot--top`,
                         { color: "#000000" },
                         left,
                         y + top + 1.5,
@@ -187,7 +187,7 @@ export function drawBarline(
                 );
                 instructions.push(
                     buildCircle(
-                        `${barline._key}-${stave.key}-dot--bottom`,
+                        `${barline._key}-${entry.start}-${stave.key}-dot--bottom`,
                         { color: "#000000" },
                         left,
                         y + top + 2.5,

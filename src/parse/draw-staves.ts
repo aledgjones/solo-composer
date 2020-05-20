@@ -7,7 +7,8 @@ export function drawStaves(
     y: number,
     width: number,
     staves: Stave[],
-    metrics: VerticalMeasurements
+    metrics: VerticalMeasurements,
+    drawSystemicBarline: boolean
 ) {
     const tweakForStaveLineWidth = 0.0625;
     const styles = { color: "#000000", thickness: 0.125 };
@@ -15,17 +16,16 @@ export function drawStaves(
     const paths: PathInstruction[] = [];
 
     // render staves
-    staves.forEach(stave => {
+    staves.forEach((stave) => {
         for (let i = 0; i < 5; i++) {
             const start = y + metrics.staves[stave.key].y + i;
-            paths.push(
-                buildPath(`${stave.key}-stave-${i}`, styles, [x, start], [x + width, start])
-            );
+            paths.push(buildPath(`${stave.key}-stave-${i}`, styles, [x, start], [x + width, start]));
         }
     });
 
-    // render starting barline
-    if (staves.length > 0) {
+    // render stystemic barline
+    // prevent errors by only drawing if there are actually staves
+    if (staves.length > 0 && drawSystemicBarline) {
         paths.push(
             buildPath(
                 "start-barline",

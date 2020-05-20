@@ -41,62 +41,66 @@ export const playerActions = (store: Store<State>) => {
     return {
         create: (type: PlayerType) => {
             const player = createPlayer(type);
-            store.update(s => {
+            store.update((s) => {
                 // add the player
                 s.score.players.order.push(player.key);
                 s.score.players.byKey[player.key] = player;
 
                 // auto include it in all flows
-                s.score.flows.order.forEach(flowKey => {
+                s.score.flows.order.forEach((flowKey) => {
                     s.score.flows.byKey[flowKey].players.push(player.key);
                 });
             });
             return player.key;
         },
         reorder: (oldIndex: number, newIndex: number) => {
-            store.update(s => {
+            store.update((s) => {
                 s.score.players.order = ArrayMove(s.score.players.order, oldIndex, newIndex);
             });
         },
         remove: (playerKey: PlayerKey) => {
-            store.update(s => {
-                s.score.players.byKey[playerKey].instruments.forEach(instrumentKey => {
-                    const instrument = s.score.instruments[instrumentKey];
-                    s.score.flows.order.forEach(flowKey => {
-                        const flow = s.score.flows.byKey[flowKey];
-                        instrument.staves.forEach(staveKey => {
-                            // delete each track
-                            flow.staves[staveKey].tracks.forEach(trackKey => {
-                                delete flow.tracks[trackKey];
-                            });
-                            // delete the stave
-                            delete flow.staves[staveKey];
+            store.update((s) => {
+                s.score.flows.order.forEach((flowKey) => {
+                    const flow = s.score.flows.byKey[flowKey];
+
+                    // delete the player entry from the flow
+                    flow.players = flow.players.filter((key) => key !== playerKey);
+
+                    s.score.players.byKey[playerKey].instruments.forEach((instrumentKey) => {
+                        s.score.instruments[instrumentKey].staves.forEach((staveKey) => {
+                            const stave = flow.staves[staveKey];
+                            if (stave) {
+                                // delete each track
+                                stave.tracks.forEach((trackKey) => {
+                                    delete flow.tracks[trackKey];
+                                });
+                                // delete the stave
+                                delete flow.staves[staveKey];
+                            }
                         });
+                        // delete the instruments
+                        delete s.score.instruments[instrumentKey];
                     });
-                    // delete the instruments
-                    delete s.score.instruments[instrumentKey];
                 });
 
                 // delete the player
-                s.score.players.order = s.score.players.order.filter(key => key !== playerKey);
+                s.score.players.order = s.score.players.order.filter((key) => key !== playerKey);
                 delete s.score.players.byKey[playerKey];
             });
         },
         assignInstrument: (playerKey: PlayerKey, instrumentKey: InstrumentKey) => {
-            store.update(s => {
+            store.update((s) => {
                 // add the instrument to the player
                 s.score.players.byKey[playerKey].instruments.push(instrumentKey);
 
                 // add the instrument staves to each flow which contains that player
                 const def = instrumentDefs[s.score.instruments[instrumentKey].id];
-                s.score.flows.order.forEach(flowKey => {
+                s.score.flows.order.forEach((flowKey) => {
                     const flow = s.score.flows.byKey[flowKey];
                     if (flow.players.includes(playerKey)) {
                         s.score.instruments[instrumentKey].staves.forEach((staveKey, i) => {
                             const track = createTrack([]);
-                            flow.staves[staveKey] = createStave(def.staves[i], staveKey, [
-                                track.key
-                            ]);
+                            flow.staves[staveKey] = createStave(def.staves[i], staveKey, [track.key]);
                             flow.tracks[track.key] = track;
                         });
                     }

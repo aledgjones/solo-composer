@@ -43,7 +43,7 @@ export const Keyboard: FC<Props> = ({ instrumentKey }) => {
             className="keyboard"
             style={{
                 backgroundImage: background,
-                backgroundPositionY: offset * SLOT_HEIGHT,
+                backgroundPositionY: (offset * SLOT_HEIGHT) + .5,
                 backgroundSize: '100% 120px, 60% 120px'
             }}
         >

@@ -1,9 +1,9 @@
 {
-    "featured": ["changelog", "setup-overview", "create-player", "add-instrument-to-player"],
+    "featured": ["changelog", "settings-overview", "setup-overview", "create-player", "add-instrument-to-player"],
     "sections": [
         {
             "label": "General",
-            "articles": ["changelog", "known-issues"]
+            "articles": ["changelog", "known-issues", "settings-overview"]
         },
         {
             "label": "Setup",
@@ -24,6 +24,13 @@
             "description": "Functionality that is known to have bugs.",
             "search": ["bugs"],
             "related": ["whats-new"]
+        },
+        "settings-overview": {
+            "url": "/articles/settings-overview.md",
+            "title": "Settings Overview",
+            "description": "A high level overview of settings.",
+            "search": ["settings", "score", "engraving", "play", "setup", "write", "print"],
+            "related": ["setup-overview"]
         },
         "setup-overview": {
             "url": "/articles/setup-overview.md",
