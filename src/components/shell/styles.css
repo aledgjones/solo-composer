@@ -11,7 +11,7 @@
 
 .main-shell__tabs {
     flex-grow: 1;
-    margin-left: 0;
+    margin-left: 0 !important;
 }
 
 .main-shell__tabs .ui-tabs__bar {
