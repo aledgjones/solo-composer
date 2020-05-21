@@ -26,14 +26,16 @@ const Write: FC = () => {
 
             <Panel>
                 <div className="panel__wrapper" />
-                <div className="panel__wrapper">
-                    <Icon
-                        className="panel__tool"
-                        path={mdiCogOutline}
-                        size={24}
-                        color={theme.background[400].fg}
-                        onClick={() => setSettings(true)}
-                    />
+                <div className="panel__wrapper panel__wrapper--settings">
+                    <div data-tooltip="Engrave Settings" data-tooltip-direction="right">
+                        <Icon
+                            className="panel__tool"
+                            path={mdiCogOutline}
+                            size={24}
+                            color={theme.background[400].fg}
+                            onClick={() => setSettings(true)}
+                        />
+                    </div>
                 </div>
             </Panel>
 

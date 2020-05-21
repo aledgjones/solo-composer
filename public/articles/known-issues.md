@@ -10,12 +10,12 @@ This project is very much an experimental work in progress. Things **will** brea
 
 4. To help with development, a score is automatically set up on page load. This is tied to the first flow created and will re-initialise if the first flow is moved or removed. You will see duplicate players created. This setup will be removed once it is no longer needed for development purposes.
 
-5. Engrave and Print sections do not exist at all yet. My focus is on parsing the score and rendering each component in a specific place and order. Equally, page layouts are not implimented yet for the same reason.
+5. Print sections do not exist at all yet. Write and engrave tabs are bassically the same. My focus is on parsing the score and rendering each component in a specific place and order. Equally, page layouts are not implimented yet for the same reason.
 
 6. Notes can be inputted in the Play section of the app only.
 
 7. Accidentals are not yet implimented and created tones with sharp of flats on the piano roll will always create a flat at present.
 
-8. Short ties do not render correctly. The curve of the tie is far too steep and the possitining is off. Equally ties between Adjacent notes just don't work as expected.
+8. Short ties do not render correctly. The curve of the tie is far too steep and the possitioning is off. Equally ties between Adjacent notes just don't work as expected.
 
 9. Many more....!

@@ -12,7 +12,7 @@ export const Panel: FC<Props> = ({ className, children }) => {
 
     const theme = useAppState(s => s.ui.theme.pallets);
 
-    return <div className={merge("panel", className)} style={{ backgroundColor: theme.background[400].bg }}>
+    return <div className={merge("panel", className)} style={{ backgroundColor: theme.background[200].bg }}>
         {children}
     </div>;
 };

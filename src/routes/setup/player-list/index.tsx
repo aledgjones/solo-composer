@@ -14,13 +14,12 @@ import "./styles.css";
 interface Props {
     selection: Selection;
 
-    onSelectPlayer: (selection: Selection) => void;
+    onSelect: (selection: Selection) => void;
     onAddInstrument: (playerKey: PlayerKey) => void;
-    onRemovePlayer: (playerKey: PlayerKey) => void;
     onCreatePlayer: () => void;
 }
 
-export const PlayerList: FC<Props> = ({ selection, onSelectPlayer, onAddInstrument, onRemovePlayer, onCreatePlayer }) => {
+export const PlayerList: FC<Props> = ({ selection, onSelect, onAddInstrument, onCreatePlayer }) => {
     const actions = useAppActions();
     const counts = useCounts();
     const { theme, players, instruments, expanded } = useAppState(s => {
@@ -36,7 +35,7 @@ export const PlayerList: FC<Props> = ({ selection, onSelectPlayer, onAddInstrume
 
     return (
         <div className="player-list" style={{ backgroundColor: theme.background[500].bg }}>
-            <div className="player-list__header" style={{ backgroundColor: theme.background[400].bg, borderLeft: `1px solid ${theme.background[500].bg}` }}>
+            <div className="player-list__header" style={{ backgroundColor: theme.background[400].bg }}>
                 <span className="player-list__label" style={{ color: theme.background[400].fg }}>
                     Players
                 </span>
@@ -52,9 +51,8 @@ export const PlayerList: FC<Props> = ({ selection, onSelectPlayer, onAddInstrume
                         counts={counts}
                         selected={!!(selection && player.key === selection.key)}
                         expanded={expanded[player.key + "-setup"]}
-                        onSelectPlayer={onSelectPlayer}
+                        onSelect={onSelect}
                         onAddInstrument={onAddInstrument}
-                        onRemovePlayer={onRemovePlayer}
                     />
                 ))}
             </SortableContainer>

@@ -20,9 +20,8 @@ interface Props {
     selected: boolean;
     expanded: boolean;
 
-    onSelectPlayer: (selection: Selection) => void;
+    onSelect: (selection: Selection) => void;
     onAddInstrument: (playerKey: PlayerKey) => void;
-    onRemovePlayer: (playerKey: PlayerKey) => void;
 }
 
 export const PlayerItem: FC<Props> = ({
@@ -32,9 +31,8 @@ export const PlayerItem: FC<Props> = ({
     counts,
     selected,
     expanded,
-    onSelectPlayer,
-    onAddInstrument,
-    onRemovePlayer
+    onSelect,
+    onAddInstrument
 }) => {
     const handle = useRef<HTMLDivElement>(null);
     const actions = useAppActions();
@@ -48,17 +46,20 @@ export const PlayerItem: FC<Props> = ({
         [actions.ui.expanded, player.key]
     );
 
-    const onSelect = useCallback(() => onSelectPlayer({ key: player.key, type: SelectionType.player }), [
-        player.key,
-        onSelectPlayer
-    ]);
+    const onSelectPlayer = useCallback(
+        () => {
+            onSelect({ key: player.key, type: SelectionType.player })
+        },
+        [player.key, onSelect]
+    );
 
     const onRemove = useCallback(
         (e: MouseEvent<HTMLDivElement>) => {
             e.stopPropagation();
-            onRemovePlayer(player.key);
+            actions.score.players.remove(player.key);
+            onSelect(null);
         },
-        [onRemovePlayer, player.key]
+        [onSelect, actions.score.players, player.key]
     );
 
     const { bg, fg } = useMemo(() => {
@@ -80,10 +81,10 @@ export const PlayerItem: FC<Props> = ({
                 "player-item--selected": selected
             })}
             style={{ backgroundColor: bg, color: fg }}
-            onClick={onSelect}
+            onClick={onSelectPlayer}
         >
             <div className="player-item__header">
-                <div onPointerDown={onSelect} ref={handle}>
+                <div onPointerDown={onSelectPlayer} ref={handle}>
                     <Icon style={{ marginRight: 16 }} path={icon} size={24} color={fg} />
                 </div>
 
@@ -132,7 +133,7 @@ export const PlayerItem: FC<Props> = ({
                             <InstrumentItem
                                 key={key}
                                 index={i}
-                                onSelectPlayer={onSelect}
+                                onSelect={onSelectPlayer}
                                 selected={selected}
                                 instrument={instruments[key]}
                                 count={counts[key]}

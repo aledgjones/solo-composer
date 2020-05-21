@@ -59,16 +59,20 @@ export const instrumentActions = (store: Store<State>) => {
                 });
 
                 // for each flow, we remove the instrument's staves and each of their tracks
-                const staves = s.score.instruments[instrumentKey].staves;
                 s.score.flows.order.forEach((flowKey) => {
                     const flow = s.score.flows.byKey[flowKey];
-                    staves.forEach((staveKey) => {
-                        // delete each track
-                        flow.staves[staveKey].tracks.forEach((trackKey) => {
-                            delete flow.tracks[trackKey];
-                        });
-                        // delete the stave
-                        delete flow.staves[staveKey];
+                    s.score.instruments[instrumentKey].staves.forEach((staveKey) => {
+                        const stave = flow.staves[staveKey];
+                        // its possible this flow doesn't include the player so check the stave
+                        // is actually present
+                        if (stave) {
+                            // delete each track
+                            stave.tracks.forEach((trackKey) => {
+                                delete flow.tracks[trackKey];
+                            });
+                            // delete the stave
+                            delete flow.staves[staveKey];
+                        }
                     });
                 });
 

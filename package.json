@@ -1,6 +1,6 @@
 {
     "name": "composer",
-    "version": "0.7.4",
+    "version": "0.7.7",
     "private": true,
     "dependencies": {
         "@mdi/js": "^5.2.45",

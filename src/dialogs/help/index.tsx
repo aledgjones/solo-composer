@@ -93,6 +93,7 @@ export const Help = Dialog<Props>(({ onClose }) => {
                     <Subheader className="feedback__subheader feedback__subheader--close">Related</Subheader>
                     {article?.related.map(slug => {
                         const related = articles.articles[slug];
+                        console.log(related);
                         return <ListItem key={related.url} onClick={() => setArticle(related)}>
                             <Icon path={mdiFileDocumentOutline} color={theme.primary[500].bg} size={24} />
                             <Label>

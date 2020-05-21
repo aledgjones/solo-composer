@@ -15,10 +15,10 @@ interface Props {
     instrument: Instrument;
     count?: string;
 
-    onSelectPlayer: () => void;
+    onSelect: () => void;
 }
 
-export const InstrumentItem: FC<Props> = ({ index, selected, instrument, count, onSelectPlayer }) => {
+export const InstrumentItem: FC<Props> = ({ index, selected, instrument, count, onSelect }) => {
     const handle = useRef<HTMLDivElement>(null);
     const actions = useAppActions();
     const theme = useAppState(s => s.ui.theme.pallets);
@@ -39,7 +39,7 @@ export const InstrumentItem: FC<Props> = ({ index, selected, instrument, count, 
             className="instrument-item"
             style={{ backgroundColor: bg, color: fg }}
         >
-            <div ref={handle} onPointerDown={onSelectPlayer}>
+            <div ref={handle} onPointerDown={onSelect}>
                 <Icon style={{ marginRight: 16 }} path={mdiPiano} color={fg} size={24} />
             </div>
             <Text className="instrument-item__name">{name}</Text>

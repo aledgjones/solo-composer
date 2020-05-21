@@ -4,8 +4,7 @@ import { mdiCogOutline } from "@mdi/js";
 import { useTitle, Icon } from "solo-ui";
 
 import { useAppActions, useAppState } from "../../services/state";
-import { PlayerType, PlayerKey } from "../../services/player";
-import { FlowKey } from "../../services/flow";
+import { PlayerType } from "../../services/player";
 import { InstrumentDef } from "../../services/instrument-defs";
 
 import { Selection, SelectionType } from "./selection";
@@ -36,8 +35,6 @@ const Setup: FC<Props> = () => {
     const [instrumentSelector, setInstrumentSelector] = useState<boolean>(false);
     const [settings, setSettings] = useState<boolean>(false);
 
-    // PLAYERS
-
     const onTypeSelected = useCallback((type?: PlayerType) => {
         setTypeSelector(false);
         if (type) {
@@ -51,11 +48,6 @@ const Setup: FC<Props> = () => {
         setInstrumentSelector(true);
     }, []);
 
-    const onRemovePlayer = useCallback((playerKey: PlayerKey) => {
-        actions.score.players.remove(playerKey);
-        setSelection(null);
-    }, [actions.score.players]);
-
     const onSelectInstrument = useCallback((def: InstrumentDef) => {
         if (selection) {
             const channel = actions.playback.sampler.createChannel();
@@ -68,66 +60,32 @@ const Setup: FC<Props> = () => {
         setInstrumentSelector(false);
     }, [selection, actions.score.instruments, actions.score.players, actions.playback.sampler]);
 
-    // FLOWS
-
-    const onCreateFlow = useCallback(() => {
-        const key = actions.score.flows.create();
-        setSelection({ key, type: SelectionType.flow });
-    }, [actions.score.flows]);
-
-    const onRemoveFlow = useCallback(
-        (flowKey: FlowKey) => {
-            actions.score.flows.remove(flowKey);
-            setSelection(null);
-        },
-        [actions.score.flows]
-    );
-
-    const onAssignPlayerToFlow = useCallback(
-        (flowKey: FlowKey) => {
-            if (selection) {
-                const playerKey = selection.key;
-                actions.score.flows.assignPlayer(flowKey, playerKey);
-            }
-        },
-        [selection, actions.score.flows]
-    );
-
-    const onRemovePlayerFromFlow = useCallback(
-        (flowKey: FlowKey) => {
-            if (selection) {
-                const playerKey = selection.key;
-                actions.score.flows.removePlayer(flowKey, playerKey);
-            }
-        },
-        [selection, actions.score.flows]
-    );
-
     return (
         <>
 
             <Panel>
                 <div className="panel__wrapper" />
-                <div className="panel__wrapper">
-                    <Icon
-                        data-tooltip="Engrave Settings"
-                        data-tooltip-direction="up"
-                        className="panel__tool"
-                        path={mdiCogOutline}
-                        size={24}
-                        color={theme.background[400].fg}
-                        onClick={() => setSettings(true)}
-                    />
+                <div className="panel__wrapper panel__wrapper--settings">
+                    <div data-tooltip="Setup Settings" data-tooltip-direction="right">
+                        <Icon
+                            data-tooltip="Engrave Settings"
+                            data-tooltip-direction="up"
+                            className="panel__tool"
+                            path={mdiCogOutline}
+                            size={24}
+                            color={theme.background[400].fg}
+                            onClick={() => setSettings(true)}
+                        />
+                    </div>
                 </div>
             </Panel>
 
             <div className="setup" style={{ backgroundColor: theme.background[500].bg }}>
                 <PlayerList
                     selection={selection}
-                    onSelectPlayer={setSelection}
+                    onSelect={setSelection}
                     onCreatePlayer={() => setTypeSelector(true)}
                     onAddInstrument={onAddInstrument}
-                    onRemovePlayer={onRemovePlayer}
                 />
                 <div
                     className="setup__middle"
@@ -141,11 +99,7 @@ const Setup: FC<Props> = () => {
                     </RenderRegion>
                     <FlowList
                         selection={selection}
-                        onSelectFlow={setSelection}
-                        onCreateFlow={onCreateFlow}
-                        onRemoveFlow={onRemoveFlow}
-                        onAssignPlayer={onAssignPlayerToFlow}
-                        onRemovePlayer={onRemovePlayerFromFlow}
+                        onSelect={setSelection}
                     />
                 </div>
                 <LayoutList />

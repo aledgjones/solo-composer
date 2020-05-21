@@ -1,6 +1,7 @@
 .main-shell__title-bar {
     display: flex;
     align-items: center;
+    height: 48px;
 }
 
 .main-shell__topbar-right {

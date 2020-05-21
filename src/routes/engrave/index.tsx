@@ -26,8 +26,8 @@ const Engrave: FC = () => {
 
             <Panel>
                 <div className="panel__wrapper" />
-                <div className="panel__wrapper">
-                    <div data-tooltip="Engrave Settings" data-tooltip-direction="up">
+                <div className="panel__wrapper panel__wrapper--settings">
+                    <div data-tooltip="Engrave Settings" data-tooltip-direction="right">
                         <Icon
                             className="panel__tool"
                             path={mdiCogOutline}

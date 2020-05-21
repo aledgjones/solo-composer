@@ -70,6 +70,11 @@ export const flowActions = (store: Store<State>) => {
 
             return flow.key;
         },
+        rename: (flowKey: FlowKey, title: string) => {
+            store.update((s) => {
+                s.score.flows.byKey[flowKey].title = title;
+            });
+        },
         reorder: (oldIndex: number, newIndex: number) => {
             store.update((s) => {
                 s.score.flows.order = ArrayMove(s.score.flows.order, oldIndex, newIndex);
@@ -84,6 +89,10 @@ export const flowActions = (store: Store<State>) => {
         assignPlayer: (flowKey: FlowKey, playerKey: PlayerKey) => {
             store.update((s) => {
                 const flow = s.score.flows.byKey[flowKey];
+
+                // actually assign the players
+                flow.players.push(playerKey);
+
                 const player = s.score.players.byKey[playerKey];
                 player.instruments.forEach((instrumentKey) => {
                     const instrument = s.score.instruments[instrumentKey];

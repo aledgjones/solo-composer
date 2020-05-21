@@ -4,6 +4,7 @@ You can find the most recent updates listed here. Version numbers are for tracki
 
 ## **0.7.0** (12-05-2020)
 
+-   <label type="feature"></label> Added the ability to rename flows.
 -   <label type="feature"></label> Added the ability to create both solo and section players.
 -   <label type="feature"></label> Added the ability to show different numbering styles for both solo and section players.
 -   <label type="feature"></label> Added engraving setting to hide systemic barlines when there is only one instrument.
@@ -12,6 +13,7 @@ You can find the most recent updates listed here. Version numbers are for tracki
 -   <label type="changed"></label> Reorganised the File menu, moved what's new into a help article.
 -   <label type="changed"></label> Updated light theme based on an inverted version of the dark theme.
 -   <label type="fixed"></label> Dotted rhythm dots now print correctly in cluster chords. They follow the rules laid down in 'Behind Bars' by Elaine Gould.
+-   <label type="fixed"></label> Fixed a small bug where empty players couldn't be reassigned to a flows
 
 ## **0.6.0** (09-05-2020)
 

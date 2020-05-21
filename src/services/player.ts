@@ -60,21 +60,20 @@ export const playerActions = (store: Store<State>) => {
         },
         remove: (playerKey: PlayerKey) => {
             store.update((s) => {
-                s.score.flows.order.forEach((flowKey) => {
-                    const flow = s.score.flows.byKey[flowKey];
-
-                    // delete the player entry from the flow
-                    flow.players = flow.players.filter((key) => key !== playerKey);
-
-                    s.score.players.byKey[playerKey].instruments.forEach((instrumentKey) => {
-                        s.score.instruments[instrumentKey].staves.forEach((staveKey) => {
+                // remove the player's staves and tracks from each flow
+                // we iterate the player's instruments and cross reference within the flows.
+                s.score.players.byKey[playerKey].instruments.forEach((instrumentKey) => {
+                    const staves = s.score.instruments[instrumentKey].staves;
+                    s.score.flows.order.forEach((flowKey) => {
+                        const flow = s.score.flows.byKey[flowKey];
+                        staves.forEach((staveKey) => {
                             const stave = flow.staves[staveKey];
                             if (stave) {
-                                // delete each track
+                                // delete each track from the flow
                                 stave.tracks.forEach((trackKey) => {
                                     delete flow.tracks[trackKey];
                                 });
-                                // delete the stave
+                                // delete the stave from the flow
                                 delete flow.staves[staveKey];
                             }
                         });
@@ -83,7 +82,13 @@ export const playerActions = (store: Store<State>) => {
                     });
                 });
 
-                // delete the player
+                // remove the player as from the flow
+                s.score.flows.order.forEach((flowKey) => {
+                    const flow = s.score.flows.byKey[flowKey];
+                    flow.players = flow.players.filter((key) => key !== playerKey);
+                });
+
+                // delete the player itself
                 s.score.players.order = s.score.players.order.filter((key) => key !== playerKey);
                 delete s.score.players.byKey[playerKey];
             });

@@ -18,8 +18,7 @@
 }
 
 .flow-list__content {
-    display: inline-flex;
-    min-width: 240px;
+    white-space: nowrap;
     min-width: 100%;
     height: calc(100% - 48px);
     padding: 8px 0 8px 8px;

@@ -1,6 +1,5 @@
 .flow-item {
-    flex-grow: 1;
-    min-width: 240px;
+    display: inline-block;
     color: white;
     height: 96px;
     margin-right: 8px;
@@ -21,6 +20,7 @@
 }
 
 .flow-item__header {
+    display: flex;
     height: 48px;
     display: flex;
     align-items: center;
@@ -29,10 +29,11 @@
 
 .flow-item__name {
     flex-grow: 1;
-    line-height: 48px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    /* a cheeky offset to center */
-    padding-top: 2px;
+    display: inline-block;
+    background-color: transparent;
+    line-height: 32px;
+}
+
+.flow-item__name[readonly] {
+    pointer-events: none;
 }

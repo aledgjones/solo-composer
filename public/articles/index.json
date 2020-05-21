@@ -23,7 +23,7 @@
             "title": "Known Issues",
             "description": "Functionality that is known to have bugs.",
             "search": ["bugs"],
-            "related": ["whats-new"]
+            "related": ["changelog"]
         },
         "settings-overview": {
             "url": "/articles/settings-overview.md",
