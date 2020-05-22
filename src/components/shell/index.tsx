@@ -1,7 +1,7 @@
 import React, { FC, useEffect, Suspense } from "react";
 
 import { Tabs, Tab, useTheme, useStyles } from "solo-ui";
-import { useDebugger } from "../../services/debugger";
+// import { useDebugger } from "../../debug/debugger";
 
 import { useAppActions, useAppState } from "../../services/state";
 import { TabState } from "../../services/ui";
@@ -20,7 +20,7 @@ const Play = React.lazy(() => import("../../routes/play"));
 
 export const MainShell: FC = () => {
     useAutoSetup();
-    useDebugger();
+    // useDebugger();
 
     const actions = useAppActions();
     const { theme, tab } = useAppState(s => {

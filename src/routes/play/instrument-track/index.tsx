@@ -98,7 +98,7 @@ export const InstrumentTrack: FC<Props> = memo(({ flowKey, color, instrument, st
             return {
                 tool: s.ui.tool[TabState.play],
                 selection: s.ui.selection,
-                audition: s.playback.settings.audition,
+                audition: s.app.audition,
                 offset: s.ui.pianoRollOffsetY[instrument.key] || 0
             };
         },

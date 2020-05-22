@@ -5,26 +5,20 @@ import { MidiState, midiEmptyState, midiActions } from "./playback-midi";
 import { SamplerState, samplerEmptyState, samplerActions } from "./playback-sampler";
 
 export interface PlaybackState {
+    metronome: boolean;
     playing: boolean;
     tick: number;
     midi: MidiState;
     sampler: SamplerState;
-    settings: {
-        metronome: boolean;
-        audition: boolean;
-    };
 }
 
 export const playbackEmptyState = (): PlaybackState => {
     return {
+        metronome: false,
         playing: false,
         tick: 0,
         midi: midiEmptyState(),
-        sampler: samplerEmptyState(),
-        settings: {
-            metronome: false,
-            audition: true
-        }
+        sampler: samplerEmptyState()
     };
 };
 
@@ -32,20 +26,11 @@ export const playbackActions = (store: Store<State>) => {
     return {
         midi: midiActions(store),
         sampler: samplerActions(store),
-        settings: {
-            metronome: {
-                toggle: () => {
-                    store.update((s) => {
-                        s.playback.settings.metronome = !s.playback.settings.metronome;
-                    });
-                }
-            },
-            audition: {
-                toggle: () => {
-                    store.update((s) => {
-                        s.playback.settings.audition = !s.playback.settings.audition;
-                    });
-                }
+        metronome: {
+            toggle: () => {
+                store.update((s) => {
+                    s.playback.metronome = !s.playback.metronome;
+                });
             }
         }
     };

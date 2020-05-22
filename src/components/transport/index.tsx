@@ -11,7 +11,7 @@ export const Transport: FC = () => {
     const { theme, metronome } = useAppState(s => {
         return {
             theme: s.app.theme.pallets,
-            metronome: s.playback.settings.metronome
+            metronome: s.playback.metronome
         }
     });
 
@@ -56,7 +56,7 @@ export const Transport: FC = () => {
             <div className="transport__metronome">
                 <Icon
                     toggle={metronome}
-                    onClick={actions.playback.settings.metronome.toggle}
+                    onClick={actions.playback.metronome.toggle}
                     size={24}
                     color={theme.background[200].fg}
                     highlight={theme.primary[500].bg}

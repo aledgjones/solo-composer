@@ -21,7 +21,7 @@ export const Preferences = Dialog<Props>(({ onClose }) => {
     const { theme, audition } = useAppState((s) => {
         return {
             theme: s.app.theme,
-            audition: s.playback.settings.audition
+            audition: s.app.audition
         };
     });
 
@@ -94,7 +94,7 @@ export const Preferences = Dialog<Props>(({ onClose }) => {
                             <div className="generic-settings__section" style={{ paddingBottom: 0 }}>
                                 <Subheader>Auditioning</Subheader>
                             </div>
-                            <ListItem onClick={actions.playback.settings.audition.toggle}>
+                            <ListItem onClick={actions.app.audition.toggle}>
                                 <Label>
                                     <p>Enable auditioning</p>
                                     <p>Play notes during note input and selection</p>

@@ -68,9 +68,6 @@ export const FileMenu: FC = () => {
                             </div>
                         </Content>
                         <List onClick={() => setOpen(false)}>
-                            <ListItem onClick={() => setPreferences(true)}>
-                                <span>Import</span>
-                            </ListItem>
                             <ListItem onClick={() => setPreferences(true)}>Preferences</ListItem>
                             <Divider />
                             {update && (
