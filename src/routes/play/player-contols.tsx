@@ -4,9 +4,9 @@ import { mdiChevronDown } from "@mdi/js";
 import { Icon } from "solo-ui";
 
 import { useAppState } from "../../services/state";
-import { Player, usePlayerName, usePlayerIcon } from "../../services/player";
-import { InstrumentCounts } from "../../services/instrument-utils";
-import { Instruments } from "../../services/instrument";
+import { Player, usePlayerName, usePlayerIcon } from "../../services/score-player";
+import { InstrumentCounts } from "../../services/score-instrument-utils";
+import { Instruments } from "../../services/score-instrument";
 import { InstrumentControls } from "./instrument-controls";
 import { Text } from "../../components/text";
 
@@ -23,7 +23,7 @@ interface Props {
 }
 
 export const PlayerControls: FC<Props> = ({ player, expanded, instruments, counts, color, onToggleExpand }) => {
-    const theme = useAppState(s => s.ui.theme.pallets);
+    const theme = useAppState(s => s.app.theme.pallets);
     const name = usePlayerName(player, instruments, counts);
     const icon = usePlayerIcon(player);
 

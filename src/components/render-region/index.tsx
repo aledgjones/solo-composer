@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const RenderRegion: FC<Props> = ({ children, className }) => {
-    const theme = useAppState((s) => s.ui.theme.pallets);
+    const theme = useAppState((s) => s.app.theme.pallets);
 
     return (
         <DragScroll

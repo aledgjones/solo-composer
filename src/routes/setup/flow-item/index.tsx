@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, MouseEvent, FC, useRef, CSSProperties, use
 import { mdiDeleteOutline, mdiFileDocumentOutline, mdiPencilOutline } from "@mdi/js";
 import { Icon, Checkbox, merge, SortableItem } from "solo-ui";
 
-import { Flow } from "../../../services/flow";
+import { Flow } from "../../../services/score-flow";
 import { useAppState, useAppActions } from "../../../services/state";
 import { SelectionType, Selection } from "../selection";
 
@@ -22,7 +22,7 @@ export const FlowItem: FC<Props> = ({ index, flow, selection, style, onSelect })
     const handle = useRef<HTMLDivElement>(null);
     const input = useRef<HTMLInputElement>(null);
     const actions = useAppActions();
-    const theme = useAppState(s => s.ui.theme.pallets);
+    const theme = useAppState(s => s.app.theme.pallets);
 
     const [editing, setEditing] = useState(false);
 

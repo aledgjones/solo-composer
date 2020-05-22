@@ -1,6 +1,6 @@
-import { Instrument } from "../services/instrument";
+import { Instrument } from "../services/score-instrument";
 import { VerticalMeasurements } from "./measure-vertical-layout";
-import { EngravingConfig } from "../services/engraving";
+import { EngravingConfig } from "../services/score-engraving";
 import { buildText, TextStyles, Align, Justify } from "../render/text";
 
 export function drawNames(
@@ -22,7 +22,7 @@ export function drawNames(
 
     const left = config.instrumentName.align === Justify.start ? x : x + width;
 
-    return instruments.map(instrument => {
+    return instruments.map((instrument) => {
         const top =
             y +
             verticalMeasurements.instruments[instrument.key].y +

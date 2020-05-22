@@ -13,7 +13,7 @@ import "./styles.css";
 
 const Engrave: FC = () => {
     useTitle("Solo Composer | Engrave");
-    const theme = useAppState(s => s.ui.theme.pallets);
+    const theme = useAppState(s => s.app.theme.pallets);
     const [settings, setSettings] = useState(false);
 
     return (

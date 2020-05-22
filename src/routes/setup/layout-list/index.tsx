@@ -11,7 +11,7 @@ interface Props { }
 
 export const LayoutList: FC<Props> = () => {
 
-    const theme = useAppState(s => s.ui.theme.pallets);
+    const theme = useAppState(s => s.app.theme.pallets);
 
     return (
         <div className="layout-list" style={{ backgroundColor: theme.background[500].bg }}>

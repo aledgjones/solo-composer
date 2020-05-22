@@ -1,9 +1,9 @@
 import shortid from "shortid";
 import ArrayMove from "array-move";
 
-import { PlayerKey } from "./player";
+import { PlayerKey } from "./score-player";
 import { Staves, createStave } from "./stave";
-import { instrumentDefs } from "./instrument-defs";
+import { instrumentDefs } from "./score-instrument-defs";
 import { Track, createTrack, Tracks } from "./track";
 import { TimeSignatureDef, createTimeSignature } from "../entries/time-signature";
 import { EntryType } from "../entries";

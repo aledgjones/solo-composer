@@ -3,15 +3,15 @@ import { Store } from "pullstate";
 import shortid from "shortid";
 import arrayMove from "array-move";
 
-import { InstrumentDef } from "./instrument-defs";
+import { InstrumentDef } from "./score-instrument-defs";
 import { StaveKey } from "./stave";
-import { FlowKey } from "./flow";
+import { FlowKey } from "./score-flow";
 import { TrackKey } from "./track";
 import { Tone, ToneDef, createTone } from "../entries/tone";
 import { useAppState, State } from "./state";
-import { InstrumentCounts, getCounts } from "./instrument-utils";
+import { InstrumentCounts, getCounts } from "./score-instrument-utils";
 import { Entry } from "../entries";
-import { PlayerKey } from "./player";
+import { PlayerKey } from "./score-player";
 
 export type InstrumentKey = string;
 

@@ -2,13 +2,13 @@ import { useMemo } from "react";
 import { mdiAccount, mdiAccountGroup } from "@mdi/js";
 import shortid from "shortid";
 import ArrayMove from "array-move";
-import { InstrumentKey, Instruments } from "./instrument";
+import { InstrumentKey, Instruments } from "./score-instrument";
 import { createStave } from "./stave";
-import { instrumentDefs } from "./instrument-defs";
+import { instrumentDefs } from "./score-instrument-defs";
 import { Store } from "pullstate";
 import { State } from "./state";
 import { createTrack } from "./track";
-import { InstrumentCounts } from "./instrument-utils";
+import { InstrumentCounts } from "./score-instrument-utils";
 
 export type PlayerKey = string;
 

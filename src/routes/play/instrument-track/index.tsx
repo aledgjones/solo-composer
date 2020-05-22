@@ -4,8 +4,8 @@ import { merge, dragHandler } from "solo-ui";
 
 import { TabState, Tool } from "../../../services/ui";
 import { useAppState, useAppActions } from "../../../services/state";
-import { FlowKey } from "../../../services/flow";
-import { Instrument } from "../../../services/instrument";
+import { FlowKey } from "../../../services/score-flow";
+import { Instrument } from "../../../services/score-instrument";
 import { Staves } from "../../../services/stave";
 import { Tracks } from "../../../services/track";
 import { getToneDimensions, SLOT_HEIGHT, BASE_TONE } from "./get-tone-dimension";

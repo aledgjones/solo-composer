@@ -1,6 +1,6 @@
 import { isSpan, BracketSpan } from "./is-span";
-import { instrumentDefs } from "../services/instrument-defs";
-import { createInstrument } from "../services/instrument";
+import { instrumentDefs } from "../services/score-instrument-defs";
+import { createInstrument } from "../services/score-instrument";
 import { BracketingType } from "./draw-brackets";
 
 const flute1 = createInstrument(instrumentDefs["woodwinds.flute"], []);

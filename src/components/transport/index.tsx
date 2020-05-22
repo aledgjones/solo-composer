@@ -10,7 +10,7 @@ export const Transport: FC = () => {
     const actions = useAppActions();
     const { theme, metronome } = useAppState(s => {
         return {
-            theme: s.ui.theme.pallets,
+            theme: s.app.theme.pallets,
             metronome: s.playback.settings.metronome
         }
     });

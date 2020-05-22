@@ -89,9 +89,9 @@ export function themeActions(store: Store<State>) {
             const query = window.matchMedia("(prefers-color-scheme: light)");
             query.addListener((e) => {
                 store.update((s) => {
-                    if (s.ui.theme.mode === ThemeMode.auto) {
+                    if (s.app.theme.mode === ThemeMode.auto) {
                         const isLight = e.matches;
-                        s.ui.theme.pallets.background = isLight ? pallets[ThemeMode.light] : pallets[ThemeMode.dark];
+                        s.app.theme.pallets.background = isLight ? pallets[ThemeMode.light] : pallets[ThemeMode.dark];
                     }
                 });
             });
@@ -99,11 +99,11 @@ export function themeActions(store: Store<State>) {
         mode: (mode: ThemeMode) => {
             localStorage.setItem("sc:theme-mode/v1", mode);
             store.update((s) => {
-                s.ui.theme.mode = mode;
+                s.app.theme.mode = mode;
                 const isLight =
                     mode === ThemeMode.light ||
                     (mode === ThemeMode.auto && window.matchMedia("(prefers-color-scheme: light)").matches);
-                s.ui.theme.pallets.background = isLight ? pallets[ThemeMode.light] : pallets[ThemeMode.dark];
+                s.app.theme.pallets.background = isLight ? pallets[ThemeMode.light] : pallets[ThemeMode.dark];
             });
         }
     };

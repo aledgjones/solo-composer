@@ -3,7 +3,7 @@ import React, { FC } from "react";
 import { useDragHandler } from "solo-ui";
 
 import { SLOT_HEIGHT } from "../instrument-track/get-tone-dimension";
-import { InstrumentKey } from "../../../services/instrument";
+import { InstrumentKey } from "../../../services/score-instrument";
 import { useAppState, useAppActions } from "../../../services/state";
 import { useKeyboardBackground } from "./keyboard-background";
 

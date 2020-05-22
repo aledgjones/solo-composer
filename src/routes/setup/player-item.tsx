@@ -3,9 +3,9 @@ import { mdiChevronDown, mdiPlus, mdiDeleteOutline, mdiChevronUp } from "@mdi/js
 import { Icon, merge, SortableContainer, SortableItem } from "solo-ui";
 
 import { useAppActions, useAppState } from "../../services/state";
-import { Player, PlayerType, usePlayerName, usePlayerIcon, PlayerKey } from "../../services/player";
-import { Instruments } from "../../services/instrument";
-import { InstrumentCounts } from "../../services/instrument-utils";
+import { Player, PlayerType, usePlayerName, usePlayerIcon, PlayerKey } from "../../services/score-player";
+import { Instruments } from "../../services/score-instrument";
+import { InstrumentCounts } from "../../services/score-instrument-utils";
 import { InstrumentItem } from "./instrument-item";
 import { SelectionType, Selection } from "./selection";
 import { Text } from "../../components/text";
@@ -36,7 +36,7 @@ export const PlayerItem: FC<Props> = ({
 }) => {
     const handle = useRef<HTMLDivElement>(null);
     const actions = useAppActions();
-    const theme = useAppState((s) => s.ui.theme.pallets);
+    const theme = useAppState((s) => s.app.theme.pallets);
 
     const onExpand = useCallback(
         (e: MouseEvent<HTMLDivElement>) => {

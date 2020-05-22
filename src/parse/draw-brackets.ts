@@ -1,5 +1,5 @@
 import { VerticalMeasurements } from "./measure-vertical-layout";
-import { EngravingConfig } from "../services/engraving";
+import { EngravingConfig } from "../services/score-engraving";
 import { buildPath } from "../render/path";
 import { buildText, TextStyles, Justify, Align } from "../render/text";
 import { Instruction } from "../render/instructions";
@@ -16,12 +16,7 @@ export enum BracketEndStyle {
     none
 }
 
-export function drawBrackets(
-    x: number,
-    y: number,
-    metrics: VerticalMeasurements,
-    config: EngravingConfig
-) {
+export function drawBrackets(x: number, y: number, metrics: VerticalMeasurements, config: EngravingConfig) {
     // if n > 1 neightbouring instruments in same family -- woodwind, brass, strings only!
     // subbrace if same instrument type next to each other
 

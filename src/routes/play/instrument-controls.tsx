@@ -3,13 +3,13 @@ import { mdiPiano } from "@mdi/js";
 
 import { Icon } from "solo-ui";
 
-import { useInstrumentName, Instrument } from "../../services/instrument";
+import { SLOT_HEIGHT } from "./instrument-track/get-tone-dimension";
+import { useAppState } from "../../services/state";
+import { useInstrumentName, Instrument } from "../../services/score-instrument";
 import { Keyboard } from "./keyboard";
 import { Text } from "../../components/text";
 
 import "./instrument-controls.css";
-import { useAppState } from "../../services/state";
-import { SLOT_HEIGHT } from "./instrument-track/get-tone-dimension";
 
 interface Props {
     instrument: Instrument;
@@ -18,7 +18,7 @@ interface Props {
 }
 
 export const InstrumentControls: FC<Props> = ({ instrument, count, color }) => {
-    const theme = useAppState(s => s.ui.theme.pallets);
+    const theme = useAppState(s => s.app.theme.pallets);
     const name = useInstrumentName(instrument, count);
 
     return (

@@ -1,10 +1,10 @@
 import { Store } from "pullstate";
 import { State } from "./state";
-import { PlayerState, playerEmptyState, playerActions } from "./player";
-import { Instruments, instrumentEmptyState, instrumentActions } from "./instrument";
-import { FlowState, flowEmptyState, flowActions } from "./flow";
-import { configEmptyState, configActions, ConfigState } from "./config";
-import { EngravingState, engravingEmptyState, engravingActions } from "./engraving";
+import { PlayerState, playerEmptyState, playerActions } from "./score-player";
+import { Instruments, instrumentEmptyState, instrumentActions } from "./score-instrument";
+import { FlowState, flowEmptyState, flowActions } from "./score-flow";
+import { configEmptyState, configActions, ConfigState } from "./score-config";
+import { EngravingState, engravingEmptyState, engravingActions } from "./score-engraving";
 
 interface ScoreMeta {
     title: string;
@@ -40,7 +40,7 @@ export const scoreActions = (store: Store<State>) => {
     return {
         meta: {
             update: (meta: Partial<ScoreMeta>) => {
-                store.update(s => {
+                store.update((s) => {
                     s.score.meta = {
                         ...s.score.meta,
                         ...meta

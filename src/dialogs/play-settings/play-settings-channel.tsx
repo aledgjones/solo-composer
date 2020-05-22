@@ -3,10 +3,10 @@ import { mdiChevronRight } from "@mdi/js";
 
 import { Spinner, Icon, merge } from "solo-ui";
 
-import { Channel, SamplerCurrentState } from "../../services/sampler";
-import { useInstrumentName, Instruments } from "../../services/instrument";
+import { Channel, SamplerCurrentState } from "../../services/playback-sampler";
+import { useInstrumentName, Instruments } from "../../services/score-instrument";
 import { useAppActions, useAppState } from "../../services/state";
-import { InstrumentCounts } from "../../services/instrument-utils";
+import { InstrumentCounts } from "../../services/score-instrument-utils";
 import { Text } from "../../components/text";
 
 interface Props {
@@ -18,7 +18,7 @@ interface Props {
 
 export const PlaySettingsChannel: FC<Props> = ({ i, channel, instruments, counts }) => {
     const actions = useAppActions();
-    const theme = useAppState(s => s.ui.theme.pallets);
+    const theme = useAppState(s => s.app.theme.pallets);
 
     let instrument, count;
     if (channel.assigned) {

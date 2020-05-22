@@ -1,6 +1,6 @@
 import { useMemo, useEffect, useState } from "react";
 
-import { FlowKey } from "../services/flow";
+import { FlowKey } from "../services/score-flow";
 import { RenderInstructions } from "../render/instructions";
 import { Score } from "../services/score";
 import { useMM } from "./converter";

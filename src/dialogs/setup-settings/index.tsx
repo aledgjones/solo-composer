@@ -3,7 +3,7 @@ import { Select, Option, Button, Subheader, Label, Dialog } from "solo-ui";
 
 import { useAppActions, useAppState } from "../../services/state";
 import { MenuItem } from "../../components/menu-item";
-import { InstrumentAutoCountStyle } from "../../services/instrument-utils";
+import { InstrumentAutoCountStyle } from "../../services/score-instrument-utils";
 
 import "../generic-settings.css";
 
@@ -22,7 +22,7 @@ export const SetupSettings = Dialog<Props>(({ onClose }) => {
     const actions = useAppActions();
     const { theme, config } = useAppState(s => {
         return {
-            theme: s.ui.theme.pallets,
+            theme: s.app.theme.pallets,
             config: s.score.config
         }
     });

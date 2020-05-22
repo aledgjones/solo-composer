@@ -2,7 +2,7 @@ import { Clef } from "../entries/clef-defs";
 import { KeySignature } from "../entries/key-signature";
 import { TimeSignature } from "../entries/time-signature";
 import { EntryType, Entry } from "../entries";
-import { EngravingConfig } from "../services/engraving";
+import { EngravingConfig } from "../services/score-engraving";
 import { Stave } from "../services/stave";
 import { EntriesByTick, entriesByTick } from "../services/track";
 import { getEntriesAtTick } from "./get-entry-at-tick";

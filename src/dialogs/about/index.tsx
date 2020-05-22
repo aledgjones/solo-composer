@@ -16,7 +16,7 @@ interface Props {
 
 export const About = Dialog<Props>(({ onClose }) => {
 
-    const theme = useAppState(s => s.ui.theme.pallets);
+    const theme = useAppState(s => s.app.theme.pallets);
 
     return <>
         <div className="about__header">

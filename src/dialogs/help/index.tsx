@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { mdiClose, mdiEmailOutline, mdiGithub, mdiWeb, mdiFileDocumentOutline, mdiArrowLeft } from "@mdi/js";
 import { Content, Icon, Dialog, Input, ListItem, Label, Subheader, Spinner, MarkdownContent } from "solo-ui";
 
-import app from "../../app.json";
 import { useAppState } from "../../services/state";
 import { useArticle, useArticlesList, Article, ArticleState } from "./use-article";
+
+import app from "../../app.json";
 
 import "./styles.css";
 
@@ -14,7 +15,7 @@ interface Props {
 
 export const Help = Dialog<Props>(({ onClose }) => {
 
-    const theme = useAppState((s) => s.ui.theme.pallets);
+    const theme = useAppState((s) => s.app.theme.pallets);
 
     const [search, setSearch] = useState("");
 

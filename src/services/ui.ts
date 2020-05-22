@@ -1,7 +1,6 @@
 import { Store } from "pullstate";
 import { State } from "./state";
-import { InstrumentKey } from "./instrument";
-import { ThemeState, themeEmptyState, themeActions } from "./theme";
+import { InstrumentKey } from "./score-instrument";
 
 export enum Tool {
     select = 1,
@@ -18,18 +17,17 @@ export enum TabState {
 }
 
 export interface UiState {
-    theme: ThemeState;
-    update?: () => void;
     tab: TabState;
     expanded: { [key: string]: boolean };
     selection: { [key: string]: boolean };
     pianoRollOffsetY: { [key: string]: number };
     tool: { [TabState.play]: Tool };
+
+    onUpdate?: () => void;
 }
 
 export const uiEmptyState = (): UiState => {
     return {
-        theme: themeEmptyState(),
         tab: TabState.setup,
         expanded: {},
         selection: {},
@@ -42,7 +40,6 @@ export const uiEmptyState = (): UiState => {
 
 export const uiActions = (store: Store<State>) => {
     return {
-        theme: themeActions(store),
         tab: {
             set: (tab: TabState) => {
                 store.update((s) => {

@@ -10,7 +10,7 @@ interface Props {
 
 export const Panel: FC<Props> = ({ className, children }) => {
 
-    const theme = useAppState(s => s.ui.theme.pallets);
+    const theme = useAppState(s => s.app.theme.pallets);
 
     return <div className={merge("panel", className)} style={{ backgroundColor: theme.background[200].bg }}>
         {children}

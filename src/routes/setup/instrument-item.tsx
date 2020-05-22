@@ -4,7 +4,7 @@ import { mdiPiano, mdiDeleteOutline } from "@mdi/js";
 import { Icon, SortableItem } from "solo-ui";
 
 import { useAppState, useAppActions } from "../../services/state";
-import { Instrument, useInstrumentName } from "../../services/instrument";
+import { Instrument, useInstrumentName } from "../../services/score-instrument";
 import { Text } from "../../components/text";
 
 import "./instrument-item.css";
@@ -21,7 +21,7 @@ interface Props {
 export const InstrumentItem: FC<Props> = ({ index, selected, instrument, count, onSelect }) => {
     const handle = useRef<HTMLDivElement>(null);
     const actions = useAppActions();
-    const theme = useAppState(s => s.ui.theme.pallets);
+    const theme = useAppState(s => s.app.theme.pallets);
     const { bg, fg } = useMemo(() => {
         if (selected) {
             return theme.primary[600];

@@ -1,7 +1,7 @@
 import shortid from "shortid";
 import { Entry, EntryType } from ".";
 import { buildText, TextStyles, Align } from "../render/text";
-import { EngravingConfig } from "../services/engraving";
+import { EngravingConfig } from "../services/score-engraving";
 import { NotationBaseDuration } from "../parse/notation-track";
 
 export interface AbsoluteTempoDef {
@@ -47,12 +47,7 @@ function glyphFromDuration(baseLength?: NotationBaseDuration) {
     }
 }
 
-export function drawAbsoluteTempo(
-    x: number,
-    y: number,
-    tempo: Entry<AbsoluteTempo>,
-    config: EngravingConfig
-) {
+export function drawAbsoluteTempo(x: number, y: number, tempo: Entry<AbsoluteTempo>, config: EngravingConfig) {
     const styles: TextStyles = {
         color: "#000000",
         font: config.tempo.font,

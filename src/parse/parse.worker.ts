@@ -1,7 +1,7 @@
 import shortid from "shortid";
 import { parse } from "../parse";
 import { Score } from "../services/score";
-import { FlowKey } from "../services/flow";
+import { FlowKey } from "../services/score-flow";
 
 const ctx = (self as unknown) as Worker; // eslint-disable-line
 

@@ -21,7 +21,7 @@ interface Props {
 export const RenderWriteMode: FC<Props> = memo(({ id, className, style }) => {
     const { theme, score } = useAppState(s => {
         return {
-            theme: s.ui.theme.pallets,
+            theme: s.app.theme.pallets,
             score: s.score
         }
     });

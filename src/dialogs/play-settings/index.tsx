@@ -3,7 +3,7 @@ import { mdiMidiPort } from "@mdi/js";
 
 import { Button, Icon, Subheader, Dialog } from "solo-ui";
 
-import { useCounts } from "../../services/instrument";
+import { useCounts } from "../../services/score-instrument";
 import { PlaySettingsChannel } from "./play-settings-channel";
 import { useAppState, useAppActions } from "../../services/state";
 import { MenuItem } from "../../components/menu-item";
@@ -25,7 +25,7 @@ export const PlaySettings = Dialog<Props>(({ onClose }) => {
     const actions = useAppActions();
 
     const { theme, midi, channels, instruments } = useAppState(s => ({
-        theme: s.ui.theme.pallets,
+        theme: s.app.theme.pallets,
         midi: s.playback.midi,
         channels: s.playback.sampler.channels.order.map(key => {
             return s.playback.sampler.channels.byKey[key];

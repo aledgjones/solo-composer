@@ -4,8 +4,8 @@ import { mdiCogOutline } from "@mdi/js";
 import { useTitle, Icon } from "solo-ui";
 
 import { useAppActions, useAppState } from "../../services/state";
-import { PlayerType } from "../../services/player";
-import { InstrumentDef } from "../../services/instrument-defs";
+import { PlayerType } from "../../services/score-player";
+import { InstrumentDef } from "../../services/score-instrument-defs";
 
 import { Selection, SelectionType } from "./selection";
 
@@ -27,7 +27,7 @@ const Setup: FC<Props> = () => {
     useTitle("Solo Composer | Setup");
 
     const actions = useAppActions();
-    const theme = useAppState(s => s.ui.theme.pallets);
+    const theme = useAppState(s => s.app.theme.pallets);
 
     // local selection fine, we don't need to keep this after nav.
     const [selection, setSelection] = useState<Selection>(null);

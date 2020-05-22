@@ -3,7 +3,7 @@ import { mdiAccount, mdiAccountGroup } from "@mdi/js";
 import { Dialog, Icon, Label, Button, Content } from "solo-ui";
 
 import { useAppState } from "../../services/state";
-import { PlayerType } from "../../services/player";
+import { PlayerType } from "../../services/score-player";
 
 import "../generic-settings.css";
 import "./styles.css";
@@ -14,7 +14,7 @@ interface Props {
 
 export const PlayerTypeSelector = Dialog<Props>(({ onClose }) => {
 
-    const theme = useAppState(s => s.ui.theme.pallets);
+    const theme = useAppState(s => s.app.theme.pallets);
     const [type, setType] = useState(PlayerType.solo);
 
     const selectedStyles = {

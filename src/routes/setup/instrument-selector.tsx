@@ -3,7 +3,7 @@ import { mdiChevronRight } from "@mdi/js";
 import { Icon, Button, Dialog } from "solo-ui";
 
 import { useAppState } from "../../services/state";
-import { InstrumentDef, useInstrumentList, getFirstInstrumentDefFromPartialPath } from "../../services/instrument-defs";
+import { InstrumentDef, useInstrumentList, getFirstInstrumentDefFromPartialPath } from "../../services/score-instrument-defs";
 import { MenuItem } from "../../components/menu-item";
 
 import "./instrument-picker.css";
@@ -14,7 +14,7 @@ interface Props {
 }
 
 export const InstrumentSelector = Dialog<Props>(({ onSelect, onCancel }) => {
-    const theme = useAppState(s => s.ui.theme.pallets);
+    const theme = useAppState(s => s.app.theme.pallets);
     const [selection, setSelection] = useState<InstrumentDef>(getFirstInstrumentDefFromPartialPath([]));
     const lists = useInstrumentList(selection);
 

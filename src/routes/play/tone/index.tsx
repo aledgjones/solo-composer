@@ -35,7 +35,7 @@ interface Props {
 
 export const ToneElement: FC<Props> = ({ flowKey, trackKey, tone, selected, color, top, left, width, tool, onEdit, onPlay }) => {
     const actions = useAppActions();
-    const theme = useAppState(s => s.ui.theme.pallets);
+    const theme = useAppState(s => s.app.theme.pallets);
 
     const fill = useMemo(() => {
         if (selected) {

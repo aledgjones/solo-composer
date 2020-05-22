@@ -33,7 +33,7 @@ serviceWorker.register({
     onUpdate: (reg) => {
         store.update(s => {
             // force the new service worker to load and take control
-            s.ui.update = () => {
+            s.ui.onUpdate = () => {
                 navigator.serviceWorker.addEventListener('controllerchange', () => window.location.reload());
                 reg.waiting?.postMessage({ type: 'SKIP_WAITING' });
             };

@@ -1,10 +1,7 @@
-import { EngravingConfig } from "../services/engraving";
+import { EngravingConfig } from "../services/score-engraving";
 import { Converter } from "./converter";
 
-export const getConvertedConfig = (
-    config: EngravingConfig,
-    converter: Converter
-): EngravingConfig => {
+export const getConvertedConfig = (config: EngravingConfig, converter: Converter): EngravingConfig => {
     const { mm } = converter;
     return {
         ...config,

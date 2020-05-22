@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Subheader, Switch, ListItem, Label, Select, Option, Dialog } from "solo-ui";
 
-import { ThemeMode } from "../../services/theme";
+import { ThemeMode } from "../../services/app-theme";
 import { useAppActions, useAppState } from "../../services/state";
 import { MenuItem } from "../../components/menu-item";
 
@@ -20,7 +20,7 @@ export const Preferences = Dialog<Props>(({ onClose }) => {
     const actions = useAppActions();
     const { theme, audition } = useAppState((s) => {
         return {
-            theme: s.ui.theme,
+            theme: s.app.theme,
             audition: s.playback.settings.audition
         };
     });
@@ -70,7 +70,7 @@ export const Preferences = Dialog<Props>(({ onClose }) => {
                                     label="Mode"
                                     color={theme.pallets.primary[500].bg}
                                     value={theme.mode}
-                                    onChange={(mode: ThemeMode) => actions.ui.theme.mode(mode)}
+                                    onChange={(mode: ThemeMode) => actions.app.theme.mode(mode)}
                                 >
                                     <Option value={ThemeMode.auto} displayAs="Auto">
                                         <Label>

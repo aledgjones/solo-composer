@@ -5,15 +5,15 @@ import { Select, Option, useRainbow, Icon, DragScroll, useTitle } from "solo-ui"
 
 import { useAppState, useAppActions } from "../../services/state";
 import { TabState, Tool } from "../../services/ui";
-import { useCounts } from "../../services/instrument";
+import { useCounts } from "../../services/score-instrument";
 import { entriesByTick } from "../../services/track";
 import { useTicks, Ticks } from "./ticks";
 import { PlayerControls } from "./player-contols";
 import { PlayerTrack } from "./player-track";
 import { PlaySettings } from "../../dialogs/play-settings";
+import { Panel } from "../../components/panel";
 
 import "./play.css";
-import { Panel } from "../../components/panel";
 
 const Play: FC = () => {
     useTitle("Solo Composer | Play");
@@ -21,7 +21,7 @@ const Play: FC = () => {
     const actions = useAppActions();
     const { theme, score, expanded, tool } = useAppState((s) => {
         return {
-            theme: s.ui.theme.pallets,
+            theme: s.app.theme.pallets,
             score: s.score,
             expanded: s.ui.expanded,
             tool: s.ui.tool[TabState.play]

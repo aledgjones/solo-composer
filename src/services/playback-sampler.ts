@@ -1,12 +1,12 @@
-import {Store} from "pullstate";
+import { Store } from "pullstate";
 import shortid from "shortid";
 
 import app from "../app.json";
-import {State} from "./state";
-import {InstrumentKey} from "./instrument";
-import {InstrumentDef} from "./instrument-defs";
-import {Expressions} from "../playback/expressions";
-import {PatchPlayer} from "../playback/patch-player";
+import { State } from "./state";
+import { InstrumentKey } from "./score-instrument";
+import { InstrumentDef } from "./score-instrument-defs";
+import { Expressions } from "../playback/expressions";
+import { PatchPlayer } from "../playback/patch-player";
 
 export type ChannelKey = string;
 

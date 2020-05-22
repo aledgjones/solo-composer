@@ -14,7 +14,7 @@ import { getNotationBaseDuration, getIsDotted, NotationTracks, NotationBaseDurat
 import { drawRest } from "./draw-rest";
 import { drawNotehead } from "./draw-notehead";
 import { drawAbsoluteTempo, AbsoluteTempo } from "../entries/absolute-tempo";
-import { EngravingConfig } from "../services/engraving";
+import { EngravingConfig } from "../services/score-engraving";
 import { getStemDirection, stepsFromTop, Direction } from "./get-stem-direction";
 import { drawNoteStem } from "./draw-note-stem";
 import { getIsRest } from "./is-rest";

@@ -1,8 +1,8 @@
 import { toRoman } from "roman-numerals";
-import { PlayerState, PlayerKey, PlayerType } from "./player";
-import { Instruments, InstrumentKey, Instrument } from "./instrument";
-import { ConfigState } from "./config";
-import { Flow } from "./flow";
+import { PlayerState, PlayerKey, PlayerType } from "./score-player";
+import { Instruments, InstrumentKey, Instrument } from "./score-instrument";
+import { ConfigState } from "./score-config";
+import { Flow } from "./score-flow";
 
 export enum InstrumentAutoCountStyle {
     arabic = 1,

@@ -1,5 +1,5 @@
 import { Names } from "./get-names";
-import { EngravingConfig } from "../services/engraving";
+import { EngravingConfig } from "../services/score-engraving";
 import { Converter } from "./converter";
 import { TextStyles, Justify, Align } from "../render/text";
 import { measureText } from "./measure-text";
@@ -13,6 +13,6 @@ export function measureNames(names: Names, config: EngravingConfig, converter: C
         align: Align.top
     };
     const keys = Object.keys(names);
-    const boxes = keys.map(key => measureText(styles, names[key], converter));
+    const boxes = keys.map((key) => measureText(styles, names[key], converter));
     return Math.max(...boxes, 0); // add a zero incase we dont actually have any widths
 }

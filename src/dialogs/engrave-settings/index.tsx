@@ -3,7 +3,7 @@ import { Select, Option, Input, Button, Subheader, Switch, ListItem, Label, Dial
 
 import { useAppActions, useAppState } from "../../services/state";
 import { MenuItem } from "../../components/menu-item";
-import { LayoutType, defaultEngravingConfig } from "../../services/engraving";
+import { LayoutType, defaultEngravingConfig } from "../../services/score-engraving";
 import { BracketingType, BracketEndStyle } from "../../parse/draw-brackets";
 
 import staveSpace from "./examples/stave-space.svg";
@@ -28,7 +28,7 @@ export const EngraveSettings = Dialog<Props>(({ onClose }) => {
     const actions = useAppActions();
     const { theme, config } = useAppState(s => {
         return {
-            theme: s.ui.theme.pallets,
+            theme: s.app.theme.pallets,
             config: s.score.engraving[layoutType]
         }
     }, [layoutType]);

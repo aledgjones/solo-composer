@@ -3,11 +3,11 @@ import { mdiPlus } from "@mdi/js";
 
 import { Icon, SortableContainer } from "solo-ui";
 
-import { PlayerKey } from "../../../services/player";
+import { PlayerKey } from "../../../services/score-player";
 import { useAppActions, useAppState } from "../../../services/state";
 import { PlayerItem } from "../player-item";
 import { Selection } from "../selection";
-import { useCounts } from "../../../services/instrument";
+import { useCounts } from "../../../services/score-instrument";
 
 import "./styles.css";
 
@@ -24,7 +24,7 @@ export const PlayerList: FC<Props> = ({ selection, onSelect, onAddInstrument, on
     const counts = useCounts();
     const { theme, players, instruments, expanded } = useAppState(s => {
         return {
-            theme: s.ui.theme.pallets,
+            theme: s.app.theme.pallets,
             players: s.score.players.order.map(key => {
                 return s.score.players.byKey[key];
             }),

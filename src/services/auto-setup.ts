@@ -1,13 +1,13 @@
 import { useEffect, useMemo } from "react";
-import { instrumentDefs } from "./instrument-defs";
-import { PlayerType } from "./player";
+import { instrumentDefs } from "./score-instrument-defs";
+import { PlayerType } from "./score-player";
 import { KeySignatureMode } from "../entries/key-signature";
 import { NotationBaseDuration } from "../parse/notation-track";
 import { getDefaultGroupings } from "../parse/get-default-groupings";
 import { useAppActions, useAppState } from "./state";
 import { TabState } from "./ui";
 import { BarlineType } from "../entries/barline";
-import { LayoutType } from "./engraving";
+import { LayoutType } from "./score-engraving";
 
 export function useAutoSetup() {
     const actions = useAppActions();

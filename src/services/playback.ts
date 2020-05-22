@@ -1,8 +1,8 @@
 import { Store } from "pullstate";
 import { State } from "./state";
 
-import { MidiState, midiEmptyState, midiActions } from "./midi";
-import { SamplerState, samplerEmptyState, samplerActions } from "./sampler";
+import { MidiState, midiEmptyState, midiActions } from "./playback-midi";
+import { SamplerState, samplerEmptyState, samplerActions } from "./playback-sampler";
 
 export interface PlaybackState {
     playing: boolean;
@@ -35,14 +35,14 @@ export const playbackActions = (store: Store<State>) => {
         settings: {
             metronome: {
                 toggle: () => {
-                    store.update(s => {
+                    store.update((s) => {
                         s.playback.settings.metronome = !s.playback.settings.metronome;
                     });
                 }
             },
             audition: {
                 toggle: () => {
-                    store.update(s => {
+                    store.update((s) => {
                         s.playback.settings.audition = !s.playback.settings.audition;
                     });
                 }

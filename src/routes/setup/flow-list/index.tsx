@@ -19,7 +19,7 @@ export const FlowList: FC<Props> = ({ selection, onSelect }) => {
     const actions = useAppActions();
     const { theme, flows } = useAppState(s => {
         return {
-            theme: s.ui.theme.pallets,
+            theme: s.app.theme.pallets,
             flows: s.score.flows.order.map(key => {
                 return s.score.flows.byKey[key];
             })

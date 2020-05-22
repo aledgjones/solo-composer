@@ -1,6 +1,6 @@
-import { FlowKey } from "../services/flow";
+import { FlowKey } from "../services/score-flow";
 import { Score } from "../services/score";
-import { LayoutType, defaultEngravingConfig } from "../services/engraving";
+import { LayoutType, defaultEngravingConfig } from "../services/score-engraving";
 
 import { getNames, NameType } from "./get-names";
 import { getStaves } from "../services/stave";
@@ -26,7 +26,7 @@ import { getFirstBeats } from "./get-first-beats";
 import { getWrittenDurations } from "./get-written-durations";
 import { createBarline } from "../entries/barline";
 import { getConvertedConfig } from "./get-converted-config";
-import { getInstruments, getCounts } from "../services/instrument-utils";
+import { getInstruments, getCounts } from "../services/score-instrument-utils";
 
 export function parse(score: Score, flowKey: FlowKey, mm: number): RenderInstructions {
     const flow = score.flows.byKey[flowKey];

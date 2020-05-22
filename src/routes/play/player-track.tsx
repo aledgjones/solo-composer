@@ -1,8 +1,8 @@
 import React, { FC } from "react";
 
-import { FlowKey } from "../../services/flow";
-import { Player } from "../../services/player";
-import { Instruments } from "../../services/instrument";
+import { FlowKey } from "../../services/score-flow";
+import { Player } from "../../services/score-player";
+import { Instruments } from "../../services/score-instrument";
 import { Staves } from "../../services/stave";
 import { Tracks } from "../../services/track";
 import { InstrumentTrack } from "./instrument-track";
@@ -25,7 +25,7 @@ interface Props {
 
 export const PlayerTrack: FC<Props> = ({ color, expanded, player, instruments, staves, tracks, ticks, flowKey }) => {
 
-    const theme = useAppState(s => s.ui.theme.pallets);
+    const theme = useAppState(s => s.app.theme.pallets);
 
     return (
         <div className="player-track" style={{ backgroundColor: theme.background[700].bg }}>

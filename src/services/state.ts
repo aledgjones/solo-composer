@@ -1,18 +1,21 @@
-import {useMemo} from "react";
-import {Store, useStoreState} from "pullstate";
+import { useMemo } from "react";
+import { Store, useStoreState } from "pullstate";
 
-import {uiEmptyState, uiActions, UiState} from "./ui";
-import {scoreActions, scoreEmptyState, Score} from "./score";
-import {PlaybackState, playbackEmptyState, playbackActions} from "./playback";
+import { uiEmptyState, uiActions, UiState } from "./ui";
+import { scoreActions, scoreEmptyState, Score } from "./score";
+import { PlaybackState, playbackEmptyState, playbackActions } from "./playback";
+import { appEmptyState, AppState, appActions } from "./app";
 
 export interface State {
     ui: UiState;
+    app: AppState;
     score: Score;
     playback: PlaybackState;
 }
 
 export const store = new Store<State>({
     ui: uiEmptyState(),
+    app: appEmptyState(),
     score: scoreEmptyState(),
     playback: playbackEmptyState()
 });
@@ -20,9 +23,10 @@ export const store = new Store<State>({
 export function useAppActions() {
     return useMemo(() => {
         return {
-            ui: uiActions(store),
-            score: scoreActions(store),
-            playback: playbackActions(store)
+            ui: uiActions(store), // user interface things (ephermeral)
+            app: appActions(store), // app wide preferences and actions
+            score: scoreActions(store), // score specific preferences and data
+            playback: playbackActions(store) // pl
         };
     }, []);
 }

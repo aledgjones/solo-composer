@@ -1,8 +1,8 @@
 import Big from "big.js";
-import { Instrument, InstrumentKey } from "../services/instrument";
+import { Instrument, InstrumentKey } from "../services/score-instrument";
 import { StaveKey } from "../services/stave";
 import { isSpan, BracketSpan } from "./is-span";
-import { EngravingConfig } from "../services/engraving";
+import { EngravingConfig } from "../services/score-engraving";
 
 export interface VerticalMeasurements {
     systemHeight: number;
@@ -24,10 +24,7 @@ export interface VerticalMeasurements {
     barlines: Array<{ start: InstrumentKey; stop: InstrumentKey }>;
 }
 
-export function measureVerticalLayout(
-    instruments: Instrument[],
-    config: EngravingConfig
-): VerticalMeasurements {
+export function measureVerticalLayout(instruments: Instrument[], config: EngravingConfig): VerticalMeasurements {
     const instrumentLen = instruments.length;
 
     const metrics = instruments.reduce(
@@ -134,9 +131,7 @@ export function measureVerticalLayout(
                 output.systemHeight = parseFloat(new Big(start + height).round(2, 1).toString());
             });
 
-            output.instruments[instrument.key].y = parseFloat(
-                new Big(instrumentTop).round(2, 1).toString()
-            );
+            output.instruments[instrument.key].y = parseFloat(new Big(instrumentTop).round(2, 1).toString());
             return output;
         },
         {

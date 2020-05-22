@@ -12,9 +12,9 @@ import "./styles.css";
 export const FileMenu: FC = () => {
     const { theme, meta, update } = useAppState((s) => {
         return {
-            theme: s.ui.theme.pallets,
+            theme: s.app.theme.pallets,
             meta: s.score.meta,
-            update: s.ui.update
+            update: s.ui.onUpdate
         };
     });
 
@@ -68,6 +68,9 @@ export const FileMenu: FC = () => {
                             </div>
                         </Content>
                         <List onClick={() => setOpen(false)}>
+                            <ListItem onClick={() => setPreferences(true)}>
+                                <span>Import</span>
+                            </ListItem>
                             <ListItem onClick={() => setPreferences(true)}>Preferences</ListItem>
                             <Divider />
                             {update && (
