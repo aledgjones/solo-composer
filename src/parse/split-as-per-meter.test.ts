@@ -822,3 +822,48 @@ it(i + ". " + "renders correctly - 4/4 [qqqq_c.q]", () => {
 });
 
 i++;
+
+it(i + ". " + "renders correctly - 4/4 [m_c_q-]", () => {
+    const q = 6;
+    const len = q * 8;
+
+    const flow = createTrack([createTimeSignature({ beats: 4, beatType: 4, groupings: getDefaultGroupings(4) }, 0)]);
+
+    const track = createTrack([createTone({ pitch: "C4", duration: q * 7 }, 0)]);
+
+    const log = parse(len, flow, track);
+
+    expect(log).toBe("o_______________________o___________o----¬r----¬");
+});
+
+i++;
+
+it(i + ". " + "renders correctly - 4/4 [m.-]", () => {
+    const q = 6;
+    const len = q * 8;
+
+    const flow = createTrack([createTimeSignature({ beats: 4, beatType: 4, groupings: getDefaultGroupings(4) }, 0)]);
+
+    const track = createTrack([createTone({ pitch: "C4", duration: q * 6 }, 0)]);
+
+    const log = parse(len, flow, track);
+
+    expect(log).toBe("o_______________________o----------¬r----------¬");
+});
+
+i++;
+
+it(i + ". " + "renders correctly - 4/4 [-m.]", () => {
+    const q = 6;
+    const len = q * 8;
+
+    const flow = createTrack([createTimeSignature({ beats: 4, beatType: 4, groupings: getDefaultGroupings(4) }, 0)]);
+
+    const track = createTrack([createTone({ pitch: "C4", duration: q * 6 }, q * 2)]);
+
+    const log = parse(len, flow, track);
+
+    expect(log).toBe("r----------¬o----------------------------------¬");
+});
+
+i++;

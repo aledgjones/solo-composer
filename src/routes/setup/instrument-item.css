@@ -6,6 +6,7 @@
     padding: 0 16px;
     line-height: 1em;
     height: 48px;
+    border-radius: 3px;
 }
 
 .instrument-item.ui-sortable-item--sorting {

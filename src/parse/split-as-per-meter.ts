@@ -80,14 +80,22 @@ export function splitUnit(
                     getIsEmpty(secondBeat, fourthBeat, track)
                 ) {
                     // 2/4 [qcq] dont't split middle
-                } else if (track[secondBeat] && !getIsRest(track[secondBeat]) && getIsEmpty(secondBeat, stop, track)) {
+                } else if (
+                    track[firstBeat] &&
+                    track[secondBeat] &&
+                    !getIsRest(track[secondBeat]) &&
+                    getIsEmpty(secondBeat, stop, track)
+                ) {
                     // 2/4 [qc.] dont't split middle
                 } else if (
                     track[firstBeat] &&
                     !getIsRest(track[firstBeat]) &&
-                    getIsEmpty(firstBeat, fourthBeat, track)
+                    getIsEmpty(firstBeat, fourthBeat, track) &&
+                    track[fourthBeat] &&
+                    !getIsRest(track[fourthBeat]) &&
+                    getIsEmpty(fourthBeat, stop, track)
                 ) {
-                    // 2/4 [c.q] don't split middle
+                    // 2/4 [c.q] don't split middle unless q === rest
                 } else {
                     track = splitNotationTrack(track, thirdBeat);
                 }
