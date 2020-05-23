@@ -1,4 +1,12 @@
-import React, { useCallback, useMemo, MouseEvent, FC, useRef, CSSProperties, useState } from "react";
+import React, {
+    useCallback,
+    useMemo,
+    MouseEvent,
+    FC,
+    useRef,
+    CSSProperties,
+    useState
+} from "react";
 import { mdiDeleteOutline, mdiFileDocumentOutline, mdiPencilOutline } from "@mdi/js";
 import { Icon, Checkbox, merge, SortableItem } from "solo-ui";
 
@@ -18,11 +26,10 @@ interface Props {
 }
 
 export const FlowItem: FC<Props> = ({ index, flow, selection, style, onSelect }) => {
-
     const handle = useRef<HTMLDivElement>(null);
     const input = useRef<HTMLInputElement>(null);
     const actions = useAppActions();
-    const theme = useAppState(s => s.app.theme.pallets);
+    const theme = useAppState((s) => s.app.theme.pallets);
 
     const [editing, setEditing] = useState(false);
 
@@ -31,15 +38,16 @@ export const FlowItem: FC<Props> = ({ index, flow, selection, style, onSelect })
     }, [selection, flow.key]);
 
     const active: boolean = useMemo(() => {
-        return !!selection && selection.type === SelectionType.player && flow.players.includes(selection.key);
+        return (
+            !!selection &&
+            selection.type === SelectionType.player &&
+            flow.players.includes(selection.key)
+        );
     }, [selection, flow.players]);
 
-    const onSelectFlow = useCallback(
-        () => {
-            onSelect({ key: flow.key, type: SelectionType.flow })
-        },
-        [flow.key, onSelect]
-    );
+    const onSelectFlow = useCallback(() => {
+        onSelect({ key: flow.key, type: SelectionType.flow });
+    }, [flow.key, onSelect]);
 
     const onCheckboxChange = useCallback(
         (value: boolean) => {
@@ -65,18 +73,6 @@ export const FlowItem: FC<Props> = ({ index, flow, selection, style, onSelect })
         [onSelect, actions.score.flows, flow.key]
     );
 
-    const { bg, fg } = useMemo(() => {
-        if (editing) {
-            return theme.primary[600];
-        } else if (selected) {
-            return theme.primary[500];
-        } else if (active) {
-            return theme.background[700];
-        } else {
-            return theme.background[600];
-        }
-    }, [editing, selected, active, theme]);
-
     const onEdit = useCallback(() => {
         if (input.current) {
             input.current.focus();
@@ -91,6 +87,18 @@ export const FlowItem: FC<Props> = ({ index, flow, selection, style, onSelect })
         }
     }, [flow.title, actions.score.flows, flow.key]);
 
+    const { bg, fg } = useMemo(() => {
+        if (editing) {
+            return theme.primary[600];
+        } else if (selected) {
+            return theme.primary[500];
+        } else if (active) {
+            return theme.background[700];
+        } else {
+            return theme.background[600];
+        }
+    }, [editing, selected, active, theme]);
+
     return (
         <SortableItem
             index={index}
@@ -100,9 +108,13 @@ export const FlowItem: FC<Props> = ({ index, flow, selection, style, onSelect })
             onClick={onSelectFlow}
         >
             <div className="flow-item__header">
-
                 <div onPointerDown={onSelectFlow} ref={handle}>
-                    <Icon style={{ marginRight: 12 }} path={mdiFileDocumentOutline} size={24} color={fg} />
+                    <Icon
+                        style={{ marginRight: 12 }}
+                        path={mdiFileDocumentOutline}
+                        size={24}
+                        color={fg}
+                    />
                 </div>
 
                 <input
@@ -135,11 +147,10 @@ export const FlowItem: FC<Props> = ({ index, flow, selection, style, onSelect })
                 )}
 
                 {!!selection && selection.type !== SelectionType.flow && (
-                    <div onClick={e => e.stopPropagation()}>
+                    <div onClick={(e) => e.stopPropagation()}>
                         <Checkbox color="white" value={active} onChange={onCheckboxChange} />
                     </div>
                 )}
-
             </div>
         </SortableItem>
     );
