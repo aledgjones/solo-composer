@@ -23,17 +23,19 @@ export const MainShell: FC = () => {
     // useDebugger();
 
     const actions = useAppActions();
-    const { theme, tab } = useAppState(s => {
+    const { theme, tab } = useAppState((s) => {
         return {
             theme: s.app.theme.pallets,
             tab: s.ui.tab
-        }
+        };
     });
 
     useTheme(theme.background[200].bg);
     useStyles(`.main-shell__tabs .ui-tab { color: ${theme.background[200].fg} !important }`); // slight hack on the tab element
 
     useEffect(() => {
+        actions.app.audition.init();
+        actions.app.theme.init();
         actions.playback.midi.init();
     }, [actions]);
 

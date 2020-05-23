@@ -1,5 +1,6 @@
 import { Store } from "pullstate";
 import { State } from "./state";
+import { localconfig } from "./localstorage";
 
 export interface Shade {
     bg: string;
@@ -60,14 +61,10 @@ export const pallets: Pallets = {
 };
 
 export function themeEmptyState(): ThemeState {
-    const mode = (localStorage.getItem("sc:theme-mode/v1") as ThemeMode) || ThemeMode.dark;
-    const isLight =
-        mode === ThemeMode.light ||
-        (mode === ThemeMode.auto && window.matchMedia("(prefers-color-scheme: light)").matches);
     return {
-        mode,
+        mode: ThemeMode.dark,
         pallets: {
-            background: isLight ? pallets[ThemeMode.light] : pallets[ThemeMode.dark],
+            background: pallets[ThemeMode.dark],
             primary: {
                 200: { bg: "", fg: "" },
                 300: { bg: "", fg: "" },
@@ -84,8 +81,22 @@ export function themeEmptyState(): ThemeState {
 }
 
 export function themeActions(store: Store<State>) {
+    const isLight = (mode: ThemeMode) => {
+        return (
+            mode === ThemeMode.light ||
+            (mode === ThemeMode.auto && window.matchMedia("(prefers-color-scheme: light)").matches)
+        );
+    };
+
     return {
-        init: () => {
+        init: async () => {
+            // get initial value
+            const mode = (await localconfig.getItem<ThemeMode>("theme-mode/v1")) || ThemeMode.dark;
+            store.update((s) => {
+                s.app.theme.mode = mode;
+                s.app.theme.pallets.background = isLight(mode) ? pallets[ThemeMode.light] : pallets[ThemeMode.dark];
+            });
+            // listen for system theme change
             const query = window.matchMedia("(prefers-color-scheme: light)");
             query.addListener((e) => {
                 store.update((s) => {
@@ -97,13 +108,10 @@ export function themeActions(store: Store<State>) {
             });
         },
         mode: (mode: ThemeMode) => {
-            localStorage.setItem("sc:theme-mode/v1", mode);
+            localconfig.setItem("theme-mode/v1", mode);
             store.update((s) => {
                 s.app.theme.mode = mode;
-                const isLight =
-                    mode === ThemeMode.light ||
-                    (mode === ThemeMode.auto && window.matchMedia("(prefers-color-scheme: light)").matches);
-                s.app.theme.pallets.background = isLight ? pallets[ThemeMode.light] : pallets[ThemeMode.dark];
+                s.app.theme.pallets.background = isLight(mode) ? pallets[ThemeMode.light] : pallets[ThemeMode.dark];
             });
         }
     };

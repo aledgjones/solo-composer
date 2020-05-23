@@ -19,6 +19,7 @@
         "big.js": "^5.2.2",
         "color": "^3.1.2",
         "firebase": "^7.14.2",
+        "localforage": "^1.7.3",
         "lodash.isstring": "^4.0.1",
         "prompt-sync": "^4.2.0",
         "pullstate": "^1.13.0",
