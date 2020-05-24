@@ -33,7 +33,7 @@ export function splitUnit(
     subdivisions: number,
     beats: number,
     beatType: number,
-    originalBeatType: number,
+    ticksPerOriginalBeat: number,
     groupings: number[],
     track: NotationTrack,
     isFullBar: boolean
@@ -81,9 +81,7 @@ export function splitUnit(
                     track[firstBeat] &&
                     getIsEmpty(firstBeat, fourthBeat, track) &&
                     track[fourthBeat] &&
-                    getIsEmpty(fourthBeat, stop, track) &&
-                    (track[firstBeat].duration < getTicksPerBeat(subdivisions, originalBeatType) ||
-                        !getIsRest(track[fourthBeat]))
+                    (track[firstBeat].duration < ticksPerOriginalBeat || !getIsRest(track[fourthBeat]))
                 ) {
                     // 2/4 [c.q] don't split middle unless q === rest
                 } else {
@@ -137,7 +135,7 @@ export function splitUnit(
                     subdivisions,
                     nextBeats,
                     nextBeatType,
-                    originalBeatType,
+                    ticksPerOriginalBeat,
                     nextGroupings,
                     track,
                     false
@@ -177,7 +175,7 @@ export function splitAsPerMeter(
             subdivisions,
             time?.beats || 0,
             time?.beatType || 4,
-            time?.beatType || 4,
+            getTicksPerBeat(subdivisions, time?.beatType || 4),
             groupings,
             track,
             true

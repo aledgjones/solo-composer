@@ -853,6 +853,44 @@ it(i + ". " + "renders correctly - 4/4 [m.-]", () => {
 
 i++;
 
+it(i + ". " + "renders correctly - 4/4 [m_c.s-]", () => {
+    const q = 6;
+    const sq = 3;
+    const len = q * 8;
+
+    const flow = createTrack([createTimeSignature({ beats: 4, beatType: 4, groupings: getDefaultGroupings(4) }, 0)]);
+
+    const track = createTrack([
+        createTone({ pitch: "C4", duration: q * 7 }, 0),
+        createTone({ pitch: "C4", duration: sq }, q * 7)
+    ]);
+
+    const log = parse(len, flow, track);
+
+    expect(log).toBe("o_______________________o----------------¬o-¬r-¬");
+});
+
+i++;
+
+it(i + ". " + "renders correctly - 4/4 [m_c.-s]", () => {
+    const q = 6;
+    const sq = 3;
+    const len = q * 8;
+
+    const flow = createTrack([createTimeSignature({ beats: 4, beatType: 4, groupings: getDefaultGroupings(4) }, 0)]);
+
+    const track = createTrack([
+        createTone({ pitch: "C4", duration: q * 7 }, 0),
+        createTone({ pitch: "C4", duration: sq }, q * 7 + sq)
+    ]);
+
+    const log = parse(len, flow, track);
+
+    expect(log).toBe("o_______________________o___________o----¬r-¬o-¬");
+});
+
+i++;
+
 it(i + ". " + "renders correctly - 4/4 [-m.]", () => {
     const q = 6;
     const len = q * 8;
