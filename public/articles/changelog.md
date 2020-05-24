@@ -14,6 +14,7 @@ You can find the most recent updates listed here. Version numbers are for tracki
 -   <label type="changed"></label> Updated light theme based on an inverted version of the dark theme.
 -   <label type="fixed"></label> Dotted rhythm dots now print correctly in cluster chords. They follow the rules laid down in 'Behind Bars' by Elaine Gould.
 -   <label type="fixed"></label> Fixed a small bug where empty players couldn't be reassigned to a flows
+-   <label type="fixed"></label> Fixes for dotted notes at different points in the beat group. Dotted notes at start of beat group display as tied notes unless shorter than the original beat then they are shown as dotted.
 
 ## **0.6.0** (09-05-2020)
 

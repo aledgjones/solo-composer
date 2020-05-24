@@ -13,7 +13,7 @@ import "./write.css";
 
 const Write: FC = () => {
     useTitle("Solo Composer | Write");
-    const theme = useAppState(s => s.app.theme.pallets);
+    const theme = useAppState((s) => s.app.theme.pallets);
     const [settings, setSettings] = useState(false);
 
     return (
@@ -27,15 +27,13 @@ const Write: FC = () => {
             <Panel>
                 <div className="panel__wrapper" />
                 <div className="panel__wrapper panel__wrapper--settings">
-                    <div data-tooltip="Engrave Settings" data-tooltip-direction="right">
-                        <Icon
-                            className="panel__tool"
-                            path={mdiCogOutline}
-                            size={24}
-                            color={theme.background[400].fg}
-                            onClick={() => setSettings(true)}
-                        />
-                    </div>
+                    <Icon
+                        className="panel__tool"
+                        path={mdiCogOutline}
+                        size={24}
+                        color={theme.background[400].fg}
+                        onClick={() => setSettings(true)}
+                    />
                 </div>
             </Panel>
 

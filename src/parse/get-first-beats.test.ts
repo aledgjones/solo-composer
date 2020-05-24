@@ -13,7 +13,7 @@ it("finds first beats - 2/4", () => {
 
     const output = getFirstBeats(12, len, flow);
 
-    expect(output).toStrictEqual([0, c * 2]);
+    expect(output).toStrictEqual({ 0: true, [c * 2]: true });
 });
 
 it("finds first beats - 3/4", () => {
@@ -26,7 +26,7 @@ it("finds first beats - 3/4", () => {
 
     const output = getFirstBeats(12, len, flow);
 
-    expect(output).toStrictEqual([0, c * 3]);
+    expect(output).toStrictEqual({ 0: true, [c * 3]: true });
 });
 
 it("finds first beats - 4/4", () => {
@@ -39,7 +39,7 @@ it("finds first beats - 4/4", () => {
 
     const output = getFirstBeats(12, len, flow);
 
-    expect(output).toStrictEqual([0, c * 4]);
+    expect(output).toStrictEqual({ 0: true, [c * 4]: true });
 });
 
 it("finds first beats - 2/4 & 3/4", () => {
@@ -53,5 +53,5 @@ it("finds first beats - 2/4 & 3/4", () => {
 
     const output = getFirstBeats(12, len, flow);
 
-    expect(output).toStrictEqual([0, c * 2, c * 4, c * 7]);
+    expect(output).toStrictEqual({ 0: true, [c * 2]: true, [c * 4]: true, [c * 7]: true });
 });

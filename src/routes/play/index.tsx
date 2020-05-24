@@ -59,59 +59,49 @@ const Play: FC = () => {
 
     return (
         <>
-
             <Panel>
                 <div className="panel__wrapper">
-                    <div data-tooltip="Select" data-tooltip-direction="right">
-                        <Icon
-                            className="panel__tool"
-                            toggle={tool === Tool.select}
-                            onClick={() => actions.ui.tool[TabState.play].set(Tool.select)}
-                            path={mdiCursorDefault}
-                            size={24}
-                            color={theme.background[400].fg}
-                            highlight={theme.primary[500].bg}
-                        />
-                    </div>
-                    <div data-tooltip="Draw" data-tooltip-direction="right">
-                        <Icon
-                            className="panel__tool"
-                            toggle={tool === Tool.pencil}
-                            onClick={() => actions.ui.tool[TabState.play].set(Tool.pencil)}
-                            path={mdiGreasePencil}
-                            size={24}
-                            color={theme.background[400].fg}
-                            highlight={theme.primary[500].bg}
-                        />
-                    </div>
-                    <div data-tooltip="Delete" data-tooltip-direction="right">
-                        <Icon
-                            className="panel__tool"
-                            toggle={tool === Tool.eraser}
-                            onClick={() => actions.ui.tool[TabState.play].set(Tool.eraser)}
-                            path={mdiEraser}
-                            size={24}
-                            color={theme.background[400].fg}
-                            highlight={theme.primary[500].bg}
-                        />
-                    </div>
+                    <Icon
+                        className="panel__tool"
+                        toggle={tool === Tool.select}
+                        onClick={() => actions.ui.tool[TabState.play].set(Tool.select)}
+                        path={mdiCursorDefault}
+                        size={24}
+                        color={theme.background[400].fg}
+                        highlight={theme.primary[500].bg}
+                    />
+                    <Icon
+                        className="panel__tool"
+                        toggle={tool === Tool.pencil}
+                        onClick={() => actions.ui.tool[TabState.play].set(Tool.pencil)}
+                        path={mdiGreasePencil}
+                        size={24}
+                        color={theme.background[400].fg}
+                        highlight={theme.primary[500].bg}
+                    />
+                    <Icon
+                        className="panel__tool"
+                        toggle={tool === Tool.eraser}
+                        onClick={() => actions.ui.tool[TabState.play].set(Tool.eraser)}
+                        path={mdiEraser}
+                        size={24}
+                        color={theme.background[400].fg}
+                        highlight={theme.primary[500].bg}
+                    />
                 </div>
                 <div className="panel__wrapper panel__wrapper--settings">
-                    <div data-tooltip="Play Settings" data-tooltip-direction="right">
-                        <Icon
-                            className="panel__tool"
-                            path={mdiCogOutline}
-                            size={24}
-                            color={theme.background[400].fg}
-                            onClick={() => setSettings(true)}
-                        />
-                    </div>
+                    <Icon
+                        className="panel__tool"
+                        path={mdiCogOutline}
+                        size={24}
+                        color={theme.background[400].fg}
+                        onClick={() => setSettings(true)}
+                    />
                 </div>
             </Panel>
 
             <DragScroll className="play" x ignore="no-scroll">
                 <div className="play__x-fixed play__left-panel no-scroll">
-
                     <div className="play__controls" style={{ backgroundColor: theme.background[500].bg }}>
                         <div className="play__header-select" style={{ backgroundColor: theme.background[400].bg }}>
                             <Select

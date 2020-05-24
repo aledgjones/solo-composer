@@ -22,10 +22,10 @@ interface Props {
 export const PlayerList: FC<Props> = ({ selection, onSelect, onAddInstrument, onCreatePlayer }) => {
     const actions = useAppActions();
     const counts = useCounts();
-    const { theme, players, instruments, expanded } = useAppState(s => {
+    const { theme, players, instruments, expanded } = useAppState((s) => {
         return {
             theme: s.app.theme.pallets,
-            players: s.score.players.order.map(key => {
+            players: s.score.players.order.map((key) => {
                 return s.score.players.byKey[key];
             }),
             instruments: s.score.instruments,

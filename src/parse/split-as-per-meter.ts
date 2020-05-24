@@ -33,8 +33,8 @@ export function splitUnit(
     subdivisions: number,
     beats: number,
     beatType: number,
+    originalBeatType: number,
     groupings: number[],
-    longestDottedRest: number,
     track: NotationTrack,
     isFullBar: boolean
 ): NotationTrack {
@@ -68,32 +68,22 @@ export function splitUnit(
                 const fourthBeat = start + quarter * 3;
 
                 if (
-                    track[firstBeat] &&
-                    getIsRest(track[firstBeat]) &&
-                    track[firstBeat].duration === longestDottedRest
-                ) {
-                    // don't chop dotted rests if they are shorter than the allowed longest duration
-                } else if (
+                    getIsEmpty(firstBeat, secondBeat, track) &&
                     track[secondBeat] &&
                     !getIsRest(track[secondBeat]) &&
                     track[fourthBeat] &&
                     getIsEmpty(secondBeat, fourthBeat, track)
                 ) {
                     // 2/4 [qcq] dont't split middle
-                } else if (
-                    track[firstBeat] &&
-                    track[secondBeat] &&
-                    !getIsRest(track[secondBeat]) &&
-                    getIsEmpty(secondBeat, stop, track)
-                ) {
+                } else if (track[secondBeat] && !getIsRest(track[secondBeat]) && getIsEmpty(secondBeat, stop, track)) {
                     // 2/4 [qc.] dont't split middle
                 } else if (
                     track[firstBeat] &&
-                    !getIsRest(track[firstBeat]) &&
                     getIsEmpty(firstBeat, fourthBeat, track) &&
                     track[fourthBeat] &&
-                    !getIsRest(track[fourthBeat]) &&
-                    getIsEmpty(fourthBeat, stop, track)
+                    getIsEmpty(fourthBeat, stop, track) &&
+                    (track[firstBeat].duration < getTicksPerBeat(subdivisions, originalBeatType) ||
+                        !getIsRest(track[fourthBeat]))
                 ) {
                     // 2/4 [c.q] don't split middle unless q === rest
                 } else {
@@ -147,8 +137,8 @@ export function splitUnit(
                     subdivisions,
                     nextBeats,
                     nextBeatType,
+                    originalBeatType,
                     nextGroupings,
-                    longestDottedRest,
                     track,
                     false
                 );
@@ -181,17 +171,14 @@ export function splitAsPerMeter(
         const time = getNearestEntriesToTick<TimeSignature>(start, flow, EntryType.timeSignature).entries[0];
         const groupings = time?.groupings || getDefaultGroupings(0);
 
-        const ticksPerBeat = getTicksPerBeat(subdivisions, time?.beatType);
-        const longestDottedRest = (ticksPerBeat / 2 / 2) * 3;
-
         track = splitUnit(
             start,
             stop,
             subdivisions,
             time?.beats || 0,
             time?.beatType || 4,
+            time?.beatType || 4,
             groupings,
-            longestDottedRest,
             track,
             true
         );
