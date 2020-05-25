@@ -50,7 +50,7 @@ export const defaultEngravingConfig: EngravingConfig = {
     instrumentName: { size: 1.75, font: "Libre Baskerville", align: Justify.end, gap: 2 },
     tempo: { size: 1.75, font: "Libre Baskerville", align: Justify.start, distanceFromStave: 2 },
 
-    systemicBarlineSingleInstrumentSystem: true,
+    systemicBarlineSingleInstrumentSystem: false,
     bracketing: BracketingType.orchestral,
     bracketEndStyle: BracketEndStyle.wing,
     bracketSingleStaves: false,
@@ -65,8 +65,7 @@ export const engravingEmptyState = (): EngravingState => {
     return {
         [LayoutType.score]: {},
         [LayoutType.part]: {
-            bracketing: BracketingType.none,
-            systemicBarlineSingleInstrumentSystem: false
+            bracketing: BracketingType.none
         }
     };
 };

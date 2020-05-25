@@ -56,6 +56,27 @@ export function drawTick(
 
     const widths = horizontalMeasurements[tick];
 
+    // let _x = x;
+    // output.push(
+    //     buildPath(
+    //         `debug-${tick}-start`,
+    //         { thickness: 0.125, color: "#ff0000aa" },
+    //         [_x, y],
+    //         [_x, y + verticalMeasurements.systemHeight]
+    //     )
+    // );
+    // widths.forEach((width, i) => {
+    //     _x = _x + width;
+    //     output.push(
+    //         buildPath(
+    //             `debug-${tick}-${i}`,
+    //             { thickness: 0.0125, color: "#ff0000aa" },
+    //             [_x, y],
+    //             [_x, y + verticalMeasurements.systemHeight]
+    //         )
+    //     );
+    // });
+
     const keyResult = getNearestEntriesToTick<KeySignature>(tick, flowEntries, EntryType.keySignature);
     const key = keyResult.entries[0];
     const timeResult = getNearestEntriesToTick<TimeSignature>(tick, flowEntries, EntryType.timeSignature);
@@ -160,20 +181,27 @@ export function drawTick(
                     const glyph = glyphFromDuration(duration);
                     const glyphWidth = getNoteheadWidthFromDuration(duration);
                     const isDotted = getIsDotted(entry.duration, subdivisions);
-                    const tieWidth =
+                    const noteGap =
                         sumTickWidths(tick, tick + entry.duration, horizontalMeasurements) -
-                        sumWidthUpTo(widths, WidthOf.preNoteSlot) +
-                        sumWidthUpTo(horizontalMeasurements[tick + entry.duration], WidthOf.preNoteSlot);
+                        sumWidthUpTo(widths, WidthOf.noteSpacing) +
+                        sumWidthUpTo(horizontalMeasurements[tick + entry.duration], WidthOf.noteSpacing);
                     const stemDirection = getStemDirection(entry.tones, clef);
-                    const [hasShunts, shuntedNoteheads] = getShuntedNoteheads(entry.tones, stemDirection);
-                    const details: ToneDetails[] = entry.tones.map((tone, i) => {
+
+                    // TO DO
+                    // Make tie direction part of hunts function as it also need to have a concept of clusters
+
+                    const [hasShunts, shuntsByKey] = getShuntedNoteheads(entry.tones, stemDirection);
+
+                    const details: ToneDetails[] = entry.tones.map((tone) => {
+                        const tieIndex = entry.ties.indexOf(tone._key);
                         return {
                             tone,
                             offset: stepsFromTop(tone, clef),
-                            isShunt: shuntedNoteheads[tone._key],
-                            tie: !entry.ties.includes(tone._key)
-                                ? Direction.none
-                                : getTieDirection(entry.tones.length, i, stemDirection)
+                            isShunt: shuntsByKey[tone._key],
+                            tie:
+                                tieIndex < 0
+                                    ? Direction.none
+                                    : getTieDirection(entry.ties.length, tieIndex, stemDirection)
                         };
                     });
 
@@ -192,10 +220,10 @@ export function drawTick(
                                 x + sumWidthUpTo(widths, WidthOf.noteSpacing),
                                 top,
                                 detail,
+                                stemDirection,
                                 glyphWidth,
                                 entry.tones.length > 1,
-                                tieWidth,
-                                hasShunts,
+                                noteGap,
                                 `${detail.tone._key}-${tick}-tie`
                             )
                         );

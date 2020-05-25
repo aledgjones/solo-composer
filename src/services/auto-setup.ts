@@ -6,8 +6,6 @@ import { NotationBaseDuration } from "../parse/notation-track";
 import { getDefaultGroupings } from "../parse/get-default-groupings";
 import { useAppActions, useAppState } from "./state";
 import { TabState } from "./ui";
-import { BarlineType } from "../entries/barline";
-import { LayoutType } from "./score-engraving";
 
 export function useAutoSetup() {
     const actions = useAppActions();
@@ -19,13 +17,12 @@ export function useAutoSetup() {
 
     useEffect(() => {
         const c = 12;
-        const q = 6;
 
         actions.score.meta.update({ title: "Hello World (String Quartet)", composer: "Solo Apps" });
-        actions.ui.tab.set(process.env.NODE_ENV === "production" ? TabState.setup : TabState.setup);
-        actions.score.flows.setLength(flowKey, 4 * c * 2 + 6 * q * 4);
+        actions.ui.tab.set(TabState.setup);
+        actions.score.flows.setLength(flowKey, 4 * c * 8);
 
-        const ids = ["strings.violin", "strings.violin", "strings.viola", "strings.violoncello"];
+        const ids = ["strings.violin"];
 
         ids.forEach((id) => {
             const def = instrumentDefs[id];
@@ -38,21 +35,12 @@ export function useAutoSetup() {
             actions.playback.sampler.assignInstrument(instrument.key, channel);
         });
 
-        actions.score.flows.createBarline({ type: BarlineType.start_repeat }, 0, flowKey);
-        actions.score.engraving.set(LayoutType.score, { finalBarlineType: BarlineType.end_repeat });
-
         actions.score.flows.createTimeSignature(
             { beats: 4, beatType: 4, groupings: getDefaultGroupings(4) },
             0,
             flowKey
         );
-        actions.score.flows.createTimeSignature(
-            { beats: 3, beatType: 4, groupings: getDefaultGroupings(3) },
-            4 * c * 2,
-            flowKey
-        );
         actions.score.flows.createKeySignature({ mode: KeySignatureMode.minor, offset: -3 }, 0, flowKey);
-        actions.score.flows.createKeySignature({ mode: KeySignatureMode.minor, offset: 4 }, 4 * c * 2, flowKey);
         actions.score.flows.createAbsoluteTempo(
             {
                 text: "Allegro",

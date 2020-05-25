@@ -2,27 +2,62 @@ import { ToneDetails } from "./draw-tick";
 import { Direction } from "./get-stem-direction";
 import { buildCurve } from "../render/curve";
 
-function tieYOffset(tone: ToneDetails, isChord: boolean) {
-    const isInsideStave = tone.offset >= 0 && tone.offset <= 8;
+function tiePointsY(y: number, tone: ToneDetails, width: number, isChord: boolean) {
     const isOnLine = tone.offset % 2 === 0;
+    const isWide = width > 10;
 
     if (isChord) {
-        if (isOnLine) {
-            return 0.5 * tone.tie;
+        const ends = y + tone.offset / 2 + 0.25 * tone.tie;
+        let middle = 0;
+        if (isWide) {
+            middle = ends + (!isOnLine ? 0.75 : 0.5) * tone.tie;
         } else {
-            return 0;
+            middle = ends + 0.5 * tone.tie;
         }
+        return { ends, middle };
     } else {
-        // * tone.tie (-1 | 1) flips the direction of the tie
-        if (isInsideStave) {
-            if (isOnLine) {
-                return 0.65 * tone.tie;
-            } else {
-                return 0.75 * tone.tie;
-            }
+        const ends = y + tone.offset / 2 + 0.75 * tone.tie;
+        let middle = 0;
+        if (isWide) {
+            middle = ends + (isOnLine ? 0.75 : 0.5) * tone.tie;
         } else {
-            return 0.75 * tone.tie;
+            middle = ends + 0.5 * tone.tie;
         }
+        return { ends, middle };
+    }
+}
+
+function tiePointsX(
+    x: number,
+    tone: ToneDetails,
+    stemDirection: Direction,
+    glyphWidth: number,
+    tieWidth: number,
+    isChord: boolean
+) {
+    if (isChord) {
+        let start = x + glyphWidth + 0.2;
+        let end = x + tieWidth - 0.2;
+
+        if (tone.isShunt) {
+            if (stemDirection === Direction.up) {
+                start += glyphWidth;
+                end += glyphWidth;
+            } else {
+                start -= glyphWidth;
+                end -= glyphWidth;
+            }
+        }
+
+        const width = end - start;
+        const middle = start + width / 2;
+        return { start, middle, end, width };
+    } else {
+        const start = x + glyphWidth / 2 + 0.1;
+        const end = x + tieWidth + glyphWidth / 2 - 0.1;
+        const width = end - start;
+        const middle = start + width / 2;
+        return { start, middle, end, width };
     }
 }
 
@@ -30,25 +65,24 @@ export function drawTie(
     x: number,
     y: number,
     tone: ToneDetails,
+    stemDirection: Direction,
     glyphWidth: number,
     isChord: boolean,
-    tieWidth: number,
-    hasShunts: boolean,
+    noteGap: number, // distance from start of note spacing to begingin of next notes spacing
     key: string
 ) {
     const instructions = [];
     if (tone.tie !== Direction.none) {
-        const startX = x + glyphWidth + (isChord ? 0.25 : 0);
-        const endX = x + tieWidth - (isChord ? 0.25 : 0) - (hasShunts ? glyphWidth : 0);
-        const midX = startX + (endX - startX) / 2;
-        const startY = y + tone.offset / 2 + tieYOffset(tone, isChord);
+        const pointsX = tiePointsX(x, tone, stemDirection, glyphWidth, noteGap, isChord);
+        const pointsY = tiePointsY(y, tone, pointsX.width, isChord);
+
         instructions.push(
             buildCurve(
                 `${key}-tie`,
                 { color: "#000000" },
-                { x: startX, y: startY, thickness: 0.125 },
-                { x: midX, y: startY + tone.tie, thickness: 0.25 },
-                { x: endX, y: startY, thickness: 0.125 }
+                { x: pointsX.start, y: pointsY.ends, thickness: 0.125 },
+                { x: pointsX.middle, y: pointsY.middle, thickness: 0.2 },
+                { x: pointsX.end, y: pointsY.ends, thickness: 0.125 }
             )
         );
     }

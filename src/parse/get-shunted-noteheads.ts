@@ -1,18 +1,16 @@
-import { Direction } from "./get-stem-direction";
+import { Direction, stepsFromTop } from "./get-stem-direction";
 import { Entry } from "../entries";
 import { Tone } from "../entries/tone";
 import { getStepsBetweenPitches } from "../playback/utils";
+import { Clef } from "../entries/clef-defs";
 
-export interface Shunts {
+export interface ShuntsByKey {
     [toneKey: string]: boolean;
 }
 
-export function getShuntedNoteheads(
-    tones: Entry<Tone>[],
-    stemDirection: Direction
-): [boolean, Shunts] {
+export function getShuntedNoteheads(tones: Entry<Tone>[], stemDirection: Direction): [boolean, ShuntsByKey] {
     let hasShunts = false;
-    const shuntedNoteheads: Shunts = {};
+    const shuntsByKey: ShuntsByKey = {};
 
     let cluster = [];
 
@@ -28,7 +26,7 @@ export function getShuntedNoteheads(
                     const isOddLength = cluster.length % 2 !== 0;
                     const firstNoteheadIsShunted = stemDirection === Direction.up || isOddLength;
                     const shunted = firstNoteheadIsShunted ? ii % 2 !== 0 : ii % 2 === 0;
-                    shuntedNoteheads[tone._key] = shunted;
+                    shuntsByKey[tone._key] = shunted;
                     if (shunted) {
                         hasShunts = true;
                     }
@@ -38,5 +36,5 @@ export function getShuntedNoteheads(
         }
     }
 
-    return [hasShunts, shuntedNoteheads];
+    return [hasShunts, shuntsByKey];
 }
