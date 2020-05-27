@@ -8,5 +8,10 @@ module.exports = function override(config, env) {
         use: { loader: "worker-loader" }
     });
 
+    config.module.rules.unshift({
+        test: /\.wasm$/,
+        type: "javascript/auto"
+    });
+
     return config;
 };

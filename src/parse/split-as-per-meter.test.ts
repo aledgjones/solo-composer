@@ -848,7 +848,7 @@ it(i + ". " + "renders correctly - 4/4 [m.-]", () => {
 
     const log = parse(len, flow, track);
 
-    expect(log).toBe("o_______________________o----------¬r----------¬");
+    expect(log).toBe("o----------------------------------¬r----------¬");
 });
 
 i++;

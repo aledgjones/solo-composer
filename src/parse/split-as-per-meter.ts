@@ -81,7 +81,8 @@ export function splitUnit(
                     track[firstBeat] &&
                     getIsEmpty(firstBeat, fourthBeat, track) &&
                     track[fourthBeat] &&
-                    (track[firstBeat].duration < ticksPerOriginalBeat || !getIsRest(track[fourthBeat]))
+                    // dotted crotchets bassically have their own rules.
+                    (track[firstBeat].duration !== ticksPerOriginalBeat * 1.5 || !getIsRest(track[fourthBeat]))
                 ) {
                     // 2/4 [c.q] don't split middle unless q === rest
                 } else {

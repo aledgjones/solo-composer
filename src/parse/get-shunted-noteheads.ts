@@ -2,7 +2,6 @@ import { Direction, stepsFromTop } from "./get-stem-direction";
 import { Entry } from "../entries";
 import { Tone } from "../entries/tone";
 import { getStepsBetweenPitches } from "../playback/utils";
-import { Clef } from "../entries/clef-defs";
 
 export interface ShuntsByKey {
     [toneKey: string]: boolean;

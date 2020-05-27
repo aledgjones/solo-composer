@@ -1,6 +1,6 @@
 {
     "name": "composer",
-    "version": "0.7.10",
+    "version": "0.7.13",
     "private": true,
     "dependencies": {
         "@mdi/js": "^5.3.45",
@@ -32,6 +32,7 @@
         "solo-ui": "aledgjones/solo-ui",
         "tone": "^14.7.2",
         "typescript": "^3.9.3",
+        "webassembly-loader": "^1.1.0",
         "webmidi": "^2.5.1",
         "worker-loader": "^2.0.0"
     },

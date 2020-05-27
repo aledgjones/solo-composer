@@ -32,12 +32,13 @@ function tiePointsX(
     tone: ToneDetails,
     stemDirection: Direction,
     glyphWidth: number,
-    tieWidth: number,
-    isChord: boolean
+    noteGap: number,
+    isChord: boolean,
+    nextPreNoteSlotWidth: number
 ) {
     if (isChord) {
         let start = x + glyphWidth + 0.2;
-        let end = x + tieWidth - 0.2;
+        let end = x + noteGap - 0.2;
 
         if (tone.isShunt) {
             if (stemDirection === Direction.up) {
@@ -45,7 +46,7 @@ function tiePointsX(
                 end += glyphWidth;
             } else {
                 start -= glyphWidth;
-                end -= glyphWidth;
+                end -= nextPreNoteSlotWidth;
             }
         }
 
@@ -54,7 +55,7 @@ function tiePointsX(
         return { start, middle, end, width };
     } else {
         const start = x + glyphWidth / 2 + 0.1;
-        const end = x + tieWidth + glyphWidth / 2 - 0.1;
+        const end = x + noteGap + glyphWidth / 2 - 0.1;
         const width = end - start;
         const middle = start + width / 2;
         return { start, middle, end, width };
@@ -69,11 +70,12 @@ export function drawTie(
     glyphWidth: number,
     isChord: boolean,
     noteGap: number, // distance from start of note spacing to begingin of next notes spacing
+    nextPreNoteSlotWidth: number = 0,
     key: string
 ) {
     const instructions = [];
     if (tone.tie !== Direction.none) {
-        const pointsX = tiePointsX(x, tone, stemDirection, glyphWidth, noteGap, isChord);
+        const pointsX = tiePointsX(x, tone, stemDirection, glyphWidth, noteGap, isChord, nextPreNoteSlotWidth);
         const pointsY = tiePointsY(y, tone, pointsX.width, isChord);
 
         instructions.push(

@@ -12,7 +12,7 @@
     ],
     "articles": {
         "changelog": {
-            "url": "/articles/changelog.md",
+            "url": "/changelog.md",
             "title": "What's New",
             "description": "Find out about recent features, bug fixes and announcements.",
             "search": ["bugs", "features", "update", "announcements", "fix"],

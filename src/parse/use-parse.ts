@@ -6,30 +6,25 @@ import { Score } from "../services/score";
 import { useMM } from "./converter";
 
 import myWorker from "./parse.worker";
+import wasm from "solo-composer-parser/solo_composer_parser_bg.wasm";
+import init, { InitOutput } from "solo-composer-parser";
 
 export function useParseWorker(score: Score, flowKey: FlowKey) {
-    const [instructions, setInstructions] = useState<RenderInstructions>();
+    const [parser, setParser] = useState<InitOutput>();
 
-    const worker = useMemo(() => {
-        return new myWorker() as Worker;
+    useEffect(() => {
+        init(wasm).then((mod) => {
+            setParser(mod);
+        });
     }, []);
+
+    const [instructions, setInstructions] = useState<RenderInstructions>();
 
     const mm = useMM();
 
     useEffect(() => {
-        worker.postMessage({ mm, score, flowKey });
-    }, [mm, score, flowKey, worker]);
-
-    useEffect(() => {
-        const cb = (e: any) => {
-            setInstructions(e.data);
-        };
-        worker.addEventListener("message", cb);
-        return () => {
-            worker.removeEventListener("message", cb);
-            worker.terminate();
-        };
-    }, [worker]);
+        parser?.greet();
+    }, [parser]);
 
     return instructions;
 }

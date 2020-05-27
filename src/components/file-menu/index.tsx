@@ -20,7 +20,7 @@ export const FileMenu: FC = () => {
 
     const element = useRef<HTMLDivElement>(null);
     const [open, setOpen] = useState(false);
-    const [about, setAbout] = useState(false);
+    const [about, setAbout] = useState(process.env.NODE_ENV === "production");
     const [preferences, setPreferences] = useState(false);
     const [help, setHelp] = useState(false);
 

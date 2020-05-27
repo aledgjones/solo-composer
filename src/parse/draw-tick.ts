@@ -191,6 +191,7 @@ export function drawTick(
                     // Make tie direction part of hunts function as it also need to have a concept of clusters
 
                     const [hasShunts, shuntsByKey] = getShuntedNoteheads(entry.tones, stemDirection);
+                    const tieDirectionsByKey = getTieDirection(entry, stemDirection);
 
                     const details: ToneDetails[] = entry.tones.map((tone) => {
                         const tieIndex = entry.ties.indexOf(tone._key);
@@ -198,10 +199,7 @@ export function drawTick(
                             tone,
                             offset: stepsFromTop(tone, clef),
                             isShunt: shuntsByKey[tone._key],
-                            tie:
-                                tieIndex < 0
-                                    ? Direction.none
-                                    : getTieDirection(entry.ties.length, tieIndex, stemDirection)
+                            tie: tieDirectionsByKey[tone._key]
                         };
                     });
 
@@ -224,6 +222,7 @@ export function drawTick(
                                 glyphWidth,
                                 entry.tones.length > 1,
                                 noteGap,
+                                horizontalMeasurements[tick + entry.duration][WidthOf.preNoteSlot],
                                 `${detail.tone._key}-${tick}-tie`
                             )
                         );
